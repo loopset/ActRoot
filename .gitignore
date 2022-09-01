@@ -1,0 +1,11 @@
+# ignore emacs temporary/version files
+*~
+
+# ignore symbolic links (in all dirs)
+compile_commands.json
+
+
+#ignore directories
+build/
+old/
+.cache/
