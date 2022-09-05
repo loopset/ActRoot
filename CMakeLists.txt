@@ -28,6 +28,7 @@ set(sources
   ${PROJECT_SOURCE_DIR}/src/ActTrack.cpp
   ${PROJECT_SOURCE_DIR}/src/ActClusteringResults.cpp
   ${PROJECT_SOURCE_DIR}/src/ActLine.cpp
+  ${PROJECT_SOURCE_DIR}/src/ActSample.cpp
   ${PROJECT_SOURCE_DIR}/src/ActRANSAC.cpp
   ${PROJECT_SOURCE_DIR}/src/ActDraw.cpp
 
@@ -38,6 +39,7 @@ set(headers
   ${PROJECT_SOURCE_DIR}/inc/ActTrack.h
   ${PROJECT_SOURCE_DIR}/inc/ActClusteringResults.h
   ${PROJECT_SOURCE_DIR}/inc/ActLine.h
+  ${PROJECT_SOURCE_DIR}/inc/ActSample.h
   ${PROJECT_SOURCE_DIR}/inc/ActRANSAC.h
   ${PROJECT_SOURCE_DIR}/inc/ActDraw.h
 

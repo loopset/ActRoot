@@ -37,7 +37,12 @@ ActClusteringResults SampleConsensus::ActRANSAC::Solve(const std::vector<ActHit>
 	for (int i = 0; i < fIterations; i++)//RANSAC ITERATIONS
 	{
 		//1st we sample two points and we find a line from them
-		auto line = SampleHits(hitArray);
+		fSampler->SetHitsToSample(&hitArray);
+		auto hitSamples = fSampler->SampleHits(fSamplePoints);
+		std::vector<XYZPoint> pointSamples;//temporary, we need to convert ActHit to XYZPoint
+		for(auto& hs : hitSamples) pointSamples.push_back(hs.GetPosition());
+		auto line = ActLine(pointSamples);
+		//auto line = SampleHits(hitArray);
 		//2nd we evaluate RANSAC: inliers and Chi2
 		auto inliers = EvaluateRANSAC(hitArray, line);
 		//3rd: if more inliers than minimum, validate line
@@ -71,99 +76,6 @@ ActClusteringResults SampleConsensus::ActRANSAC::Solve(const std::vector<ActHit>
 		clusters.AddNoise(std::move(hit));
 	}
 	return clusters;
-}
-
-double SampleConsensus::ActRANSAC::GetPDF(const ActHit& hit, const ActHit& referenceHit)
-{
-	if(fSampleMethod == 0)//Uniform, doesnt need call to this method!
-		return {};
-	else if(fSampleMethod == 1)//Simple gaussian from reference point
-	{
-		auto dist = (referenceHit.GetPosition() - hit.GetPosition()).Mag2();
-		dist      = std::sqrt(dist);
-		return ROOT::Math::gaussian_pdf(dist, fGaussianSigma);
-	}
-	else { throw std::runtime_error("Sampling method not yet implemented or wrong int!"); }
-}
-
-ActLine SampleConsensus::ActRANSAC::SampleHits(const std::vector<ActHit>& hitArray)
-{
-	//std::cout<<"seed: "<<gRandom->GetSeed()<<'\n';
-	std::vector<int> ind;
-	std::vector<XYZPoint> sampled;
-	if(fSampleMethod == 0)//Uniform
-	{
-		while (ind.size() < fSamplePoints)
-		{
-			int i = gRandom->Uniform() * hitArray.size();
-			if(fSampleWithReplacement || !isInVector(i, ind))
-			{
-				ind.push_back(i);
-				sampled.push_back(hitArray.at(i).GetPosition());
-			}
-		}
-	}
-	else if(fSampleMethod == 1)//Simple gaussian
-	{
-		//1st, set reference point and add it to sampled
-		int refIndex = gRandom->Uniform() * hitArray.size();
-		auto refHit   = hitArray.at(refIndex);
-		ind.push_back(refIndex); sampled.push_back(refHit.GetPosition());
-		//2nd, iterate and push back according to criteria
-		while(ind.size() < fSamplePoints)
-		{
-			int i = gRandom->Uniform() * hitArray.size();
-			auto hit = hitArray.at(i); 
-			auto gauss = GetPDF(hit, refHit);
-			auto r     = gRandom->Uniform();
-			//we are sampling the gaussiang following the _truncated_ procedure:
-			// an auxiliary random [0,1) is needed to compare with the gaussian pdf
-			if(( gauss >= r) && ( fSampleWithReplacement || !isInVector(i, ind) ))
-			{
-				ind.push_back(i);
-				sampled.push_back(hit.GetPosition());
-			}
-		}
-	}
-	else if(fSampleMethod == 2)//Charge weighted sampling
-	{
-		//1st, we fill weight vector
-		if(!fIsWeightVectorConstructed)
-		{
-			double totalCharge { 0.};
-			//get total charge
-			for(auto& el : hitArray) totalCharge += el.GetCharge();
-			//normalize weights to total charge
-			for(auto& el : hitArray)fWeightVector.push_back( el.GetCharge() / totalCharge );
-			//mark this operation as done, only once
-			fIsWeightVectorConstructed = true;
-		}
-		//1st, set reference point and add it to sampled
-		int refIndex = gRandom->Uniform() * hitArray.size();
-		auto refHit   = hitArray.at(refIndex);
-		ind.push_back(refIndex); sampled.push_back(refHit.GetPosition());
-		//2nd, iterate and push back according to criteria
-		while(ind.size() < fSamplePoints)
-		{
-			int i = gRandom->Uniform() * hitArray.size();
-			auto hit = hitArray.at(i);
-			//maximum of fWeightVector to sample!
-			// idk why jczamorac does it using GetAvCharge, when it should be the maximum of the pdf
-			auto maxWeightPDF = std::max_element(std::begin(fWeightVector), std::end(fWeightVector));
-			//generate random number between (0, maxWeightPDF)
-			auto r = gRandom->Uniform(0., *maxWeightPDF);
-			//and now check if our sampled PDF is greater than r random value
-			if(( fWeightVector[i] >= r ) && ( fSampleWithReplacement || !isInVector(i, ind) ) )
-			{
-				ind.push_back(i);
-				sampled.push_back(hit.GetPosition());
-			}
-		}
-	}
-	else { throw std::runtime_error("Sampling method not yet implemented or wrong int!"); }
-
-	auto sampledLine = ActLine(sampled);
-	return sampledLine;
 }
 
 int SampleConsensus::ActRANSAC::EvaluateRANSAC(const std::vector<ActHit>& hitArray, ActLine& sampledLine)

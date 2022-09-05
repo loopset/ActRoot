@@ -8,11 +8,11 @@ void RunRANSAC()
 	TString pwd { gSystem->pwd()};
 	TString inc { pwd  + "/inc/"};
 	//std::cout<<inc<<'\n';
-	gSystem->AddIncludePath(inc);
-	gInterpreter->AddIncludePath(inc);
+	gSystem->AddIncludePath(" -I" + inc);
+	//gInterpreter->AddIncludePath(inc);
 	gROOT->ProcessLine(".L ./build/libActRoot.so");
 
 	//run or compile macros
-	gROOT->ProcessLine(".L MacroRANSAC.cpp");
+	gROOT->ProcessLine(".L MacroRANSAC.cpp++");
 	gROOT->ProcessLine("MacroRANSAC()");
 }

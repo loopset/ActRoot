@@ -74,7 +74,7 @@ void ActDraw::Init()
 void ActDraw::Reset()
 {
 	fCanvPrecluster->Clear("D"); //fCanvPrecluster->Update();//"D" option does not delete TPads
-	fCanvAllcluster->Clear("D"); fCanvAllcluster->Update();
+	fCanvAllcluster->Clear("D"); //fCanvAllcluster->Update();
 	fCanv3DResults->Clear("D");
 	
 	fHistFront->Reset();
@@ -96,6 +96,8 @@ void ActDraw::Reset()
 
 void ActDraw::DrawEvent(std::vector<ActHit> &hitArray)
 {
+	fCanvAllcluster->Close();
+	fCanv3DResults->Close();
 	Reset();
 
 	//read each event and file Pad, Profile and Front hits
@@ -119,6 +121,7 @@ void ActDraw::DrawEvent(std::vector<ActHit> &hitArray)
 		fCanvPrecluster->cd(3); fHistFront->Draw("colz");
 
 		fCanvPrecluster->Update();
+		fCanvPrecluster->cd();
 		fCanvPrecluster->WaitPrimitive();
 		
 	}
@@ -127,6 +130,8 @@ void ActDraw::DrawEvent(std::vector<ActHit> &hitArray)
 
 void ActDraw::DrawResults(std::vector<ActHit> &hitArray, ActClusteringResults &results)
 {
+	fCanvPrecluster->Close();
+	fCanv3DResults->Close();
 	Reset();
 
 	//first, events
@@ -175,7 +180,6 @@ void ActDraw::DrawResults(std::vector<ActHit> &hitArray, ActClusteringResults &r
 	//and finally draw
 	if(fCanvAllcluster)
 	{
-		//fCanvAllcluster->Divide(3, 2x);
 		fCanvAllcluster->cd(1); fHistPad->Draw("colz");
 		fCanvAllcluster->cd(2); fHistProfile->Draw("colz");
 		fCanvAllcluster->cd(3); fHistFront->Draw("colz");
@@ -188,12 +192,15 @@ void ActDraw::DrawResults(std::vector<ActHit> &hitArray, ActClusteringResults &r
 		for(auto& poly : polylines["YZ"]) poly->Draw("same");
 
 		fCanvAllcluster->Update();
+		fCanvAllcluster->cd();
 		fCanvAllcluster->WaitPrimitive();
 	}
 }
 
 void ActDraw::DrawResults3D(std::vector<ActHit> &hitArray, ActClusteringResults &results)
 {
+	fCanvPrecluster->Close();
+	fCanvAllcluster->Close();
 	Reset();
 
 	//first, events
@@ -232,6 +239,7 @@ void ActDraw::DrawResults3D(std::vector<ActHit> &hitArray, ActClusteringResults 
 		for(auto& poly : polylines) poly->Draw("same");
 		
 		fCanv3DResults->Update();
+		fCanv3DResults->cd();
 		fCanv3DResults->WaitPrimitive();
 	}
 }
