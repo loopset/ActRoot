@@ -198,6 +198,8 @@ std::vector<ActHit> RandomSampling::ActSample::SampleHits(int N)
 		}
 		return out;//break here
 	}
+	///difers from ATTPC ROOT: SetReferenceHit is called in SetHitsToSample instead of SampleHits
+	//-> SetHitsToSample has to be called each time a new reference is needed (ie, RANSAC iterations)
 	auto sampledIndices = sampleIndicesFromCDF(N);
 	for(auto& ind : sampledIndices)
 		out.push_back(fHitArray->at(ind));

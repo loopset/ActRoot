@@ -260,20 +260,48 @@ std::unique_ptr<TPolyLine> ActDraw::GetPolyLine(const ActTrack& track, TString p
 	double offsetXZ { position.Z() - slope3DXZ * position.X() };
 	double slopeXZ  { slope3DXZ };
 
-	int Npoints { 50 };
+	int Npoints { 500 };
 	std::vector<double> vecX, vecY, vecZ;
-	double x0 { 0. };
+	double x0 { fMinX };
 	double dx { 1. * ActParameters::NPADX / Npoints };
 	for(int r = 0; r < Npoints; r++ )
 	{
 		double yval { offsetXY + slopeXY * x0 };
 		double zval { offsetXZ + slopeXZ * x0 };
-		if(isInInterval(yval, fMinY, fMaxY) && isInInterval(zval, fMinZ, fMaxZ))
+		//projection-dependent TPolyLine filling
+		if(projection.Contains("XY"))
 		{
-			vecX.push_back(x0);
-			vecY.push_back(yval);
-			vecZ.push_back(zval);
+			if(isInInterval(yval, fMinY, fMaxY))
+			{
+				vecX.push_back(x0);
+				vecY.push_back(yval);
+			}
+			else
+				continue;
 		}
+		else if(projection.Contains("XZ"))
+		{
+			if(isInInterval(zval, fMinZ, fMaxZ))
+			{
+				vecX.push_back(x0);
+				vecZ.push_back(zval);
+			}
+			else
+				continue;
+		}
+		else if(projection.Contains("YZ"))
+		{
+			if(isInInterval(yval, fMinY, fMaxY) &&
+			   isInInterval(zval, fMinZ, fMaxZ))
+			{
+				vecY.push_back(yval);
+				vecZ.push_back(zval);
+			}
+			else
+				continue;
+		}
+		else { throw std::runtime_error("Wrong string passed to GetPolyline()"); }
+		
 		x0 += dx;
 	}
 

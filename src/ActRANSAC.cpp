@@ -27,8 +27,7 @@ ActClusteringResults SampleConsensus::ActRANSAC::Solve(const std::vector<ActHit>
 {
 	if(hitArray.size() < fMinPatternPoints)
 	{
-		std::cout<<"ERROR: Lower hits than minimum expected"<<std::endl;
-		std::abort();
+		throw std::runtime_error("In ActRANSAC::Solve, passed hitArray has less hits than fMinPatterPoints");
 	}
 	//follow ATTPROOT for sorting
 	auto compareLines = [](const ActLine& a, const ActLine& b) { return a.GetChi2() < b.GetChi2(); };//lambda functor

@@ -56,7 +56,11 @@ void ActLine::FitCloudToLine(const std::vector<ActHit>& pointsToFit, double char
 			charge.push_back(hit.GetCharge());
 		}
 	}
-
+	if(points.size() < 2)
+	{
+		std::cout<<"Warning: Charge weighted fit in ActLine::FitCloudToLine has less hits than fMinPatterHits -> Not fitting"<<'\n';
+		return;
+	}
 	if (chargeThreshold == -1.)
 		FitCloudToLine(points);
 	else
@@ -153,16 +157,22 @@ void ActLine::FitCloudToLine(const std::vector<XYZPoint>& points, const std::vec
     XYZPoint p1 = {Xm, Ym, Zm};
     XYZPoint p2 = {Xh, Yh, Zh};
 	std::vector<XYZPoint> vPoints {p1, p2};
-	
+
+	//temporary bug fix: detect if we have NaN values here dont redefine ActLine!
+	if(std::isnan(dm2))
+	{
+		std::cout<<"Warning: dm2 is NaN is ActLine::FitLineToCloud -> Not fitting"<<'\n';
+		return;
+	}
 	SetPoint(vPoints);
 	SetDirection(vPoints);
 	SetChi2(fabs(dm2 / Q));
-	//fNFree = points.size() - 6;
+	//WARNING: Something in this func returns nan sometimes! It is in variable dm2!
 }
 
 void ActLine::FitCloudToLine(const std::vector<XYZPoint>& points)
 {
-	std::cout<<"Fitting ActLine without considering charge!"<<'\n';
+	//std::cout<<"Fitting ActLine without considering charge!"<<'\n';
 	std::vector<double> vQ {-1.};
 	FitCloudToLine(points, vQ);
 }
