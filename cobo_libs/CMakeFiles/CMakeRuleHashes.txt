@@ -1,0 +1,2 @@
+# Hashes of file build rules.
+149cd6db4299ec71d95554e7b1ddb885 ActRootDict.cc

@@ -27,36 +27,50 @@ using XYZPoint = ROOT::Math::XYZPoint;
 void MacroRANSAC()
 {
 	TString path {"/media/Datos/ApuntesUSC/TESE/ACTAR_tracking/analysis_2022/ACTAR_ANALYSIS_LIGHT_root6/root/arrays_of_E796_events/"};
+	std::ifstream elastic_event((path + TString("index.dat")).Data());
+	std::vector<int> elastic_event_index;
+	int aux_index;
+	while (elastic_event >> aux_index){elastic_event_index.push_back(aux_index);}
 
-	int max_event {20};
-
+	int min_event{ 13};
+	int max_event {14};
 	//drawing structure
 	ActDraw painter{};
+	//painter.SetMaxZ(512./4);
+	//painter.SetNbinsZ(static_cast<int>(512 / 4));
 	painter.Init();
 
 	//iterate over events
-	for(int i = 0; i < max_event; i++)
+	//for(int i = min_event; i < max_event; i++)
+	for(auto& i : elastic_event_index)
 	{
 		TString event { TString::Format("event_%d.dat", i) };
 		std::cout<<"Reading "<<event<<'\n';
 		std::ifstream infile((path + event).Data());
 		std::vector<ActHit> eventVector{};
+		std::vector<ActHit> allVector{};
 		Double_t x, y, z, q;
+		double maxZ {0.};
 		while(infile >> x >> y >> z >> q)
 		{
-			//avoi beam region
-			if((y >= 50) && (y <= 70)) continue;//in pad units
+			if(z > maxZ)  maxZ = z;
 			ActHit hit = ActHit(-1, XYZPoint(x, y, z), q);
+			allVector.push_back(hit);
+			//avoid beam region
+			if((y <= 90)) continue;//in pad units
 			eventVector.push_back(hit);
 		}
-		
+		//std::cout<<"Max Z value: "<<maxZ<<'\n';
+		//lets try to sort by Z value
+		std::sort(eventVector.begin(), eventVector.end(), [](const ActHit& lhs, const ActHit& rhs){return lhs.GetPosition().Z() < rhs.GetPosition().Z();});
+		//std::cout<<"First Z value: "<<eventVector[0].GetPosition().Z()<<'\n';
 		//and now RANSAC estimator
-		SampleConsensus::ActRANSAC estimator{500, 10, 4.};
+		SampleConsensus::ActRANSAC estimator{500, 15, 4.};
 		//customize sampling method
 		auto method { RandomSampling::SamplingMethod::kGaussian};
 		estimator.SetSampleMethod(method);
 		//estimator.SetSampleWithReplacement(true);
-		estimator.SetChargeThreshold(200.);
+		//estimator.SetChargeThreshold(200.);
 		//estimator.SetFitPattern(false);
 		//std::cout<<eventVector.size()<<'\n';
 		try
@@ -70,7 +84,7 @@ void MacroRANSAC()
 
 			//drawing
 			//painter.DrawEvent(eventVector);
-			painter.DrawResults(eventVector, out);
+			painter.DrawResults(allVector, out);
 			//painter.DrawResults3D(eventVector, out);
 
 			//building silhouette score
@@ -98,6 +112,14 @@ void MacroRANSAC()
 			continue;
 		}
 
+		//try to find
+		auto eventToFind { eventVector[0]};
+		auto sth = std::find_if(eventVector.begin(), eventVector.end(),
+					 [&eventToFind](const ActHit& hit) -> bool {return ((eventToFind.GetPosition().X() == hit.GetPosition().X())
+															   && (eventToFind.GetPosition().Y() == hit.GetPosition().Y())
+															   && (eventToFind.GetPosition().Z() == hit.GetPosition().Z()));});
+		ActHit ret { *sth};
+		std::cout<<"Found: "<<ret.GetHitID()<<'\n';
 		//test random sampling
 		// RandomSampling::ActSample sampler;
 		// sampler.SetSampleMehtod(3);

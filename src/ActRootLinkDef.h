@@ -11,6 +11,7 @@
 //not inherited from ROOT -> Neither does it need a streamer (-) nor a >> operator (!)
 #pragma link C++ class ActLine - !;
 
+
 //recommended if we use namespaces
 #pragma link C++ nestedclass;
 #pragma link C++ nestedtypedef;
@@ -25,5 +26,10 @@
 #pragma link C++ class SampleConsensus::ActRANSAC - !;
 
 #pragma link C++ class ActDraw - !;
+
+//ActRoot far from RANSAC
+#pragma link C++ class ActCalibrations - !;
+
+#pragma link C++ class ActEvent - !;
 
 #endif

@@ -1,0 +1,3 @@
+/media/Datos/ApuntesUSC/TESE/ACTAR_tracking/analysis_2022/ACTAR_ANALYSIS_LIGHT_root6/ActRoot/cobo_libs/CMakeFiles/ActRoot.dir
+/media/Datos/ApuntesUSC/TESE/ACTAR_tracking/analysis_2022/ACTAR_ANALYSIS_LIGHT_root6/ActRoot/cobo_libs/CMakeFiles/edit_cache.dir
+/media/Datos/ApuntesUSC/TESE/ACTAR_tracking/analysis_2022/ACTAR_ANALYSIS_LIGHT_root6/ActRoot/cobo_libs/CMakeFiles/rebuild_cache.dir

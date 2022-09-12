@@ -85,6 +85,10 @@ public:
 	//draw results in 3D!!
 	void DrawResults3D(std::vector<ActHit>& hitArray, ActClusteringResults& results);
 
+	//set bin and max values on histograms
+	void SetMaxZ(double max) { fMaxZ = max; }
+	void SetNbinsZ(int nbins) { fNbinsZ = nbins; }
+
 	protected:
 	inline void OverrideHistContent(std::unique_ptr<TH2I>& hist, const Double_t& maxVal, const Double_t& val1, const Double_t& val2, const Double_t& val3)
 	{
@@ -92,8 +96,10 @@ public:
 		Int_t Bin1 { hist->GetXaxis()->FindFixBin(val1) };
 		Int_t Bin2 { hist->GetYaxis()->FindFixBin(val2) };
 		Double_t content { hist->GetBinContent(Bin1, Bin2) };
-		if(content > 0) hist->SetBinContent(Bin1, Bin2, maxVal + 1);
-		else hist->SetBinContent(Bin1, Bin2, val3);
+		//simply override; do not consider extra max value
+		hist->SetBinContent(Bin1, Bin2, val3);
+		//if(content > 0) hist->SetBinContent(Bin1, Bin2, maxVal + 1);
+		//else hist->SetBinContent(Bin1, Bin2, val3);
 	}
 
 	inline bool isInInterval(double val, double min, double max)

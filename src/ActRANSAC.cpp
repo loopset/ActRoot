@@ -32,11 +32,12 @@ ActClusteringResults SampleConsensus::ActRANSAC::Solve(const std::vector<ActHit>
 	//follow ATTPROOT for sorting
 	auto compareLines = [](const ActLine& a, const ActLine& b) { return a.GetChi2() < b.GetChi2(); };//lambda functor
 	auto sortedLines  = std::set<ActLine, decltype(compareLines)>(compareLines);
-	
+
+	//set hits to sample
+	fSampler->SetHitsToSample(&hitArray);
 	for (int i = 0; i < fIterations; i++)//RANSAC ITERATIONS
 	{
 		//1st we sample two points and we find a line from them
-		fSampler->SetHitsToSample(&hitArray);
 		auto hitSamples = fSampler->SampleHits(fSamplePoints);
 		std::vector<XYZPoint> pointSamples;//temporary, we need to convert ActHit to XYZPoint
 		for(auto& hs : hitSamples) pointSamples.push_back(hs.GetPosition());

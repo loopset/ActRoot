@@ -15,6 +15,10 @@ include("${CMAKE_MODULE_PATH}/FindROOT.cmake")
 
 # ActRoot inc directories
 include_directories(${PROJECT_SOURCE_DIR}/inc)
+# for MEvent and so on
+# add_subdirectory(${PROJECT_SOURCE_DIR}/cobo_libs)
+include_directories(${PROJECT_SOURCE_DIR}/cobo_libs/inc)
+include_directories(${PROJECT_SOURCE_DIR}/cobo_libs/libMFM)
 # ROOT directories
 include_directories(${ROOT_INCLUDE_DIR})
 # ROOT linking directories
@@ -31,8 +35,10 @@ set(sources
   ${PROJECT_SOURCE_DIR}/src/ActSample.cpp
   ${PROJECT_SOURCE_DIR}/src/ActRANSAC.cpp
   ${PROJECT_SOURCE_DIR}/src/ActDraw.cpp
-
+  ${PROJECT_SOURCE_DIR}/src/ActCalibrations.cpp
+  ${PROJECT_SOURCE_DIR}/src/ActEvent.cpp
 )
+
 set(headers
   ${PROJECT_SOURCE_DIR}/inc/ActParameters.h
   ${PROJECT_SOURCE_DIR}/inc/ActHit.h
@@ -42,7 +48,8 @@ set(headers
   ${PROJECT_SOURCE_DIR}/inc/ActSample.h
   ${PROJECT_SOURCE_DIR}/inc/ActRANSAC.h
   ${PROJECT_SOURCE_DIR}/inc/ActDraw.h
-
+  ${PROJECT_SOURCE_DIR}/inc/ActCalibrations.h
+  ${PROJECT_SOURCE_DIR}/inc/ActEvent.h
 )
 # Set everything needed for the root dictonary and create the
 # dictionary = headers already defined

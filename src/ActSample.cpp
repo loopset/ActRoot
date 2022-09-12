@@ -159,24 +159,10 @@ void RandomSampling::ActSample::SampleReferenceHit()
 void RandomSampling::ActSample::SetHitsToSample(const std::vector<ActHit> *hits)
 {
 	fHitArray = std::move(hits);
-	if(fSampleMethod == SamplingMethod::kUniform)//Uniform method does not require the time-consuming filling of CDF
-		;
-	else if(fSampleMethod == SamplingMethod::kGaussian)
-	{
-		SampleReferenceHit();
+	if(fSampleMethod == SamplingMethod::kChargeWeighted)
 		FillCDF();
-	}
-	else if(fSampleMethod == SamplingMethod::kChargeWeighted)
-		FillCDF();
-	else if(fSampleMethod == SamplingMethod::kWeightedGaussian)//for Weighted + gaussian we need a trick!
-	{
-		SampleReferenceHit();
-		FillCDF();
-	}
-	else
-	{
-		throw std::runtime_error("SetHitsToSample not available for chosen sampling method");
-	}
+	
+	
 }
 
 //and finally, sample
@@ -198,8 +184,23 @@ std::vector<ActHit> RandomSampling::ActSample::SampleHits(int N)
 		}
 		return out;//break here
 	}
-	///difers from ATTPC ROOT: SetReferenceHit is called in SetHitsToSample instead of SampleHits
-	//-> SetHitsToSample has to be called each time a new reference is needed (ie, RANSAC iterations)
+	else if(fSampleMethod == SamplingMethod::kGaussian)
+	{
+		SampleReferenceHit();
+		FillCDF();
+	}
+	else if(fSampleMethod == SamplingMethod::kChargeWeighted)
+		;//do nothing, FillingCDF is done once in SetHitsToSample()
+	else if(fSampleMethod == SamplingMethod::kWeightedGaussian)//for Weighted + gaussian we need a trick!
+	{
+		SampleReferenceHit();
+		FillCDF();
+	}
+	else
+	{
+		throw std::runtime_error("SetHitsToSample not available for chosen sampling method");
+	}
+	
 	auto sampledIndices = sampleIndicesFromCDF(N);
 	for(auto& ind : sampledIndices)
 		out.push_back(fHitArray->at(ind));

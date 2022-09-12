@@ -1,0 +1,24 @@
+set(sources
+  ${PROJECT_SOURCE_DIR}/Analyse.cpp
+  ${PROJECT_SOURCE_DIR}/MChannel.cpp
+  ${PROJECT_SOURCE_DIR}/MCoboAsad.cpp
+  ${PROJECT_SOURCE_DIR}/MEvent.cpp
+  ${PROJECT_SOURCE_DIR}/TreatBaseline.cpp
+  ${PROJECT_SOURCE_DIR}/MExperiment.cpp
+  ${PROJECT_SOURCE_DIR}/MFile.cpp
+  ${PROJECT_SOURCE_DIR}/MUnpacker.cpp
+  ${PROJECT_SOURCE_DIR}/MVisu.cpp
+  ${PROJECT_SOURCE_DIR}/MyDict.C
+)
+
+set(headers
+  ${PROJECT_SOURCE_DIR}/MExperiment.h
+  ${PROJECT_SOURCE_DIR}/MUnpacker.h
+  ${PROJECT_SOURCE_DIR}/MFile.h
+  ${PROJECT_SOURCE_DIR}/MEvent.h
+  ${PROJECT_SOURCE_DIR}/MVisu.h
+  ${PROJECT_SOURCE_DIR}/MEventReduced.h
+  ${PROJECT_SOURCE_DIR}/MCoboAsad.h
+  ${PROJECT_SOURCE_DIR}/MChannel.h
+  ${PROJECT_SOURCE_DIR}/MParameters.h
+)
