@@ -101,19 +101,21 @@ void MacroFull(int initRun, int endRun)
 		runTree->SetBranchAddress("data", &myEventReduced);
 		int entriesInRun { static_cast<int>(runTree->GetEntries())};
 		entryNumber += entriesInRun;
-		std::cout<<BOLDGREEN<<"\t with "<<entriesInRun<<" entries"<<RESET<<'\n';
+		std::cout<<BOLDGREEN<<"\t with "<<entriesInRun<<" events"<<RESET<<'\n';
 
 		//iterate over run entries = events
 		for(int iEvent = 0; iEvent < entriesInRun; iEvent++)
 		{
 			runTree->GetEntry(iEvent);
-			if(!(iEvent % 1000)) std::cout<<iEvent<<'\n';
+			if(!(iEvent % 1000)) std::cout<<BOLDGREEN<<"At event "<<iEvent<<RESET<<'\n';
+			
 			ActEvent event;
 			event.ReadEvent(calibrations, myEvent, myEventReduced);
-			TriggersAndGates triggers = { event.GetConstEventTriggers()};
+			TriggersAndGates triggers = { event.GetEventTriggers()};
 			//choose only GATCONF = 8
 			if(triggers.GATCONF != 8) continue;
 
+			//////// CALIBRATE AND READ SILICONS ///////
 			event.CalibrateSilicons(calibrations);
 			event.ReadSiliconsData();
 			//test

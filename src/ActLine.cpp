@@ -1,5 +1,6 @@
 #include "ActLine.h"
 
+#include "ActParameters.h"
 #include "ActHit.h"
 
 #include <cmath>
@@ -58,7 +59,7 @@ void ActLine::FitCloudToLine(const std::vector<ActHit>& pointsToFit, double char
 	}
 	if(points.size() < 2)
 	{
-		std::cout<<"Warning: Charge weighted fit in ActLine::FitCloudToLine has less hits than fMinPatterHits -> Not fitting"<<'\n';
+		std::cout<<BOLDMAGENTA<<"Warning: Charge weighted fit in ActLine::FitCloudToLine has less hits than fMinPatterHits -> Not fitting"<<RESET<<'\n';
 		return;
 	}
 	if (chargeThreshold == -1.)
@@ -161,7 +162,8 @@ void ActLine::FitCloudToLine(const std::vector<XYZPoint>& points, const std::vec
 	//temporary bug fix: detect if we have NaN values here dont redefine ActLine!
 	if(std::isnan(dm2))
 	{
-		std::cout<<"Warning: dm2 is NaN is ActLine::FitLineToCloud -> Not fitting"<<'\n';
+		std::cout<<BOLDMAGENTA<<"Warning: dm2 is NaN is ActLine::FitLineToCloud due to pad saturation -> Not fitting"<<RESET<<'\n';
+		//std::cout<<"Remaining line direction X: "<<GetDirection().X()<<" Y: "<<GetDirection().Y()<< " Z: "<<GetDirection().Z()<<'\n';
 		return;
 	}
 	SetPoint(vPoints);

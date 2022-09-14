@@ -15,6 +15,7 @@
 #include <TH3.h>
 #include <TPolyLine3D.h>
 
+#include <cmath>
 #include <map>
 #include <stdexcept>
 #include <vector>
@@ -253,7 +254,14 @@ std::unique_ptr<TPolyLine> ActDraw::GetPolyLine(const ActTrack& track, TString p
 	//we force slope X to 1! -> line parametric in X 
 	double slope3DXY { direction.Y() / direction.X() };
 	double slope3DXZ { direction.Z() / direction.X() };
-
+	//x direction can be 0. if we have pad saturation: we must return empty TPolyLine then
+	if(std::isnan(slope3DXY) || std::isnan(slope3DXZ))
+	{
+		std::cout<<BOLDMAGENTA<<"Warning: TPolyLine has slope in X null due to pad saturation, thus, it isn't drawn!"<<RESET<<'\n';
+		std::unique_ptr<TPolyLine> emptyPolyline;
+		emptyPolyline = std::make_unique<TPolyLine>();
+		return emptyPolyline;
+	}
 	double offsetXY { position.Y() - slope3DXY * position.X() };
 	double slopeXY  { slope3DXY };
 
@@ -262,8 +270,8 @@ std::unique_ptr<TPolyLine> ActDraw::GetPolyLine(const ActTrack& track, TString p
 
 	int Npoints { 500 };
 	std::vector<double> vecX, vecY, vecZ;
-	double x0 { fMinX };
-	double dx { 1. * ActParameters::NPADX / Npoints };
+	double x0 { fMinX};
+	double dx { 1. * static_cast<double>(ActParameters::NPADX) / Npoints };
 	for(int r = 0; r < Npoints; r++ )
 	{
 		double yval { offsetXY + slopeXY * x0 };
@@ -275,9 +283,8 @@ std::unique_ptr<TPolyLine> ActDraw::GetPolyLine(const ActTrack& track, TString p
 			{
 				vecX.push_back(x0);
 				vecY.push_back(yval);
+				
 			}
-			else
-				continue;
 		}
 		else if(projection.Contains("XZ"))
 		{
@@ -286,8 +293,6 @@ std::unique_ptr<TPolyLine> ActDraw::GetPolyLine(const ActTrack& track, TString p
 				vecX.push_back(x0);
 				vecZ.push_back(zval);
 			}
-			else
-				continue;
 		}
 		else if(projection.Contains("YZ"))
 		{
@@ -297,8 +302,6 @@ std::unique_ptr<TPolyLine> ActDraw::GetPolyLine(const ActTrack& track, TString p
 				vecY.push_back(yval);
 				vecZ.push_back(zval);
 			}
-			else
-				continue;
 		}
 		else { throw std::runtime_error("Wrong string passed to GetPolyline()"); }
 		
@@ -323,6 +326,14 @@ std::unique_ptr<TPolyLine3D> ActDraw::GetPolyLine3D(const ActTrack& track)
 	//we force slope X to 1! -> line parametric in X 
 	double slope3DXY { direction.Y() / direction.X() };
 	double slope3DXZ { direction.Z() / direction.X() };
+	//x direction can be 0. if we have pad saturation: we must return empty TPolyLine then
+	if(std::isnan(slope3DXY) || std::isnan(slope3DXZ))
+	{
+		std::cout<<BOLDMAGENTA<<"Warning: TPolyLine has slope in X null due to pad saturation, thus, it isn't drawn!"<<RESET<<'\n';
+		std::unique_ptr<TPolyLine3D> emptyPolyline;
+		emptyPolyline = std::make_unique<TPolyLine3D>();
+		return emptyPolyline;
+	}
 
 	double offsetXY { position.Y() - slope3DXY * position.X() };
 	double slopeXY  { slope3DXY };
