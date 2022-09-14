@@ -4,6 +4,7 @@
 
 #include "ActParameters.h"
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -14,6 +15,8 @@ class ActCalibrations
 	std::vector<std::vector<int>> fTABLE;//has to be initialized in constructor
 	//pad align coefficients
 	std::vector<std::vector<double>> fPadAlignCoefs;
+	std::map<std::string, std::vector<std::vector<double>>> fSilicon01SCalibrations {}; //not initialized in constructor
+	std::vector<std::vector<double>> fSiliconBeamCalibrations;
 
 	public:
 	ActCalibrations();
@@ -24,6 +27,11 @@ class ActCalibrations
 
 	void ReadPadAlignCoefs(std::string& coefsFile);
 	const std::vector<std::vector<double>>& GetPadAlignCoefs() const { return fPadAlignCoefs; }
+
+	void ReadSilicon01SCalibrations (std::string& coefsFile, std::string panel);
+	void ReadSiliconBeamCalibrations(std::string& coefsFile);
+	const std::map<std::string, std::vector<std::vector<double>>>& GetSilicon01SCalibrations() const { return fSilicon01SCalibrations; }
+	const std::vector<std::vector<double>>& GetSiliconBeamCalibrations() const { return fSiliconBeamCalibrations; }
 };
 
 

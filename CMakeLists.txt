@@ -36,6 +36,7 @@ set(sources
   ${PROJECT_SOURCE_DIR}/src/ActRANSAC.cpp
   ${PROJECT_SOURCE_DIR}/src/ActDraw.cpp
   ${PROJECT_SOURCE_DIR}/src/ActCalibrations.cpp
+  ${PROJECT_SOURCE_DIR}/src/ActStructs.cpp
   ${PROJECT_SOURCE_DIR}/src/ActEvent.cpp
 )
 
@@ -49,6 +50,7 @@ set(headers
   ${PROJECT_SOURCE_DIR}/inc/ActRANSAC.h
   ${PROJECT_SOURCE_DIR}/inc/ActDraw.h
   ${PROJECT_SOURCE_DIR}/inc/ActCalibrations.h
+  ${PROJECT_SOURCE_DIR}/inc/ActStructs.h
   ${PROJECT_SOURCE_DIR}/inc/ActEvent.h
 )
 # Set everything needed for the root dictonary and create the

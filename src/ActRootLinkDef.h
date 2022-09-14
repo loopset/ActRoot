@@ -30,6 +30,9 @@
 //ActRoot far from RANSAC
 #pragma link C++ class ActCalibrations - !;
 
+#pragma link C++ struct Silicons - !;
+#pragma link C++ struct TriggersAndGates -!;
+
 #pragma link C++ class ActEvent - !;
 
 #endif
