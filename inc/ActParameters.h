@@ -32,9 +32,9 @@
 namespace ActParameters
 {
 	//pad size
-	inline constexpr int NPADX { 128};
-	inline constexpr int NPADY { 128};
-	inline constexpr int NPADZ { 512};
+	inline constexpr int g_NPADX { 128};
+	inline constexpr int g_NPADY { 128};
+	inline constexpr int g_NPADZ { 512};
 
 	//MEvent-related parameters for DAQ
 	//with g_ to avoid confict with MEvent defined values in preprocessor
