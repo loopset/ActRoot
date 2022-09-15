@@ -18,23 +18,38 @@ class ActEvent
 	public:
 	using XYZPoint = ROOT::Math::XYZPoint;
 	
-	protected:
+protected://if we ever decide to inherit the class
 	std::vector<ActHit> fHitArray {};
 	Silicons fSilicons {};
 	TriggersAndGates fTriggers {};
 
+	private:
+	//auxiliar vectors to ReadHits
+	std::vector<int> voxel;
+	std::vector<int> indexOfVoxelInHitArray;
+
 
 	public:
-	ActEvent() = default;
+	ActEvent();//not default bc we have to initialize voxel and indexOfVoxelInHitArray
 	~ActEvent() = default;
+	void Reset();
 
-	//read measured data into out structs and ActHit array
-	void ReadEvent(const ActCalibrations& calibrations, const MEvent* Evt, const MEventReduced* EvtRed);
+	////////////// READERS = SETTERS ////////////////////////////////
+	//READ measured data into out structs and ActHit array
+	//one function to read at the same time Triggers and Hits
+	//time-consuming if we choose to gate GATCONF; however, if we checkOverlap = false time-consumption is improved (at the expense of probably having repeated hits)
+	void ReadEvent(const ActCalibrations& calibrations, const MEvent* Evt, const MEventReduced* EvtRed, bool checkOverlap = true);
+	//two functions that split reading to our structures; ReadTriggers should be run before ReadHits
+	void ReadTriggersAndGates(const MEvent* Evt, const MEventReduced* EvtRed);
+	void ReadHits(const ActCalibrations& calibrations, const MEventReduced* EvtRed);
+	
 	//calibrate our data using ActCalibrations info
 	void CalibrateSilicons(const ActCalibrations& calibrations);
 
 	//read silicon data after calibration (i.e, multiplicity, stopping layer, final energy)
 	void ReadSiliconsData();
+
+	/////////////////////// GETTERS ///////////////////////////////
 	//get events
 	const std::vector<ActHit>& GetConstEventHits() const { return fHitArray; }
 	std::vector<ActHit>& GetEventHits() { return fHitArray; }
@@ -53,6 +68,19 @@ class ActEvent
 
 	void ReadSilicons01FData();
 	void ReadSiliconsSData();
+
+	//inline function to search for matches between ActHits based on position
+	inline bool isAlreadyInHitArray(ActHit& hit, ActHit& newHit)
+	{
+		auto position { hit.GetPosition()};
+		auto newPosition { newHit.GetPosition()};
+		bool xCondition { position.X() == newPosition.X()};
+		bool yCondition { position.Y() == newPosition.Y()};
+		bool zCondition { position.Z() == newPosition.Z()};
+
+		return (xCondition && yCondition && zCondition);
+	}
+	
 };
 
 

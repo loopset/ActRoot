@@ -14,14 +14,178 @@
 #include <vector>
 #include <math.h>
 
-void ActEvent::ReadEvent(const ActCalibrations &calibrations, const MEvent* Evt, const MEventReduced *EvtRed)
+ActEvent::ActEvent()
+	: fHitArray(), fSilicons(), fTriggers(),
+	  voxel(ActParameters::g_NPADX *  ActParameters::g_NPADY *  ActParameters::g_NPADZ),
+	  indexOfVoxelInHitArray(ActParameters::g_NPADX * ActParameters::g_NPADY * ActParameters::g_NPADZ, -1)
+{
+}
+
+void ActEvent::Reset()
+{
+	fHitArray.clear();
+	fSilicons = {};
+	fTriggers = {};
+	voxel.assign(voxel.size(), 0);
+	indexOfVoxelInHitArray.assign(indexOfVoxelInHitArray.size(), -1);
+}
+
+void ActEvent::ReadTriggersAndGates(const MEvent *Evt, const MEventReduced *EvtRed)
+{
+	for(int it = 0; it < EvtRed->CoboAsad.size(); it++)
+	{
+		int co = EvtRed->CoboAsad[it].globalchannelid>>11 ;
+		int as = (EvtRed->CoboAsad[it].globalchannelid - (co<<11))>>9 ;
+		int ag = (EvtRed->CoboAsad[it].globalchannelid - (co<<11)-(as<<9))>>7 ;
+		int ch = EvtRed->CoboAsad[it].globalchannelid - (co<<11)-(as<<9)-(ag<<7) ;
+		int where = co * ActParameters::g_NB_ASAD * ActParameters::g_NB_AGET * ActParameters::g_NB_CHANNEL +
+			as * ActParameters::g_NB_AGET * ActParameters::g_NB_CHANNEL +
+			ag * ActParameters::g_NB_CHANNEL +
+			ch ;
+
+		//Read SILICON data
+		if( co == 31 ){
+			for(unsigned int hit = 0; hit < EvtRed->CoboAsad[it].peaktime.size(); hit++)
+			{
+
+				int index = Evt->labelVXI[(int)(EvtRed->CoboAsad[it].peaktime[hit])];
+				int counter = 0 ;
+
+				if(index > -1 && index < 11)
+				{
+					int Si0Index { index};
+					auto value { EvtRed->CoboAsad[it].peakheight[hit]};
+					fSilicons.fSi0[Si0Index] = value;
+				}
+				//Index for Si signal tunned for the heavy particle
+				if(index>999 && index<1011)
+				{
+					int Si1Index { index - 1000};
+					auto value { EvtRed->CoboAsad[it].peakheight[hit]};
+					
+					fSilicons.fSi1[Si1Index] = value;
+				}
+				if(index>1999 && index<2008)
+				{
+					int SiSIndex { index - 2000};
+					auto value { EvtRed->CoboAsad[it].peakheight[hit]};
+
+					fSilicons.fSiS[SiSIndex] = (value > 0) ? value : 0.;
+				}
+				if(index == 3000 ){ fSilicons.fSiBeam[0] = EvtRed->CoboAsad[it].peakheight[hit] ; }
+				if(index == 4000 ){ fSilicons.fSiBeam[1] = EvtRed->CoboAsad[it].peakheight[hit] ; }
+				if(index == 5000 ){ fSilicons.fSiBeam[2] = EvtRed->CoboAsad[it].peakheight[hit] ; }
+
+				//Triggers and Gates
+				if(index == 6000  ){ fTriggers.INCONF         = EvtRed->CoboAsad[it].peakheight[hit] ; }
+				if(index == 7000  ){ fTriggers.GATCONF        = EvtRed->CoboAsad[it].peakheight[hit] ; } 
+				if(index == 8000  ){ fTriggers.TVAL_CFA_HF    = EvtRed->CoboAsad[it].peakheight[hit] ; }
+				if(index == 9000  ){ fTriggers.TVAL_CFA_CATD4 = EvtRed->CoboAsad[it].peakheight[hit] ; }
+				if(index == 10000 ){ fTriggers.TVAL_CFA_CATD6 = EvtRed->CoboAsad[it].peakheight[hit] ; }
+
+				if(index == 11000 ){ fTriggers.DT_CLK_UP      = EvtRed->CoboAsad[it].peakheight[hit] ; }
+				if(index == 12000 ){ fTriggers.DT_CLK         = EvtRed->CoboAsad[it].peakheight[hit] ; }
+				if(index == 13000 ){ fTriggers.DT_GET_UP      = EvtRed->CoboAsad[it].peakheight[hit] ; }
+				if(index == 14000 ){ fTriggers.DT_GET         = EvtRed->CoboAsad[it].peakheight[hit] ; }
+				if(index == 15000 ){ fTriggers.DT_VXI_UP      = EvtRed->CoboAsad[it].peakheight[hit] ; }
+				if(index == 16000 ){ fTriggers.DT_VXI         = EvtRed->CoboAsad[it].peakheight[hit] ; }
+
+				if(index == 17000 ){ fTriggers.CTR_TIMEH_UP   = EvtRed->CoboAsad[it].peakheight[hit] ; }
+				if(index == 18000 ){ fTriggers.CTR_TIMEH      = EvtRed->CoboAsad[it].peakheight[hit] ; }
+				if(index == 19000 ){ fTriggers.CTR_TIMEML_UP  = EvtRed->CoboAsad[it].peakheight[hit] ; }
+				if(index == 20000 ){ fTriggers.CTR_TIMEML     = EvtRed->CoboAsad[it].peakheight[hit] ; }
+
+				if(index == 21000 ){ fTriggers.CTR_EVT_UP     = EvtRed->CoboAsad[it].peakheight[hit] ; }
+				if(index == 22000 ){ fTriggers.CTR_EVT        = EvtRed->CoboAsad[it].peakheight[hit] ; }	
+
+				if(index == 23000 ){ fTriggers.SCA_TiD3_UP    = EvtRed->CoboAsad[it].peakheight[hit] ; }
+				if(index == 24000 ){ fTriggers.SCA_TiD3       = EvtRed->CoboAsad[it].peakheight[hit] ; }	
+				if(index == 25000 ){ fTriggers.SCA_CATSD4_UP  = EvtRed->CoboAsad[it].peakheight[hit] ; }
+				if(index == 26000 ){ fTriggers.SCA_CATSD4     = EvtRed->CoboAsad[it].peakheight[hit] ; }	
+				if(index == 27000 ){ fTriggers.SCA_CATSD5_UP  = EvtRed->CoboAsad[it].peakheight[hit] ; }
+				if(index == 28000 ){ fTriggers.SCA_CATSD5     = EvtRed->CoboAsad[it].peakheight[hit] ; }	
+				if(index == 29000 ){ fTriggers.SCA_CFA_UP     = EvtRed->CoboAsad[it].peakheight[hit] ; }
+				if(index == 30000 ){ fTriggers.SCA_CFA        = EvtRed->CoboAsad[it].peakheight[hit] ; }	
+				if(index == 31000 ){ fTriggers.SCA_SiBeam1_UP = EvtRed->CoboAsad[it].peakheight[hit] ; }
+				if(index == 32000 ){ fTriggers.SCA_SiBeam1    = EvtRed->CoboAsad[it].peakheight[hit] ; }
+				if(index == 33000 ){ fTriggers.SCA_SiBeam2_UP = EvtRed->CoboAsad[it].peakheight[hit] ; }
+				if(index == 34000 ){ fTriggers.SCA_SiBeam2    = EvtRed->CoboAsad[it].peakheight[hit] ; }	
+				if(index == 35000 ){ fTriggers.SCA_Si0_UP     = EvtRed->CoboAsad[it].peakheight[hit] ; }
+				if(index == 36000 ){ fTriggers.SCA_Si0        = EvtRed->CoboAsad[it].peakheight[hit] ; }
+				if(index == 37000 ){ fTriggers.SCA_SiS_UP     = EvtRed->CoboAsad[it].peakheight[hit] ; }
+				if(index == 38000 ){ fTriggers.SCA_SiS        = EvtRed->CoboAsad[it].peakheight[hit] ; }
+				if(index == 39000 ){ fTriggers.SCA_L1ok_UP    = EvtRed->CoboAsad[it].peakheight[hit] ; }
+				if(index == 40000 ){ fTriggers.SCA_L1ok       = EvtRed->CoboAsad[it].peakheight[hit] ; }
+			}
+		}
+	}
+}
+
+void ActEvent::ReadHits(const ActCalibrations &calibrations, const MEventReduced *EvtRed)
 {
 	auto TABLE { calibrations.GetTABLE()};
 	auto PadAlignCoefs { calibrations.GetPadAlignCoefs()};
-	//auto silicons { GetEventSilicons()};
-	// std::vector<std::vector<std::vector<double>>> voxel(ActParameters::NPADX,
-	// 													std::vector<std::vector<double>>(ActParameters::NPADY,
-	// 																					 std::vector<double>(ActParameters::NPADZ, 0.)));
+
+	int hitID { 0};
+	//read to array of ActHits without considering rebinning by now
+	for(int it = 0; it < EvtRed->CoboAsad.size(); it++)
+	{
+		int co = EvtRed->CoboAsad[it].globalchannelid>>11 ;
+		int as = (EvtRed->CoboAsad[it].globalchannelid - (co<<11))>>9 ;
+		int ag = (EvtRed->CoboAsad[it].globalchannelid - (co<<11)-(as<<9))>>7 ;
+		int ch = EvtRed->CoboAsad[it].globalchannelid - (co<<11)-(as<<9)-(ag<<7) ;
+		int where = co * ActParameters::g_NB_ASAD * ActParameters::g_NB_AGET * ActParameters::g_NB_CHANNEL +
+			as * ActParameters::g_NB_AGET * ActParameters::g_NB_CHANNEL +
+			ag * ActParameters::g_NB_CHANNEL +
+			ch ;
+		// Read HITS in 3D!
+		if((co != 31) && (co != 16))
+		{
+			for(int hit = 0; hit < EvtRed->CoboAsad[it].peakheight.size(); hit++)
+			{
+				if(TABLE[5][where] != -1)
+				{
+					double z_position { EvtRed->CoboAsad[it].peaktime[hit]};
+					if(z_position > 0.)
+					{
+						auto Qiaux { EvtRed->CoboAsad[it].peakheight[hit]};
+						auto Qiaux_align { PadAlignCoefs[where][0] + PadAlignCoefs[where][1] * Qiaux
+						 				   + PadAlignCoefs[where][2] * Qiaux * Qiaux};
+						double xval { static_cast<double>(TABLE[4][where])};
+						double yval { static_cast<double>(TABLE[5][where])};
+
+						//HOPEFULLY, final version
+						ActHit candidate { hitID, XYZPoint(xval, yval, z_position), Qiaux_align};
+						//define a global index for 1D vectors voxel and indexOfHit
+						int globalIndex { static_cast<int>(xval + yval * ActParameters::g_NPADX
+										  + z_position * ActParameters::g_NPADX * ActParameters::g_NPADY)};
+						//increase count on voxel
+						voxel[globalIndex] += 1;
+						indexOfVoxelInHitArray[globalIndex] = hitID;
+						
+						if(voxel[globalIndex] > 1)//then we have to append charge to already existent hit
+						{
+							std::cout<<BOLDCYAN<<"Found coincidence in fHitArray -> Resetting hit"<<RESET<<'\n';
+							//we already have the index in fHitArray!!!
+							auto alreadyCharge { fHitArray[indexOfVoxelInHitArray[globalIndex]].GetCharge()};
+							fHitArray[indexOfVoxelInHitArray[globalIndex]].SetCharge(alreadyCharge + Qiaux_align);
+						}
+						else//otherwise (by default, do not check)
+						{
+							fHitArray.push_back(candidate);
+							hitID++;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void ActEvent::ReadEvent(const ActCalibrations &calibrations, const MEvent* Evt, const MEventReduced *EvtRed, bool checkOverlap)
+{
+	auto TABLE { calibrations.GetTABLE()};
+	auto PadAlignCoefs { calibrations.GetPadAlignCoefs()};
 	
 	int hitID { 0};
 	//read to array of ActHits without considering rebinning by now
@@ -49,15 +213,6 @@ void ActEvent::ReadEvent(const ActCalibrations &calibrations, const MEvent* Evt,
 					int Si0Index { index};
 					auto value { EvtRed->CoboAsad[it].peakheight[hit]};
 					fSilicons.fSi0[Si0Index] = value;
-					// Si0Number  = index ;
-					// E_Si0_val = 0 ; // We initialize the value of energy of each Si to 0.
-					// int c = 0 ;
-					// if ( 1 ) { //EvtRed->CoboAsad[it].peakheight[hit] > Threshold_Silicon ){
-
-					// 	//counterHitsOnSi += 1 ;
-					// 	E_Si0_val= EvtRed->CoboAsad[it].peakheight[hit] ; //offset_cal_Si_L_array
-					// }
-					// E_Si0_array[Si0Number] = E_Si0_val; //We fill the branch
 				}
 				//Index for Si signal tunned for the heavy particle
 				if(index>999 && index<1011)
@@ -66,14 +221,6 @@ void ActEvent::ReadEvent(const ActCalibrations &calibrations, const MEvent* Evt,
 					auto value { EvtRed->CoboAsad[it].peakheight[hit]};
 					
 					fSilicons.fSi1[Si1Index] = value;
-					// E_Si1_val = 0 ; // We initialize the value of energy of each Si to 0.
-					// if ( 1 ) { //EvtRed->CoboAsad[it].peakheight[hit] > 0 ){
-					// 	E_Si1_val= EvtRed->CoboAsad[it].peakheight[hit] ;
-					// 	counterHitsOnSi += 1 ;
-
-					// }
-					// E_Si1_array[Si1Number] = E_Si1_val; //We fill the branch
-
 				}
 				if(index>1999 && index<2008)
 				{
@@ -81,11 +228,6 @@ void ActEvent::ReadEvent(const ActCalibrations &calibrations, const MEvent* Evt,
 					auto value { EvtRed->CoboAsad[it].peakheight[hit]};
 
 					fSilicons.fSiS[SiSIndex] = (value > 0) ? value : 0.;
-					// E_SiS_val = 0 ; // We initialize the value of energy of each Si to 0.
-					// if (EvtRed->CoboAsad[it].peakheight[hit] > 0 ){
-					// 	E_SiS_val =  ;
-					// }
-					// E_SiS_array[SiSNumber] = E_SiS_val ;
 				}
 				if(index == 3000 ){ fSilicons.fSiBeam[0] = EvtRed->CoboAsad[it].peakheight[hit] ; }
 				if(index == 4000 ){ fSilicons.fSiBeam[1] = EvtRed->CoboAsad[it].peakheight[hit] ; }
@@ -148,49 +290,28 @@ void ActEvent::ReadEvent(const ActCalibrations &calibrations, const MEvent* Evt,
 						 				   + PadAlignCoefs[where][2] * Qiaux * Qiaux};
 						double xval { static_cast<double>(TABLE[4][where])};
 						double yval { static_cast<double>(TABLE[5][where])};
-						//std::cout<<" X: "<<xval<<" Y: "<<yval<< " Z: "<<z_position<<'\n';
-						//std::cout<<"Q: "<<Qiaux<<" Q_aligned: "<<Qiaux_align<<'\n';
 
-						// voxel[xval][yval][z_position] += Qiaux_align;
-						// std::cout<<"VOXEL filled"<<'\n';
-						// for(int x = 0; x < ActParameters::NPADX; x++)
-						// {
-						// 	for(int y = 0; y < ActParameters::NPADY; y++)
-						// 	{
-						// 		for(int z = 0; z < ActParameters::NPADZ; z++)
-						// 		{
-						// 			if(voxel[x][y][z] <= 0.) continue;
-						// 			ActHit candidate { hitID, XYZPoint(x, y, z), voxel[x][y][z]};
-						// 			fHitArray.push_back(candidate);
-						// 			hitID++;
-						// 		}
-						// 	}
-						// }
-						// ActHit candidate { hitID, XYZPoint(xval, yval, z_position), Qiaux_align};
-						// auto isInVectorLambda = [&candidate](const ActHit& h) -> bool
-						// {return ((h.GetPosition().X() == candidate.GetPosition().X())
-						// 		 && (h.GetPosition().Y() == candidate.GetPosition().Y())
-						// 		 && (h.GetPosition().Z() == candidate.GetPosition().Z()));};
-						// auto itFound { std::find_if(fHitArray.begin(), fHitArray.end(), isInVectorLambda)};
-						// auto indexFound { itFound - fHitArray.begin()};
-						// //if ActHit (by POSITION) is already in fHitArray,
-						// //add charge and dont update ID (intended to work with rebinning)
-						// if( itFound != fHitArray.end())
-						// {
-						// 	fHitArray[indexFound].SetCharge(fHitArray[indexFound].GetCharge()
-						// 									+ Qiaux_align);
-						// 	//do not increment hitID
-						// }
-						// else
-						// {
-						// 	fHitArray.push_back(candidate);
-						// 	hitID++;
-						// }
-
-						//VERSION WITHOUT taking into account posible hit with lower charge
+						//HOPEFULLY, final version
 						ActHit candidate { hitID, XYZPoint(xval, yval, z_position), Qiaux_align};
-						fHitArray.push_back(candidate);
-						hitID++;
+						//define a global index for 1D vectors voxel and indexOfHit
+						int globalIndex { static_cast<int>(xval + yval * ActParameters::g_NPADX
+										  + z_position * ActParameters::g_NPADX * ActParameters::g_NPADY)};
+						//increase count on voxel
+						voxel[globalIndex] += 1;
+						indexOfVoxelInHitArray[globalIndex] = hitID;
+						
+						if(voxel[globalIndex] > 1 && checkOverlap)//then we have to append charge to already existent hit
+						{
+							std::cout<<BOLDCYAN<<"Found coincidence in fHitArray -> Resetting hit"<<RESET<<'\n';
+							//we already have the index in fHitArray!!!
+							auto alreadyCharge { fHitArray[indexOfVoxelInHitArray[globalIndex]].GetCharge()};
+							fHitArray[indexOfVoxelInHitArray[globalIndex]].SetCharge(alreadyCharge + Qiaux_align);
+						}
+						else//otherwise (by default, do not check)
+						{
+							fHitArray.push_back(candidate);
+							hitID++;
+						}
 					}
 				}
 			}
@@ -401,4 +522,5 @@ void ActEvent::ReadSiliconsData()
 	//call subfunctions
 	ReadSilicons01FData();
 	ReadSiliconsSData();
+	//missing beam?
 }

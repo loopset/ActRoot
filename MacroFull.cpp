@@ -82,7 +82,7 @@ void MacroFull(int initRun, int endRun)
 	/////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////// LOOP OVER EVENTS /////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////
-
+	ActEvent event;
 	//auxiliar pointers and MEvents needed
 	TTree* runTree;
 	//pointer to MEventReduced
@@ -108,13 +108,14 @@ void MacroFull(int initRun, int endRun)
 		{
 			runTree->GetEntry(iEvent);
 			if(!(iEvent % 1000)) std::cout<<BOLDGREEN<<"At event "<<iEvent<<RESET<<'\n';
-			
-			ActEvent event;
-			event.ReadEvent(calibrations, myEvent, myEventReduced);
-			TriggersAndGates triggers = { event.GetEventTriggers()};
-			//choose only GATCONF = 8
-			if(triggers.GATCONF != 8) continue;
 
+			event.ReadTriggersAndGates(myEvent, myEventReduced);
+			//check GATCONF before reading ActHits!! (saves way more time than having to perform two for loops!)
+			auto triggers { event.GetEventTriggers()};
+			if(triggers.GATCONF != 8) continue;
+			//then, continue reading hits
+			event.ReadHits(calibrations, myEventReduced);
+		
 			//////// CALIBRATE AND READ SILICONS ///////
 			event.CalibrateSilicons(calibrations);
 			event.ReadSiliconsData();
@@ -132,6 +133,8 @@ void MacroFull(int initRun, int endRun)
 			//painter.DrawEvent(event.GetEventHits());
 			painter.DrawResults(event.GetEventHits(), out);
 
+			//reset ActEvent
+			event.Reset();
 			
 		}
 	}
