@@ -546,6 +546,7 @@ void ActEvent::CleanSaturatedHits(double chargeThreshold, int minDimZToDelete)
 		chargeInPad[position.X()][position.Y()] += hit.GetCharge() ;
 		zInPad[std::make_pair(position.X(), position.Y())].push_back(hit.GetHitID());
 	}
+	bool IDHasChanged { false};
 	for(int x = 0; x < ActParameters::g_NPADX; x++)
 	{
 		for(int y = 0; y < ActParameters::g_NPADY; y++)
@@ -555,6 +556,7 @@ void ActEvent::CleanSaturatedHits(double chargeThreshold, int minDimZToDelete)
 			auto indexesToDelete { zInPad[std::make_pair(x, y)]};
 			if(indexesToDelete.size() > minDimZToDelete)//saturation is characterized by a large spread over Z
 			{
+				IDHasChanged = true;
 				std::cout<<BOLDCYAN<<"Deleting "<<indexesToDelete.size()<<" hits which are saturated!"<<RESET<<'\n';
 				std::sort(indexesToDelete.begin(), indexesToDelete.end(),
 						  std::greater<int>());
@@ -564,6 +566,14 @@ void ActEvent::CleanSaturatedHits(double chargeThreshold, int minDimZToDelete)
 					fHitArray.erase(fHitArray.begin() + i);
 				}
 			}
+		}
+	}
+	//and reset hitID if necessary
+	if(IDHasChanged)
+	{
+		for(int newID = 0; newID < fHitArray.size(); newID++)
+		{
+			fHitArray[newID].SetHitID(newID);
 		}
 	}
 }
