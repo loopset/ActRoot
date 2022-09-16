@@ -27,6 +27,8 @@ protected://if we ever decide to inherit the class
 	//auxiliar vectors to ReadHits
 	std::vector<int> voxel;
 	std::vector<int> indexOfVoxelInHitArray;
+	// //auxiliar vector to CleanSaturatedPads
+	// std::vector<double> pad;
 
 
 	public:
@@ -42,6 +44,9 @@ protected://if we ever decide to inherit the class
 	//two functions that split reading to our structures; ReadTriggers should be run before ReadHits
 	void ReadTriggersAndGates(const MEvent* Evt, const MEventReduced* EvtRed);
 	void ReadHits(const ActCalibrations& calibrations, const MEventReduced* EvtRed);
+
+	//clean fHitArray from saturated pads
+	void CleanSaturatedHits(double chargeThreshold, int minDimZToDelete = 20);
 	
 	//calibrate our data using ActCalibrations info
 	void CalibrateSilicons(const ActCalibrations& calibrations);
@@ -79,6 +84,13 @@ protected://if we ever decide to inherit the class
 		bool zCondition { position.Z() == newPosition.Z()};
 
 		return (xCondition && yCondition && zCondition);
+	}
+	template <typename T>
+	inline bool isInVector(T val, std::vector<T> vec)
+	{
+		if (vec.size() == 0)
+			return false;
+		return std::find(vec.begin(), vec.end(), val) != vec.end();
 	}
 	
 };

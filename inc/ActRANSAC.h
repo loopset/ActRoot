@@ -31,7 +31,7 @@ namespace SampleConsensus
 		float fDistanceThreshold {15}; //below this distance, a point is considered an inlier
 		bool fFitPattern {true};
 		double fChargeThreshold {-1.};
-		int fSamplePoints {2};// for ActLine
+		int fSamplePoints {2};// for ActLine (should not be changed)
 		// int fSampleMethod {0}; //sample method to choose
 		// double fGaussianSigma { 30.};
 		// bool fSampleWithReplacement{false}; // not implemented yet!!
@@ -60,6 +60,7 @@ namespace SampleConsensus
 		int GetMinPatterPoints() const { return fMinPatternPoints; }
 		float GetDistanceThreshold() const { return fDistanceThreshold; }
 		double GetChargeThreshold() const { return fChargeThreshold; }
+
 		//for sampler
 		SamplingMethod GetSampleMethod() const { return fSampler->GetSampleMethod(); }
 		double GetGaussianSigma() const { return fSampler->GetGaussianSigma(); }

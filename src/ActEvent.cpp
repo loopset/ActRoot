@@ -8,9 +8,12 @@
 #include "../cobo_libs/inc/MEventReduced.h"
 #include <algorithm>
 #include <cmath>
+#include <functional>
 #include <map>
 #include <memory>
+#include <stdexcept>
 #include <string>
+#include <utility>
 #include <vector>
 #include <math.h>
 
@@ -18,6 +21,7 @@ ActEvent::ActEvent()
 	: fHitArray(), fSilicons(), fTriggers(),
 	  voxel(ActParameters::g_NPADX *  ActParameters::g_NPADY *  ActParameters::g_NPADZ),
 	  indexOfVoxelInHitArray(ActParameters::g_NPADX * ActParameters::g_NPADY * ActParameters::g_NPADZ, -1)
+	  //pad(ActParameters::g_NPADX *  ActParameters::g_NPADY)
 {
 }
 
@@ -523,4 +527,43 @@ void ActEvent::ReadSiliconsData()
 	ReadSilicons01FData();
 	ReadSiliconsSData();
 	//missing beam?
+}
+
+void ActEvent::CleanSaturatedHits(double chargeThreshold, int minDimZToDelete)
+{
+	if(fHitArray.size() == 0)
+	{
+		throw std::runtime_error("Error: CleanSaturedHits has received an empty fHitArray -> Fill ActEvent first");
+	}
+	//vector to represent pad plane
+	//map to store fHitArray indixes in each pad
+	std::map<std::pair<int, int>, std::vector<int>> zInPad;
+	std::vector<std::vector<double>> chargeInPad(ActParameters::g_NPADX,
+												 std::vector<double>(ActParameters::g_NPADY));
+	for(auto& hit : fHitArray)
+	{
+		auto position  { hit.GetPosition()};
+		chargeInPad[position.X()][position.Y()] += hit.GetCharge() ;
+		zInPad[std::make_pair(position.X(), position.Y())].push_back(hit.GetHitID());
+	}
+	for(int x = 0; x < ActParameters::g_NPADX; x++)
+	{
+		for(int y = 0; y < ActParameters::g_NPADY; y++)
+		{
+			if(chargeInPad[x][y] < chargeThreshold)
+				continue;
+			auto indexesToDelete { zInPad[std::make_pair(x, y)]};
+			if(indexesToDelete.size() > minDimZToDelete)//saturation is characterized by a large spread over Z
+			{
+				std::cout<<BOLDCYAN<<"Deleting "<<indexesToDelete.size()<<" hits which are saturated!"<<RESET<<'\n';
+				std::sort(indexesToDelete.begin(), indexesToDelete.end(),
+						  std::greater<int>());
+				//now that they are sorted in descending way, we can erase
+				for(auto& i : indexesToDelete)
+				{
+					fHitArray.erase(fHitArray.begin() + i);
+				}
+			}
+		}
+	}
 }

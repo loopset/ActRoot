@@ -20,7 +20,6 @@
 SampleConsensus::ActRANSAC::ActRANSAC(int iteractions, int minPoints, float distanceThreshold)
 	: fIterations(iteractions), fMinPatternPoints(minPoints), fDistanceThreshold(distanceThreshold)
 {
-	
 }
 
 ActClusteringResults SampleConsensus::ActRANSAC::Solve(const std::vector<ActHit>& hitArray)

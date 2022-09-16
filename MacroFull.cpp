@@ -19,6 +19,7 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include <vector>
 
 void MacroFull(int initRun, int endRun)
 {
@@ -125,13 +126,30 @@ void MacroFull(int initRun, int endRun)
 			// std::cout<<"Data SiS: "<<sil.fData["S"]["ES"]<<'\n';
 
 
-			//////// RANSAC ///////
-			SampleConsensus::ActRANSAC estimator { 500, 15, 4.};
+			/////////////////// RANSAC ///////////////////
+			//////// Clean saturated pads
+			event.CleanSaturatedHits(2000.);
+			//////// Cut on hits
+			auto allHits { event.GetEventHits()};
+			double yMin { 50.};
+			double yMax { 70.};
+			std::vector<ActHit> cutHits;
+			for(auto& hit : allHits)
+			{
+				//std::cout<<"hit ID: "<<hit.GetHitID()<<'\n';
+				auto position { hit.GetPosition()};
+				if( (position.Y() >= yMin) && (position.Y() <= yMax) )
+					continue;
+				else
+					cutHits.push_back(hit);
+			}
+			SampleConsensus::ActRANSAC estimator { 500, 20, 4.};
 			estimator.SetSampleMethod(RandomSampling::SamplingMethod::kGaussian);
-			auto out = estimator.Solve(event.GetEventHits());
+			estimator.SetGaussianSigma(10.);
+			auto out = estimator.Solve(cutHits);
 
 			//painter.DrawEvent(event.GetEventHits());
-			painter.DrawResults(event.GetEventHits(), out);
+			painter.DrawResults(allHits, out);
 
 			//reset ActEvent
 			event.Reset();
