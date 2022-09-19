@@ -546,34 +546,41 @@ void ActEvent::CleanSaturatedHits(double chargeThreshold, int minDimZToDelete)
 		chargeInPad[position.X()][position.Y()] += hit.GetCharge() ;
 		zInPad[std::make_pair(position.X(), position.Y())].push_back(hit.GetHitID());
 	}
+	//vector to store hits to delete (to delete all of them together at the end)
 	bool IDHasChanged { false};
+	std::vector<int> indexesToDelete;
 	for(int x = 0; x < ActParameters::g_NPADX; x++)
 	{
 		for(int y = 0; y < ActParameters::g_NPADY; y++)
 		{
 			if(chargeInPad[x][y] < chargeThreshold)
 				continue;
-			auto indexesToDelete { zInPad[std::make_pair(x, y)]};
-			if(indexesToDelete.size() > minDimZToDelete)//saturation is characterized by a large spread over Z
+			auto indexesInPadToDeletete { zInPad[std::make_pair(x, y)]};
+			if(indexesInPadToDeletete.size() > minDimZToDelete)//saturation is characterized by a large spread over Z
 			{
+				indexesToDelete.insert(indexesToDelete.end(),
+									   indexesInPadToDeletete.begin(), indexesInPadToDeletete.end());
 				IDHasChanged = true;
-				std::cout<<BOLDCYAN<<"Deleting "<<indexesToDelete.size()<<" hits which are saturated!"<<RESET<<'\n';
-				std::sort(indexesToDelete.begin(), indexesToDelete.end(),
-						  std::greater<int>());
-				//now that they are sorted in descending way, we can erase
-				for(auto& i : indexesToDelete)
-				{
-					fHitArray.erase(fHitArray.begin() + i);
-				}
 			}
 		}
 	}
-	//and reset hitID if necessary
 	if(IDHasChanged)
 	{
+		std::cout<<BOLDCYAN<<"Deleting "<<indexesToDelete.size()<<" hits which are saturated!"<<RESET<<'\n';
+		std::sort(indexesToDelete.begin(), indexesToDelete.end(),
+				  std::greater<int>());
+		//now that they are sorted in descending way, we can erase
+		for(auto& i : indexesToDelete)
+		{
+			fHitArray.erase(fHitArray.begin() + i);
+		}
+		//and we should reset hitID
 		for(int newID = 0; newID < fHitArray.size(); newID++)
 		{
 			fHitArray[newID].SetHitID(newID);
 		}
 	}
+
+
+	
 }
