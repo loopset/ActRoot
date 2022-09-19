@@ -1,11 +1,15 @@
 #include "ActEvent.h"
 
 #include "ActHit.h"
+#include "ActLine.h"
+#include "ActClusteringResults.h"
+#include "ActTrack.h"
 #include "ActParameters.h"
 #include "ActCalibrations.h"
 
 #include "../cobo_libs/inc/MEvent.h"
 #include "../cobo_libs/inc/MEventReduced.h"
+
 #include <algorithm>
 #include <cmath>
 #include <functional>
@@ -17,11 +21,12 @@
 #include <vector>
 #include <math.h>
 
+#include <TMath.h>
+
 ActEvent::ActEvent()
 	: fHitArray(), fSilicons(), fTriggers(),
 	  voxel(ActParameters::g_NPADX *  ActParameters::g_NPADY *  ActParameters::g_NPADZ),
 	  indexOfVoxelInHitArray(ActParameters::g_NPADX * ActParameters::g_NPADY * ActParameters::g_NPADZ, -1)
-	  //pad(ActParameters::g_NPADX *  ActParameters::g_NPADY)
 {
 }
 
@@ -32,6 +37,7 @@ void ActEvent::Reset()
 	fTriggers = {};
 	voxel.assign(voxel.size(), 0);
 	indexOfVoxelInHitArray.assign(indexOfVoxelInHitArray.size(), -1);
+	fTracks.clear();
 }
 
 void ActEvent::ReadTriggersAndGates(const MEvent *Evt, const MEventReduced *EvtRed)
@@ -579,8 +585,27 @@ void ActEvent::CleanSaturatedHits(double chargeThreshold, int minDimZToDelete)
 		{
 			fHitArray[newID].SetHitID(newID);
 		}
+	}	
+}
+
+//set ActTracks from RANSAC
+void ActEvent::ReadTracksFromAlgorithm(ActClusteringResults &results)
+{
+	for(auto& track : results.GetTrackCandidates())
+	{
+		CalculatePhysicalInfoOfTrack(track);
+		fTracks.push_back(track);
 	}
+}
 
-
-	
+void ActEvent::CalculatePhysicalInfoOfTrack(ActTrack& track)
+{
+	//get line representing fit of ActTrack
+	auto line { track.GetLine()};
+	//ANGLES
+	//1-Theta with beam, assuming ideal beam coming at (0, 0, 1)
+	XYZVector n_z {0., 0., 1.};
+	auto dot { n_z.Dot(line.GetDirection())};
+	auto theta { TMath::ACos(dot / (TMath::Sqrt(line.GetDirection().Mag2())))};
+	track.SetTheta( theta);
 }

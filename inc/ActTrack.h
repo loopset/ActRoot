@@ -27,7 +27,13 @@ class ActTrack : public TObject
 	Int_t fTrackID {-1};
 	std::vector<ActHit> fHitArray;
 	//Line fit results
-	ActLine fLine;
+	ActLine fLine {};
+	//physical information
+	Double_t fTotalCharge {};
+	Double_t fTrackLength {};
+	Double_t fTheta {};
+	Double_t fPhi {};
+	
 
 	public:
 	ActTrack() = default;
@@ -44,10 +50,22 @@ class ActTrack : public TObject
 	// //or as constant
 	const std::vector<ActHit>& GetHitArrayConst() const { return fHitArray; }
 
+	//getters for physical info
+	Double_t GetTotalCharge() const { return fTotalCharge; }
+	Double_t GetTrackLength() const { return fTrackLength; }
+	Double_t GetTheta() const { return fTheta; }
+	Double_t GetPhi() const { return fPhi; }
+
 	void SetTrackID(Int_t trackID) { fTrackID = trackID; }
 	void AddHit(const ActHit& hit);
 	void AddHit(ActHit &&hit);//r-value move
 	void SetLine(const ActLine& line);
+
+	//setters for physical info
+	void SetTotalCharge(double charge){ fTotalCharge = charge; }
+	void SetTrackLength(double length){ fTrackLength = length; }
+	void SetTheta(double theta){ fTheta = theta; }
+	void SetPhi(double phi){ fPhi = phi; }
 
 	ClassDef(ActTrack, 1);
 };

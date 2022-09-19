@@ -113,7 +113,8 @@ void MacroFull(int initRun, int endRun)
 			event.ReadTriggersAndGates(myEvent, myEventReduced);
 			//check GATCONF before reading ActHits!! (saves way more time than having to perform two for loops!)
 			auto triggers { event.GetEventTriggers()};
-			if(triggers.GATCONF != 8) continue;
+			if(triggers.GATCONF != 8)
+				continue;
 			//then, continue reading hits
 			event.ReadHits(calibrations, myEventReduced);
 		
@@ -122,6 +123,9 @@ void MacroFull(int initRun, int endRun)
 			event.ReadSiliconsData();
 			//test
 			// Silicons sil { event.GetEventSilicons()};
+			auto silicons { event.GetEventSilicons()};
+			// if(silicons.fData["01F"]["E0"] < 1.)
+			// 	continue;
 			// //for(auto& s : sil.fSi0_cal) std::cout<<"Value 0 calibrated: "<<s<<'\n';
 			// std::cout<<"Data SiS: "<<sil.fData["S"]["ES"]<<'\n';
 
@@ -143,10 +147,12 @@ void MacroFull(int initRun, int endRun)
 				else
 					cutHits.push_back(hit);
 			}
-			SampleConsensus::ActRANSAC estimator { 500, 20, 4.};
+			SampleConsensus::ActRANSAC estimator { 500, 20, 3.};
 			estimator.SetSampleMethod(RandomSampling::SamplingMethod::kGaussian);
 			estimator.SetGaussianSigma(10.);
 			auto out = estimator.Solve(cutHits);
+			//save out to ActEvent
+			event.ReadTracksFromAlgorithm(out);
 
 			//painter.DrawEvent(event.GetEventHits());
 			painter.DrawResults(allHits, out);

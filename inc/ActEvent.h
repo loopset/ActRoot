@@ -2,6 +2,8 @@
 #define ACTEVENT_H
 
 #include "ActHit.h"
+#include "ActClusteringResults.h"
+#include "ActTrack.h"
 #include "ActCalibrations.h"
 #include "ActStructs.h"
 
@@ -10,26 +12,26 @@
 
 #include <Math/Point3Dfwd.h>
 #include <Math/Point3D.h>
+#include <Math/Vector3Dfwd.h>
+#include <Math/Vector3D.h>
 #include <vector>
-
 
 class ActEvent 
 {
 	public:
 	using XYZPoint = ROOT::Math::XYZPoint;
+	using XYZVector = ROOT::Math::XYZVector;
 	
-protected://if we ever decide to inherit the class
+    protected://if we ever decide to inherit the class
 	std::vector<ActHit> fHitArray {};
 	Silicons fSilicons {};
 	TriggersAndGates fTriggers {};
+	std::vector<ActTrack> fTracks {};
 
 	private:
 	//auxiliar vectors to ReadHits
 	std::vector<int> voxel;
 	std::vector<int> indexOfVoxelInHitArray;
-	// //auxiliar vector to CleanSaturatedPads
-	// std::vector<double> pad;
-
 
 	public:
 	ActEvent();//not default bc we have to initialize voxel and indexOfVoxelInHitArray
@@ -54,6 +56,9 @@ protected://if we ever decide to inherit the class
 	//read silicon data after calibration (i.e, multiplicity, stopping layer, final energy)
 	void ReadSiliconsData();
 
+	//read ActRANSAC Clustering results and save tracks to ActEvent
+	void ReadTracksFromAlgorithm(ActClusteringResults& results);
+
 	/////////////////////// GETTERS ///////////////////////////////
 	//get events
 	const std::vector<ActHit>& GetConstEventHits() const { return fHitArray; }
@@ -66,6 +71,10 @@ protected://if we ever decide to inherit the class
 	TriggersAndGates& GetEventTriggers() { return fTriggers; }
 	const TriggersAndGates& GetConstEventTriggers() const { return fTriggers; }
 
+	//tracks
+	std::vector<ActTrack>& GetEventTracks() { return fTracks; }
+	const std::vector<ActTrack>& GetConstEventTracks() const { return fTracks; }
+
 	protected:
 	//splitted functions by types of silicons
 	void CalibrateSilicons01S(const ActCalibrations& calibrations);
@@ -73,6 +82,9 @@ protected://if we ever decide to inherit the class
 
 	void ReadSilicons01FData();
 	void ReadSiliconsSData();
+
+	//calculate physical info when filling fTracks
+	void CalculatePhysicalInfoOfTrack(ActTrack& track);
 
 	//inline function to search for matches between ActHits based on position
 	inline bool isAlreadyInHitArray(ActHit& hit, ActHit& newHit)
