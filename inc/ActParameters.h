@@ -73,6 +73,9 @@ namespace ActParameters
 	// if ESiS > this, multiplicityS += 1
 	inline constexpr double minESiSToIncreaseMultiplicity { 0.5};
 
+	//number of pads above chamber boundaries where silicons are placed
+	inline constexpr double g_NPADSISIDE { 50}; //10 cm
+	inline constexpr double g_NPADSSIFRONT { 50}; //10 cm
 
 	//MEvent parameters names
 	inline const std::vector<TString> VXINames {"SI0_", "SI1_", "SIS_",

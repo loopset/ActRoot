@@ -32,6 +32,7 @@
 
 #pragma link C++ struct Silicons - !;
 #pragma link C++ struct TriggersAndGates -!;
+#pragma link C++ struct TrackPhysics -!;
 
 #pragma link C++ class ActEvent - !;
 

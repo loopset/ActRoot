@@ -1,6 +1,8 @@
 #ifndef ACTSTRUCTS_H
 #define ACTSTRUCTS_H
 
+#include <Math/Point3Dfwd.h>
+#include <Math/Point3D.h>
 #include <map>
 #include <string>
 #include <vector>
@@ -71,4 +73,23 @@ struct TriggersAndGates
 	~TriggersAndGates() = default;
 };
 
+
+struct TrackPhysics
+{
+	using XYZPoint = ROOT::Math::XYZPoint;
+	
+	int fTrackID {-1};
+	double fTheta {};
+	double fPhi {};
+	XYZPoint fReactionPoint {-1, -1, -1};
+	XYZPoint fSiliconPoint {-1, -1, -1};
+	double fTrackLength {};
+	double fTotalCharge {};
+	double fAverageCharge {};
+	std::string fReactionPlace {""};
+	std::string fSiliconPlace {""};
+	
+	TrackPhysics() = default;
+	~TrackPhysics() = default;
+};
 #endif //ACTSTRUCTS_H

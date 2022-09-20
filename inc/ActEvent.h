@@ -11,9 +11,7 @@
 #include "../cobo_libs/inc/MEventReduced.h"
 
 #include <Math/Point3Dfwd.h>
-#include <Math/Point3D.h>
 #include <Math/Vector3Dfwd.h>
-#include <Math/Vector3D.h>
 #include <vector>
 
 class ActEvent 
@@ -82,9 +80,6 @@ class ActEvent
 
 	void ReadSilicons01FData();
 	void ReadSiliconsSData();
-
-	//calculate physical info when filling fTracks
-	void CalculatePhysicalInfoOfTrack(ActTrack& track);
 
 	//inline function to search for matches between ActHits based on position
 	inline bool isAlreadyInHitArray(ActHit& hit, ActHit& newHit)

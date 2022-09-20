@@ -2,6 +2,7 @@
 
 #include "ActHit.h"
 #include "ActLine.h"
+#include "ActStructs.h"
 #include "ActClusteringResults.h"
 #include "ActTrack.h"
 #include "ActParameters.h"
@@ -593,19 +594,8 @@ void ActEvent::ReadTracksFromAlgorithm(ActClusteringResults &results)
 {
 	for(auto& track : results.GetTrackCandidates())
 	{
-		CalculatePhysicalInfoOfTrack(track);
+		//read physics before appending to array!
+		track.SetTrackPhysics();
 		fTracks.push_back(track);
 	}
-}
-
-void ActEvent::CalculatePhysicalInfoOfTrack(ActTrack& track)
-{
-	//get line representing fit of ActTrack
-	auto line { track.GetLine()};
-	//ANGLES
-	//1-Theta with beam, assuming ideal beam coming at (0, 0, 1)
-	XYZVector n_z {0., 0., 1.};
-	auto dot { n_z.Dot(line.GetDirection())};
-	auto theta { TMath::ACos(dot / (TMath::Sqrt(line.GetDirection().Mag2())))};
-	track.SetTheta( theta);
 }

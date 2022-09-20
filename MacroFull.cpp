@@ -153,6 +153,14 @@ void MacroFull(int initRun, int endRun)
 			auto out = estimator.Solve(cutHits);
 			//save out to ActEvent
 			event.ReadTracksFromAlgorithm(out);
+			for(auto& track : event.GetEventTracks())
+			{
+				if(track.GetIsGood())
+				{
+					auto info { track.GetTrackPhysics()};
+					std::cout<<"Track ID "<<info.fTrackID<<" with total charge "<<info.fTotalCharge<< " and track length "<<info.fTrackLength<<" pads"<<'\n';
+				}
+			}
 
 			//painter.DrawEvent(event.GetEventHits());
 			painter.DrawResults(allHits, out);
