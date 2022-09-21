@@ -81,7 +81,7 @@ void ActTrack::CalculatePhiTrack(ActTrack& track)
 void ActTrack::CalculateReactionPoint(ActTrack& track)
 {
 	
-	XYZPoint pointPlane { 0., 64., 0.};
+	XYZPoint pointPlane { 0., ActParameters::beamPlaneY, 0.};
 	XYZVector normalUnitaryPlane { 0., 1., 0.};
 
 	auto intersection { IntersectionTrackPlane(pointPlane, normalUnitaryPlane, track)};
@@ -89,27 +89,27 @@ void ActTrack::CalculateReactionPoint(ActTrack& track)
 	//also, if Z is outside 0 < z < NPADZ, it is probably a delta electron
 	if(IsInChamber(intersection))
 	{
-		track.GetTrackPhysics().fReactionPlace = "chamber";
+		track.GetTrackPhysics().fReactionPlace = ActParameters::trackChamber;
 		track.GetTrackPhysics().fReactionPoint = intersection;
 		return;
 	}
 	
 	if((intersection.Z() < 0) || (intersection.Z() > ActParameters::g_NPADZ))
 	{
-		track.GetTrackPhysics().fReactionPlace = "likelyDelta";
+		track.GetTrackPhysics().fReactionPlace = ActParameters::trackDelta;
 		fIsGood = false;
 		return;
 	}
 	//even if Z is inside chamber and X not, nothing guarantees that it is not a delta
 	if(intersection.X() < 0.)
 	{
-		track.GetTrackPhysics().fReactionPlace = "likelyWindow";
+		track.GetTrackPhysics().fReactionPlace = ActParameters::trackWindow;
 		fIsGood = false;
 		return;
 	}
 	else if(intersection.X() > ActParameters::g_NPADX)
 	{
-		track.GetTrackPhysics().fReactionPlace = "likelyDump";
+		track.GetTrackPhysics().fReactionPlace = ActParameters::trackDump;
 		fIsGood = false;
 		return;
 	}
@@ -134,17 +134,17 @@ void ActTrack::CalculateBoundaryPoint(ActTrack& track)
 	// std::cout<<'\t'<<"X: "<<intersectionX.X()<<" Y: "<<intersectionX.Y()<< " Z: "<<intersectionX.Z()<<'\n';
 	if(IsInChamber(intersectionY))
 	{
-		track.GetTrackPhysics().fSiliconPlace = "side";
+		track.GetTrackPhysics().fSiliconPlace = ActParameters::trackHitsSiliconSide;
 	}
 	else if (IsInChamber(intersectionX))
 	{
-		track.GetTrackPhysics().fSiliconPlace = "front";
+		track.GetTrackPhysics().fSiliconPlace = ActParameters::trackHitsSiliconFront;
 	}
 	else
 	{
 		//again, if intersection point in boundary is not in chamber
 		//we are not interested in this track
-		track.GetTrackPhysics().fSiliconPlace = "none";
+		track.GetTrackPhysics().fSiliconPlace = ActParameters::trackHitsSiliconOutside;
 		fIsGood = false;
 	}
 }
@@ -153,12 +153,12 @@ void ActTrack::CalculateSiliconPoint(ActTrack& track)
 {
 	XYZPoint pointPlane;
 	XYZVector vectorPlane;
-	if(track.GetTrackPhysics().fSiliconPlace == "side")
+	if(track.GetTrackPhysics().fSiliconPlace == ActParameters::trackHitsSiliconSide)
 	{
 		pointPlane = { 0., ActParameters::g_NPADY + ActParameters::g_NPADSISIDE, 0.};
 		vectorPlane = { 0., 1., 0.};
 	}
-	else if(track.GetTrackPhysics().fSiliconPlace == "front")
+	else if(track.GetTrackPhysics().fSiliconPlace == ActParameters::trackHitsSiliconFront)
 	{
 		pointPlane = { ActParameters::g_NPADX + ActParameters::g_NPADSSIFRONT, 0., 0.};
 		vectorPlane = { 1., 0., 0.};

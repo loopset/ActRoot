@@ -22,7 +22,6 @@ struct Silicons
 
 	Silicons();
 	~Silicons() = default;
-	
 };
 
 struct TriggersAndGates

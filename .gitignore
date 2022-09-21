@@ -6,6 +6,7 @@
 *.d
 *.so
 *.pcm
+*.root
 
 # ignore symbolic links (in all dirs)
 compile_commands.json

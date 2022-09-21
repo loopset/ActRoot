@@ -1,3 +1,5 @@
+#include<vector>
+
 #ifdef __CLING__
 
 #pragma link off all globals;
@@ -8,7 +10,7 @@
 #pragma link C++ class ActHit + ;
 #pragma link C++ class ActTrack + ;
 #pragma link C++ class ActClusteringResults + ;
-//not inherited from ROOT -> Neither does it need a streamer (-) nor a >> operator (!)
+//not inherited from TObject -> Neither does it need a streamer (-) nor a >> operator (!)
 #pragma link C++ class ActLine - !;
 
 
@@ -30,10 +32,12 @@
 //ActRoot far from RANSAC
 #pragma link C++ class ActCalibrations - !;
 
-#pragma link C++ struct Silicons - !;
-#pragma link C++ struct TriggersAndGates -!;
-#pragma link C++ struct TrackPhysics -!;
+//structs generating I/O subsystem
+#pragma link C++ struct Silicons +;
+#pragma link C++ struct TriggersAndGates +;
+#pragma link C++ struct TrackPhysics +;
+#pragma link C++ class vector<TrackPhysics>+;//in order to generate I/O streamer to write std::vector of TrackPhysics
 
-#pragma link C++ class ActEvent - !;
+#pragma link C++ class ActEvent +;
 
 #endif

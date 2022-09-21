@@ -31,6 +31,8 @@
 
 namespace ActParameters
 {
+	//////////////////////////////////////////////
+	///// PAD SIZES AND READ COBO VARIABLES //////
 	//pad size
 	inline constexpr int g_NPADX { 128};
 	inline constexpr int g_NPADY { 128};
@@ -43,7 +45,10 @@ namespace ActParameters
 	inline constexpr int g_NB_AGET { 4};
 	inline constexpr int g_NB_CHANNEL { 68};
 	inline constexpr int g_NB_SAMPLES { 512};
+	////////////////////////////////////////////
 
+	////////////////////////////////////////////
+	///// CALIBRATION FILES PARAMETERS ////////
 	//number of pads in calibration file!
 	inline constexpr int NCoefRows { 17408};
 
@@ -65,18 +70,36 @@ namespace ActParameters
 
 	//Silicon data map string values
 	inline const std::vector<std::string> siliconMapKeys {"M", "E", "P"};
-	//stands for "M" = multiplicity, "E" = energy, "P" = Si pad
+	//stands for "M" = multiplicity, "E" = energy, "P" = Si array pad
 
 	//values for thresholds in multiplicity (MeV?)
 	// if ESi0 > this, multiplicity01F += 1
 	inline constexpr double minESi0ToIncreaseMultiplicity { 1.};
 	// if ESiS > this, multiplicityS += 1
 	inline constexpr double minESiSToIncreaseMultiplicity { 0.5};
+	//////////////////////////////////////////////
 
+	/////////////////////////////////////////////
+	///////// FIND PHYSICS OF TRACKS ////////////
 	//number of pads above chamber boundaries where silicons are placed
 	inline constexpr double g_NPADSISIDE { 50}; //10 cm
 	inline constexpr double g_NPADSSIFRONT { 50}; //10 cm
 
+	//[temporary] position of beam plane in Y
+	inline constexpr double beamPlaneY { 64.};// = g_NPADY / 2
+	
+	//strings passed when classifying ActTracks
+	inline const std::string trackChamber { "chamber"};
+	inline const std::string trackWindow  { "likelyWindow"};
+	inline const std::string trackDump    { "likelyDump"};
+	inline const std::string trackDelta   { "likelyDelta"};
+	inline const std::string trackHitsSiliconSide { "side"};
+	inline const std::string trackHitsSiliconFront{ "front"};
+	inline const std::string trackHitsSiliconOutside{ "outside"};
+	/////////////////////////////////////////////////
+
+	/////////////////////////////////////////////////
+	/////////// MEvent PARAMETERS ///////////////////
 	//MEvent parameters names
 	inline const std::vector<TString> VXINames {"SI0_", "SI1_", "SIS_",
 											  "SIBEAM_1", "SIBEAM_2", "SIBEAM_3",

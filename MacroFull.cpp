@@ -13,11 +13,14 @@
 
 #include <TString.h>
 #include <TROOT.h>
+#include <TFile.h>
 #include <TChain.h>
 #include <TTree.h>
 
+
 #include <iostream>
 #include <map>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -76,10 +79,22 @@ void MacroFull(int initRun, int endRun)
 	///////////////////// INITIALIZE DRAWING STRUCTURE //////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////
 	ActDraw painter;
-	painter.Init();
+	//painter.Init();
 	/////////////////////////////////////////////////////////////////////////////////
 	//////////////////////// FINISH INIT DRAW STRUCTURE /////////////////////////////
-	
+
+	/////////////////////////////////////////////////////////////////////////////////
+	/////////////////////// TTree SAVING STRUCTURE //////////////////////////////////
+	auto outFile = new TFile("macroFull.root", "recreate", "Alpha version of TTree output");
+	auto outTree = new TTree("outTree", "TTree with Silicon, triggers and physics of found tracks information");
+	///auxiliar variables to write to ttree
+	Silicons siliconsTree {};
+	outTree->Branch("silicons", &siliconsTree);
+	TriggersAndGates triggersTree {};
+	outTree->Branch("triggers", &triggersTree);
+	std::vector<TrackPhysics> trackPhysicsTree {};
+	//TrackPhysics trackPhysicsTree {};
+	outTree->Branch("tracks", &trackPhysicsTree);
 	/////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////// LOOP OVER EVENTS /////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////
@@ -105,7 +120,7 @@ void MacroFull(int initRun, int endRun)
 		std::cout<<BOLDGREEN<<"\t with "<<entriesInRun<<" events"<<RESET<<'\n';
 
 		//iterate over run entries = events
-		for(int iEvent = 0; iEvent < entriesInRun; iEvent++)
+		for(int iEvent = 0; iEvent < 100; iEvent++)
 		{
 			runTree->GetEntry(iEvent);
 			if(!(iEvent % 1000)) std::cout<<BOLDGREEN<<"At event "<<iEvent<<RESET<<'\n';
@@ -153,22 +168,37 @@ void MacroFull(int initRun, int endRun)
 			auto out = estimator.Solve(cutHits);
 			//save out to ActEvent
 			event.ReadTracksFromAlgorithm(out);
+			std::vector<TrackPhysics> trackPhysics;
+			//TrackPhysics trackPhysics {};
 			for(auto& track : event.GetEventTracks())
 			{
+				auto info { track.GetTrackPhysics()};
+				trackPhysics.push_back(info);
+				//trackPhysics = info;
 				if(track.GetIsGood())
 				{
-					auto info { track.GetTrackPhysics()};
 					std::cout<<"Track ID "<<info.fTrackID<<" with total charge "<<info.fTotalCharge<< " and track length "<<info.fTrackLength<<" pads"<<'\n';
 				}
 			}
-
+			
 			//painter.DrawEvent(event.GetEventHits());
-			painter.DrawResults(allHits, out);
+			//painter.DrawResults(allHits, out);
+
+			//write to TTree
+			siliconsTree = silicons;
+			triggersTree = triggers;
+			trackPhysicsTree = trackPhysics;
+			outTree->Fill();
 
 			//reset ActEvent
 			event.Reset();
 			
 		}
 	}
+
+	//print TTree info
+	outTree->Print();
+	outFile->Write();
+	outFile->Close();
 	
 }
