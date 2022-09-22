@@ -18,7 +18,7 @@
 
 
 //1st, build PDF
-std::vector<double> RandomSampling::ActSample::PDF(const ActHit& hit)
+std::vector<double> ActSample::PDF(const ActHit& hit)
 {
 	if(fSampleMethod == SamplingMethod::kUniform)//uniform
 		return {1.};
@@ -43,7 +43,7 @@ std::vector<double> RandomSampling::ActSample::PDF(const ActHit& hit)
 }
 
 //2nd, fill CDF
-void RandomSampling::ActSample::FillCDF()
+void ActSample::FillCDF()
 {
 	std::vector<double> normalization;
 	fCDF.clear();
@@ -73,14 +73,14 @@ void RandomSampling::ActSample::FillCDF()
 	for(auto& el : fCDF)
 		el /= norm;
 }
-double RandomSampling::ActSample::getPDFfromCDF(int index)
+double ActSample::getPDFfromCDF(int index)
 {
 	return (index == 0) ? fCDF[0] : (fCDF[index] - fCDF[index - 1]);
 }
 //and now methods to sample from CDF! remember that we do implement now with(out) replacement
 //if without, that means we have to scale fCDF values!!
 
-int RandomSampling::ActSample::getIndexFromCDF(double r, double rmCDF, std::vector<int> vetoed)
+int ActSample::getIndexFromCDF(double r, double rmCDF, std::vector<int> vetoed)
 {
 	//track probability removed from CDF
 	double probRemoved { 0.};
@@ -98,7 +98,7 @@ int RandomSampling::ActSample::getIndexFromCDF(double r, double rmCDF, std::vect
 	return fCDF.size() - 1;
 }
 
-std::vector<int> RandomSampling::ActSample::sampleIndicesFromCDF(int N, std::vector<int> vetoed)
+std::vector<int> ActSample::sampleIndicesFromCDF(int N, std::vector<int> vetoed)
 {
 	//probability contained in vetoed hits
 	auto probSum = [this](double accum, int ind){ return accum + getPDFfromCDF(ind); };
@@ -128,14 +128,14 @@ std::vector<int> RandomSampling::ActSample::sampleIndicesFromCDF(int N, std::vec
 }
 
 //for reference Hit
-void RandomSampling::ActSample::SetReferenceHit(ActHit hit)
+void ActSample::SetReferenceHit(ActHit hit)
 {
 	fReferenceHit = std::move(hit);
 	//FillCDF(); //filling is done is SetHitsToSample
 }
 
 
-void RandomSampling::ActSample::SampleReferenceHit()
+void ActSample::SampleReferenceHit()
 {
 	if(fSampleMethod == SamplingMethod::kGaussian)//gaussian
 	{
@@ -156,7 +156,7 @@ void RandomSampling::ActSample::SampleReferenceHit()
 	
 }
 
-void RandomSampling::ActSample::SetHitsToSample(const std::vector<ActHit> *hits)
+void ActSample::SetHitsToSample(const std::vector<ActHit> *hits)
 {
 	fHitArray = std::move(hits);
 	if(fSampleMethod == SamplingMethod::kChargeWeighted)
@@ -166,7 +166,7 @@ void RandomSampling::ActSample::SetHitsToSample(const std::vector<ActHit> *hits)
 }
 
 //and finally, sample
-std::vector<ActHit> RandomSampling::ActSample::SampleHits(int N)
+std::vector<ActHit> ActSample::SampleHits(int N)
 {
 	std::vector<ActHit> out;
 	//for Uniform (fSampleMethod == 0), override previous methods

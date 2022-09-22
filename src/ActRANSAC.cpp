@@ -6,6 +6,7 @@
 #include "ActClusteringResults.h"
 
 #include <Math/PdfFuncMathCore.h>
+#include <Rtypes.h>
 #include <TRandom.h>
 #include <algorithm>
 #include <cmath>
@@ -16,13 +17,12 @@
 #include <set>
 #include <stdexcept>
 
-
-SampleConsensus::ActRANSAC::ActRANSAC(int iteractions, int minPoints, float distanceThreshold)
+ActRANSAC::ActRANSAC(int iteractions, int minPoints, float distanceThreshold)
 	: fIterations(iteractions), fMinPatternPoints(minPoints), fDistanceThreshold(distanceThreshold)
 {
 }
 
-ActClusteringResults SampleConsensus::ActRANSAC::Solve(const std::vector<ActHit>& hitArray)
+ActClusteringResults ActRANSAC::Solve(const std::vector<ActHit>& hitArray)
 {
 	if(hitArray.size() < fMinPatternPoints)
 	{
@@ -77,7 +77,7 @@ ActClusteringResults SampleConsensus::ActRANSAC::Solve(const std::vector<ActHit>
 	return clusters;
 }
 
-int SampleConsensus::ActRANSAC::EvaluateRANSAC(const std::vector<ActHit>& hitArray, ActLine& sampledLine)
+int ActRANSAC::EvaluateRANSAC(const std::vector<ActHit>& hitArray, ActLine& sampledLine)
 {
 	int nbInliers {0};
 	for(const auto& hit : hitArray)
@@ -95,7 +95,7 @@ int SampleConsensus::ActRANSAC::EvaluateRANSAC(const std::vector<ActHit>& hitArr
 	return nbInliers;
 }
 
-std::vector<ActHit> SampleConsensus::ActRANSAC::RankLines(const ActLine& line, std::vector<ActHit>& remainHits)
+std::vector<ActHit> ActRANSAC::RankLines(const ActLine& line, std::vector<ActHit>& remainHits)
 {
 
 	// std::vector<ActHit> inliersHits;
@@ -151,7 +151,7 @@ std::vector<ActHit> SampleConsensus::ActRANSAC::RankLines(const ActLine& line, s
 	return retVec;
 }
 
-ActTrack SampleConsensus::ActRANSAC::CreateTrack(ActLine& line, std::vector<ActHit>& inliers)
+ActTrack ActRANSAC::CreateTrack(ActLine& line, std::vector<ActHit>& inliers)
 {
 	ActTrack track;
 	for(auto& hit : inliers)

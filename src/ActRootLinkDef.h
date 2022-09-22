@@ -1,4 +1,4 @@
-#include<vector>
+#include <vector>
 
 #ifdef __CLING__
 
@@ -20,12 +20,13 @@
 
 #pragma link C++ namespace ActParameters ;
 
-#pragma link C++ namespace RandomSampling ;
-#pragma link C++ class RandomSampling::ActSample - !;
-#pragma link C++ enum RandomSampling::SamplingMethod;
+//#pragma link C++ namespace RandomSampling;
+//#pragma link C++ defined_in namespace RandomSampling;
+#pragma link C++ class ActSample - !;
+#pragma link C++ enum SamplingMethod;
 
-#pragma link C++ namespace SampleConsensus;
-#pragma link C++ class SampleConsensus::ActRANSAC - !;
+//#pragma link C++ namespace SampleConsensus;
+#pragma link C++ class ActRANSAC + ;
 
 #pragma link C++ class ActDraw - !;
 
@@ -36,7 +37,7 @@
 #pragma link C++ struct Silicons +;
 #pragma link C++ struct TriggersAndGates +;
 #pragma link C++ struct TrackPhysics +;
-#pragma link C++ class vector<TrackPhysics>+;//in order to generate I/O streamer to write std::vector of TrackPhysics
+#pragma link C++ class std::vector<TrackPhysics>+;//in order to generate I/O streamer to write std::vector of TrackPhysics
 
 #pragma link C++ class ActEvent +;
 

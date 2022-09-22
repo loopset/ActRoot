@@ -2,14 +2,16 @@
 #include "ActHit.h"
 #include "ActEvent.h"
 #include "ActCalibrations.h"
-#include "ActStructs.h"
+#include "Silicons.h"
+#include "TriggersAndGates.h"
+#include "TrackPhysics.h"
 #include "ActClusteringResults.h"
 #include "ActSample.h"
 #include "ActRANSAC.h"
 #include "ActDraw.h"
 
-#include "cobo_libs/inc/MEvent.h"
-#include "cobo_libs/inc/MEventReduced.h"
+#include "MEvent.h"
+#include "MEventReduced.h"
 
 #include <TString.h>
 #include <TROOT.h>
@@ -23,6 +25,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+
 
 void MacroFull(int initRun, int endRun)
 {
@@ -162,8 +165,8 @@ void MacroFull(int initRun, int endRun)
 				else
 					cutHits.push_back(hit);
 			}
-			SampleConsensus::ActRANSAC estimator { 500, 20, 3.};
-			estimator.SetSampleMethod(RandomSampling::SamplingMethod::kGaussian);
+			ActRANSAC estimator { 500, 20, 3.};
+			estimator.SetSampleMethod(SamplingMethod::kGaussian);
 			estimator.SetGaussianSigma(10.);
 			auto out = estimator.Solve(cutHits);
 			//save out to ActEvent

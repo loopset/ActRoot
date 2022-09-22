@@ -8,74 +8,53 @@ project(ActRoot)
 set(CMAKE_CXX_STANDARD 17) # same as ROOT built for Arch Linux
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
-# Include cmake macros to, i.e., find ROOT installation
-set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
-include("${CMAKE_MODULE_PATH}/FindROOT.cmake")
-#find_package(ROOT REQUIRED) #does not work in Arch Linux bc we don't have sourced thisroot.sh
+find_package(ROOT 6.20 CONFIG REQUIRED)
 
-# ActRoot inc directories
-include_directories(${PROJECT_SOURCE_DIR}/inc)
-# for MEvent and so on
-# add_subdirectory(${PROJECT_SOURCE_DIR}/cobo_libs)
-include_directories(${PROJECT_SOURCE_DIR}/cobo_libs/inc)
-include_directories(${PROJECT_SOURCE_DIR}/cobo_libs/libMFM)
-# ROOT directories
-include_directories(${ROOT_INCLUDE_DIR})
-# ROOT linking directories
-link_directories(${ROOT_LIBRARY_DIR})
+## because it is located outside this project
+include_directories(/media/Datos/ApuntesUSC/TESE/ACTAR_tracking/analysis_2022/ACTAR_ANALYSIS_LIGHT_root6/MyEvents/inc)
 
-# locate files
-#file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cpp)
-#file(GLOB headers ${PROJECT_SOURCE_DIR}/inc/*.h)
 set(sources
-  ${PROJECT_SOURCE_DIR}/src/ActHit.cpp
-  ${PROJECT_SOURCE_DIR}/src/ActTrack.cpp
-  ${PROJECT_SOURCE_DIR}/src/ActClusteringResults.cpp
-  ${PROJECT_SOURCE_DIR}/src/ActLine.cpp
-  ${PROJECT_SOURCE_DIR}/src/ActSample.cpp
-  ${PROJECT_SOURCE_DIR}/src/ActRANSAC.cpp
-  ${PROJECT_SOURCE_DIR}/src/ActDraw.cpp
-  ${PROJECT_SOURCE_DIR}/src/ActCalibrations.cpp
-  ${PROJECT_SOURCE_DIR}/src/ActStructs.cpp
-  ${PROJECT_SOURCE_DIR}/src/ActEvent.cpp
+  ${CMAKE_SOURCE_DIR}/src/ActHit.cpp
+  ${CMAKE_SOURCE_DIR}/src/ActTrack.cpp
+  ${CMAKE_SOURCE_DIR}/src/ActClusteringResults.cpp
+  ${CMAKE_SOURCE_DIR}/src/ActLine.cpp
+  ${CMAKE_SOURCE_DIR}/src/ActSample.cpp
+  ${CMAKE_SOURCE_DIR}/src/ActRANSAC.cpp
+  ${CMAKE_SOURCE_DIR}/src/ActDraw.cpp
+  ${CMAKE_SOURCE_DIR}/src/ActCalibrations.cpp
+  ${CMAKE_SOURCE_DIR}/src/Silicons.cpp
+  #${CMAKE_SOURCE_DIR}/src/ActTrackPhysics.cpp
+  ${CMAKE_SOURCE_DIR}/src/ActEvent.cpp
 )
 
 set(headers
-  ${PROJECT_SOURCE_DIR}/inc/ActParameters.h
-  ${PROJECT_SOURCE_DIR}/inc/ActHit.h
-  ${PROJECT_SOURCE_DIR}/inc/ActTrack.h
-  ${PROJECT_SOURCE_DIR}/inc/ActClusteringResults.h
-  ${PROJECT_SOURCE_DIR}/inc/ActLine.h
-  ${PROJECT_SOURCE_DIR}/inc/ActSample.h
-  ${PROJECT_SOURCE_DIR}/inc/ActRANSAC.h
-  ${PROJECT_SOURCE_DIR}/inc/ActDraw.h
-  ${PROJECT_SOURCE_DIR}/inc/ActCalibrations.h
-  ${PROJECT_SOURCE_DIR}/inc/ActStructs.h
-  ${PROJECT_SOURCE_DIR}/inc/ActEvent.h
+  ${CMAKE_SOURCE_DIR}/inc/ActParameters.h
+  ${CMAKE_SOURCE_DIR}/inc/ActHit.h
+  ${CMAKE_SOURCE_DIR}/inc/ActTrack.h
+  ${CMAKE_SOURCE_DIR}/inc/ActClusteringResults.h
+  ${CMAKE_SOURCE_DIR}/inc/ActLine.h
+  ${CMAKE_SOURCE_DIR}/inc/ActSample.h
+  ${CMAKE_SOURCE_DIR}/inc/ActRANSAC.h
+  ${CMAKE_SOURCE_DIR}/inc/ActDraw.h
+  ${CMAKE_SOURCE_DIR}/inc/ActCalibrations.h
+  ${CMAKE_SOURCE_DIR}/inc/Silicons.h
+  ${CMAKE_SOURCE_DIR}/inc/TriggersAndGates.h
+  ${CMAKE_SOURCE_DIR}/inc/TrackPhysics.h
+  ${CMAKE_SOURCE_DIR}/inc/ActEvent.h
 )
-# Set everything needed for the root dictonary and create the
-# dictionary = headers already defined
-# set(ActRoot_HEADERS
-#   ${PROJECT_SOURCE_DIR}/inc/ActParameters.h
-#   ${PROJECT_SOURCE_DIR}/inc/ActHit.h
-#   ${PROJECT_SOURCE_DIR}/inc/ActTrack.h
-#   ${PROJECT_SOURCE_DIR}/inc/ActClusteringResults.h
-#   ${PROJECT_SOURCE_DIR}/inc/ActLine.h
-#   ${PROJECT_SOURCE_DIR}/inc/ActRANSAC.h
-#   ${PROJECT_SOURCE_DIR}/inc/ActDraw.h
-# )
 
 # ActRoot LinkDef and dict name
-set(ActRoot_LINKDEF ${PROJECT_SOURCE_DIR}/src/ActRootLinkDef.h )
-set(ActRoot_DICTIONARY ActRootDict.cc)
+set(LINKDEF_LOCATION ${CMAKE_SOURCE_DIR}/src/ActRootLinkDef.h )
+set(DICTIONARY_NAME G__${PROJECT_NAME})
 
-# function to generate dictonary imported from FindROOT.cmake
-ROOT_GENERATE_DICTIONARY("${headers}" "${ActRoot_LINKDEF}" "${ActRoot_DICTIONARY}" "${ROOT_INCLUDE_DIR}")
-# below using built-in macro (not working here as mentioned)
-#ROOT_GENERATE_DICTIONARY(${ActRoot_DICTIONARY} ${headers} LINKDEF ${ActRoot_LINKDEF})
+ROOT_GENERATE_DICTIONARY(${DICTIONARY_NAME} ${headers} LINKDEF  ${LINKDEF_LOCATION})
 
+##link with MyActEvents
+find_library(MYACTARTEVENTS NAMES MyActarEvents PATHS /media/Datos/ApuntesUSC/TESE/ACTAR_tracking/analysis_2022/ACTAR_ANALYSIS_LIGHT_root6/MyEvents/build)
 # and add library
-set(TARGET_NAME ActRoot)
-add_library(${TARGET_NAME} SHARED ${sources} ${headers} ${ActRoot_DICTIONARY})
+set(TARGET_NAME ${PROJECT_NAME})
+add_library(${TARGET_NAME} SHARED ${sources} ${headers} ${DICTIONARY_NAME}.cxx)
+## add ActRoot headers
+target_include_directories(${TARGET_NAME} BEFORE PUBLIC ${CMAKE_SOURCE_DIR}/inc)
 # setup linking libraries
-target_link_libraries(${TARGET_NAME} ${ROOT_LIBRARIES})
+target_link_libraries(${TARGET_NAME} ${ROOT_LIBRARIES} ${MYACTAREVENTS})

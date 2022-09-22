@@ -5,10 +5,12 @@
 #include "ActClusteringResults.h"
 #include "ActTrack.h"
 #include "ActCalibrations.h"
-#include "ActStructs.h"
+#include "Silicons.h"
+#include "TriggersAndGates.h"
+#include "TrackPhysics.h"
 
-#include "../cobo_libs/inc/MEvent.h"
-#include "../cobo_libs/inc/MEventReduced.h"
+#include "MEvent.h"
+#include "MEventReduced.h"
 
 #include <Math/Point3Dfwd.h>
 #include <Math/Vector3Dfwd.h>

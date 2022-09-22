@@ -19,7 +19,8 @@
 #include "ActHit.h"
 #include "ActLine.h"
 #include "ActParameters.h"
-#include "ActStructs.h"
+#include "TrackPhysics.h"
+#include "Silicons.h"
 
 class ActTrack : public TObject
 {
