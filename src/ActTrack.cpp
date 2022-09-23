@@ -3,8 +3,7 @@
 #include "ActParameters.h"
 #include "ActHit.h"
 #include "ActLine.h"
-#include "Silicons.h"
-#include "TrackPhysics.h"
+#include "ActStructs.h"
 
 
 #include <Rtypes.h>

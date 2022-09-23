@@ -5,9 +5,7 @@
 #include "ActClusteringResults.h"
 #include "ActTrack.h"
 #include "ActCalibrations.h"
-#include "Silicons.h"
-#include "TriggersAndGates.h"
-#include "TrackPhysics.h"
+#include "ActStructs.h"
 
 #include "MEvent.h"
 #include "MEventReduced.h"

@@ -21,6 +21,10 @@ ActCalibrations::ActCalibrations()
 void ActCalibrations::ReadTABLE(std::string& tableFile)
 {
 	std::ifstream streamer(tableFile.c_str());
+	if(streamer.fail())
+	{
+		throw std::runtime_error("Fail opening LT table!");
+	}
 	int aux0, aux1, aux2, aux3, aux4, aux5;
 	for(int i = 0; i < fTABLE[0].size(); i++)
 	{
@@ -35,6 +39,10 @@ void ActCalibrations::ReadTABLE(std::string& tableFile)
 void ActCalibrations::ReadPadAlignCoefs(std::string &coefsFile)
 {
 	std::ifstream streamer(coefsFile.c_str());
+	if(streamer.fail())
+	{
+		throw std::runtime_error("Error opening PadAligCoefs file!");
+	}
 	double aux0, aux1, aux2;
 	for(int i = 0; i < ActParameters::NCoefRows; i++)
 	{
@@ -56,6 +64,10 @@ void ActCalibrations::ReadSilicon01SCalibrations(std::string &coefsFile, std::st
 	std::vector<std::vector<double>> aux(ActParameters::Si01SCalibrationRows[panel],
 										 std::vector<double>(ActParameters::NcolsSi01S));//all have 4 columns
 	std::ifstream streamer(coefsFile.c_str());
+	if(streamer.fail())
+	{
+		throw std::runtime_error("Error opening Silicons 01S calibration files!");
+	}
 	double aux0, aux1, aux2, aux3;//4 columns always
 	for(int i = 0; i < ActParameters::Si01SCalibrationRows[panel]; i++)
 	{
@@ -72,6 +84,10 @@ void ActCalibrations::ReadSilicon01SCalibrations(std::string &coefsFile, std::st
 void ActCalibrations::ReadSiliconBeamCalibrations(std::string &coefsFile)
 {
 	std::ifstream streamer(coefsFile.c_str());
+	if(streamer.fail())
+	{
+		throw std::runtime_error("Fail opening Silicon Beam calibration file!");
+	}
 	double aux0, aux1;//2 columns
 	for(int i = 0; i < ActParameters::NrowsSiBeam; i++)
 	{

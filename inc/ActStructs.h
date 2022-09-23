@@ -1,5 +1,29 @@
-#ifndef TRIGGERSANDGATES_H
-#define TRIGGERSANDGATES_H
+#ifndef ACTSTRUCTS_H
+#define ACTSTRUCTS_H
+
+#include <Math/Point3Dfwd.h>
+#include <Math/Point3D.h>
+
+#include <vector>
+#include <map>
+#include <string>
+
+struct Silicons
+{
+	//VECTORS with energy per channel
+	//initialized in .cpp file
+	std::vector<double> fSi0, fSi0_cal;
+	std::vector<double> fSi1, fSi1_cal;
+	std::vector<double> fSiS, fSiS_cal;
+	std::vector<double> fSiF, fSiF_cal; //front array: combination of Si0 + Si1
+	std::vector<double> fSiBeam, fSiBeam_cal;
+
+	//maps storing information for each event
+	std::map<std::string, std::map<std::string, double>> fData;
+
+	Silicons();
+	~Silicons() = default;
+};
 
 struct TriggersAndGates
 {
@@ -49,4 +73,23 @@ struct TriggersAndGates
 	~TriggersAndGates() = default;
 };
 
-#endif
+struct TrackPhysics
+{
+	using XYZPoint = ROOT::Math::XYZPoint;
+	
+	int fTrackID {-1};
+	double fTheta {};
+	double fPhi {};
+	XYZPoint fReactionPoint {-1, -1, -1};
+	XYZPoint fSiliconPoint {-1, -1, -1};
+	double fTrackLength {};
+	double fTotalCharge {};
+	double fAverageCharge {};
+	std::string fReactionPlace {""};
+	std::string fSiliconPlace {""};
+	
+	TrackPhysics() = default;
+	~TrackPhysics() = default;
+};
+
+#endif //ACTSTRUCTS_H

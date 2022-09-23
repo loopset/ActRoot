@@ -2,9 +2,7 @@
 
 #include "ActHit.h"
 #include "ActLine.h"
-#include "Silicons.h"
-#include "TriggersAndGates.h"
-#include "TrackPhysics.h"
+#include "ActStructs.h"
 #include "ActClusteringResults.h"
 #include "ActTrack.h"
 #include "ActParameters.h"
