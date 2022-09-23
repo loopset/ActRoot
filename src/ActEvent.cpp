@@ -33,6 +33,7 @@ ActEvent::ActEvent()
 
 void ActEvent::Reset()
 {
+	fEventID = -1;
 	fHitArray.clear();
 	fSilicons = {};
 	fTriggers = {};

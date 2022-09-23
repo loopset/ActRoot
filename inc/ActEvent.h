@@ -21,6 +21,7 @@ class ActEvent
 	using XYZVector = ROOT::Math::XYZVector;
 	
     protected://if we ever decide to inherit the class
+	int fEventID {-1};
 	std::vector<ActHit> fHitArray {};
 	Silicons fSilicons {};
 	TriggersAndGates fTriggers {};
@@ -37,6 +38,8 @@ class ActEvent
 	void Reset();
 
 	////////////// READERS = SETTERS ////////////////////////////////
+	//first, for event ID
+	void SetEventID(int value){ fEventID = value; }
 	//READ measured data into out structs and ActHit array
 	//one function to read at the same time Triggers and Hits
 	//time-consuming if we choose to gate GATCONF; however, if we checkOverlap = false time-consumption is improved (at the expense of probably having repeated hits)
@@ -58,6 +61,8 @@ class ActEvent
 	void ReadTracksFromAlgorithm(ActClusteringResults& results);
 
 	/////////////////////// GETTERS ///////////////////////////////
+	//get event ID
+	int GetEventID() const { return fEventID; }
 	//get events
 	const std::vector<ActHit>& GetConstEventHits() const { return fHitArray; }
 	std::vector<ActHit>& GetEventHits() { return fHitArray; }

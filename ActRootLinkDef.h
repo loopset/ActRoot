@@ -41,4 +41,6 @@
 
 #pragma link C++ class ActEvent +;
 
+#pragma link C++ class ActAnalyze + ;
+
 #endif
