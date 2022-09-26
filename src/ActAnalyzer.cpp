@@ -2,8 +2,10 @@
 
 #include "ActParameters.h"
 
+#include <TROOT.h>
 #include <TCanvas.h>
 #include <TH2.h>
+#include <TStyle.h>
 #include <TTree.h>
 
 #include <algorithm>
@@ -19,6 +21,13 @@ ActAnalyzer::ActAnalyzer(TTree* tree, std::unique_ptr<TH2D> histTrackID)
 
 void ActAnalyzer::DrawCanvas()
 {
+	//customize plotting
+	gROOT->SetStyle("Plain");
+	gStyle->SetOptStat("nemruo");//include under/overflows
+	gStyle->SetPadTickX(1);
+	gStyle->SetPadTickY(1);
+
+	//create canvas and draw histos
 	fCanvTrackID = std::make_unique<TCanvas>("fCanvTrackID", "Track ID ", 1);
 	fCanvTrackID->cd();
 	fHistTrackID->Draw("colz");
@@ -51,7 +60,7 @@ void ActAnalyzer::ProcessTrackID()
 	for(auto& track : *fTracks)
 	{
 		if(!(track.fIsGood))//if track is not good, continue!
-			continue;
+			continue;//this can be due to identification as delta or not having hit a silicon detector
 		//get silicon place
 		auto siliconSide { track.fSiliconPlace};
 		double energySi {};
