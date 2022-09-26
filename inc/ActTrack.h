@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <iostream>
 #include <memory>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -75,7 +76,7 @@ private:
 	void CalculateThetaTrack(ActTrack& track);
 	void CalculatePhiTrack(ActTrack& track);
 	void CalculateReactionPoint(ActTrack& track);
-	void CalculateBoundaryPoint(ActTrack& track);
+	//void CalculateBoundaryPoint(ActTrack& track);
 	void CalculateSiliconPoint(ActTrack& track);
 	void CalculateTrackLength(ActTrack& track);
 	void CalculateTrackCharge(ActTrack& track);
@@ -94,6 +95,20 @@ private:
 		bool condY { point.Y() >= 0. && point.Y() <= ActParameters::g_NPADY};
 		bool condZ { point.Z() >= 0. && point.Z() <= ActParameters::g_NPADZ};
 		return (condX && condY && condZ);
+	}
+	inline bool IsInSiliconPlane(XYZPoint point, std::string mode)
+	{
+		bool condZ { point.Z() >= 0. && point.Z() <= ActParameters::g_NPADZ};
+		bool condXY {};
+		if(mode=="S")//side, only check X
+		{
+			condXY = point.X() >= 0. && point.X() <= ActParameters::g_NPADX;
+		}
+		else if (mode=="F")//front, check only Y
+		{
+			condXY = point.Y() >= 0. && point.Y() <= ActParameters::g_NPADY;
+		}
+		return (condXY && condZ);
 	}
 	
 	ClassDef(ActTrack, 1);

@@ -93,7 +93,8 @@ namespace ActParameters
 	inline const std::string trackWindow  { "likelyWindow"};
 	inline const std::string trackDump    { "likelyDump"};
 	inline const std::string trackDelta   { "likelyDelta"};
-	inline const std::string trackHitsSiliconSide { "side"};
+	inline const std::string trackHitsSiliconSideLeft { "side_left"};
+	inline const std::string trackHitsSiliconSideRight { "side_right"};
 	inline const std::string trackHitsSiliconFront{ "front"};
 	inline const std::string trackHitsSiliconOutside{ "outside"};
 	/////////////////////////////////////////////////

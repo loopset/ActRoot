@@ -86,7 +86,9 @@ struct TrackPhysics
 	double fTotalCharge {};
 	double fAverageCharge {};
 	std::string fReactionPlace {""};
+	//std::string fBoundaryPlace {""};
 	std::string fSiliconPlace {""};
+	bool fIsGood {true};
 	
 	TrackPhysics() = default;
 	~TrackPhysics() = default;

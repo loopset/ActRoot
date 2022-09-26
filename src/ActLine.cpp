@@ -23,7 +23,8 @@ ActLine::ActLine(std::vector<XYZPoint>& sampled)
 void ActLine::SetPoint(std::vector<XYZPoint> &sampled)
 {
 	if(sampled.size() != 2) throw std::runtime_error("sampled ActHits size differs from 2!");
-	fPoint = sampled[0];
+	fPoint = sampled[0];//if fitted, this point corresponds to M in the regression paper
+	//meaning it is the gravity center of the cloud
 }
 
 void ActLine::SetDirection(std::vector<XYZPoint> &sampled)

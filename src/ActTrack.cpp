@@ -10,11 +10,16 @@
 #include <Math/Point3D.h>
 #include <Math/Vector3D.h>
 #include <algorithm>
+#include <cmath>
 #include <cstddef>
+#include <iterator>
+#include <map>
 #include <memory>
 #include <numeric>
+#include <string>
 #include <type_traits>
 #include <utility>
+#include <vector>
 
 ClassImp(ActTrack);
 
@@ -52,7 +57,7 @@ void ActTrack::SetTrackPhysics()
 	CalculateThetaTrack(*this);
 	CalculatePhiTrack(*this);
 	CalculateReactionPoint(*this);
-	CalculateBoundaryPoint(*this);
+	//CalculateBoundaryPoint(*this);
 	if(!fIsGood)
 		return;
 	// do not compute other parameters if reaction point is outside chamber
@@ -98,6 +103,7 @@ void ActTrack::CalculateReactionPoint(ActTrack& track)
 	if((intersection.Z() < 0) || (intersection.Z() > ActParameters::g_NPADZ))
 	{
 		track.GetTrackPhysics().fReactionPlace = ActParameters::trackDelta;
+		track.GetTrackPhysics().fIsGood = false;
 		fIsGood = false;
 		return;
 	}
@@ -105,74 +111,78 @@ void ActTrack::CalculateReactionPoint(ActTrack& track)
 	if(intersection.X() < 0.)
 	{
 		track.GetTrackPhysics().fReactionPlace = ActParameters::trackWindow;
+		track.GetTrackPhysics().fIsGood = false;
 		fIsGood = false;
 		return;
 	}
 	else if(intersection.X() > ActParameters::g_NPADX)
 	{
 		track.GetTrackPhysics().fReactionPlace = ActParameters::trackDump;
+		track.GetTrackPhysics().fIsGood = false;
 		fIsGood = false;
 		return;
-	}
-}
-
-void ActTrack::CalculateBoundaryPoint(ActTrack& track)
-{
-	if(!fIsGood)
-		return;
-	//get sign of direction in y of track
-	auto slopeY { track.GetLine().GetDirection().Y()};
-	XYZPoint planeY { 0., (slopeY >= 0. ) ? ActParameters::g_NPADY : 0., 0.};
-	XYZVector vectorY { 0., 1., 0.};
-	auto intersectionY { IntersectionTrackPlane(planeY, vectorY, track)};
-
-	XYZPoint planeX { ActParameters::g_NPADX, 0., 0.};
-	XYZVector vectorX { 1., 0., 0.};
-	auto intersectionX { IntersectionTrackPlane(planeX, vectorX, track)};
-	// std::cout<<"Intersection Y: "<<'\n';
-	// std::cout<<'\t'<<"X: "<<intersectionY.X()<<" Y: "<<intersectionY.Y()<< " Z: "<<intersectionY.Z()<<'\n';
-	// std::cout<<"Intersection X: "<<'\n';
-	// std::cout<<'\t'<<"X: "<<intersectionX.X()<<" Y: "<<intersectionX.Y()<< " Z: "<<intersectionX.Z()<<'\n';
-	if(IsInChamber(intersectionY))
-	{
-		track.GetTrackPhysics().fSiliconPlace = ActParameters::trackHitsSiliconSide;
-	}
-	else if (IsInChamber(intersectionX))
-	{
-		track.GetTrackPhysics().fSiliconPlace = ActParameters::trackHitsSiliconFront;
-	}
-	else
-	{
-		//again, if intersection point in boundary is not in chamber
-		//we are not interested in this track
-		track.GetTrackPhysics().fSiliconPlace = ActParameters::trackHitsSiliconOutside;
-		fIsGood = false;
 	}
 }
 
 void ActTrack::CalculateSiliconPoint(ActTrack& track)
 {
-	XYZPoint pointPlane;
-	XYZVector vectorPlane;
-	if(track.GetTrackPhysics().fSiliconPlace == ActParameters::trackHitsSiliconSide)
+	//computute intersection point with silicons
+	std::map<std::string, XYZPoint> siliconsPlacement = { {"S_left", XYZPoint(0., ActParameters::g_NPADY + ActParameters::g_NPADSISIDE, 0.)},
+														  {"S_right", XYZPoint(0., -ActParameters::g_NPADSISIDE, 0.)},
+														  {"F", XYZPoint(ActParameters::g_NPADX + ActParameters::g_NPADSSIFRONT, 0., 0.)}};
+
+	//get correct direction taking into account reaction point and gravity center
+	auto direction { track.GetLine().GetPoint() -
+					 track.GetTrackPhysics().fReactionPoint};
+	//compute intersection with Silicon walls according to direction of track
+	std::string label {""};
+	//SIDES
+	XYZPoint intersectionY {};
+	if(direction.Y() >= 0)//left silicons
 	{
-		pointPlane = { 0., ActParameters::g_NPADY + ActParameters::g_NPADSISIDE, 0.};
-		vectorPlane = { 0., 1., 0.};
-	}
-	else if(track.GetTrackPhysics().fSiliconPlace == ActParameters::trackHitsSiliconFront)
-	{
-		pointPlane = { ActParameters::g_NPADX + ActParameters::g_NPADSSIFRONT, 0., 0.};
-		vectorPlane = { 1., 0., 0.};
+		label = ActParameters::trackHitsSiliconSideLeft;
+		intersectionY = IntersectionTrackPlane(siliconsPlacement["S_left"], XYZVector(0., 1., 0.), track);
+		
 	}
 	else
 	{
-			std::cout<<BOLDRED<<"ActTrack::CalculateSiliconPoint has received a wrong boundary intersection point -> Not computing silicon point!"<<RESET<<'\n';
-			return;
+		label = ActParameters::trackHitsSiliconSideRight;
+		intersectionY = IntersectionTrackPlane(siliconsPlacement["S_right"], XYZVector(0., 1., 0.), track);
+	}
+	if(IsInSiliconPlane(intersectionY, "S"))
+	{
+		track.GetTrackPhysics().fSiliconPlace = label;
+		track.GetTrackPhysics().fSiliconPoint = intersectionY;
+	}
+	else
+	{
+		//check FRONT
+		XYZPoint intersectionX {};
+		if(direction.X() >= 0)
+		{
+			label = ActParameters::trackHitsSiliconFront;
+			intersectionX = IntersectionTrackPlane(siliconsPlacement["F"], XYZVector(1., 0., 0.), track);
+		}
+		else
+		{
+			intersectionX = XYZPoint(-999, -999, -999);
+		}
+		if(IsInSiliconPlane(intersectionX, "F"))
+		{
+			track.GetTrackPhysics().fSiliconPlace = label;
+			track.GetTrackPhysics().fSiliconPoint = intersectionX;
+		}
+		else
+		{
+			track.GetTrackPhysics().fSiliconPlace = ActParameters::trackHitsSiliconOutside;
+			fIsGood = false;
+			track.GetTrackPhysics().fIsGood = false;
+		}
 	}
 
-	auto intersection { IntersectionTrackPlane(pointPlane, vectorPlane, track)};
-	track.GetTrackPhysics().fSiliconPoint = intersection;
+	//std::cout<<"Silicon hit: "<<track.GetTrackPhysics().fSiliconPlace<<'\n';
 }
+
 
 void ActTrack::CalculateTrackLength(ActTrack& track)
 {
