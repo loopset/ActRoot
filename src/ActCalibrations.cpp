@@ -1,9 +1,15 @@
 #include "ActCalibrations.h"
 
 #include "ActParameters.h"
+#include "ActStructs.h"
 
+#include <TH2.h>
+#include <TCanvas.h>
+
+#include <TROOT.h>
 #include <fstream>
 #include <iostream>
+#include <memory>
 #include <stdexcept>
 #include <vector>
 #include <string>
@@ -96,4 +102,37 @@ void ActCalibrations::ReadSiliconBeamCalibrations(std::string &coefsFile)
 		fSiliconBeamCalibrations[i][1] = aux1;
 	}
 	streamer.close();
+}
+
+void ActCalibrations::ReadDriftVelocity(std::vector<TrackPhysics>& tracks, Silicons& silicons)
+{
+	//if multiplicity in silicon is > 1, we cannot guarantee that hit silicon is number 4, so we skip event
+	if(silicons.fData["S"]["M"] > 1)
+	{
+		//std::cout<<BOLDRED<<"Drift: M > 1"<<RESET<<'\n';
+		return;
+	}
+	for(auto& track : tracks)
+	{
+		if(track.fSiliconPlace != ActParameters::trackHitsSiliconSideLeft)
+		{
+			//std::cout<<BOLDRED<<"Drift: SiliconPlace != Side Left"<<RESET<<'\n';
+			continue;
+		}
+		fHistDrift->Fill(track.fSiliconPoint.X(), track.fSiliconPoint.Z(),
+						 silicons.fData["S"]["ES"]);//fill with energy
+	}
+	
+}
+
+void ActCalibrations::PlotDriftVelocity()
+{
+	gROOT->SetStyle("Plain");
+	
+	fCanvDrift = std::make_unique<TCanvas>("fCanvDrift", "Drift velocity", 1);
+	fCanvDrift->cd();
+	fHistDrift->Draw("colz");
+	fCanvDrift->Update();
+	fCanvDrift->cd();
+	fCanvDrift->WaitPrimitive();
 }

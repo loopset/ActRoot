@@ -43,4 +43,6 @@
 
 #pragma link C++ class ActAnalyzer + ;
 
+#pragma link C++ class ActSRIM + ;
+
 #endif

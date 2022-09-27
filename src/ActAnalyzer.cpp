@@ -66,10 +66,17 @@ void ActAnalyzer::ProcessTrackID()
 		double energySi {};
 		if(siliconSide == ActParameters::trackHitsSiliconSideLeft)//side_left
 		{
+			if(fSilicons->fData["S"]["M"] > 1)
+			{//skip multiplicity over 1
+				//std::cout<<"Skipping M > 1 at side_left"<<'\n';
+				continue;
+			}
 		    energySi = fSilicons->fData["S"]["ES"];
 		}
 		else if(siliconSide == ActParameters::trackHitsSiliconFront)//front
 		{
+			if(fSilicons->fData["01F"]["M"] > 1)
+				continue;
 			auto energySi0 { fSilicons->fData["01F"]["E0"]};
 			auto energySi1 { fSilicons->fData["01F"]["E1"]};
 			energySi = (energySi1 > 0.) ? energySi1 : energySi0;
