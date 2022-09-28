@@ -38,6 +38,12 @@ namespace ActParameters
 	inline constexpr int g_NPADY { 128};
 	inline constexpr int g_NPADZ { 512};
 
+	//pad side in mm
+	inline constexpr double padSideLength { 2.};//mm
+	
+	//silicon 4 z side length in mm
+	inline constexpr double zSiliconLength { 50.};//mm
+
 	//MEvent-related parameters for DAQ
 	//with g_ to avoid confict with MEvent defined values in preprocessor
 	inline constexpr int g_NB_COBO { 18};

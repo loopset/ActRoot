@@ -59,7 +59,7 @@ void ActAnalyzer::ProcessTrackID()
 
 	for(auto& track : *fTracks)
 	{
-		if(!(track.fIsGood))//if track is not good, continue!
+		if(!(track.fRPInChamber) || !(track.fSPInArray))//if track is not good, continue!
 			continue;//this can be due to identification as delta or not having hit a silicon detector
 		//get silicon place
 		auto siliconSide { track.fSiliconPlace};

@@ -88,7 +88,8 @@ struct TrackPhysics
 	std::string fReactionPlace {""};
 	//std::string fBoundaryPlace {""};
 	std::string fSiliconPlace {""};
-	bool fIsGood {true};
+	bool fRPInChamber {false};
+	bool fSPInArray   {false};
 	
 	TrackPhysics() = default;
 	~TrackPhysics() = default;

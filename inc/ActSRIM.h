@@ -22,9 +22,12 @@ public:
 	ActSRIM() = default;
 	~ActSRIM() = default;
 
-	void ReadInterpolations(std::string fileName, std::string key);
+	void ReadInterpolations(std::string key, std::string fileName);
 	double EvalDirect(std::string key, double energy) { return fInterpolationsDirect[key]->Eval(energy); }
 	double EvalInverse(std::string key, double range) { return fInterpolationsInverse[key]->Eval(range);}
+
+	void DrawDirect(std::string key);
+	void DrawInverse(std::string key);
 };
 
 #endif //ACTSRIM_H

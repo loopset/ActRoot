@@ -591,12 +591,10 @@ void ActEvent::CleanSaturatedHits(double chargeThreshold, int minDimZToDelete)
 }
 
 //set ActTracks from RANSAC
-void ActEvent::ReadTracksFromAlgorithm(ActClusteringResults &results)
+void ActEvent::ReadEventTracks(ActClusteringResults &results)
 {
 	for(auto& track : results.GetTrackCandidates())
 	{
-		//read physics before appending to array!
-		track.SetTrackPhysics();
 		fTracks.push_back(track);
 	}
 }

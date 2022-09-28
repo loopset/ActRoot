@@ -17,6 +17,7 @@
 #include <vector>
 
 //class ActHit;
+#include "ActCalibrations.h"
 #include "ActHit.h"
 #include "ActLine.h"
 #include "ActParameters.h"
@@ -34,8 +35,9 @@ protected:
 	std::vector<ActHit> fHitArray;
 	//Line fit results
 	ActLine fLine {};
-	//if it is a valid track (Reaction Point inside ACTAR cave)
-	Bool_t fIsGood { true};
+	//bools to store conditions regarding track state (Reaction Point inside ACTAR cave, etc)
+	Bool_t fRPInChamber { false};
+	Bool_t fSPInArray   { false};
 	//physical information
 	TrackPhysics fTrackPhysics {};
 	
@@ -52,7 +54,8 @@ public:
 	Int_t GetTrackID() const { return fTrackID; }
 	std::vector<ActHit>& GetHitArray() { return fHitArray; }
 	ActLine GetLine() const { return fLine; }
-	Bool_t GetIsGood() const { return fIsGood; }
+	Bool_t GetRPIsInChamber() const { return fRPInChamber; }
+	Bool_t GetSPIsInArray() const { return fSPInArray; }
 	// //or as constant
 	const std::vector<ActHit>& GetHitArrayConst() const { return fHitArray; }
 
@@ -64,22 +67,29 @@ public:
 	void AddHit(const ActHit& hit);
 	void AddHit(ActHit &&hit);//r-value move
 	void SetLine(const ActLine& line);
-	void SetIsGood(Bool_t good){ fIsGood = good; }
+	void SetRPIsInChamber(Bool_t good){ fRPInChamber = good; }
+	void SetSPIsInArray(Bool_t good){ fSPInArray = good; }
 	
 	//setters for physical info
+	void SetReactionAndSiliconPointsRawUnits();
 	void SetTrackPhysics(TrackPhysics& info){ fTrackPhysics = info; }
 	//setter with self info
-	void SetTrackPhysics();
+	void SetTrackPhysics(ActCalibrations& calibrations);
 
 private:
 	//inner functions to set values
-	void CalculateThetaTrack(ActTrack& track);
-	void CalculatePhiTrack(ActTrack& track);
-	void CalculateReactionPoint(ActTrack& track);
-	//void CalculateBoundaryPoint(ActTrack& track);
-	void CalculateSiliconPoint(ActTrack& track);
-	void CalculateTrackLength(ActTrack& track);
-	void CalculateTrackCharge(ActTrack& track);
+	//two for raw units, if we dont have drift coefs available
+	void CalculateSiliconPointRawUnits();
+	void CalculateReactionPointRawUnits();
+	//these ones work in physical units (mm or pad units)
+	void CalculateThetaTrack();
+	void CalculatePhiTrack();
+	void CalculateReactionPoint(ActCalibrations& calibrations);
+	void CalculateSiliconPoint(ActCalibrations& calibrations);
+	void CalculateTrackLength();
+	//independent of system of units
+	void CalculateTrackTotalCharge();
+	void CalculateTrackAverageCharge();
 
 	inline XYZPoint IntersectionTrackPlane(XYZPoint Pp, XYZVector vp, ActTrack& track)
 	{

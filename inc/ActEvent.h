@@ -58,7 +58,9 @@ class ActEvent
 	void ReadSiliconsData();
 
 	//read ActRANSAC Clustering results and save tracks to ActEvent
-	void ReadTracksFromAlgorithm(ActClusteringResults& results);
+	//WARNING: this does do not include track physics
+	[[deprecated("ReadEventTracks does not include physics, which are externalized")]]
+	void ReadEventTracks(ActClusteringResults& results);
 
 	/////////////////////// GETTERS ///////////////////////////////
 	//get event ID

@@ -24,12 +24,13 @@ class ActCalibrations
 	std::map<std::string, std::vector<std::vector<double>>> fSilicon01SCalibrations {}; //not initialized in constructor
 	std::vector<std::vector<double>> fSiliconBeamCalibrations;
 
-	//compute drift velocity from TH2D when filling ActEvent
-	std::unique_ptr<TCanvas> fCanvDrift { nullptr};
-	std::unique_ptr<TH2D> fHistDrift { std::make_unique<TH2D>("fHistDrift", "Drift velocity",
-											100, 0., ActParameters::g_NPADX,
-											100, 0., ActParameters::g_NPADZ)};
+	//store conversion to physical units
+	double fXYToLengthUnits { ActParameters::padSideLength};//should be constant!
 	double fZToLengthUnits {};
+	double fZToPadUnits {};
+	//compute drift velocity from TH2D when filling ActEvent
+	std::unique_ptr<TH2D> fHistDrift { nullptr};
+
 
 	public:
 	ActCalibrations();
@@ -46,10 +47,22 @@ class ActCalibrations
 	const std::map<std::string, std::vector<std::vector<double>>>& GetSilicon01SCalibrations() const { return fSilicon01SCalibrations; }
 	const std::vector<std::vector<double>>& GetSiliconBeamCalibrations() const { return fSiliconBeamCalibrations; }
 
-	//drift velocity
-	void ReadDriftVelocity(std::vector<TrackPhysics>& tracks, Silicons& silicons);
-	void PlotDriftVelocity();
-	std::unique_ptr<TH2D> GetDriftVelocity(){ return std::move(fHistDrift); }
+	//////////////////////////////////////////////////////////////////////////
+	//drift velocity and converto-to-physical-units coefs.
+	void SetXYToLengthUnitsCoef(double val) { fXYToLengthUnits = val; }
+	void SetZToLengthUnitsCoef(double val){ fZToLengthUnits = val; }
+	void SetZToPadUnitsCoef(double val){ fZToPadUnits = val; }
+	double GetZToLengthUnitsCoef() const { return fZToLengthUnits; }
+	double GetZToPadUnitsCoef() const { return fZToPadUnits; }
+	double GetXYToLengthUnitsCoef() const { return fXYToLengthUnits; }
+	void InitDriftVelocityHist();//initialize histogram and fill it with physics
+	void FillDriftVelocityHist(std::vector<TrackPhysics>& tracks, Silicons& silicons);
+	void ComputeDriftCoefsFromHist();//compute coefs once hist is filled
+	void PlotDriftVelocityHist();//plot it
+	void WriteDriftCoefsToFile(std::string fileName);//write it to files
+	void ReadDriftCoefsFromFile(std::string fileName);//read file
+	std::unique_ptr<TH2D> GetDriftVelocityHist(){ return std::move(fHistDrift); }//get histo to write it to ttree
+	//////////////////////////////////////////////////////////////////////////
 };
 
 
