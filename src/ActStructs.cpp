@@ -10,3 +10,15 @@ Silicons::Silicons()
 	  fSiBeam(ActParameters::NrowsSiBeam, 0.), fSiBeam_cal(ActParameters::NrowsSiBeam, 0.)
 {
 }
+
+void TrackPhysics::Print()
+{
+	std::cout<<BOLDGREEN<<"===== Track "<<fTrackID<<" ====="<<RESET<<'\n';
+	std::cout<<" Total charge: "<<fTotalCharge<<'\n';
+	std::cout<<" Reaction point in mm at X: "<<fReactionPoint.X()<<" Y: "<<fReactionPoint.Y()<<" Z: "<<fReactionPoint.Z()<<'\n';
+	std::cout<<" Silicon point "<<fSiliconPlace<<" with coordinates in mm"<<'\n';
+	std::cout<<"  X: "<<fSiliconPoint.X()<<" Y: "<<fSiliconPoint.Y()<<" Z: "<<fSiliconPoint.Z()<<'\n';
+	std::cout<<" Track length: "<<fTrackLength<< " mm and average charge: "<<fAverageCharge<<" / mm"<<'\n';
+	std::cout<<" Theta: "<<fTheta<<" degrees and phi: "<<fPhi<<" degrees"<<'\n';
+	std::cout<<BOLDGREEN<<"============"<<RESET<<'\n'; 
+}

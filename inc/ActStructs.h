@@ -93,6 +93,8 @@ struct TrackPhysics
 	
 	TrackPhysics() = default;
 	~TrackPhysics() = default;
+
+	void Print();
 };
 
 #endif //ACTSTRUCTS_H

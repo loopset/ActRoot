@@ -10,6 +10,7 @@
 #include <Rtypes.h>
 #include <Math/Point3D.h>
 #include <Math/Vector3D.h>
+#include <TMath.h>
 #include <algorithm>
 #include <cmath>
 #include <cstddef>
@@ -181,7 +182,7 @@ void ActTrack::CalculateThetaTrack()
 	XYZVector n_z { 0., 0., 1.};//normal to z in order to get theta
 	auto dot { n_z.Dot(vector.Unit())};//all unitary vectors
 	auto theta { TMath::ACos(dot)};
-	fTrackPhysics.fTheta = theta;
+	fTrackPhysics.fTheta = TMath::RadToDeg() * theta;
 }
 
 void ActTrack::CalculatePhiTrack()
@@ -190,7 +191,7 @@ void ActTrack::CalculatePhiTrack()
 	XYZVector n_y { 0., 1., 0.};
 	auto dot { n_y.Dot(vector.Unit())};
 	auto phi { TMath::ACos(dot)};
-	fTrackPhysics.fPhi = phi;
+	fTrackPhysics.fPhi = TMath::RadToDeg() * phi;
 }
 
 void ActTrack::CalculateReactionPoint(ActCalibrations& calibrations)
