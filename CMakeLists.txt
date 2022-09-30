@@ -26,6 +26,7 @@ set(sources
   ${CMAKE_SOURCE_DIR}/src/ActEvent.cpp
   ${CMAKE_SOURCE_DIR}/src/ActAnalyzer.cpp
   ${CMAKE_SOURCE_DIR}/src/ActSRIM.cpp
+  ${CMAKE_SOURCE_DIR}/src/ActKinematics.cpp
 )
 
 set(headers
@@ -42,6 +43,7 @@ set(headers
   ${CMAKE_SOURCE_DIR}/inc/ActEvent.h
   ${CMAKE_SOURCE_DIR}/inc/ActAnalyzer.h
   ${CMAKE_SOURCE_DIR}/inc/ActSRIM.h
+  ${CMAKE_SOURCE_DIR}/inc/ActKinematics.h
 )
 
 # ActRoot LinkDef and dict generation

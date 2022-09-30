@@ -123,7 +123,7 @@ void ActAnalyzer::ReadTree(ActSRIM& srim)
 			continue;//dont run funcions if we dont have tracks in event
 		ProcessTrackID();
 		//only BINARY events
-		if(fTracks->size() != 1)
+		if(fTracks->size() != fTracksPerEvent)
 			continue;
 		ProcessRecoilEnergy(srim);
 	}

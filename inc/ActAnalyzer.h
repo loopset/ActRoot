@@ -37,6 +37,11 @@ private:
 	//WARNING: keys should be the same as ActSRIM
 	std::vector<std::string> fSkipParticles {};
 	std::map<std::string, std::unique_ptr<TCutG>> fGCuts {};
+
+	//set parameters of reaction
+	double fInitialBeamEnergy {35. * 20.004};//default-initialized to 20O as E796
+	std::string fBeamIsotope {"20O"};
+	int fTracksPerEvent { 1};//default to binary reactions
 	
 public:
 	ActAnalyzer(TTree* tree, std::unique_ptr<TH2D> histTrackID,
@@ -44,6 +49,7 @@ public:
 	~ActAnalyzer() = default;
 
 	//read TTree and set branches to our private members
+	//execute all computations
 	void ReadTree(ActSRIM& srim);
 	//draw canvas at the end of execution
 	void DrawCanvas();
@@ -54,6 +60,14 @@ public:
 	void ReadGraphicalCuts(std::string key, std::string fileName);
 	void SetSkipParticles(std::vector<std::string> vec);
 	std::vector<std::string> GetSkipParticles() const { return fSkipParticles; }
+
+	//setters and getter for reaction parameters
+	void SetInitialBeamEnergy(double energy) { fInitialBeamEnergy = energy; }
+	double GetInitialBeamEnergy() const { return fInitialBeamEnergy; }
+	void SetBeamIsotope(std::string isotope) { fBeamIsotope = isotope; }
+	std::string GetBeamIsotope() const { return fBeamIsotope; }
+	void SetTracksPerEvent(int val) { fTracksPerEvent = val; }
+	int GetTracksPerEvent() const { return fTracksPerEvent; }
 
 private:
 	void ProcessTrackID();

@@ -45,4 +45,6 @@
 
 #pragma link C++ class ActSRIM + ;
 
+#pragma link C++ class ActKinematics + ;
+
 #endif
