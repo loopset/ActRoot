@@ -54,7 +54,7 @@ public:
 
 	//getters
 	int GetIterations() const { return fIterations; }
-	int GetMinPatterPoints() const { return fMinPatternPoints; }
+	int GetMinPatternPoints() const { return fMinPatternPoints; }
 	float GetDistanceThreshold() const { return fDistanceThreshold; }
 	double GetChargeThreshold() const { return fChargeThreshold; }
 
