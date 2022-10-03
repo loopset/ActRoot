@@ -29,6 +29,16 @@ void ActKinematics::SetTargetKineticEnergy(double energy)
 	fEnergies["target"] = fKinetics["target"] + fMasses["target"];
 }
 
+void ActKinematics::SetEjectileAndRecoil(std::string particle)
+{
+	if(!isKnown(particle))
+	{
+		throw std::runtime_error("Cannot get particle mass for ejectile");
+	}
+	fMasses["ejectile"] = fKnownMasses[particle];
+	fMasses["recoil"] = fKnownMasses[fRecoilAssociatedToEjectile[particle]];
+}
+
 void ActKinematics::SetEjectileKineticEnergy(double energy)
 {
 	fKinetics["ejectile"] = energy;
@@ -45,7 +55,7 @@ void ActKinematics::ComputeEnergyAtCM()
 void ActKinematics::ComputeGammaAndDelta()
 {
 	fGamma = (fEnergies["beam"] + fEnergies["target"]) / fEnergyAtCM;
-	fBeta = std::sqrt(1 - 1. / std::pow(fGamma, 2));
+	fBeta = std::sqrt(1. - 1. / std::pow(fGamma, 2));
 }
 
 double ActKinematics::GetRecoilInvariantMass()

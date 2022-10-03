@@ -179,8 +179,8 @@ void ActTrack::SetTrackPhysics(ActCalibrations& calibrations)
 void ActTrack::CalculateThetaTrack()
 {
 	XYZVector vector { fTrackPhysics.fSiliconPoint - fTrackPhysics.fReactionPoint};
-	XYZVector n_z { 0., 0., 1.};//normal to z in order to get theta
-	auto dot { n_z.Dot(vector.Unit())};//all unitary vectors
+	XYZVector n_x { 1., 0., 0.};//unitary along x in order to get theta
+	auto dot { n_x.Dot(vector.Unit())};//all unitary vectors
 	auto theta { TMath::ACos(dot)};
 	fTrackPhysics.fTheta = TMath::RadToDeg() * theta;
 }
@@ -188,8 +188,8 @@ void ActTrack::CalculateThetaTrack()
 void ActTrack::CalculatePhiTrack()
 {
 	XYZVector vector { fTrackPhysics.fSiliconPoint - fTrackPhysics.fReactionPoint};
-	XYZVector n_y { 0., 1., 0.};
-	auto dot { n_y.Dot(vector.Unit())};
+	XYZVector n_z { 0., 0., 1.};
+	auto dot { n_z.Dot(vector.Unit())};
 	auto phi { TMath::ACos(dot)};
 	fTrackPhysics.fPhi = TMath::RadToDeg() * phi;
 }
