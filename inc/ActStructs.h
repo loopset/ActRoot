@@ -19,7 +19,7 @@ struct Silicons
 	std::vector<double> fSiBeam, fSiBeam_cal;
 
 	//maps storing information for each event
-	std::map<std::string, std::map<std::string, double>> fData;
+	std::map<std::string, std::map<std::string, double>> fData {};
 
 	Silicons();
 	~Silicons() = default;
@@ -78,13 +78,13 @@ struct TrackPhysics
 	using XYZPoint = ROOT::Math::XYZPoint;
 	
 	int fTrackID {-1};
-	double fTheta {};
-	double fPhi {};
+	double fTheta {-1.};
+	double fPhi {-1.};
 	XYZPoint fReactionPoint {-1, -1, -1};
 	XYZPoint fSiliconPoint {-1, -1, -1};
-	double fTrackLength {};
-	double fTotalCharge {};
-	double fAverageCharge {};
+	double fTrackLength {-1.};
+	double fTotalCharge {-1.};
+	double fAverageCharge {-1.};
 	std::string fReactionPlace {""};
 	//std::string fBoundaryPlace {""};
 	std::string fSiliconPlace {""};

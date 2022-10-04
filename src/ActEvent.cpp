@@ -25,21 +25,35 @@
 #include <TMath.h>
 
 ActEvent::ActEvent()
-	: fHitArray(), fSilicons(), fTriggers(),
-	  voxel(ActParameters::g_NPADX *  ActParameters::g_NPADY *  ActParameters::g_NPADZ),
-	  indexOfVoxelInHitArray(ActParameters::g_NPADX * ActParameters::g_NPADY * ActParameters::g_NPADZ, -1)
+	: voxel(ActParameters::g_NPADX *  ActParameters::g_NPADY *  ActParameters::g_NPADZ),
+	  indexOfVoxelInHitArray(ActParameters::g_NPADX * ActParameters::g_NPADY * ActParameters::g_NPADZ, -1),
+	  chargeInPad(ActParameters::g_NPADX, std::vector<double>(ActParameters::g_NPADY))
 {
 }
 
-void ActEvent::Reset()
+void ActEvent::Reset(std::string mode)
 {
-	fEventID = -1;
-	fHitArray.clear();
-	fSilicons = {};
-	fTriggers = {};
-	voxel.assign(voxel.size(), 0);
-	indexOfVoxelInHitArray.assign(indexOfVoxelInHitArray.size(), -1);
-	fTracks.clear();
+	if(mode == "shallow")//because we use to gate only at this stage
+	{
+		fEventID = -1;
+		fTriggers = {};
+		fSilicons = {};
+	}
+	else if(mode == "deep")//fully reset events which go through gates
+	{
+		fEventID = -1;
+		fTriggers = {};
+		fHitArray.clear();
+		fSilicons = {};
+		voxel.assign(voxel.size(), 0);
+		indexOfVoxelInHitArray.assign(indexOfVoxelInHitArray.size(), -1);
+		//reset of chargeInPad is done in its method! (so it is done only when method is called)
+		fTracks.clear();
+	}
+	else
+	{
+		throw std::runtime_error("Wrong string passed to ActEvent::Reset()!");
+	}
 }
 
 void ActEvent::ReadTriggersAndGates(const MEvent *Evt, const MEventReduced *EvtRed)
@@ -177,7 +191,7 @@ void ActEvent::ReadHits(const ActCalibrations &calibrations, const MEventReduced
 						
 						if(voxel[globalIndex] > 1)//then we have to append charge to already existent hit
 						{
-							std::cout<<BOLDCYAN<<"Found coincidence in fHitArray -> Resetting hit"<<RESET<<'\n';
+							//std::cout<<BOLDCYAN<<"Found coincidence in fHitArray -> Resetting hit"<<RESET<<'\n';
 							//we already have the index in fHitArray!!!
 							auto alreadyCharge { fHitArray[indexOfVoxelInHitArray[globalIndex]].GetCharge()};
 							fHitArray[indexOfVoxelInHitArray[globalIndex]].SetCharge(alreadyCharge + Qiaux_align);
@@ -314,7 +328,7 @@ void ActEvent::ReadEvent(const ActCalibrations &calibrations, const MEvent* Evt,
 						
 						if(voxel[globalIndex] > 1 && checkOverlap)//then we have to append charge to already existent hit
 						{
-							std::cout<<BOLDCYAN<<"Found coincidence in fHitArray -> Resetting hit"<<RESET<<'\n';
+							//std::cout<<BOLDCYAN<<"Found coincidence in fHitArray -> Resetting hit"<<RESET<<'\n';
 							//we already have the index in fHitArray!!!
 							auto alreadyCharge { fHitArray[indexOfVoxelInHitArray[globalIndex]].GetCharge()};
 							fHitArray[indexOfVoxelInHitArray[globalIndex]].SetCharge(alreadyCharge + Qiaux_align);
@@ -545,9 +559,9 @@ void ActEvent::CleanSaturatedHits(double chargeThreshold, int minDimZToDelete)
 	}
 	//vector to represent pad plane
 	//map to store fHitArray indixes in each pad
-	std::map<std::pair<int, int>, std::vector<int>> zInPad;
-	std::vector<std::vector<double>> chargeInPad(ActParameters::g_NPADX,
-												 std::vector<double>(ActParameters::g_NPADY));
+	std::map<std::pair<int, int>, std::vector<int>> zInPad {};
+	//std::vector<std::vector<double>> chargeInPad(ActParameters::g_NPADX,
+	//											 std::vector<double>(ActParameters::g_NPADY));
 	for(auto& hit : fHitArray)
 	{
 		auto position  { hit.GetPosition()};
@@ -574,7 +588,7 @@ void ActEvent::CleanSaturatedHits(double chargeThreshold, int minDimZToDelete)
 	}
 	if(IDHasChanged)
 	{
-		std::cout<<BOLDCYAN<<"Deleting "<<indexesToDelete.size()<<" hits which are saturated!"<<RESET<<'\n';
+		//std::cout<<BOLDCYAN<<"Deleting "<<indexesToDelete.size()<<" hits which are saturated!"<<RESET<<'\n';
 		std::sort(indexesToDelete.begin(), indexesToDelete.end(),
 				  std::greater<int>());
 		//now that they are sorted in descending way, we can erase
@@ -587,7 +601,12 @@ void ActEvent::CleanSaturatedHits(double chargeThreshold, int minDimZToDelete)
 		{
 			fHitArray[newID].SetHitID(newID);
 		}
-	}	
+	}
+	//reset class vector
+	for(auto& inner_vec : chargeInPad)
+	{
+		inner_vec.assign(inner_vec.size(), 0.);
+	}
 }
 
 //set ActTracks from RANSAC

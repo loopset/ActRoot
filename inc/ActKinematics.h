@@ -13,12 +13,13 @@ class ActKinematics
 private:
 	//store masses for multiple particles
 	double fUToMeV { 931.494};
-	std::map<std::string, double> fKnownMasses {{"p", 1.007825 * fUToMeV},
-												{"d", 2.014102 * fUToMeV},
-												{"t", 3.0160 * fUToMeV},
-												{"20O", 20.00475 * fUToMeV},
-												{"19O", 19.003578 * fUToMeV},
-												{"18O", 17.999159 * fUToMeV}};
+	double fElectron { 0.511};//MeV
+	std::map<std::string, double> fKnownMasses {{"p", 1.007825 * fUToMeV - fElectron},
+												{"d", 2.014102 * fUToMeV - fElectron},
+												{"t", 3.0160 * fUToMeV - fElectron},
+												{"20O", 20.00475 * fUToMeV - 8 * fElectron},
+												{"19O", 19.003578 * fUToMeV - 8 * fElectron},
+												{"18O", 17.999159 * fUToMeV - 8 * fElectron}};
 	std::map<std::string, std::string> fRecoilAssociatedToEjectile {{"p", "20O"},//elastic reaction
 																	{"d", "20O"},//elastic channel
 																	{"t", "20O"}};

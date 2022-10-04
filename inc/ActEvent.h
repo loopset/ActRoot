@@ -31,11 +31,15 @@ class ActEvent
 	//auxiliar vectors to ReadHits
 	std::vector<int> voxel;
 	std::vector<int> indexOfVoxelInHitArray;
+	//auxiliar vector to CleanSaturatedHits
+	std::vector<std::vector<double>> chargeInPad;
 
 	public:
 	ActEvent();//not default bc we have to initialize voxel and indexOfVoxelInHitArray
 	~ActEvent() = default;
-	void Reset();
+	//two modes: shallow only resets TriggersAndGates and Silicons
+	//deep resets all (default, as before this implementation)
+	void Reset(std::string mode = "deep");
 
 	////////////// READERS = SETTERS ////////////////////////////////
 	//first, for event ID

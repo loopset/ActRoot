@@ -199,7 +199,7 @@ void ActAnalyzer::ProcessRecoilEnergy(ActSRIM& srim, ActKinematics& kinematics)
 		if(std::isnan(energyAtSilicon) || energyAtSilicon <= 0.)
 			continue;//skip wrong energy values or panels
 		double energyAtRP {};
-		double invariantMass {};
+		double recoilMass {};
 		//if we dont have done yet particle ID graphical cuts, default to proton
 		if(!fEnableGraphicalCuts)
 		{
@@ -211,8 +211,8 @@ void ActAnalyzer::ProcessRecoilEnergy(ActSRIM& srim, ActKinematics& kinematics)
 			kinematics.SetEjectileAndRecoil("p");
 			kinematics.SetEjectileKineticEnergy(energyAtRP);
 			kinematics.SetEjectileAngle(track.fTheta);
-			invariantMass = kinematics.GetRecoilInvariantMass();
-			double excitationEnergy {std::sqrt(invariantMass) - kinematics.GetMass("recoil")};
+			recoilMass = kinematics.GetRecoilInvariantMass();
+			double excitationEnergy {std::sqrt(recoilMass) - kinematics.GetMass("recoil")};
 			if(isInExcitationMap("p"))
 				fHistosExcitation["p"]->Fill(excitationEnergy);
 			else
@@ -233,9 +233,9 @@ void ActAnalyzer::ProcessRecoilEnergy(ActSRIM& srim, ActKinematics& kinematics)
 			kinematics.SetEjectileAndRecoil(particle);
 			kinematics.SetEjectileKineticEnergy(energyAtRP);
 			kinematics.SetEjectileAngle(track.fTheta);
-			invariantMass = kinematics.GetRecoilInvariantMass();
-			double excitationEnergy {std::sqrt(invariantMass) - kinematics.GetMass("recoil")};
-			std::cout<<"Excitation energy with "<<particle<<" :"<<excitationEnergy<<'\n';
+			recoilMass = kinematics.GetRecoilInvariantMass();
+			double excitationEnergy {std::sqrt(recoilMass) - kinematics.GetMass("recoil")};
+			//std::cout<<"Excitation energy with "<<particle<<" :"<<excitationEnergy<<'\n';
 			if(isInExcitationMap(particle))
 				fHistosExcitation[particle]->Fill(excitationEnergy);
 			else
@@ -243,7 +243,7 @@ void ActAnalyzer::ProcessRecoilEnergy(ActSRIM& srim, ActKinematics& kinematics)
 				std::cout<<BOLDRED<<"Could not find fHistosExcitation associated to particle "<<particle<<" -> Check excitationKeys!"<<RESET<<'\n';
 			}
 		}
-		std::cout<<"Energy: "<<energyAtRP<<" with angle: "<<track.fTheta<<'\n';
+		//std::cout<<"Energy: "<<energyAtRP<<" with angle: "<<track.fTheta<<'\n';
 		fHistRecoilEnergy->Fill(energyAtRP);
 	}
 }
