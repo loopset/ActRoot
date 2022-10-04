@@ -142,7 +142,7 @@ void ActCalibrations::ComputeDriftCoefsFromHist()
 	double xMin { 30.}; int binXMin { fHistDrift->GetXaxis()->FindFixBin(xMin)};
 	double xMax { 90.}; int binXMax { fHistDrift->GetXaxis()->FindFixBin(xMax)};
 	double yMin { 200.}; int binYMin { fHistDrift->GetYaxis()->FindFixBin(yMin)};
-	double yMax { 350.}; int binYMax { fHistDrift->GetYaxis()->FindFixBin(yMax)};
+	double yMax { 310.}; int binYMax { fHistDrift->GetYaxis()->FindFixBin(yMax)};
 
 	double zMin { yMin};
 	bool zMinIsFound { false};
