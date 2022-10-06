@@ -82,7 +82,7 @@ private:
 	void CalculateSiliconPointRawUnits();
 	void CalculateReactionPointRawUnits();
 	//these ones work in physical units (mm or pad units)
-	void CalculateThetaTrack();
+	void CalculateThetaTrack(ActCalibrations& calibrations);
 	void CalculatePhiTrack();
 	void CalculateReactionPoint(ActCalibrations& calibrations);
 	void CalculateSiliconPoint(ActCalibrations& calibrations);

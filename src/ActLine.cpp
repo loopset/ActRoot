@@ -30,7 +30,7 @@ void ActLine::SetPoint(std::vector<XYZPoint> &sampled)
 void ActLine::SetDirection(std::vector<XYZPoint> &sampled)
 {
 	if(sampled.size() != 2) throw std::runtime_error("sampled ActHits size differs from 2!");
-	fDirection = sampled[1] - sampled[0];
+	fDirection = sampled[0] - sampled[1];//for backwards compatibility, point to gravity center always
 }
 
 void ActLine::SetChi2(double chi)

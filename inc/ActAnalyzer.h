@@ -5,6 +5,8 @@
 #include "ActKinematics.h"
 #include "ActStructs.h"
 
+#include <Math/Point3Dfwd.h>
+#include <Math/Vector3Dfwd.h>
 #include <TH1.h>
 #include <TH2.h>
 #include <THStack.h>
@@ -19,6 +21,9 @@
 
 class ActAnalyzer
 {
+public:
+	using XYZPoint = ROOT::Math::XYZPoint;
+	using XYZVector = ROOT::Math::XYZVector;
 private:
 	//to read ttree
 	TTree* fTree { nullptr};
@@ -34,6 +39,12 @@ private:
 	std::unique_ptr<TCanvas> fCanvExcitation {nullptr};
 	std::map<std::string, std::unique_ptr<TH1D>> fHistosExcitation {};
 	std::unique_ptr<THStack> fStackExcitation {nullptr};
+	//check kinematics
+	std::unique_ptr<TCanvas> fCanvKinematics {nullptr};
+	std::map<std::string, std::unique_ptr<TH2D>> fHistosKinematics {};
+	std::map<std::string, std::unique_ptr<TH2D>> fHistosTheoreticalKinematics {};
+	std::unique_ptr<THStack> fStackKinematics {nullptr};
+	std::unique_ptr<THStack> fStackTheoreticalKinematics {nullptr};
 
 	//read graphical cuts, mainly for track particle ID
 	//enable graphical cuts service
@@ -50,6 +61,7 @@ public:
 	ActAnalyzer(TTree* tree, std::unique_ptr<TH2D> histTrackID,
 				std::unique_ptr<TH1D> histRecoilEnergy,
 				std::unique_ptr<TH1D> histExcitation,
+				std::unique_ptr<TH2D> histKinematics,
 				std::vector<std::string> excitationKeys = {"p"});
 	~ActAnalyzer() = default;
 
@@ -76,6 +88,7 @@ private:
 	//function to get energy from silicons, keeping in mind multiplicity, side and so on
 	double GetGatedSiliconEnergy(TrackPhysics& track, std::string frontPanel = "0");
 	std::string IdentifyRecoilInGraphCuts(TrackPhysics& track);
+	void PropagateBeamInChamber(TrackPhysics& track, ActSRIM& srim, ActKinematics& kinematics);
 	
 	template<typename T>
 	inline bool isInVector(T val, std::vector<T> vec)

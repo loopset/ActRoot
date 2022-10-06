@@ -172,11 +172,11 @@ void ActTrack::SetTrackPhysics(ActCalibrations& calibrations)
 	CalculateSiliconPoint(calibrations);
 	CalculateTrackLength();
 	CalculateTrackAverageCharge();
-	CalculateThetaTrack();
+	CalculateThetaTrack(calibrations);
 	CalculatePhiTrack();
 }
 
-void ActTrack::CalculateThetaTrack()
+void ActTrack::CalculateThetaTrack(ActCalibrations& calibrations)
 {
 	XYZVector vector { fTrackPhysics.fSiliconPoint - fTrackPhysics.fReactionPoint};
 	XYZVector n_x { 1., 0., 0.};//unitary along x in order to get theta

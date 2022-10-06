@@ -88,7 +88,7 @@ namespace ActParameters
 	/////////////////////////////////////////////
 	///////// FIND PHYSICS OF TRACKS ////////////
 	//number of pads above chamber boundaries where silicons are placed
-	inline constexpr double g_NPADSISIDE { 50}; //10 cm
+	inline constexpr double g_NPADSISIDE { 42.5}; //8.5 cm
 	inline constexpr double g_NPADSSIFRONT { 50}; //10 cm
 
 	//[temporary] position of beam plane in Y

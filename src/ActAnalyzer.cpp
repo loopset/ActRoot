@@ -6,6 +6,11 @@
 #include "ActStructs.h"
 
 #include <TCutG.h>
+#include <Math/Point3Dfwd.h>
+#include <Math/Point3D.h>
+#include <Math/Vector3Dfwd.h>
+#include <Math/Vector3D.h>
+#include <Rtypes.h>
 #include <TH1.h>
 #include <THStack.h>
 #include <TROOT.h>
@@ -26,6 +31,7 @@
 ActAnalyzer::ActAnalyzer(TTree* tree, std::unique_ptr<TH2D> histTrackID,
 						 std::unique_ptr<TH1D> histRecoilEnergy,
 						 std::unique_ptr<TH1D> histExcitation,
+						 std::unique_ptr<TH2D> histKinematics,
 						 std::vector<std::string> excitationKeys)
 	: fTree(tree),
 	  fHistTrackID(std::move(histTrackID)),
@@ -34,6 +40,8 @@ ActAnalyzer::ActAnalyzer(TTree* tree, std::unique_ptr<TH2D> histTrackID,
 	for(auto& key : excitationKeys)
 	{
 		fHistosExcitation[key] = std::unique_ptr<TH1D>((TH1D*)histExcitation->Clone());
+		fHistosKinematics[key] = std::unique_ptr<TH2D>((TH2D*)histKinematics->Clone());
+		fHistosTheoreticalKinematics[key] = std::unique_ptr<TH2D>((TH2D*)histKinematics->Clone());
 	}
 }
 
@@ -83,7 +91,43 @@ void ActAnalyzer::DrawCanvas()
 	fCanvRecoilEnergy->Update();
 	//fCanvRecoilEnergy->WaitPrimitive();
 
-	//excitation energy / invariant mass
+	//kinematics plot
+	fCanvKinematics = std::make_unique<TCanvas>("fCanvKinematics", "Kinematics plot", 1);
+	fCanvKinematics->Divide(fHistosKinematics.size());
+	int padIndex { 1};
+	for(auto& kinHisto : fHistosKinematics)
+	{
+		fCanvKinematics->cd(padIndex);
+		kinHisto.second->SetTitle(("Kinematics for " + kinHisto.first).c_str());
+		kinHisto.second->Draw();
+		fHistosTheoreticalKinematics[kinHisto.first]->SetTitle(("Theoretical for " + kinHisto.first).c_str());
+		fHistosTheoreticalKinematics[kinHisto.first]->SetMarkerColor(kBlue);
+		fHistosTheoreticalKinematics[kinHisto.first]->Draw("same");
+		padIndex++;
+	}
+	fCanvKinematics->cd();
+	fCanvKinematics->Update();
+	// fStackKinematics = std::make_unique<THStack>("fStackKinematics", "Kinematics");
+	// for(auto& histo : fHistosKinematics)
+	// {
+	// 	histo.second->SetTitle(("Kinematics for " + histo.first).c_str());
+	// 	fStackKinematics->Add(histo.second.get());
+	// }
+	// //theoretical ones
+	// fStackTheoreticalKinematics = std::make_unique<THStack>("fStackTheoreticalKinematics", "Theoretical");
+	// for(auto& histo : fHistosTheoreticalKinematics)
+	// {
+	// 	histo.second->SetTitle(("Theoretical for " + histo.first).c_str());
+	// 	histo.second->SetMarkerColor(kBlue);
+	// 	fStackTheoreticalKinematics->Add(histo.second.get());
+	// }
+	// fCanvKinematics->cd();
+	// fStackKinematics->Draw("pads");
+	// fStackTheoreticalKinematics->Draw("pads sames");
+	// fCanvKinematics->Update();
+
+	
+	//excitation energy
 	fCanvExcitation = std::make_unique<TCanvas>("fCanvExcitation", "Excitation energy", 1);
 	fStackExcitation = std::make_unique<THStack>("fStackExcitation", "Excitation energies");
 	for(auto& histo : fHistosExcitation)
@@ -96,6 +140,7 @@ void ActAnalyzer::DrawCanvas()
 	fCanvExcitation->cd();
 	fCanvExcitation->WaitPrimitive("lat", "");
 	fStackExcitation.reset();
+	fStackKinematics.reset();
 }
 
 double ActAnalyzer::GetGatedSiliconEnergy(TrackPhysics& track, std::string frontPanel)
@@ -186,12 +231,31 @@ std::string ActAnalyzer::IdentifyRecoilInGraphCuts(TrackPhysics& track)
 	return identifiedCut;
 }
 
+void ActAnalyzer::PropagateBeamInChamber(TrackPhysics& track, ActSRIM& srim,
+										   ActKinematics& kinematics)
+{
+	//assume this as the enter point
+	XYZPoint enterPoint { 0./2, 295./2, 255./2};//mm
+	auto reactionPoint { track.fReactionPoint};//mm too
+	auto length { std::sqrt((enterPoint - reactionPoint).Mag2())};
+	auto initialRange { srim.EvalDirect(kinematics.GetBeamParticle(), kinematics.GetBeamKineticEnergy())};
+	auto rangeAtRP { initialRange - length};
+	if(rangeAtRP <= 0.)
+		return;//something went wrong, should check! but by now we dont modify beam energy
+	auto energyAtRP { srim.EvalInverse(kinematics.GetBeamParticle(), rangeAtRP)};
+
+	//and now set value
+	kinematics.SetBeamKineticEnergy(energyAtRP);
+}
+
 void ActAnalyzer::ProcessRecoilEnergy(ActSRIM& srim, ActKinematics& kinematics)
 {
 	//use SRIM to get energy just after reaction point!
 	for(auto& track : *fTracks)
 	{
 		if(!(track.fRPInChamber) || !(track.fSPInArray))//if track is not good, continue!
+			continue;
+		if(track.fSiliconPlace != ActParameters::trackHitsSiliconSideLeft)
 			continue;
 		
 		auto energyAtSilicon { GetGatedSiliconEnergy(track, "0")};//always energy at front panel 0
@@ -200,21 +264,30 @@ void ActAnalyzer::ProcessRecoilEnergy(ActSRIM& srim, ActKinematics& kinematics)
 			continue;//skip wrong energy values or panels
 		double energyAtRP {};
 		double recoilMass {};
+		double recoilTheta {};
+		double theoRecoilEnergy {};
 		//if we dont have done yet particle ID graphical cuts, default to proton
 		if(!fEnableGraphicalCuts)
 		{
 			auto initialRange { srim.EvalDirect("p", energyAtSilicon)};
 			auto rangeAtRP   { initialRange + track.fTrackLength};
 			energyAtRP = srim.EvalInverse("p", rangeAtRP);
+			PropagateBeamInChamber(track, srim, kinematics);
 			kinematics.SetParticle("target", "p");
 			kinematics.SetTargetKineticEnergy(0.);
 			kinematics.SetEjectileAndRecoil("p");
 			kinematics.SetEjectileKineticEnergy(energyAtRP);
+			recoilTheta = track.fTheta;
 			kinematics.SetEjectileAngle(track.fTheta);
 			recoilMass = kinematics.GetRecoilInvariantMass();
+			theoRecoilEnergy = kinematics.GetTheoreticalRecoilEnergy();
 			double excitationEnergy {std::sqrt(recoilMass) - kinematics.GetMass("recoil")};
 			if(isInExcitationMap("p"))
+			{
 				fHistosExcitation["p"]->Fill(excitationEnergy);
+				fHistosKinematics["p"]->Fill(recoilTheta, energyAtRP);
+				fHistosTheoreticalKinematics["p"]->Fill(recoilTheta, theoRecoilEnergy);
+			}
 			else
 			{
 				std::cout<<BOLDRED<<"Could not find fHistosExcitation associated to particle p -> Check excitationKeys!"<<RESET<<'\n';
@@ -228,16 +301,23 @@ void ActAnalyzer::ProcessRecoilEnergy(ActSRIM& srim, ActKinematics& kinematics)
 			auto initialRange { srim.EvalDirect(particle, energyAtSilicon)};
 			auto rangeAtRP   { initialRange + track.fTrackLength};
 			energyAtRP = srim.EvalInverse(particle, rangeAtRP);
+			PropagateBeamInChamber(track, srim, kinematics);
 			kinematics.SetParticle("target", particle);
 			kinematics.SetTargetKineticEnergy(0.);
 			kinematics.SetEjectileAndRecoil(particle);
 			kinematics.SetEjectileKineticEnergy(energyAtRP);
+			recoilTheta = track.fTheta;
 			kinematics.SetEjectileAngle(track.fTheta);
 			recoilMass = kinematics.GetRecoilInvariantMass();
+			theoRecoilEnergy = kinematics.GetTheoreticalRecoilEnergy();
 			double excitationEnergy {std::sqrt(recoilMass) - kinematics.GetMass("recoil")};
 			//std::cout<<"Excitation energy with "<<particle<<" :"<<excitationEnergy<<'\n';
 			if(isInExcitationMap(particle))
+			{
 				fHistosExcitation[particle]->Fill(excitationEnergy);
+				fHistosKinematics[particle]->Fill(recoilTheta, energyAtRP);
+				fHistosTheoreticalKinematics[particle]->Fill(recoilTheta, theoRecoilEnergy);
+			}
 			else
 			{
 				std::cout<<BOLDRED<<"Could not find fHistosExcitation associated to particle "<<particle<<" -> Check excitationKeys!"<<RESET<<'\n';

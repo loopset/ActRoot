@@ -28,6 +28,7 @@ private:
 	std::map<std::string, double> fEnergies {};//total energies at lab
 	std::map<std::string, double> fKinetics {};//kinetic energies at lab
 	std::map<std::string, double> fThetas {};//internally stored in rads at lab
+	std::string fBeamParticle {""};
 	double fGamma {};
 	double fBeta {};
 	double fEnergyAtCM {};//energy available at CM
@@ -43,12 +44,17 @@ public:
 	void SetEjectileAngle(double angle){ fThetas["ejectile"] = TMath::DegToRad() * angle; }
 	void SetParticle(std::string type, std::string particle){fMasses[type] = fKnownMasses[particle]; }
 	void SetEjectileAndRecoil(std::string ejectile);
-	
+
+	double GetBeamKineticEnergy() { return fKinetics["beam"]; }
+	std::string GetBeamParticle() const { return fBeamParticle; }
 	double GetRecoilInvariantMass();
 	double GetBeta() const { return fBeta; }
 	double GetGamma() const { return fGamma; }
 	double GetEnergyAtCM() const { return fEnergyAtCM; }
 	double GetMass(std::string type) { return fMasses[type]; }
+
+	//auxiliar funtion to compute recoil energy knowing theta and Etot
+	double GetTheoreticalRecoilEnergy(std::string branch = "positive");
 
 private:
 	void ComputeGammaAndDelta();

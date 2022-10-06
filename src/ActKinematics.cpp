@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include <iostream>
 
 ActKinematics::ActKinematics(std::string beam, std::string target,
 							 double beamKinetic, double targetKinetic)
@@ -11,6 +12,7 @@ ActKinematics::ActKinematics(std::string beam, std::string target,
 	{
 		throw std::runtime_error("Could not find particle in list of know masses!");
 	}
+	fBeamParticle = beam;
 	SetParticle("beam", beam);
 	SetParticle("target", target);
 	SetBeamKineticEnergy(beamKinetic);
@@ -72,4 +74,26 @@ double ActKinematics::GetRecoilInvariantMass()
 		2.*fEnergyAtCM*(fGamma*(fEnergies["ejectile"] - fBeta*p3*std::cos(fThetas["ejectile"])))
 	};
 	return invariantMass;
+}
+
+double ActKinematics::GetTheoreticalRecoilEnergy(std::string branch)
+{
+	//require again computation of CM energy and gamma and beta
+	ComputeEnergyAtCM();
+	ComputeGammaAndDelta();
+	double A { (std::pow(fEnergyAtCM, 2) + std::pow(fMasses["ejectile"], 2) - std::pow(fMasses["recoil"], 2)) / (2*fEnergyAtCM*fGamma)};
+	double B { fBeta * std::cos(fThetas["ejectile"])};
+	double Delta { A*A * B*B - B*B*std::pow(fMasses["ejectile"], 2) * (1. - B*B)};
+	if(Delta < 0)
+		return -1.;
+	double denom { 1. - B*B};
+	double solPos { (A + std::sqrt(Delta)) / denom - fMasses["ejectile"]};
+	double solNeg { (A - std::sqrt(Delta)) / denom - fMasses["ejectile"]};
+	if(branch == "positive")
+		return solPos;
+	else
+	{
+		return solNeg;
+	}
+
 }
