@@ -64,8 +64,10 @@ double ActKinematics::GetRecoilInvariantMass()
 {
 	//require first the execution of ComputeEnergyAtCM
 	ComputeEnergyAtCM();
+	//std::cout<<"Energy at CM: "<<fEnergyAtCM<<'\n';
 	//then, gamma and beta
 	ComputeGammaAndDelta();
+	//std::cout<<"Gamma and beta: "<<fGamma<<" "<<fBeta<<'\n';
 	//then compute p_ejectile momentum
 	double p3 { std::sqrt(std::pow(fEnergies["ejectile"], 2) - std::pow(fMasses["ejectile"], 2))};
 	//finally, invariant mass

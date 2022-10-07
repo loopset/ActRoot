@@ -71,10 +71,10 @@ public:
 	void SetSPIsInArray(Bool_t good){ fSPInArray = good; }
 	
 	//setters for physical info
-	void SetReactionAndSiliconPointsRawUnits();
+	void SetMinimalTrackPhysics();
 	void SetTrackPhysics(TrackPhysics& info){ fTrackPhysics = info; }
 	//setter with self info
-	void SetTrackPhysics(ActCalibrations& calibrations);
+	//void SetTrackPhysics(ActCalibrations& calibrations);
 
 private:
 	//inner functions to set values
@@ -82,14 +82,13 @@ private:
 	void CalculateSiliconPointRawUnits();
 	void CalculateReactionPointRawUnits();
 	//these ones work in physical units (mm or pad units)
-	void CalculateThetaTrack(ActCalibrations& calibrations);
-	void CalculatePhiTrack();
-	void CalculateReactionPoint(ActCalibrations& calibrations);
-	void CalculateSiliconPoint(ActCalibrations& calibrations);
-	void CalculateTrackLength();
-	//independent of system of units
+	//void CalculateThetaTrack(ActCalibrations& calibrations);
+	//void CalculatePhiTrack();
+	//void CalculateReactionPoint(ActCalibrations& calibrations);
+	//void CalculateSiliconPoint(ActCalibrations& calibrations);
+	//void CalculateTrackLength();
 	void CalculateTrackTotalCharge();
-	void CalculateTrackAverageCharge();
+	//void CalculateTrackAverageCharge();
 
 	inline XYZPoint IntersectionTrackPlane(XYZPoint Pp, XYZVector vp, ActTrack& track)
 	{

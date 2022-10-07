@@ -4,9 +4,14 @@
 #include <Math/Point3Dfwd.h>
 #include <Math/Point3D.h>
 
+#include <Math/Vector3Dfwd.h>
+#include <Math/Vector3D.h>
+
 #include <vector>
 #include <map>
 #include <string>
+
+class ActCalibrations;
 
 struct Silicons
 {
@@ -76,6 +81,7 @@ struct TriggersAndGates
 struct TrackPhysics
 {
 	using XYZPoint = ROOT::Math::XYZPoint;
+	using XYZVector = ROOT::Math::XYZVector;
 	
 	int fTrackID {-1};
 	double fTheta {-1.};
@@ -95,6 +101,15 @@ struct TrackPhysics
 	~TrackPhysics() = default;
 
 	void Print();
+	void SetTrackFullPhysics(ActCalibrations& calibrations);
+
+private:
+	void CalculateThetaTrack();
+	void CalculatePhiTrack();
+	void CalculateReactionPoint(ActCalibrations& calibrations);
+	void CalculateSiliconPoint(ActCalibrations& calibrations);
+	void CalculateTrackLength();
+	void CalculateTrackAverageCharge();
 };
 
 #endif //ACTSTRUCTS_H

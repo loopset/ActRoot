@@ -52,12 +52,16 @@ void ActTrack::SetLine(const ActLine& line)
 ///// PHYSICAL INFORMATION OF TRACK ///////
 
 //1st, in pad and time bucket units!
-void ActTrack::SetReactionAndSiliconPointsRawUnits()
+void ActTrack::SetMinimalTrackPhysics()
 {
+	fTrackPhysics.fTrackID = fTrackID;
+	CalculateTrackTotalCharge();
+	
 	CalculateReactionPointRawUnits();
 	if(!fRPInChamber)
 		return;//do not continue if RP is not inside chamber
 	CalculateSiliconPointRawUnits();
+	
 }
 
 void ActTrack::CalculateReactionPointRawUnits()
@@ -155,78 +159,6 @@ void ActTrack::CalculateSiliconPointRawUnits()
 	}
 }
 
-//2nd, set physical values
-//IMPORTANT: depends on ActCalibrations bc we need to convert to
-//physical lengths using coefficients set there!
-void ActTrack::SetTrackPhysics(ActCalibrations& calibrations)
-{
-	//copy trackID to our struct
-	fTrackPhysics.fTrackID = fTrackID;
-	CalculateTrackTotalCharge();
-	if(!fRPInChamber)
-		return;//since RP is not located in chamber, we cannot compute anything
-	//and now a funtion to each physical parameter
-	CalculateReactionPoint(calibrations);
-	if(!fSPInArray)
-		return;//same but with SP
-	CalculateSiliconPoint(calibrations);
-	CalculateTrackLength();
-	CalculateTrackAverageCharge();
-	CalculateThetaTrack(calibrations);
-	CalculatePhiTrack();
-}
-
-void ActTrack::CalculateThetaTrack(ActCalibrations& calibrations)
-{
-	XYZVector vector { fTrackPhysics.fSiliconPoint - fTrackPhysics.fReactionPoint};
-	XYZVector n_x { 1., 0., 0.};//unitary along x in order to get theta
-	auto dot { n_x.Dot(vector.Unit())};//all unitary vectors
-	auto theta { TMath::ACos(dot)};
-	fTrackPhysics.fTheta = TMath::RadToDeg() * theta;
-}
-
-void ActTrack::CalculatePhiTrack()
-{
-	XYZVector vector { fTrackPhysics.fSiliconPoint - fTrackPhysics.fReactionPoint};
-	XYZVector n_z { 0., 0., 1.};
-	auto dot { n_z.Dot(vector.Unit())};
-	auto phi { TMath::ACos(dot)};
-	fTrackPhysics.fPhi = TMath::RadToDeg() * phi;
-}
-
-void ActTrack::CalculateReactionPoint(ActCalibrations& calibrations)
-{
-	//once reaction point is computed in raw units, we have to convert it to physical units
-	//here, we convert it to mm
-	auto oldPoint { fTrackPhysics.fReactionPoint};
-	XYZPoint newPoint;
-	newPoint.SetX(oldPoint.X() * calibrations.GetXYToLengthUnitsCoef());
-	newPoint.SetY(oldPoint.Y() * calibrations.GetXYToLengthUnitsCoef());
-	newPoint.SetZ(oldPoint.Z() * calibrations.GetZToLengthUnitsCoef());
-
-	fTrackPhysics.fReactionPoint = newPoint;
-}
-
-void ActTrack::CalculateSiliconPoint(ActCalibrations& calibrations)
-{
-	auto oldPoint { fTrackPhysics.fSiliconPoint};
-	XYZPoint newPoint;
-	newPoint.SetX(oldPoint.X() * calibrations.GetXYToLengthUnitsCoef());
-	newPoint.SetY(oldPoint.Y() * calibrations.GetXYToLengthUnitsCoef());
-	newPoint.SetZ(oldPoint.Z() * calibrations.GetZToLengthUnitsCoef());
-
-	fTrackPhysics.fSiliconPoint = newPoint;
-}
-
-void ActTrack::CalculateTrackLength()
-{
-	//MUST BE RUN AFTER SILICON AND REACTION POINT CALCULATIONS
-	auto rp { fTrackPhysics.fReactionPoint};
-	auto sp { fTrackPhysics.fSiliconPoint};
-
-	double dist2 { (rp - sp).Mag2()};
-	fTrackPhysics.fTrackLength = TMath::Sqrt(dist2);
-}
 
 void ActTrack::CalculateTrackTotalCharge()
 {
@@ -238,7 +170,77 @@ void ActTrack::CalculateTrackTotalCharge()
 	fTrackPhysics.fTotalCharge = totalCharge;
 }
 
-void ActTrack::CalculateTrackAverageCharge()
-{
-	fTrackPhysics.fAverageCharge = fTrackPhysics.fTotalCharge / fTrackPhysics.fTrackLength;
-}
+//2nd, set physical values
+//IMPORTANT: depends on ActCalibrations bc we need to convert to
+//physical lengths using coefficients set there!
+// void ActTrack::SetTrackPhysics(ActCalibrations& calibrations)
+// {
+// 	if(!fRPInChamber)
+// 		return;//since RP is not located in chamber, we cannot compute anything
+// 	//and now a funtion to each physical parameter
+// 	CalculateReactionPoint(calibrations);
+// 	if(!fSPInArray)
+// 		return;//same but with SP
+// 	CalculateSiliconPoint(calibrations);
+// 	CalculateTrackLength();
+// 	CalculateTrackAverageCharge();
+// 	CalculateThetaTrack(calibrations);
+// 	CalculatePhiTrack();
+// }
+
+// void ActTrack::CalculateThetaTrack(ActCalibrations& calibrations)
+// {
+// 	XYZVector vector { fTrackPhysics.fSiliconPoint - fTrackPhysics.fReactionPoint};
+// 	XYZVector n_x { 1., 0., 0.};//unitary along x in order to get theta
+// 	auto dot { n_x.Dot(vector.Unit())};//all unitary vectors
+// 	auto theta { TMath::ACos(dot)};
+// 	fTrackPhysics.fTheta = TMath::RadToDeg() * theta;
+// }
+
+// void ActTrack::CalculatePhiTrack()
+// {
+// 	XYZVector vector { fTrackPhysics.fSiliconPoint - fTrackPhysics.fReactionPoint};
+// 	XYZVector n_z { 0., 0., 1.};
+// 	auto dot { n_z.Dot(vector.Unit())};
+// 	auto phi { TMath::ACos(dot)};
+// 	fTrackPhysics.fPhi = TMath::RadToDeg() * phi;
+// }
+
+// void ActTrack::CalculateReactionPoint(ActCalibrations& calibrations)
+// {
+// 	//once reaction point is computed in raw units, we have to convert it to physical units
+// 	//here, we convert it to mm
+// 	auto oldPoint { fTrackPhysics.fReactionPoint};
+// 	XYZPoint newPoint;
+// 	newPoint.SetX(oldPoint.X() * calibrations.GetXYToLengthUnitsCoef());
+// 	newPoint.SetY(oldPoint.Y() * calibrations.GetXYToLengthUnitsCoef());
+// 	newPoint.SetZ(oldPoint.Z() * calibrations.GetZToLengthUnitsCoef());
+
+// 	fTrackPhysics.fReactionPoint = newPoint;
+// }
+
+// void ActTrack::CalculateSiliconPoint(ActCalibrations& calibrations)
+// {
+// 	auto oldPoint { fTrackPhysics.fSiliconPoint};
+// 	XYZPoint newPoint;
+// 	newPoint.SetX(oldPoint.X() * calibrations.GetXYToLengthUnitsCoef());
+// 	newPoint.SetY(oldPoint.Y() * calibrations.GetXYToLengthUnitsCoef());
+// 	newPoint.SetZ(oldPoint.Z() * calibrations.GetZToLengthUnitsCoef());
+
+// 	fTrackPhysics.fSiliconPoint = newPoint;
+// }
+
+// void ActTrack::CalculateTrackLength()
+// {
+// 	//MUST BE RUN AFTER SILICON AND REACTION POINT CALCULATIONS
+// 	auto rp { fTrackPhysics.fReactionPoint};
+// 	auto sp { fTrackPhysics.fSiliconPoint};
+
+// 	double dist2 { (rp - sp).Mag2()};
+// 	fTrackPhysics.fTrackLength = TMath::Sqrt(dist2);
+// }
+
+// void ActTrack::CalculateTrackAverageCharge()
+// {
+// 	fTrackPhysics.fAverageCharge = fTrackPhysics.fTotalCharge / fTrackPhysics.fTrackLength;
+// }

@@ -262,6 +262,7 @@ void ActAnalyzer::ProcessRecoilEnergy(ActSRIM& srim, ActKinematics& kinematics)
 		//since particle ID uses also E1 for front panel, we need to extract its value
 		if(std::isnan(energyAtSilicon) || energyAtSilicon <= 0.)
 			continue;//skip wrong energy values or panels
+		//track.Print();
 		double energyAtRP {};
 		double recoilMass {};
 		double recoilTheta {};
@@ -272,7 +273,7 @@ void ActAnalyzer::ProcessRecoilEnergy(ActSRIM& srim, ActKinematics& kinematics)
 			auto initialRange { srim.EvalDirect("p", energyAtSilicon)};
 			auto rangeAtRP   { initialRange + track.fTrackLength};
 			energyAtRP = srim.EvalInverse("p", rangeAtRP);
-			PropagateBeamInChamber(track, srim, kinematics);
+			//PropagateBeamInChamber(track, srim, kinematics);
 			kinematics.SetParticle("target", "p");
 			kinematics.SetTargetKineticEnergy(0.);
 			kinematics.SetEjectileAndRecoil("p");
@@ -301,7 +302,7 @@ void ActAnalyzer::ProcessRecoilEnergy(ActSRIM& srim, ActKinematics& kinematics)
 			auto initialRange { srim.EvalDirect(particle, energyAtSilicon)};
 			auto rangeAtRP   { initialRange + track.fTrackLength};
 			energyAtRP = srim.EvalInverse(particle, rangeAtRP);
-			PropagateBeamInChamber(track, srim, kinematics);
+			//PropagateBeamInChamber(track, srim, kinematics);
 			kinematics.SetParticle("target", particle);
 			kinematics.SetTargetKineticEnergy(0.);
 			kinematics.SetEjectileAndRecoil(particle);
