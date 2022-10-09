@@ -8,13 +8,18 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <vector>
 
 class ActSRIM
 {
 protected:
+	//store values of interpolations
+	std::map<std::string, std::vector<double>> fXAxis {};
+	std::map<std::string, std::vector<double>> fYAxis {};
 	//direct functions
 	std::map<std::string, std::unique_ptr<TSpline3>> fSplinesDirect;
 	std::map<std::string, std::unique_ptr<TF1>> fInterpolationsDirect;
+	//inverse functions
 	std::map<std::string, std::unique_ptr<TSpline3>> fSplinesInverse;
 	std::map<std::string, std::unique_ptr<TF1>> fInterpolationsInverse;
 
@@ -26,8 +31,9 @@ public:
 	double EvalDirect(std::string key, double energy) { return fInterpolationsDirect[key]->Eval(energy); }
 	double EvalInverse(std::string key, double range) { return fInterpolationsInverse[key]->Eval(range);}
 
-	void DrawDirect(std::string key);
-	void DrawInverse(std::string key);
+	void DrawDirect(std::vector<std::string> keys);
+	void DrawInverse(std::vector<std::string> keys);
+
 };
 
 #endif //ACTSRIM_H

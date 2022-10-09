@@ -100,7 +100,7 @@ struct TrackPhysics
 	TrackPhysics() = default;
 	~TrackPhysics() = default;
 
-	void Print();
+	void Print(std::string mode = "full");
 	void SetTrackFullPhysics(ActCalibrations& calibrations);
 
 private:

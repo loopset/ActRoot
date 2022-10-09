@@ -4,6 +4,7 @@
 #include "ActCalibrations.h"
 
 #include <TMath.h>
+#include <string>
 
 Silicons::Silicons()
 	: fSi0(ActParameters::NrowsSi01, 0.), fSi0_cal(ActParameters::NrowsSi01, 0.),
@@ -14,15 +15,28 @@ Silicons::Silicons()
 {
 }
 
-void TrackPhysics::Print()
+void TrackPhysics::Print(std::string mode)
 {
 	std::cout<<BOLDGREEN<<"===== Track "<<fTrackID<<" ====="<<RESET<<'\n';
 	std::cout<<" Total charge: "<<fTotalCharge<<'\n';
+	if(mode == "full")
+	{
 	std::cout<<" Reaction point in mm at X: "<<fReactionPoint.X()<<" Y: "<<fReactionPoint.Y()<<" Z: "<<fReactionPoint.Z()<<'\n';
 	std::cout<<" Silicon point "<<fSiliconPlace<<" with coordinates in mm"<<'\n';
 	std::cout<<"  X: "<<fSiliconPoint.X()<<" Y: "<<fSiliconPoint.Y()<<" Z: "<<fSiliconPoint.Z()<<'\n';
 	std::cout<<" Track length: "<<fTrackLength<< " mm and average charge: "<<fAverageCharge<<" / mm"<<'\n';
 	std::cout<<" Theta: "<<fTheta<<" degrees and phi: "<<fPhi<<" degrees"<<'\n';
+	}
+	else if (mode == "preliminary")
+	{
+		std::cout<<" RP in pads/time buckets at X: "<<fReactionPoint.X()<<" Y: "<<fReactionPoint.Y()<<" Z: "<<fReactionPoint.Z()<<'\n';
+		std::cout<<" SP at "<<fSiliconPlace<<" with coordinates in pads/time buckets"<<'\n';
+		std::cout<<"  X: "<<fSiliconPoint.X()<<" Y: "<<fSiliconPoint.Y()<<" Z: "<<fSiliconPoint.Z()<<'\n';
+	}
+	else
+	{
+		std::cout<<BOLDRED<<"Wrong string passed to TrackPhysics::Print -> Should be full or preliminary!"<<RESET<<'\n';
+	}
 	std::cout<<BOLDGREEN<<"============"<<RESET<<'\n'; 
 }
 
