@@ -45,8 +45,14 @@ void ActEvent::Reset(std::string mode)
 		fTriggers = {};
 		fHitArray.clear();
 		fSilicons = {};
-		voxel.assign(voxel.size(), 0);
-		indexOfVoxelInHitArray.assign(indexOfVoxelInHitArray.size(), -1);
+		for(auto indexToReset : globalIndexToReset)
+		{
+			voxel[indexToReset] = 0;
+			indexOfVoxelInHitArray[indexToReset] = -1;
+		}
+		globalIndexToReset.clear();
+		//voxel.assign(voxel.size(), 0);
+		//indexOfVoxelInHitArray.assign(indexOfVoxelInHitArray.size(), -1);
 		//reset of chargeInPad is done in its method! (so it is done only when method is called)
 		fTracks.clear();
 	}
@@ -188,6 +194,7 @@ void ActEvent::ReadHits(const ActCalibrations &calibrations, const MEventReduced
 						//increase count on voxel
 						voxel[globalIndex] += 1;
 						indexOfVoxelInHitArray[globalIndex] = hitID;
+						globalIndexToReset.push_back(globalIndex);
 						
 						if(voxel[globalIndex] > 1)//then we have to append charge to already existent hit
 						{
@@ -325,6 +332,7 @@ void ActEvent::ReadEvent(const ActCalibrations &calibrations, const MEvent* Evt,
 						//increase count on voxel
 						voxel[globalIndex] += 1;
 						indexOfVoxelInHitArray[globalIndex] = hitID;
+						globalIndexToReset.push_back(globalIndex);
 						
 						if(voxel[globalIndex] > 1 && checkOverlap)//then we have to append charge to already existent hit
 						{
@@ -557,6 +565,8 @@ void ActEvent::CleanSaturatedHits(double chargeThreshold, int minDimZToDelete)
 	{
 		throw std::runtime_error("Error: CleanSaturedHits has received an empty fHitArray -> Fill ActEvent first");
 	}
+	//auxiliar vector to reset only filled values in chargeInPad
+	std::vector<std::pair<int, int>> positionsToDelete {};
 	//vector to represent pad plane
 	//map to store fHitArray indixes in each pad
 	std::map<std::pair<int, int>, std::vector<int>> zInPad {};
@@ -565,7 +575,8 @@ void ActEvent::CleanSaturatedHits(double chargeThreshold, int minDimZToDelete)
 	for(auto& hit : fHitArray)
 	{
 		auto position  { hit.GetPosition()};
-		chargeInPad[position.X()][position.Y()] += hit.GetCharge() ;
+		chargeInPad[position.X()][position.Y()] += hit.GetCharge();
+		positionsToDelete.push_back(std::make_pair(position.X(), position.Y()));
 		zInPad[std::make_pair(position.X(), position.Y())].push_back(hit.GetHitID());
 	}
 	//vector to store hits to delete (to delete all of them together at the end)
@@ -602,11 +613,12 @@ void ActEvent::CleanSaturatedHits(double chargeThreshold, int minDimZToDelete)
 			fHitArray[newID].SetHitID(newID);
 		}
 	}
-	//reset class vector
-	for(auto& inner_vec : chargeInPad)
+	//reset class vector, only for triggered values in positionsToReset
+	for(auto& par : positionsToDelete)
 	{
-		inner_vec.assign(inner_vec.size(), 0.);
+		chargeInPad[par.first][par.second] = 0.;
 	}
+	positionsToDelete.clear();
 }
 
 //set ActTracks from RANSAC

@@ -13,6 +13,7 @@ ActKinematics::ActKinematics(std::string beam, std::string target,
 		throw std::runtime_error("Could not find particle in list of know masses!");
 	}
 	fBeamParticle = beam;
+	fInitialBeamKineticEnergy = beamKinetic;
 	SetParticle("beam", beam);
 	SetParticle("target", target);
 	SetBeamKineticEnergy(beamKinetic);
@@ -23,6 +24,12 @@ void ActKinematics::SetBeamKineticEnergy(double energy)
 {
 	fKinetics["beam"] = energy;
 	fEnergies["beam"] = fKinetics["beam"] + fMasses["beam"];
+}
+
+void ActKinematics::ResetBeamEnergy()
+{
+	//set beam energy to fInitialBeamKineticEnergy in constructor
+	SetBeamKineticEnergy(fInitialBeamKineticEnergy);
 }
 
 void ActKinematics::SetTargetKineticEnergy(double energy)

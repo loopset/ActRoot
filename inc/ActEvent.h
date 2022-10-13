@@ -29,10 +29,11 @@ class ActEvent
 
 	private:
 	//auxiliar vectors to ReadHits
-	std::vector<int> voxel;
-	std::vector<int> indexOfVoxelInHitArray;
+	std::vector<int> voxel {};
+	std::vector<int> indexOfVoxelInHitArray {};
 	//auxiliar vector to CleanSaturatedHits
-	std::vector<std::vector<double>> chargeInPad;
+	std::vector<std::vector<double>> chargeInPad {};
+	std::vector<int> globalIndexToReset {};
 
 	public:
 	ActEvent();//not default bc we have to initialize voxel and indexOfVoxelInHitArray

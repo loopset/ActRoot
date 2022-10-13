@@ -28,13 +28,12 @@
 #include <stdexcept>
 #include <string>
 
-ActAnalyzer::ActAnalyzer(TTree* tree, std::unique_ptr<TH2D> histTrackID,
+ActAnalyzer::ActAnalyzer(std::unique_ptr<TH2D> histTrackID,
 						 std::unique_ptr<TH1D> histRecoilEnergy,
 						 std::unique_ptr<TH1D> histExcitation,
 						 std::unique_ptr<TH2D> histKinematics,
 						 std::vector<std::string> excitationKeys)
-	: fTree(tree),
-	  fHistTrackID(std::move(histTrackID)),
+:	  fHistTrackID(std::move(histTrackID)),
 	  fHistRecoilEnergy(std::move(histRecoilEnergy))
 {
 	for(auto& key : excitationKeys)
@@ -82,14 +81,12 @@ void ActAnalyzer::DrawCanvas()
 		}
 	}
 	fCanvTrackID->Update();
-	//fCanvTrackID->WaitPrimitive();
 
 	//recoil energy
 	fCanvRecoilEnergy = std::make_unique<TCanvas>("fCanvRecoilEnergy", "Recoil energy", 1);
 	fCanvRecoilEnergy->cd();
 	fHistRecoilEnergy->Draw();
 	fCanvRecoilEnergy->Update();
-	//fCanvRecoilEnergy->WaitPrimitive();
 
 	//kinematics plot
 	fCanvKinematics = std::make_unique<TCanvas>("fCanvKinematics", "Kinematics plot", 1);
@@ -107,25 +104,6 @@ void ActAnalyzer::DrawCanvas()
 	}
 	fCanvKinematics->cd();
 	fCanvKinematics->Update();
-	// fStackKinematics = std::make_unique<THStack>("fStackKinematics", "Kinematics");
-	// for(auto& histo : fHistosKinematics)
-	// {
-	// 	histo.second->SetTitle(("Kinematics for " + histo.first).c_str());
-	// 	fStackKinematics->Add(histo.second.get());
-	// }
-	// //theoretical ones
-	// fStackTheoreticalKinematics = std::make_unique<THStack>("fStackTheoreticalKinematics", "Theoretical");
-	// for(auto& histo : fHistosTheoreticalKinematics)
-	// {
-	// 	histo.second->SetTitle(("Theoretical for " + histo.first).c_str());
-	// 	histo.second->SetMarkerColor(kBlue);
-	// 	fStackTheoreticalKinematics->Add(histo.second.get());
-	// }
-	// fCanvKinematics->cd();
-	// fStackKinematics->Draw("pads");
-	// fStackTheoreticalKinematics->Draw("pads sames");
-	// fCanvKinematics->Update();
-
 	
 	//excitation energy
 	fCanvExcitation = std::make_unique<TCanvas>("fCanvExcitation", "Excitation energy", 1);
@@ -143,7 +121,7 @@ void ActAnalyzer::DrawCanvas()
 	fStackKinematics.reset();
 }
 
-double ActAnalyzer::GetGatedSiliconEnergy(TrackPhysics& track, std::string frontPanel)
+double ActAnalyzer::GetGatedSiliconEnergy(const TrackPhysics& track, std::string frontPanel)
 {
 	auto siliconSide { track.fSiliconPlace};
 	if(siliconSide == ActParameters::trackHitsSiliconSideLeft)//side_left
@@ -176,26 +154,6 @@ double ActAnalyzer::GetGatedSiliconEnergy(TrackPhysics& track, std::string front
 	}
 }
 
-void ActAnalyzer::ReadTree(ActSRIM& srim, ActKinematics& kinematics)
-{
-	fTree->SetBranchAddress("tracks", &fTracks);
-	fTree->SetBranchAddress("silicons", &fSilicons);
-	fTree->SetBranchAddress("triggers", &fTriggers);
-	//number of entries
-	long long nEntries { fTree->GetEntries()};
-	for(long long i = 0; i < nEntries; i++)
-	{
-		fTree->GetEntry(i);
-		//and here run functions
-		if(fTracks->size() == 0)
-			continue;//dont run funcions if we dont have tracks in event
-		ProcessTrackID();
-		//only BINARY events
-		if(fTracks->size() != fTracksPerEvent)
-			continue;
-		ProcessRecoilEnergy(srim, kinematics);
-	}
-}
 
 void ActAnalyzer::ProcessTrackID()
 {
@@ -214,7 +172,7 @@ void ActAnalyzer::ProcessTrackID()
 	}	
 }
 
-std::string ActAnalyzer::IdentifyRecoilInGraphCuts(TrackPhysics& track)
+std::string ActAnalyzer::IdentifyRecoilInGraphCuts(const TrackPhysics& track)
 {
 	auto energyAtSiliconForID { GetGatedSiliconEnergy(track, "1")};
 	auto averageCharge { track.fAverageCharge};
@@ -231,13 +189,15 @@ std::string ActAnalyzer::IdentifyRecoilInGraphCuts(TrackPhysics& track)
 	return identifiedCut;
 }
 
-void ActAnalyzer::PropagateBeamInChamber(TrackPhysics& track, ActSRIM& srim,
+void ActAnalyzer::PropagateBeamInChamber(const TrackPhysics& track, ActSRIM& srim,
 										   ActKinematics& kinematics)
 {
 	//assume this as the enter point
 	XYZPoint enterPoint { 0./2, 295./2, 255./2};//mm
 	auto reactionPoint { track.fReactionPoint};//mm too
 	auto length { std::sqrt((enterPoint - reactionPoint).Mag2())};
+	//reset beam kinematics to original state
+	kinematics.ResetBeamEnergy();
 	auto initialRange { srim.EvalDirect(kinematics.GetBeamParticle(), kinematics.GetBeamKineticEnergy())};
 	auto rangeAtRP { initialRange - length};
 	if(rangeAtRP <= 0.)
@@ -273,7 +233,7 @@ void ActAnalyzer::ProcessRecoilEnergy(ActSRIM& srim, ActKinematics& kinematics)
 			auto initialRange { srim.EvalDirect("p", energyAtSilicon)};
 			auto rangeAtRP   { initialRange + track.fTrackLength};
 			energyAtRP = srim.EvalInverse("p", rangeAtRP);
-			//PropagateBeamInChamber(track, srim, kinematics);
+			PropagateBeamInChamber(track, srim, kinematics);
 			kinematics.SetParticle("target", "p");
 			kinematics.SetTargetKineticEnergy(0.);
 			kinematics.SetEjectileAndRecoil("p");
@@ -302,7 +262,7 @@ void ActAnalyzer::ProcessRecoilEnergy(ActSRIM& srim, ActKinematics& kinematics)
 			auto initialRange { srim.EvalDirect(particle, energyAtSilicon)};
 			auto rangeAtRP   { initialRange + track.fTrackLength};
 			energyAtRP = srim.EvalInverse(particle, rangeAtRP);
-			//PropagateBeamInChamber(track, srim, kinematics);
+			PropagateBeamInChamber(track, srim, kinematics);
 			kinematics.SetParticle("target", particle);
 			kinematics.SetTargetKineticEnergy(0.);
 			kinematics.SetEjectileAndRecoil(particle);
@@ -326,5 +286,31 @@ void ActAnalyzer::ProcessRecoilEnergy(ActSRIM& srim, ActKinematics& kinematics)
 		}
 		//std::cout<<"Energy: "<<energyAtRP<<" with angle: "<<track.fTheta<<'\n';
 		fHistRecoilEnergy->Fill(energyAtRP);
+	}
+}
+
+void ActAnalyzer::ReadTree(ActSRIM& srim, ActKinematics& kinematics)
+{
+	if(!fTree)
+	{
+		std::cout<<BOLDRED<<"fTree does not point to any valid TTree -> Set it correctly"<<RESET<<'\n';
+		return;
+	}
+	fTree->SetBranchAddress("tracks", &fTracks);
+	fTree->SetBranchAddress("silicons", &fSilicons);
+	fTree->SetBranchAddress("triggers", &fTriggers);
+	//number of entries
+	long long nEntries { fTree->GetEntries()};
+	for(long long i = 0; i < nEntries; i++)
+	{
+		fTree->GetEntry(i);
+		//and here run functions
+		if(fTracks->size() == 0)
+			continue;//dont run funcions if we dont have tracks in event
+		ProcessTrackID();
+		//only BINARY events
+		if(fTracks->size() != fTracksPerEvent)
+			continue;
+		ProcessRecoilEnergy(srim, kinematics);
 	}
 }

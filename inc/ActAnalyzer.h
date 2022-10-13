@@ -58,13 +58,16 @@ private:
 	int fTracksPerEvent { 1};//default to binary reactions
 	
 public:
-	ActAnalyzer(TTree* tree, std::unique_ptr<TH2D> histTrackID,
+	//constructor taking histograms as templates
+	ActAnalyzer(std::unique_ptr<TH2D> histTrackID,
 				std::unique_ptr<TH1D> histRecoilEnergy,
 				std::unique_ptr<TH1D> histExcitation,
 				std::unique_ptr<TH2D> histKinematics,
 				std::vector<std::string> excitationKeys = {"p"});
 	~ActAnalyzer() = default;
 
+	//set ttree to analyze
+	void SetTree(TTree* tree){ fTree = tree; };
 	//read TTree and set branches to our private members
 	//execute all computations
 	void ReadTree(ActSRIM& srim, ActKinematics& kinematics);
@@ -86,9 +89,9 @@ private:
 	void ProcessTrackID();
 	void ProcessRecoilEnergy(ActSRIM& srim, ActKinematics& kinematics);
 	//function to get energy from silicons, keeping in mind multiplicity, side and so on
-	double GetGatedSiliconEnergy(TrackPhysics& track, std::string frontPanel = "0");
-	std::string IdentifyRecoilInGraphCuts(TrackPhysics& track);
-	void PropagateBeamInChamber(TrackPhysics& track, ActSRIM& srim, ActKinematics& kinematics);
+	double GetGatedSiliconEnergy(const TrackPhysics& track, std::string frontPanel = "0");
+	std::string IdentifyRecoilInGraphCuts(const TrackPhysics& track);
+	void PropagateBeamInChamber(const TrackPhysics& track, ActSRIM& srim, ActKinematics& kinematics);
 	
 	template<typename T>
 	inline bool isInVector(T val, std::vector<T> vec)

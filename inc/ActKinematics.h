@@ -32,6 +32,7 @@ private:
 	double fGamma {};
 	double fBeta {};
 	double fEnergyAtCM {};//energy available at CM
+	double fInitialBeamKineticEnergy {};
 	
 
 public:
@@ -44,6 +45,7 @@ public:
 	void SetEjectileAngle(double angle){ fThetas["ejectile"] = TMath::DegToRad() * angle; }
 	void SetParticle(std::string type, std::string particle){fMasses[type] = fKnownMasses[particle]; }
 	void SetEjectileAndRecoil(std::string ejectile);
+	void ResetBeamEnergy();
 
 	double GetBeamKineticEnergy() { return fKinetics["beam"]; }
 	std::string GetBeamParticle() const { return fBeamParticle; }
