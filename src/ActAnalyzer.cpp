@@ -234,7 +234,7 @@ void ActAnalyzer::ProcessTrackID()
 			}
 		}
 		//check if we need to skip track
-		if(!skipFill)
+		if(!skipFill && fSiliconMode == "front")
 			continue;
 
 		double energySi {GetGatedSiliconEnergy(track, "1")};//here we go for panel 1 if is non null!
