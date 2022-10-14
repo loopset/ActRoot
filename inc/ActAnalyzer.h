@@ -14,6 +14,7 @@
 #include <TCanvas.h>
 #include <TCutG.h>
 
+#include <cstring>
 #include <map>
 #include <memory>
 #include <string>
@@ -27,6 +28,7 @@ public:
 private:
 	//to read ttree
 	TTree* fTree { nullptr};
+	int fEventID {};
 	Silicons* fSilicons {nullptr};
 	TriggersAndGates* fTriggers {nullptr};
 	std::vector<TrackPhysics>* fTracks {nullptr};
@@ -34,6 +36,8 @@ private:
 	//canvas and histograms
 	std::unique_ptr<TCanvas> fCanvTrackID {nullptr};
 	std::unique_ptr<TH2D> fHistTrackID {nullptr};
+	std::unique_ptr<TCanvas> fCanvWall {nullptr};
+	std::unique_ptr<TH2D> fHistWall {nullptr};
 	std::unique_ptr<TCanvas> fCanvRecoilEnergy {nullptr};
 	std::unique_ptr<TH1D> fHistRecoilEnergy {nullptr};
 	std::unique_ptr<TCanvas> fCanvExcitation {nullptr};
@@ -54,12 +58,25 @@ private:
 	std::vector<std::string> fSkipParticles {};
 	std::map<std::string, std::unique_ptr<TCutG>> fGCuts {};
 
+	//silicon wall cuts
+	std::map<std::string, std::unique_ptr<TCutG>> fWallCuts {};
+	bool fEnableWallCuts {false};
+
+	//custom TCutG to save indexes
+	std::unique_ptr<TCutG> fAuxiliarCut {nullptr};
+	bool fEnableAuxiliarCut {false};
+	bool fWriteToStreamer {false};
+
 	//set parameters of reaction
 	int fTracksPerEvent { 1};//default to binary reactions
+
+	//set mode of analysis
+	std::string fSiliconMode {"side"};
 	
 public:
 	//constructor taking histograms as templates
 	ActAnalyzer(std::unique_ptr<TH2D> histTrackID,
+				std::unique_ptr<TH2D> histWall,
 				std::unique_ptr<TH1D> histRecoilEnergy,
 				std::unique_ptr<TH1D> histExcitation,
 				std::unique_ptr<TH2D> histKinematics,
@@ -78,12 +95,19 @@ public:
 	void SetEnableGraphicalCuts(bool val){ fEnableGraphicalCuts = val; }
 	bool GetEnableGraphicalCuts() const { return fEnableGraphicalCuts; }
 	void ReadGraphicalCuts(std::string key, std::string fileName);
+	void SetEnableWallCuts(bool val){ fEnableWallCuts = val; }
+	bool GetEnableWallCuts() const { return fEnableWallCuts; }
+	void ReadWallCuts(std::string key, std::string fileName);
+	void SetEnableAuxiliarCut(bool val){ fEnableAuxiliarCut = val; }
+	void ReadAuxiliarCut(std::string fileName);
 	void SetSkipParticles(std::vector<std::string> vec);
 	std::vector<std::string> GetSkipParticles() const { return fSkipParticles; }
 
 	//setters and getter for reaction parameters
 	void SetTracksPerEvent(int val) { fTracksPerEvent = val; }
 	int GetTracksPerEvent() const { return fTracksPerEvent; }
+	void SetSiliconMode(std::string mode){ fSiliconMode = mode; }
+	std::string GetSiliconMode() const { return  fSiliconMode; }
 
 private:
 	void ProcessTrackID();

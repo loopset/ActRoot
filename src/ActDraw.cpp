@@ -29,7 +29,10 @@ ActDraw::ActDraw()
 	  ///////////////////
 	  fCanvAllcluster(nullptr), fHistPadAllcluster(nullptr),
 	  fHistFrontAllcluster(nullptr), fHistProfileAllcluster(nullptr),
-	  fCanv3DResults(nullptr), fHist3DPrecluster(nullptr), fHist3DAftercluster(nullptr)
+	  ////////////////////
+	  fCanv3DResults(nullptr), fHist3DPrecluster(nullptr), fHist3DAftercluster(nullptr),
+	  //////////////////
+	  fCanvVisual(nullptr), fHistVisualPad(nullptr), fHistVisualFront(nullptr), fHistVisualProfile(nullptr)
 {
 }
 
@@ -66,6 +69,13 @@ void ActDraw::Init()
 												 fNbinsX, fMinX, fMaxX,
 											   fNbinsY, fMinY, fMaxY,
 											   fNbinsZ, fMinZ, fMaxZ);
+
+	///////////////////////////////////////////////////////////////
+	fCanvVisual = std::make_unique<TCanvas>("fCanvVisual", "Visual analysis", 1);
+	fCanvVisual->Divide(3, 1);
+	fHistVisualPad = std::make_unique<TH2D>("fHistVisualPad", "Pad: XY", fNbinsX, fMinX, fMaxX, fNbinsY, fMinY, fMaxY);
+	fHistVisualProfile = std::make_unique<TH2D>("fHistVisualProfile", "Profile: XZ", fNbinsX, fMinX, fMaxX, fNbinsZ, fMinZ, fMaxZ);
+	fHistVisualFront = std::make_unique<TH2D>("fHistVisualFront", "Front: YZ", fNbinsY, fMinY, fMaxY, fNbinsZ, fMinZ, fMaxZ);
 	
 	//options to gStyle
 	gStyle->SetOptStat(0);
@@ -77,6 +87,7 @@ void ActDraw::Reset()
 	fCanvPrecluster->Clear("D"); //fCanvPrecluster->Update();//"D" option does not delete TPads
 	fCanvAllcluster->Clear("D"); //fCanvAllcluster->Update();
 	fCanv3DResults->Clear("D");
+	fCanvVisual->Clear("D");
 	
 	fHistFront->Reset();
 	fHistProfile->Reset();
@@ -89,16 +100,22 @@ void ActDraw::Reset()
 
 	fHist3DPrecluster->Reset();
 	fHist3DAftercluster->Reset();
+
+	fHistVisualPad->Reset();
+	fHistVisualFront->Reset();
+	fHistVisualProfile->Reset();
 	
 	fCanvPrecluster->Update();
 	fCanvAllcluster->Update();
 	fCanv3DResults->Update();
+	fCanvVisual->Update();
 }
 
 void ActDraw::DrawEvent(std::vector<ActHit> &hitArray)
 {
 	fCanvAllcluster->Close();
 	fCanv3DResults->Close();
+	fCanvVisual->Close();
 	Reset();
 
 	//read each event and file Pad, Profile and Front hits
@@ -133,6 +150,7 @@ void ActDraw::DrawResults(std::vector<ActHit> &hitArray, ActClusteringResults &r
 {
 	fCanvPrecluster->Close();
 	fCanv3DResults->Close();
+	fCanvVisual->Close();
 	Reset();
 
 	//first, events
@@ -202,6 +220,7 @@ void ActDraw::DrawResults3D(std::vector<ActHit> &hitArray, ActClusteringResults 
 {
 	fCanvPrecluster->Close();
 	fCanvAllcluster->Close();
+	fCanvVisual->Close();
 	Reset();
 
 	//first, events
@@ -243,6 +262,57 @@ void ActDraw::DrawResults3D(std::vector<ActHit> &hitArray, ActClusteringResults 
 		fCanv3DResults->cd();
 		fCanv3DResults->WaitPrimitive();
 	}
+}
+
+
+void ActDraw::DrawPhysicalTracks(const std::vector<ActHit> &hitArray, const std::vector<TrackPhysics> &tracks)
+{
+	fCanvAllcluster->Close();
+	fCanv3DResults->Close();
+	fCanvPrecluster->Close();
+	Reset();
+
+	//read each event and file Pad, Profile and Front hits
+	for(const auto& hit : hitArray)
+	{
+		XYZPoint position { hit.GetPosition()};
+		Double_t charge   { hit.GetCharge()};
+
+		//pad
+		fHistVisualPad->Fill(position.X(), position.Y(), charge);
+		//profile
+		fHistVisualProfile->Fill(position.X(), position.Z(), charge);
+		//front
+		fHistVisualFront->Fill(position.Y(), position.Z(), charge);
+	}
+	//read physical tracks
+	std::vector<TString> projections { "XY", "XZ", "YZ" };
+	std::map<TString, std::vector<std::unique_ptr<TPolyLine>>> polylines;
+	for(const auto& track : tracks)
+	{
+		for(auto& proj : projections)
+		{
+			auto polyline = GetPolyLineFromPhysicalTrack(track, proj);
+			polyline->SetLineColor(track.fTrackID + 1);
+			polyline->SetLineWidth(2);
+			polylines[proj].push_back(std::move(polyline));
+		}
+	}
+	if(fCanvVisual)
+	{	
+		fCanvVisual->cd(1); fHistVisualPad->Draw("colz");
+		for(auto& poly : polylines["XY"]) poly->Draw("same");
+		fCanvVisual->cd(2); fHistVisualProfile->Draw("colz");
+		for(auto& poly : polylines["XZ"]) poly->Draw("same");
+		fCanvVisual->cd(3); fHistVisualFront->Draw("colz");
+		for(auto& poly : polylines["YZ"]) poly->Draw("same");
+
+		fCanvVisual->Update();
+		fCanvVisual->cd();
+		fCanvVisual->WaitPrimitive();
+		
+	}
+
 }
 
 std::unique_ptr<TPolyLine> ActDraw::GetPolyLine(const ActTrack& track, TString projection)
@@ -361,5 +431,76 @@ std::unique_ptr<TPolyLine3D> ActDraw::GetPolyLine3D(const ActTrack& track)
 	std::unique_ptr<TPolyLine3D> polyline;
 	polyline = std::make_unique<TPolyLine3D>(vecX.size(), &(vecX[0]),
 										  &(vecY[0]), &(vecZ[0]));
+	return std::move(polyline);
+}
+
+std::unique_ptr<TPolyLine> ActDraw::GetPolyLineFromPhysicalTrack(const TrackPhysics& track, TString projection)
+{
+	auto position = track.fReactionPoint;
+	auto direction = (track.fSiliconPoint - track.fReactionPoint);
+
+	//we force slope X to 1! -> line parametric in X 
+	double slope3DXY { direction.Y() / direction.X() };
+	double slope3DXZ { direction.Z() / direction.X() };
+	//x direction can be 0. if we have pad saturation: we must return empty TPolyLine then
+	if(std::isnan(slope3DXY) || std::isnan(slope3DXZ))
+	{
+		std::cout<<BOLDMAGENTA<<"Warning: TPolyLine has slope in X null due to pad saturation, thus, it isn't drawn!"<<RESET<<'\n';
+		std::unique_ptr<TPolyLine> emptyPolyline;
+		emptyPolyline = std::make_unique<TPolyLine>();
+		return emptyPolyline;
+	}
+	double offsetXY { position.Y() - slope3DXY * position.X() };
+	double slopeXY  { slope3DXY };
+
+	double offsetXZ { position.Z() - slope3DXZ * position.X() };
+	double slopeXZ  { slope3DXZ };
+
+	int Npoints { 500 };
+	std::vector<double> vecX, vecY, vecZ;
+	double x0 { fMinX};
+	double dx { 1. * static_cast<double>(ActParameters::g_NPADX) / Npoints };
+	for(int r = 0; r < Npoints; r++ )
+	{
+		double yval { offsetXY + slopeXY * x0 };
+		double zval { offsetXZ + slopeXZ * x0 };
+		//projection-dependent TPolyLine filling
+		if(projection.Contains("XY"))
+		{
+			if(isInInterval(yval, fMinY, fMaxY))
+			{
+				vecX.push_back(x0);
+				vecY.push_back(yval);
+				
+			}
+		}
+		else if(projection.Contains("XZ"))
+		{
+			if(isInInterval(zval, fMinZ, fMaxZ))
+			{
+				vecX.push_back(x0);
+				vecZ.push_back(zval);
+			}
+		}
+		else if(projection.Contains("YZ"))
+		{
+			if(isInInterval(yval, fMinY, fMaxY) &&
+			   isInInterval(zval, fMinZ, fMaxZ))
+			{
+				vecY.push_back(yval);
+				vecZ.push_back(zval);
+			}
+		}
+		else { throw std::runtime_error("Wrong string passed to GetPolyline()"); }
+		
+		x0 += dx;
+	}
+
+	std::unique_ptr<TPolyLine> polyline;
+	if(projection.Contains("XY")) polyline = std::make_unique<TPolyLine>(vecX.size(), &(vecX[0]), &(vecY[0]));
+	else if (projection.Contains("XZ")) polyline = std::make_unique<TPolyLine>(vecX.size(), &(vecX[0]), &(vecZ[0]));
+	else if (projection.Contains("YZ")) polyline = std::make_unique<TPolyLine>(vecY.size(), &(vecY[0]), &(vecZ[0]));
+	else { throw std::runtime_error("Wrong string passed to GetPolyline()"); }
+
 	return std::move(polyline);
 }

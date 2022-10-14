@@ -23,17 +23,20 @@
 #include <TUUID.h>
 #include <algorithm>
 #include <cmath>
+#include <fstream>
 #include <iostream>
 #include <memory>
 #include <stdexcept>
 #include <string>
 
 ActAnalyzer::ActAnalyzer(std::unique_ptr<TH2D> histTrackID,
+						 std::unique_ptr<TH2D> histWall,
 						 std::unique_ptr<TH1D> histRecoilEnergy,
 						 std::unique_ptr<TH1D> histExcitation,
 						 std::unique_ptr<TH2D> histKinematics,
 						 std::vector<std::string> excitationKeys)
 :	  fHistTrackID(std::move(histTrackID)),
+	  fHistWall(std::move(histWall)),
 	  fHistRecoilEnergy(std::move(histRecoilEnergy))
 {
 	for(auto& key : excitationKeys)
@@ -59,6 +62,36 @@ void ActAnalyzer::ReadGraphicalCuts(std::string key, std::string fileName)
 	}
 }
 
+void ActAnalyzer::ReadWallCuts(std::string key, std::string fileName)
+{
+	if(!fEnableWallCuts)
+	{
+		std::cout<<BOLDMAGENTA<<"Warning: skip reading TCutG files because fEnableWallCuts is set to false!"<<RESET<<'\n';
+		return;
+	}
+	auto file = std::make_unique<TFile>(fileName.c_str(), "read");
+	fWallCuts[key] = std::unique_ptr<TCutG>((TCutG*)file->Get("CUTG"));//name is predefined of ROOT
+	if(fWallCuts[key] == nullptr)
+	{
+		throw std::runtime_error(("Error loading TCutG from " + key + " file").c_str());
+	}
+}
+
+void ActAnalyzer::ReadAuxiliarCut(std::string fileName)
+{
+	if(!fEnableAuxiliarCut)
+	{
+		std::cout<<BOLDMAGENTA<<"Warning: skip reading TCutG files because fEnableAuxiliarCut is set to false!"<<RESET<<'\n';
+		return;
+	}
+	auto file = std::make_unique<TFile>(fileName.c_str(), "read");
+	fAuxiliarCut = std::unique_ptr<TCutG>((TCutG*)file->Get("CUTG"));//name is predefined of ROOT
+	if(fAuxiliarCut == nullptr)
+	{
+		throw std::runtime_error(("Error loading TCutG from " + fileName).c_str());
+	}
+}
+
 void ActAnalyzer::SetSkipParticles(std::vector<std::string> vec)
 {
 	fSkipParticles = vec;
@@ -81,6 +114,12 @@ void ActAnalyzer::DrawCanvas()
 		}
 	}
 	fCanvTrackID->Update();
+
+	//silicon wall
+	fCanvWall = std::make_unique<TCanvas>("fCanvWall", "Silicon wall", 1);
+	fCanvWall->cd();
+	fHistWall->Draw("colz");
+	fCanvWall->Update();
 
 	//recoil energy
 	fCanvRecoilEnergy = std::make_unique<TCanvas>("fCanvRecoilEnergy", "Recoil energy", 1);
@@ -161,14 +200,66 @@ void ActAnalyzer::ProcessTrackID()
 	{
 		if(!(track.fRPInChamber) || !(track.fSPInArray))//if track is not good, continue!
 			continue;//this can be due to identification as delta or not having hit a silicon detector
-		//get silicon place
-		
+		//determine analysis mode according to fSiliconMode
+		std::string mode {};
+		if(fSiliconMode == "side")
+			mode = ActParameters::trackHitsSiliconSideLeft;
+		else if(fSiliconMode == "front")
+			mode = ActParameters::trackHitsSiliconFront;
+		else
+		{
+			throw std::runtime_error("Wrong fSiliconMode passed to ActAnalyzer -> Available options are side and front");
+		}
+		if(track.fSiliconPlace != mode)
+			continue;
+
+		// //manage cuts on silicon wall
+		bool skipFill {false};
+		if(fEnableWallCuts)
+		{
+			if(fSiliconMode == "side")
+			{
+				;//no cuts here
+			}
+			if(fSiliconMode == "front")
+			{
+				for(auto& cut : fWallCuts)
+				{
+					if(cut.second->IsInside(track.fSiliconPoint.Y(), track.fSiliconPoint.Z()))
+					{
+						skipFill = true;
+						break;
+					}
+				}
+			}
+		}
+		//check if we need to skip track
+		if(!skipFill)
+			continue;
+
 		double energySi {GetGatedSiliconEnergy(track, "1")};//here we go for panel 1 if is non null!
 		if(std::isnan(energySi) || energySi <= 0.)
 			continue;
 		auto chargeAveraged { track.fAverageCharge};
+		//fill wall
+		if(fSiliconMode == "side")
+		{
+			fHistWall->Fill(track.fSiliconPoint.X(), track.fSiliconPoint.Z());
+		}
+		else if(fSiliconMode == "front")
+		{
+			fHistWall->Fill(track.fSiliconPoint.Y(), track.fSiliconPoint.Z());
+		}
+		else
+		{
+			throw std::runtime_error("Wrong fSiliconMode passed to ActAnalyzer -> Available options are side and front");
+		}
 
+		//fill charge ID
 		fHistTrackID->Fill(energySi, chargeAveraged);
+
+		if(fEnableAuxiliarCut && fAuxiliarCut->IsInside(energySi, chargeAveraged))
+			fWriteToStreamer = true;
 	}	
 }
 
@@ -215,7 +306,17 @@ void ActAnalyzer::ProcessRecoilEnergy(ActSRIM& srim, ActKinematics& kinematics)
 	{
 		if(!(track.fRPInChamber) || !(track.fSPInArray))//if track is not good, continue!
 			continue;
-		if(track.fSiliconPlace != ActParameters::trackHitsSiliconSideLeft)
+		//determine analysis mode according to fSiliconMode
+		std::string mode {};
+		if(fSiliconMode == "side")
+			mode = ActParameters::trackHitsSiliconSideLeft;
+		else if(fSiliconMode == "front")
+			mode = ActParameters::trackHitsSiliconFront;
+		else
+		{
+			throw std::runtime_error("Wrong fSiliconMode passed to ActAnalyzer -> Available options are side and front");
+		}
+		if(track.fSiliconPlace != mode)
 			continue;
 		
 		auto energyAtSilicon { GetGatedSiliconEnergy(track, "0")};//always energy at front panel 0
@@ -296,21 +397,37 @@ void ActAnalyzer::ReadTree(ActSRIM& srim, ActKinematics& kinematics)
 		std::cout<<BOLDRED<<"fTree does not point to any valid TTree -> Set it correctly"<<RESET<<'\n';
 		return;
 	}
+	fTree->SetBranchAddress("eventID", &fEventID);
 	fTree->SetBranchAddress("tracks", &fTracks);
 	fTree->SetBranchAddress("silicons", &fSilicons);
 	fTree->SetBranchAddress("triggers", &fTriggers);
+	//streamer for auxiliar cut
+	std::ofstream streamer {};
+	if(fEnableAuxiliarCut)
+	{
+		streamer.open("./FrontIndexesPunchThrough.dat");
+	}
 	//number of entries
 	long long nEntries { fTree->GetEntries()};
 	for(long long i = 0; i < nEntries; i++)
 	{
+		//reset fWriteToStreamer
+		fWriteToStreamer = false;
+		//read entry
 		fTree->GetEntry(i);
 		//and here run functions
 		if(fTracks->size() == 0)
 			continue;//dont run funcions if we dont have tracks in event
 		ProcessTrackID();
+		if(fEnableAuxiliarCut && fWriteToStreamer)
+		{
+			streamer<<i<<" "<<fEventID<<'\n';
+		}
 		//only BINARY events
 		if(fTracks->size() != fTracksPerEvent)
 			continue;
 		ProcessRecoilEnergy(srim, kinematics);
 	}
+
+	streamer.close();
 }

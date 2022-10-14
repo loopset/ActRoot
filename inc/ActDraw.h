@@ -4,6 +4,7 @@
 #include "ActHit.h"
 #include "ActClusteringResults.h"
 #include "ActTrack.h"
+#include "ActStructs.h"
 
 #include <Math/Point3Dfwd.h>
 #include <Math/Point3D.h>
@@ -51,6 +52,12 @@ class ActDraw
 	std::unique_ptr<TH3D>    fHist3DPrecluster;
 	std::unique_ptr<TH3I>    fHist3DAftercluster;
 
+	//physical tracks for visual analysis
+	std::unique_ptr<TCanvas> fCanvVisual;
+	std::unique_ptr<TH2D> fHistVisualPad;
+	std::unique_ptr<TH2D> fHistVisualFront;
+	std::unique_ptr<TH2D> fHistVisualProfile;
+
 	//binning and size of histograms
 	Int_t fNbinsX { 128};
 	Int_t fNbinsY { 128};
@@ -84,6 +91,8 @@ public:
 	void DrawResults(std::vector<ActHit>& hitArray, ActClusteringResults& results);
 	//draw results in 3D!!
 	void DrawResults3D(std::vector<ActHit>& hitArray, ActClusteringResults& results);
+	//draw results in visual analysis (does not require ActClusteringResults)
+	void DrawPhysicalTracks(const std::vector<ActHit>& hitArray, const std::vector<TrackPhysics>& tracks);
 
 	//set bin and max values on histograms
 	void SetMaxZ(double max) { fMaxZ = max; }
@@ -108,6 +117,7 @@ public:
 	}
 	std::unique_ptr<TPolyLine> GetPolyLine(const ActTrack& track, TString projection);
 	std::unique_ptr<TPolyLine3D>  GetPolyLine3D(const ActTrack& track);
+	std::unique_ptr<TPolyLine> GetPolyLineFromPhysicalTrack(const TrackPhysics& track, TString projection);
 	
 };
 
