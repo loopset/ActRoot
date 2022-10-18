@@ -4,6 +4,7 @@
 #include "ActCalibrations.h"
 
 #include <TMath.h>
+#include <iostream>
 #include <string>
 
 Silicons::Silicons()
@@ -15,6 +16,14 @@ Silicons::Silicons()
 {
 }
 
+void Silicons::Print()
+{
+	std::cout<<BOLDCYAN<<"=========== Event Silicons =========="<<RESET<<'\n';
+	std::cout<<"Side-> M: "<<fData["S"]["M"]<<" P: "<<fData["S"]["P"]<<" ES: "<<fData["S"]["ES"]<<'\n';
+	std::cout<<"Front-> M: "<<fData["01F"]["M"]<<" P: "<<fData["01F"]["P"]<<" E0: "<<fData["01F"]["E0"]<<" E1: "<<fData["01F"]["E1"]<<'\n';
+	std::cout<<"=========="<<RESET<<'\n';
+}
+
 void TrackPhysics::Print(std::string mode)
 {
 	std::cout<<BOLDGREEN<<"===== Track "<<fTrackID<<" ====="<<RESET<<'\n';
@@ -22,6 +31,7 @@ void TrackPhysics::Print(std::string mode)
 	if(mode == "full")
 	{
 	std::cout<<" Reaction point in mm at X: "<<fReactionPoint.X()<<" Y: "<<fReactionPoint.Y()<<" Z: "<<fReactionPoint.Z()<<'\n';
+	std::cout<<" Boundary point in mm at X: "<<fBoundaryPoint.X()<< " Y: "<<fBoundaryPoint.Y()<<" Z: "<<fBoundaryPoint.Z()<<'\n';
 	std::cout<<" Silicon point "<<fSiliconPlace<<" with coordinates in mm"<<'\n';
 	std::cout<<"  X: "<<fSiliconPoint.X()<<" Y: "<<fSiliconPoint.Y()<<" Z: "<<fSiliconPoint.Z()<<'\n';
 	std::cout<<" Track length: "<<fTrackLength<< " mm and average charge: "<<fAverageCharge<<" / mm"<<'\n';
@@ -49,6 +59,7 @@ void TrackPhysics::SetTrackFullPhysics(ActCalibrations& calibrations)
 	if(!fSPInArray)
 		return;//same but with SP
 	CalculateSiliconPoint(calibrations);
+	CalculateBoundaryPoint(calibrations);
 	CalculateTrackLength();
 	CalculateTrackAverageCharge();
 	//total charge already computed in ActTrack::SetMinimalTrackPhysics
@@ -98,17 +109,47 @@ void TrackPhysics::CalculateSiliconPoint(ActCalibrations& calibrations)
 	fSiliconPoint = newPoint;
 }
 
+void TrackPhysics::CalculateBoundaryPoint(ActCalibrations& calibrations)
+{
+	if(fSiliconPlace == ActParameters::trackHitsSiliconSideLeft)
+	{
+		XYZPoint planePoint { 0., ActParameters::g_NPADY * calibrations.GetXYToLengthUnitsCoef(), 0.};
+		XYZVector normalVector {0., 1., 0.};
+		fBoundaryPoint = IntersectionTrackPlane(planePoint, normalVector);
+	}
+	else if(fSiliconPlace == ActParameters::trackHitsSiliconSideRight)
+	{
+		XYZPoint planePoint { 0., 0., 0.};
+		XYZVector normalVector {0., -1., 0.};
+		fBoundaryPoint = IntersectionTrackPlane(planePoint, normalVector);
+	}
+	else if(fSiliconPlace == ActParameters::trackHitsSiliconFront)
+	{
+		XYZPoint planePoint { ActParameters::g_NPADX * calibrations.GetXYToLengthUnitsCoef(), 0., 0.};
+		XYZVector normalVector {1., 0., 0.};
+		fBoundaryPoint = IntersectionTrackPlane(planePoint, normalVector);
+	}
+	else
+	{
+		;//do nothing
+	}
+}
+
 void TrackPhysics::CalculateTrackLength()
 {
 	//MUST BE RUN AFTER SILICON AND REACTION POINT CALCULATIONS
 	auto rp { fReactionPoint};
+	auto bp { fBoundaryPoint};
 	auto sp { fSiliconPoint};
-
+	
 	double dist2 { (rp - sp).Mag2()};
+	double dist2Gas { (rp - bp).Mag2()};
+	
 	fTrackLength = TMath::Sqrt(dist2);
+	fTrackLengthInGas = TMath::Sqrt(dist2Gas);
 }
 
 void TrackPhysics::CalculateTrackAverageCharge()
 {
-	fAverageCharge = fTotalCharge / fTrackLength;
+	fAverageCharge = fTotalCharge / fTrackLengthInGas;
 }

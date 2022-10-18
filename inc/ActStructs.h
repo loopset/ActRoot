@@ -28,6 +28,8 @@ struct Silicons
 
 	Silicons();
 	~Silicons() = default;
+
+	void Print();
 };
 
 struct TriggersAndGates
@@ -88,7 +90,9 @@ struct TrackPhysics
 	double fPhi {-1.};
 	XYZPoint fReactionPoint {-1, -1, -1};
 	XYZPoint fSiliconPoint {-1, -1, -1};
+	XYZPoint fBoundaryPoint {-1, -1, -1};
 	double fTrackLength {-1.};
+	double fTrackLengthInGas {-1.};
 	double fTotalCharge {-1.};
 	double fAverageCharge {-1.};
 	std::string fReactionPlace {""};
@@ -108,8 +112,17 @@ private:
 	void CalculatePhiTrack();
 	void CalculateReactionPoint(ActCalibrations& calibrations);
 	void CalculateSiliconPoint(ActCalibrations& calibrations);
+	void CalculateBoundaryPoint(ActCalibrations& calibrations);
 	void CalculateTrackLength();
 	void CalculateTrackAverageCharge();
+
+	inline XYZPoint IntersectionTrackPlane(XYZPoint Pp, XYZVector vp)
+	{
+		auto Pt { fReactionPoint};//point of plane
+		auto vt { (fSiliconPoint - fReactionPoint).Unit()};
+		auto interesection { Pt + (((Pp - Pt).Dot(vp)) / (vt.Dot(vp))) * vt};
+		return interesection;
+	}
 };
 
 #endif //ACTSTRUCTS_H

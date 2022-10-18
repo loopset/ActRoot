@@ -6,7 +6,8 @@
 #include <iostream>
 
 ActKinematics::ActKinematics(std::string beam, std::string target,
-							 double beamKinetic, double targetKinetic)
+							 double beamKinetic, double targetKinetic,
+							 std::string reactionType)
 {
 	if(!(isKnown(beam) && isKnown(target)))
 	{
@@ -18,6 +19,24 @@ ActKinematics::ActKinematics(std::string beam, std::string target,
 	SetParticle("target", target);
 	SetBeamKineticEnergy(beamKinetic);
 	SetTargetKineticEnergy(targetKinetic);
+	SetReactionType(reactionType);
+}
+
+void ActKinematics::SetReactionType(std::string reactionType)
+{
+	//set reactions
+	if(reactionType == "ElasticInelastic")
+	{
+		fReactions = fElasticInelasticReactions;
+	}
+	else if(reactionType == "Transfer")
+	{
+		fReactions = fTransferReactions;
+	}
+	else
+	{
+		throw std::runtime_error("Wrong reaction type passed to ActKinematics -> ElasticInelastic or Transfer");
+	}
 }
 
 void ActKinematics::SetBeamKineticEnergy(double energy)
@@ -45,7 +64,8 @@ void ActKinematics::SetEjectileAndRecoil(std::string particle)
 		throw std::runtime_error("Cannot get particle mass for ejectile");
 	}
 	fMasses["ejectile"] = fKnownMasses[particle];
-	fMasses["recoil"] = fKnownMasses[fRecoilAssociatedToEjectile[particle]];
+	fMasses["target"] = fKnownMasses[fReactions[particle].first];
+	fMasses["recoil"] = fKnownMasses[fReactions[particle].second];
 }
 
 void ActKinematics::SetEjectileKineticEnergy(double energy)

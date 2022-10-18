@@ -28,6 +28,7 @@ public:
 private:
 	//to read ttree
 	TTree* fTree { nullptr};
+	int fRunID {};
 	int fEventID {};
 	Silicons* fSilicons {nullptr};
 	TriggersAndGates* fTriggers {nullptr};

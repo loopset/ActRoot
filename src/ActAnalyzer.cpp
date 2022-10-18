@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <cmath>
 #include <fstream>
+#include <ios>
 #include <iostream>
 #include <memory>
 #include <stdexcept>
@@ -331,29 +332,30 @@ void ActAnalyzer::ProcessRecoilEnergy(ActSRIM& srim, ActKinematics& kinematics)
 		//if we dont have done yet particle ID graphical cuts, default to proton
 		if(!fEnableGraphicalCuts)
 		{
-			auto initialRange { srim.EvalDirect("p", energyAtSilicon)};
-			auto rangeAtRP   { initialRange + track.fTrackLength};
-			energyAtRP = srim.EvalInverse("p", rangeAtRP);
-			PropagateBeamInChamber(track, srim, kinematics);
-			kinematics.SetParticle("target", "p");
-			kinematics.SetTargetKineticEnergy(0.);
-			kinematics.SetEjectileAndRecoil("p");
-			kinematics.SetEjectileKineticEnergy(energyAtRP);
-			recoilTheta = track.fTheta;
-			kinematics.SetEjectileAngle(track.fTheta);
-			recoilMass = kinematics.GetRecoilInvariantMass();
-			theoRecoilEnergy = kinematics.GetTheoreticalRecoilEnergy();
-			double excitationEnergy {std::sqrt(recoilMass) - kinematics.GetMass("recoil")};
-			if(isInExcitationMap("p"))
-			{
-				fHistosExcitation["p"]->Fill(excitationEnergy);
-				fHistosKinematics["p"]->Fill(recoilTheta, energyAtRP);
-				fHistosTheoreticalKinematics["p"]->Fill(recoilTheta, theoRecoilEnergy);
-			}
-			else
-			{
-				std::cout<<BOLDRED<<"Could not find fHistosExcitation associated to particle p -> Check excitationKeys!"<<RESET<<'\n';
-			}
+			continue;
+			// auto initialRange { srim.EvalDirect("p", energyAtSilicon)};
+			// auto rangeAtRP   { initialRange + track.fTrackLength};
+			// energyAtRP = srim.EvalInverse("p", rangeAtRP);
+			// PropagateBeamInChamber(track, srim, kinematics);
+			// kinematics.SetParticle("target", "p");
+			// kinematics.SetTargetKineticEnergy(0.);
+			// kinematics.SetEjectileAndRecoil("p");
+			// kinematics.SetEjectileKineticEnergy(energyAtRP);
+			// recoilTheta = track.fTheta;
+			// kinematics.SetEjectileAngle(track.fTheta);
+			// recoilMass = kinematics.GetRecoilInvariantMass();
+			// theoRecoilEnergy = kinematics.GetTheoreticalRecoilEnergy();
+			// double excitationEnergy {std::sqrt(recoilMass) - kinematics.GetMass("recoil")};
+			// if(isInExcitationMap("p"))
+			// {
+			// 	fHistosExcitation["p"]->Fill(excitationEnergy);
+			// 	fHistosKinematics["p"]->Fill(recoilTheta, energyAtRP);
+			// 	fHistosTheoreticalKinematics["p"]->Fill(recoilTheta, theoRecoilEnergy);
+			// }
+			// else
+			// {
+			// 	std::cout<<BOLDRED<<"Could not find fHistosExcitation associated to particle p -> Check excitationKeys!"<<RESET<<'\n';
+			// }
 		}
 		else
 		{
@@ -364,16 +366,15 @@ void ActAnalyzer::ProcessRecoilEnergy(ActSRIM& srim, ActKinematics& kinematics)
 			auto rangeAtRP   { initialRange + track.fTrackLength};
 			energyAtRP = srim.EvalInverse(particle, rangeAtRP);
 			PropagateBeamInChamber(track, srim, kinematics);
-			kinematics.SetParticle("target", particle);
-			kinematics.SetTargetKineticEnergy(0.);
 			kinematics.SetEjectileAndRecoil(particle);
+			kinematics.SetTargetKineticEnergy(0.);
 			kinematics.SetEjectileKineticEnergy(energyAtRP);
 			recoilTheta = track.fTheta;
 			kinematics.SetEjectileAngle(track.fTheta);
 			recoilMass = kinematics.GetRecoilInvariantMass();
 			theoRecoilEnergy = kinematics.GetTheoreticalRecoilEnergy();
 			double excitationEnergy {std::sqrt(recoilMass) - kinematics.GetMass("recoil")};
-			//std::cout<<"Excitation energy with "<<particle<<" :"<<excitationEnergy<<'\n';
+			//std::cout<<"Theoretical recoil energy "<<particle<<" :"<<theoRecoilEnergy<<'\n';
 			if(isInExcitationMap(particle))
 			{
 				fHistosExcitation[particle]->Fill(excitationEnergy);
@@ -397,15 +398,18 @@ void ActAnalyzer::ReadTree(ActSRIM& srim, ActKinematics& kinematics)
 		std::cout<<BOLDRED<<"fTree does not point to any valid TTree -> Set it correctly"<<RESET<<'\n';
 		return;
 	}
+	if(fSiliconMode == "front")
+		fTree->SetBranchAddress("runID", &fRunID);
 	fTree->SetBranchAddress("eventID", &fEventID);
 	fTree->SetBranchAddress("tracks", &fTracks);
 	fTree->SetBranchAddress("silicons", &fSilicons);
 	fTree->SetBranchAddress("triggers", &fTriggers);
+
 	//streamer for auxiliar cut
 	std::ofstream streamer {};
 	if(fEnableAuxiliarCut)
 	{
-		streamer.open("./FrontIndexesPunchThrough.dat");
+		streamer.open("./FrontIndexesPunchThrough.dat", std::ios_base::app);
 	}
 	//number of entries
 	long long nEntries { fTree->GetEntries()};
@@ -421,7 +425,7 @@ void ActAnalyzer::ReadTree(ActSRIM& srim, ActKinematics& kinematics)
 		ProcessTrackID();
 		if(fEnableAuxiliarCut && fWriteToStreamer)
 		{
-			streamer<<i<<" "<<fEventID<<'\n';
+			streamer<<fRunID<<" "<<fEventID<<" "<<i<<'\n';
 		}
 		//only BINARY events
 		if(fTracks->size() != fTracksPerEvent)

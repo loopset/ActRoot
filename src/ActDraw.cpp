@@ -1,5 +1,6 @@
 #include "ActDraw.h"
 
+#include "ActCalibrations.h"
 #include "ActParameters.h"
 #include "ActHit.h"
 #include "ActLine.h"
@@ -73,9 +74,9 @@ void ActDraw::Init()
 	///////////////////////////////////////////////////////////////
 	fCanvVisual = std::make_unique<TCanvas>("fCanvVisual", "Visual analysis", 1);
 	fCanvVisual->Divide(3, 1);
-	fHistVisualPad = std::make_unique<TH2D>("fHistVisualPad", "Pad: XY", fNbinsX, fMinX, fMaxX, fNbinsY, fMinY, fMaxY);
-	fHistVisualProfile = std::make_unique<TH2D>("fHistVisualProfile", "Profile: XZ", fNbinsX, fMinX, fMaxX, fNbinsZ, fMinZ, fMaxZ);
-	fHistVisualFront = std::make_unique<TH2D>("fHistVisualFront", "Front: YZ", fNbinsY, fMinY, fMaxY, fNbinsZ, fMinZ, fMaxZ);
+	fHistVisualPad = std::make_unique<TH2D>("fHistVisualPad", "Pad: XY;X [mm];Y [mm]", fNbinsX, fMinX, fMaxX, fNbinsY, fMinY, fMaxY);
+	fHistVisualProfile = std::make_unique<TH2D>("fHistVisualProfile", "Profile: XZ;X [mm];Z [mm]", fNbinsX, fMinX, fMaxX, fNbinsZ, fMinZ, fMaxZ);
+	fHistVisualFront = std::make_unique<TH2D>("fHistVisualFront", "Front: YZ;Y [mm];Z [mm]", fNbinsY, fMinY, fMaxY, fNbinsZ, fMinZ, fMaxZ);
 	
 	//options to gStyle
 	gStyle->SetOptStat(0);
@@ -265,7 +266,7 @@ void ActDraw::DrawResults3D(std::vector<ActHit> &hitArray, ActClusteringResults 
 }
 
 
-void ActDraw::DrawPhysicalTracks(const std::vector<ActHit> &hitArray, const std::vector<TrackPhysics> &tracks)
+void ActDraw::DrawPhysicalTracks(const std::vector<ActHit> &hitArray, const std::vector<TrackPhysics> &tracks, const ActCalibrations& calibrations)
 {
 	fCanvAllcluster->Close();
 	fCanv3DResults->Close();
@@ -279,11 +280,17 @@ void ActDraw::DrawPhysicalTracks(const std::vector<ActHit> &hitArray, const std:
 		Double_t charge   { hit.GetCharge()};
 
 		//pad
-		fHistVisualPad->Fill(position.X(), position.Y(), charge);
+		fHistVisualPad->Fill(position.X() * calibrations.GetXYToLengthUnitsCoef(),
+							 position.Y() * calibrations.GetXYToLengthUnitsCoef(),
+							 charge);
 		//profile
-		fHistVisualProfile->Fill(position.X(), position.Z(), charge);
+		fHistVisualProfile->Fill(position.X() * calibrations.GetXYToLengthUnitsCoef(),
+								 position.Z() * calibrations.GetZToLengthUnitsCoef(),
+								 charge);
 		//front
-		fHistVisualFront->Fill(position.Y(), position.Z(), charge);
+		fHistVisualFront->Fill(position.Y() * calibrations.GetXYToLengthUnitsCoef(),
+							   position.Z() * calibrations.GetZToLengthUnitsCoef(),
+							   charge);
 	}
 	//read physical tracks
 	std::vector<TString> projections { "XY", "XZ", "YZ" };
@@ -292,7 +299,7 @@ void ActDraw::DrawPhysicalTracks(const std::vector<ActHit> &hitArray, const std:
 	{
 		for(auto& proj : projections)
 		{
-			auto polyline = GetPolyLineFromPhysicalTrack(track, proj);
+			auto polyline = GetPolyLineFromPhysicalTrack(track, proj, calibrations);
 			polyline->SetLineColor(track.fTrackID + 1);
 			polyline->SetLineWidth(2);
 			polylines[proj].push_back(std::move(polyline));
@@ -434,7 +441,7 @@ std::unique_ptr<TPolyLine3D> ActDraw::GetPolyLine3D(const ActTrack& track)
 	return std::move(polyline);
 }
 
-std::unique_ptr<TPolyLine> ActDraw::GetPolyLineFromPhysicalTrack(const TrackPhysics& track, TString projection)
+std::unique_ptr<TPolyLine> ActDraw::GetPolyLineFromPhysicalTrack(const TrackPhysics& track, TString projection, const ActCalibrations& calibrations)
 {
 	auto position = track.fReactionPoint;
 	auto direction = (track.fSiliconPoint - track.fReactionPoint);
@@ -459,7 +466,7 @@ std::unique_ptr<TPolyLine> ActDraw::GetPolyLineFromPhysicalTrack(const TrackPhys
 	int Npoints { 500 };
 	std::vector<double> vecX, vecY, vecZ;
 	double x0 { fMinX};
-	double dx { 1. * static_cast<double>(ActParameters::g_NPADX) / Npoints };
+	double dx { 1. * (ActParameters::g_NPADX * calibrations.GetXYToLengthUnitsCoef()) / Npoints };
 	for(int r = 0; r < Npoints; r++ )
 	{
 		double yval { offsetXY + slopeXY * x0 };

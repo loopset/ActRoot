@@ -1,6 +1,7 @@
 #ifndef ACTDRAW_H
 #define ACTDRAW_H
 
+#include "ActCalibrations.h"
 #include "ActHit.h"
 #include "ActClusteringResults.h"
 #include "ActTrack.h"
@@ -92,13 +93,17 @@ public:
 	//draw results in 3D!!
 	void DrawResults3D(std::vector<ActHit>& hitArray, ActClusteringResults& results);
 	//draw results in visual analysis (does not require ActClusteringResults)
-	void DrawPhysicalTracks(const std::vector<ActHit>& hitArray, const std::vector<TrackPhysics>& tracks);
+	void DrawPhysicalTracks(const std::vector<ActHit>& hitArray, const std::vector<TrackPhysics>& tracks, const ActCalibrations& calibrations);
 
 	//set bin and max values on histograms
 	void SetMaxZ(double max) { fMaxZ = max; }
 	void SetNbinsZ(int nbins) { fNbinsZ = nbins; }
-
-	protected:
+	void SetMaxY(double max){ fMaxY = max; }
+	void SetNbinsY(int nbins){ fNbinsY = nbins; }
+	void SetMaxX(double max){ fMaxX = max; }
+	void SetNbinsX(int nbins){ fNbinsX = nbins; }
+	
+protected:
 	inline void OverrideHistContent(std::unique_ptr<TH2I>& hist, const Double_t& maxVal, const Double_t& val1, const Double_t& val2, const Double_t& val3)
 	{
 		if(hist == nullptr) return ;
@@ -117,7 +122,7 @@ public:
 	}
 	std::unique_ptr<TPolyLine> GetPolyLine(const ActTrack& track, TString projection);
 	std::unique_ptr<TPolyLine3D>  GetPolyLine3D(const ActTrack& track);
-	std::unique_ptr<TPolyLine> GetPolyLineFromPhysicalTrack(const TrackPhysics& track, TString projection);
+	std::unique_ptr<TPolyLine> GetPolyLineFromPhysicalTrack(const TrackPhysics& track, TString projection, const ActCalibrations& calibrations);
 	
 };
 
