@@ -150,7 +150,7 @@ void ActAnalyzer::DrawCanvas()
 	fStackExcitation = std::make_unique<THStack>("fStackExcitation", "Excitation energies");
 	for(auto& histo : fHistosExcitation)
 	{
-		histo.second->SetTitle(("Elastic with " + histo.first).c_str());
+		histo.second->SetTitle(("Ejectile ID as " + histo.first).c_str());
 		fStackExcitation->Add(histo.second.get());
 	}
 	fStackExcitation->Draw("pads");
@@ -264,7 +264,7 @@ void ActAnalyzer::ProcessTrackID()
 	}	
 }
 
-std::string ActAnalyzer::IdentifyRecoilInGraphCuts(const TrackPhysics& track)
+std::string ActAnalyzer::IdentifyEjectileInGraphCuts(const TrackPhysics& track)
 {
 	auto energyAtSiliconForID { GetGatedSiliconEnergy(track, "1")};
 	auto averageCharge { track.fAverageCharge};
@@ -359,7 +359,7 @@ void ActAnalyzer::ProcessRecoilEnergy(ActSRIM& srim, ActKinematics& kinematics)
 		}
 		else
 		{
-			auto particle { IdentifyRecoilInGraphCuts(track)};
+			auto particle { IdentifyEjectileInGraphCuts(track)};
 			if(particle == "none" || isInVector(particle, fSkipParticles))//wasnt inside TCutG or custom skip selection
 				continue;
 			auto initialRange { srim.EvalDirect(particle, energyAtSilicon)};

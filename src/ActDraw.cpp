@@ -297,6 +297,9 @@ void ActDraw::DrawPhysicalTracks(const std::vector<ActHit> &hitArray, const std:
 	std::map<TString, std::vector<std::unique_ptr<TPolyLine>>> polylines;
 	for(const auto& track : tracks)
 	{
+		if(!(track.fRPInChamber && track.fSPInArray))
+			continue;//dont draw wrong lines
+		
 		for(auto& proj : projections)
 		{
 			auto polyline = GetPolyLineFromPhysicalTrack(track, proj, calibrations);

@@ -115,7 +115,7 @@ private:
 	void ProcessRecoilEnergy(ActSRIM& srim, ActKinematics& kinematics);
 	//function to get energy from silicons, keeping in mind multiplicity, side and so on
 	double GetGatedSiliconEnergy(const TrackPhysics& track, std::string frontPanel = "0");
-	std::string IdentifyRecoilInGraphCuts(const TrackPhysics& track);
+	std::string IdentifyEjectileInGraphCuts(const TrackPhysics& track);
 	void PropagateBeamInChamber(const TrackPhysics& track, ActSRIM& srim, ActKinematics& kinematics);
 	
 	template<typename T>
