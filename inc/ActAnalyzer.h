@@ -67,6 +67,7 @@ private:
 	std::unique_ptr<TCutG> fAuxiliarCut {nullptr};
 	bool fEnableAuxiliarCut {false};
 	bool fWriteToStreamer {false};
+	std::string fAuxiliarCutOutputFile {""};
 
 	//set parameters of reaction
 	int fTracksPerEvent { 1};//default to binary reactions
@@ -101,6 +102,7 @@ public:
 	void ReadWallCuts(std::string key, std::string fileName);
 	void SetEnableAuxiliarCut(bool val){ fEnableAuxiliarCut = val; }
 	void ReadAuxiliarCut(std::string fileName);
+	void SetAuxiliarCutOutputFile(std::string fileName){ fAuxiliarCutOutputFile = fileName; }
 	void SetSkipParticles(std::vector<std::string> vec);
 	std::vector<std::string> GetSkipParticles() const { return fSkipParticles; }
 

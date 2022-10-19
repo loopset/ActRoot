@@ -42,6 +42,9 @@ class ActDraw
 	std::unique_ptr<TH2D>    fHistFront;
 	std::unique_ptr<TH2D>    fHistProfile;
 
+	//canvas for poster 
+	std::unique_ptr<TCanvas> fCanvPoster;
+
 	//both
 	std::unique_ptr<TCanvas> fCanvAllcluster;
 	std::unique_ptr<TH2I>    fHistPadAllcluster;
@@ -90,6 +93,8 @@ public:
 	void DrawEvent(std::vector<ActHit>& hitArray);
 	//draw both
 	void DrawResults(std::vector<ActHit>& hitArray, ActClusteringResults& results);
+	//draw results for publications (just less TPads)
+	void DrawResultsPublication(std::vector<ActHit>& hitArray, ActClusteringResults& results);
 	//draw results in 3D!!
 	void DrawResults3D(std::vector<ActHit>& hitArray, ActClusteringResults& results);
 	//draw results in visual analysis (does not require ActClusteringResults)

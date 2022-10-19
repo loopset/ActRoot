@@ -28,6 +28,8 @@ ActDraw::ActDraw()
 	  fHistPad(nullptr), fHistProfile(nullptr),
 	  fHistFront(nullptr),
 	  ///////////////////
+	  fCanvPoster(nullptr),
+	  ///////////////////
 	  fCanvAllcluster(nullptr), fHistPadAllcluster(nullptr),
 	  fHistFrontAllcluster(nullptr), fHistProfileAllcluster(nullptr),
 	  ////////////////////
@@ -44,19 +46,23 @@ void ActDraw::Init()
 	//initialize canvas
 	fCanvPrecluster = std::make_unique<TCanvas>("fCanvPrecluster", "Event before clustering", 1);
 	fCanvPrecluster->Divide(3, 1);
+
+	// canvas for poster and publications
+	fCanvPoster = std::make_unique<TCanvas>("fCanvPoster", "Canvas for publications", 1);
+	fCanvPoster->Divide(2, 1);
 	
 	//initialize histos
-	fHistPad = std::make_unique<TH2D>("fHistPad", "Pad: XY", fNbinsX, fMinX, fMaxX, fNbinsY, fMinY, fMaxY);
-	fHistProfile = std::make_unique<TH2D>("fHistProfile", "Profile: XZ", fNbinsX, fMinX, fMaxX, fNbinsZ, fMinZ, fMaxZ);
-	fHistFront = std::make_unique<TH2D>("fHistFront", "Front: YZ", fNbinsY, fMinY, fMaxY, fNbinsZ, fMinZ, fMaxZ);
+	fHistPad = std::make_unique<TH2D>("fHistPad", "Pad: XY;X [pad];Y [pad]", fNbinsX, fMinX, fMaxX, fNbinsY, fMinY, fMaxY);
+	fHistProfile = std::make_unique<TH2D>("fHistProfile", "Profile: XZ;X [pad];Z [time bucket]", fNbinsX, fMinX, fMaxX, fNbinsZ, fMinZ, fMaxZ);
+	fHistFront = std::make_unique<TH2D>("fHistFront", "Front: YZ;Y [pad];Z [time bucket]", fNbinsY, fMinY, fMaxY, fNbinsZ, fMinZ, fMaxZ);
 
 	///////////////////////////////////////////
 	fCanvAllcluster = std::make_unique<TCanvas>("fCanvAllcluster", "Canvas with full info", 1);
 	fCanvAllcluster->Divide(3, 2);
 	
-	fHistPadAllcluster = std::make_unique<TH2I>("fHistPadAllcluster", "Clusters in pad", fNbinsX, fMinX, fMaxX, fNbinsY, fMinY, fMaxY);
-	fHistFrontAllcluster = std::make_unique<TH2I>("fHistFrontAllcluster", "Clusters in front", fNbinsY, fMinY, fMaxY, fNbinsZ, fMinZ, fMaxZ);
-	fHistProfileAllcluster = std::make_unique<TH2I>("fHistProfileAllcluster", "Clusters in profile", fNbinsX, fMinX, fMaxX, fNbinsZ, fMinZ, fMaxZ);
+	fHistPadAllcluster = std::make_unique<TH2I>("fHistPadAllcluster", "Tracks in pad;X [pad];Y [pad]", fNbinsX, fMinX, fMaxX, fNbinsY, fMinY, fMaxY);
+	fHistFrontAllcluster = std::make_unique<TH2I>("fHistFrontAllcluster", "Tracks in front;X [pad];Z [time bucket]", fNbinsY, fMinY, fMaxY, fNbinsZ, fMinZ, fMaxZ);
+	fHistProfileAllcluster = std::make_unique<TH2I>("fHistProfileAllcluster", "Tracks in profile;Y [pad];Z [time bucket]", fNbinsX, fMinX, fMaxX, fNbinsZ, fMinZ, fMaxZ);
 
 
 	////////3D results
@@ -89,6 +95,7 @@ void ActDraw::Reset()
 	fCanvAllcluster->Clear("D"); //fCanvAllcluster->Update();
 	fCanv3DResults->Clear("D");
 	fCanvVisual->Clear("D");
+	fCanvPoster->Clear("D");
 	
 	fHistFront->Reset();
 	fHistProfile->Reset();
@@ -110,6 +117,7 @@ void ActDraw::Reset()
 	fCanvAllcluster->Update();
 	fCanv3DResults->Update();
 	fCanvVisual->Update();
+	fCanvPoster->Update();
 }
 
 void ActDraw::DrawEvent(std::vector<ActHit> &hitArray)
@@ -117,6 +125,7 @@ void ActDraw::DrawEvent(std::vector<ActHit> &hitArray)
 	fCanvAllcluster->Close();
 	fCanv3DResults->Close();
 	fCanvVisual->Close();
+	fCanvPoster->Close();
 	Reset();
 
 	//read each event and file Pad, Profile and Front hits
@@ -147,11 +156,14 @@ void ActDraw::DrawEvent(std::vector<ActHit> &hitArray)
 	
 }
 
+
+
 void ActDraw::DrawResults(std::vector<ActHit> &hitArray, ActClusteringResults &results)
 {
 	fCanvPrecluster->Close();
 	fCanv3DResults->Close();
 	fCanvVisual->Close();
+	fCanvPoster->Close();
 	Reset();
 
 	//first, events
@@ -222,6 +234,7 @@ void ActDraw::DrawResults3D(std::vector<ActHit> &hitArray, ActClusteringResults 
 	fCanvPrecluster->Close();
 	fCanvAllcluster->Close();
 	fCanvVisual->Close();
+	fCanvPoster->Close();
 	Reset();
 
 	//first, events
@@ -265,6 +278,73 @@ void ActDraw::DrawResults3D(std::vector<ActHit> &hitArray, ActClusteringResults 
 	}
 }
 
+void ActDraw::DrawResultsPublication(std::vector<ActHit> &hitArray, ActClusteringResults &results)
+{
+	fCanvPrecluster->Close();
+	fCanv3DResults->Close();
+	fCanvVisual->Close();
+	fCanvAllcluster->Close();
+	Reset();
+
+	//first, events
+	//read each event and file Pad, Profile and Front hits
+	for(const auto& hit : hitArray)
+	{
+		XYZPoint position { hit.GetPosition()};
+		Double_t charge   { hit.GetCharge()};
+
+		//pad
+		fHistPad->Fill(position.X(), position.Y(), charge);
+		//profile
+		fHistProfile->Fill(position.X(), position.Z(), charge);
+		//front
+		fHistFront->Fill(position.Y(), position.Z(), charge);
+	}
+
+	//now, clusters and lines
+	std::vector<TString> projections { "XY", "XZ", "YZ" };
+	std::map<TString, std::vector<std::unique_ptr<TPolyLine>>> polylines;
+
+	auto tracks = results.GetTrackCandidates();
+	for(const auto& track : tracks)
+	{
+		auto hits = track.GetHitArrayConst();
+		for(const auto& hit : hits)
+		{
+			XYZPoint position { hit.GetPosition()};
+			//pad
+			OverrideHistContent(fHistPadAllcluster, tracks.size(), position.X(), position.Y(), track.GetTrackID() + 1);
+			//front
+			OverrideHistContent(fHistFrontAllcluster, tracks.size(), position.Y(), position.Z(), track.GetTrackID() + 1);
+			//profile
+			OverrideHistContent(fHistProfileAllcluster, tracks.size(), position.X(), position.Z(), track.GetTrackID() + 1);
+		}
+		//add TPolyLines
+		for(auto& proj : projections)
+		{
+			auto polyline = GetPolyLine(track, proj);
+			polyline->SetLineColor(track.GetTrackID() + 1);
+			polyline->SetLineWidth(2);
+			polylines[proj].push_back(std::move(polyline));
+		}
+	}
+
+	//and finally draw
+	if(fCanvPoster)
+	{
+		fCanvPoster->cd(1); fHistPad->Draw("colz");
+		//fCanvPoster->cd(2); fHistFront->Draw("colz");
+
+		fCanvPoster->cd(2); fHistPadAllcluster->Draw("colz");
+		for(auto& poly : polylines["XY"]) poly->Draw("same");
+		//fCanvPoster->cd(4); fHistFrontAllcluster->Draw("colz");
+		//for(auto& poly : polylines["YZ"]) poly->Draw("same");
+
+		fCanvPoster->Update();
+		fCanvPoster->cd();
+		fCanvPoster->WaitPrimitive();
+	}
+}
 
 void ActDraw::DrawPhysicalTracks(const std::vector<ActHit> &hitArray, const std::vector<TrackPhysics> &tracks, const ActCalibrations& calibrations)
 {

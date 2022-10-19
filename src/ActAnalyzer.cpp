@@ -109,9 +109,13 @@ void ActAnalyzer::DrawCanvas()
 	fHistTrackID->Draw("colz");
 	if(fEnableGraphicalCuts)
 	{
+		int i { 1};
 		for(auto& cut : fGCuts)
 		{
+			cut.second->SetLineWidth(3);
+			cut.second->SetLineColor(i);
 			cut.second->Draw("same");
+			i++;
 		}
 	}
 	fCanvTrackID->Update();
@@ -372,7 +376,10 @@ void ActAnalyzer::ProcessRecoilEnergy(ActSRIM& srim, ActKinematics& kinematics)
 			recoilTheta = track.fTheta;
 			kinematics.SetEjectileAngle(track.fTheta);
 			recoilMass = kinematics.GetRecoilInvariantMass();
-			theoRecoilEnergy = kinematics.GetTheoreticalRecoilEnergy();
+			if(mode != "front")
+				theoRecoilEnergy = kinematics.GetTheoreticalRecoilEnergy();
+			else
+				theoRecoilEnergy = kinematics.GetTheoreticalRecoilEnergy("negative");
 			double excitationEnergy {std::sqrt(recoilMass) - kinematics.GetMass("recoil")};
 			//std::cout<<"Theoretical recoil energy "<<particle<<" :"<<theoRecoilEnergy<<'\n';
 			if(isInExcitationMap(particle))
@@ -398,8 +405,7 @@ void ActAnalyzer::ReadTree(ActSRIM& srim, ActKinematics& kinematics)
 		std::cout<<BOLDRED<<"fTree does not point to any valid TTree -> Set it correctly"<<RESET<<'\n';
 		return;
 	}
-	if(fSiliconMode == "front")
-		fTree->SetBranchAddress("runID", &fRunID);
+	fTree->SetBranchAddress("runID", &fRunID);
 	fTree->SetBranchAddress("eventID", &fEventID);
 	fTree->SetBranchAddress("tracks", &fTracks);
 	fTree->SetBranchAddress("silicons", &fSilicons);
@@ -409,7 +415,11 @@ void ActAnalyzer::ReadTree(ActSRIM& srim, ActKinematics& kinematics)
 	std::ofstream streamer {};
 	if(fEnableAuxiliarCut)
 	{
-		streamer.open("./FrontIndexesPunchThrough.dat", std::ios_base::app);
+		if(fAuxiliarCutOutputFile.empty())
+		{
+			throw std::runtime_error("You have enabled AuxiliarCut but not have specified an AuxiliarCutOutputFile -> Use ActAnalyzer::SetAuxiliarCutOutputFile()");
+		}
+		streamer.open(fAuxiliarCutOutputFile.c_str(), std::ios_base::app);
 	}
 	//number of entries
 	long long nEntries { fTree->GetEntries()};
