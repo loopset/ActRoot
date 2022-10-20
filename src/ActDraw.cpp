@@ -278,7 +278,7 @@ void ActDraw::DrawResults3D(std::vector<ActHit> &hitArray, ActClusteringResults 
 	}
 }
 
-void ActDraw::DrawResultsPublication(std::vector<ActHit> &hitArray, ActClusteringResults &results)
+void ActDraw::DrawResultsPublication(const std::vector<ActHit> &hitArray, ActClusteringResults &results)
 {
 	fCanvPrecluster->Close();
 	fCanv3DResults->Close();
@@ -351,6 +351,7 @@ void ActDraw::DrawPhysicalTracks(const std::vector<ActHit> &hitArray, const std:
 	fCanvAllcluster->Close();
 	fCanv3DResults->Close();
 	fCanvPrecluster->Close();
+	fCanvPoster->Close();
 	Reset();
 
 	//read each event and file Pad, Profile and Front hits

@@ -91,7 +91,7 @@ public:
 	//execute all computations
 	void ReadTree(ActSRIM& srim, ActKinematics& kinematics);
 	//draw canvas at the end of execution
-	void DrawCanvas();
+	void DrawCanvas(int canvasForm = 1);
 
 	//read graphical cuts
 	void SetEnableGraphicalCuts(bool val){ fEnableGraphicalCuts = val; }

@@ -94,7 +94,7 @@ public:
 	//draw both
 	void DrawResults(std::vector<ActHit>& hitArray, ActClusteringResults& results);
 	//draw results for publications (just less TPads)
-	void DrawResultsPublication(std::vector<ActHit>& hitArray, ActClusteringResults& results);
+	void DrawResultsPublication(const std::vector<ActHit>& hitArray, ActClusteringResults& results);
 	//draw results in 3D!!
 	void DrawResults3D(std::vector<ActHit>& hitArray, ActClusteringResults& results);
 	//draw results in visual analysis (does not require ActClusteringResults)

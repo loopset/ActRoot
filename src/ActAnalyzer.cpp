@@ -101,10 +101,10 @@ void ActAnalyzer::SetSkipParticles(std::vector<std::string> vec)
 		std::cout<<BOLDGREEN<<"Excluding particle "<<particle<<" from analysis"<<RESET<<'\n';
 	}
 }
-void ActAnalyzer::DrawCanvas()
+void ActAnalyzer::DrawCanvas(int canvasForm)
 {
 	//particle ID
-	fCanvTrackID = std::make_unique<TCanvas>("fCanvTrackID", "Track ID ", 1);
+	fCanvTrackID = std::make_unique<TCanvas>("fCanvTrackID", "Track ID ", canvasForm);
 	fCanvTrackID->cd();
 	fHistTrackID->Draw("colz");
 	if(fEnableGraphicalCuts)
@@ -121,7 +121,7 @@ void ActAnalyzer::DrawCanvas()
 	fCanvTrackID->Update();
 
 	//silicon wall
-	fCanvWall = std::make_unique<TCanvas>("fCanvWall", "Silicon wall", 1);
+	fCanvWall = std::make_unique<TCanvas>("fCanvWall", "Silicon wall", canvasForm);
 	fCanvWall->cd();
 	fHistWall->Draw("colz");
 	fCanvWall->Update();
@@ -337,29 +337,6 @@ void ActAnalyzer::ProcessRecoilEnergy(ActSRIM& srim, ActKinematics& kinematics)
 		if(!fEnableGraphicalCuts)
 		{
 			continue;
-			// auto initialRange { srim.EvalDirect("p", energyAtSilicon)};
-			// auto rangeAtRP   { initialRange + track.fTrackLength};
-			// energyAtRP = srim.EvalInverse("p", rangeAtRP);
-			// PropagateBeamInChamber(track, srim, kinematics);
-			// kinematics.SetParticle("target", "p");
-			// kinematics.SetTargetKineticEnergy(0.);
-			// kinematics.SetEjectileAndRecoil("p");
-			// kinematics.SetEjectileKineticEnergy(energyAtRP);
-			// recoilTheta = track.fTheta;
-			// kinematics.SetEjectileAngle(track.fTheta);
-			// recoilMass = kinematics.GetRecoilInvariantMass();
-			// theoRecoilEnergy = kinematics.GetTheoreticalRecoilEnergy();
-			// double excitationEnergy {std::sqrt(recoilMass) - kinematics.GetMass("recoil")};
-			// if(isInExcitationMap("p"))
-			// {
-			// 	fHistosExcitation["p"]->Fill(excitationEnergy);
-			// 	fHistosKinematics["p"]->Fill(recoilTheta, energyAtRP);
-			// 	fHistosTheoreticalKinematics["p"]->Fill(recoilTheta, theoRecoilEnergy);
-			// }
-			// else
-			// {
-			// 	std::cout<<BOLDRED<<"Could not find fHistosExcitation associated to particle p -> Check excitationKeys!"<<RESET<<'\n';
-			// }
 		}
 		else
 		{
