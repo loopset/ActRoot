@@ -335,6 +335,7 @@ void ActDraw::DrawResultsPublication(const std::vector<ActHit> &hitArray, ActClu
 		fCanvPoster->cd(1); fHistPad->Draw("colz");
 		//fCanvPoster->cd(2); fHistFront->Draw("colz");
 
+		fHistPadAllcluster->SetMaximum(7);
 		fCanvPoster->cd(2); fHistPadAllcluster->Draw("colz");
 		for(auto& poly : polylines["XY"]) poly->Draw("same");
 		//fCanvPoster->cd(4); fHistFrontAllcluster->Draw("colz");
