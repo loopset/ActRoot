@@ -7,11 +7,14 @@ project(ActRoot)
 # stablish c++ version
 set(CMAKE_CXX_STANDARD 17) # same as ROOT built for Arch Linux
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE) # force require this standard
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 find_package(ROOT 6.20 CONFIG REQUIRED)
 
 ## because it is located outside this project! keep in mind directory structure so this can be feasible!!
 include_directories(${CMAKE_SOURCE_DIR}/../MyActarEvents/inc)
+## for ROOT includes in Ubuntu
+include_directories(${ROOT_INCLUDE_DIRS})
 
 set(sources
   ${CMAKE_SOURCE_DIR}/src/ActHit.cpp
