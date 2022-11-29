@@ -8,19 +8,36 @@
 #include <string>
 
 Silicons::Silicons()
-	: fSi0(ActParameters::NrowsSi01, 0.), fSi0_cal(ActParameters::NrowsSi01, 0.),
-	  fSi1(ActParameters::NrowsSi01, 0.), fSi1_cal(ActParameters::NrowsSi01, 0.),
-	  fSiS(ActParameters::NrowsSiS, 0.),  fSiS_cal(ActParameters::NrowsSiS, 0.),
-	  fSiF(ActParameters::NrowsSi01, 0.), fSiF_cal(ActParameters::NrowsSi01, 0.),
-	  fSiBeam(ActParameters::NrowsSiBeam, 0.), fSiBeam_cal(ActParameters::NrowsSiBeam, 0.)
+	: fSilLeft0(ActParameters::NSilLeft0), fSilLeft0_cal(ActParameters::NSilLeft0),
+      fSilLeft1(ActParameters::NSilLeft1), fSilLeft1_cal(ActParameters::NSilLeft1),
+      fSilRight0(ActParameters::NSilRight0), fSilRight0_cal(ActParameters::NSilRight0),
+      fSilRight1(ActParameters::NSilRight1), fSilRight1_cal(ActParameters::NSilRight1),
+      fSilFront0(ActParameters::NSilFront0), fSilFront0_cal(ActParameters::NSilFront0),
+      fSilFront1(ActParameters::NSilFront1), fSilFront1_cal(ActParameters::NSilFront1),
+      fSiBeam(ActParameters::NrowsSiBeam, 0.), fSiBeam_cal(ActParameters::NrowsSiBeam, 0.),
+      fSilSide0({{"left", std::vector<double>(ActParameters::NSilLeft0)}, {"right", std::vector<double>(ActParameters::NSilRight0)}}),
+      fSilSide0_cal({{"left", std::vector<double>(ActParameters::NSilLeft0)}, {"right", std::vector<double>(ActParameters::NSilRight0)}})
 {
 }
 
 void Silicons::Print()
 {
 	std::cout<<BOLDCYAN<<"=========== Event Silicons =========="<<RESET<<'\n';
-	std::cout<<"Side-> M: "<<fData["S"]["M"]<<" P: "<<fData["S"]["P"]<<" ES: "<<fData["S"]["ES"]<<'\n';
-	std::cout<<"Front-> M: "<<fData["01F"]["M"]<<" P: "<<fData["01F"]["P"]<<" E0: "<<fData["01F"]["E0"]<<" E1: "<<fData["01F"]["E1"]<<'\n';
+	// std::cout<<"Side-> M: "<<fData["S"]["M"]<<" P: "<<fData["S"]["P"]<<" ES: "<<fData["S"]["ES"]<<'\n';
+	// std::cout<<"Front-> M: "<<fData["01F"]["M"]<<" P: "<<fData["01F"]["P"]<<" E0: "<<fData["01F"]["E0"]<<" E1: "<<fData["01F"]["E1"]<<'\n';
+    for(const auto& [side, vecRaw] : fSilSide0)
+    {
+        int silIndex {0};
+        for(const auto& val : vecRaw)
+        {
+            std::cout<<"\tSide: "<<side<<" sil: "<<silIndex<<" RAW: "<<val<<" Channel CAL: "<<fSilSide0_cal.at(side).at(silIndex)<<" MeV"<<'\n';
+
+            silIndex++;
+        }
+    }
+    std::cout<<"----------"<<'\n';
+    std::cout<<"Left-> M: "<<fData.at("left").at("M")<<" P: "<<fData.at("left").at("P")<<" E: "<<fData.at("left").at("E")<<'\n';
+	std::cout<<"Right-> M: "<<fData.at("right").at("M")<<" P: "<<fData.at("right").at("P")<<" E: "<<fData.at("right").at("E")<<'\n';
 	std::cout<<"=========="<<RESET<<'\n';
 }
 

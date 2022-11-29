@@ -58,9 +58,11 @@ class ActEvent
 	
 	//calibrate our data using ActCalibrations info
 	void CalibrateSilicons(const ActCalibrations& calibrations);
+    void CalibrateSideSilicons(const ActCalibrations& calibrations);
 
 	//read silicon data after calibration (i.e, multiplicity, stopping layer, final energy)
 	void ReadSiliconsData();
+    void ReadSideSiliconsData();
 
 	//read ActRANSAC Clustering results and save tracks to ActEvent
 	//WARNING: this does do not include track physics
@@ -89,7 +91,6 @@ class ActEvent
 	//splitted functions by types of silicons
 	void CalibrateSilicons01S(const ActCalibrations& calibrations);
 	void CalibrateSiliconsBeam(const ActCalibrations& calibrations);
-
 	void ReadSilicons01FData();
 	void ReadSiliconsSData();
 

@@ -17,11 +17,16 @@ struct Silicons
 {
 	//VECTORS with energy per channel
 	//initialized in .cpp file
-	std::vector<double> fSi0, fSi0_cal;
-	std::vector<double> fSi1, fSi1_cal;
-	std::vector<double> fSiS, fSiS_cal;
-	std::vector<double> fSiF, fSiF_cal; //front array: combination of Si0 + Si1
+	std::vector<double> fSilLeft0, fSilLeft0_cal;
+	std::vector<double> fSilLeft1, fSilLeft1_cal;
+    std::vector<double> fSilRight0, fSilRight0_cal;
+	std::vector<double> fSilRight1, fSilRight1_cal;
+	std::vector<double> fSilFront0, fSilFront0_cal;
+    std::vector<double> fSilFront1, fSilFront1_cal;
 	std::vector<double> fSiBeam, fSiBeam_cal;
+    //new version using maps
+    std::map<std::string, std::vector<double>> fSilSide0 {};
+    std::map<std::string, std::vector<double>> fSilSide0_cal {};
 
 	//maps storing information for each event
 	std::map<std::string, std::map<std::string, double>> fData {};

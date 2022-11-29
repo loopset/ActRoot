@@ -10,6 +10,7 @@
 #include <fstream>
 #include <iostream>
 #include <memory>
+#include <sstream>
 #include <stdexcept>
 #include <vector>
 #include <string>
@@ -58,6 +59,52 @@ void ActCalibrations::ReadPadAlignCoefs(std::string &coefsFile)
 		fPadAlignCoefs[i][2] = aux2;
 	}
 	streamer.close();
+}
+
+void ActCalibrations::ReadSiliconSideCalibrations(const std::string &file)
+{
+    std::ifstream streamer {file.c_str()};
+    if(!streamer)
+    {
+        throw std::runtime_error("Error opening Silicons 01S calibration files!");
+    }
+    std::string line {};
+    while(std::getline(streamer, line, '\n'))
+    {
+        std::istringstream lineStreamer {line};
+        std::string value {};
+        int column {0};
+        std::string side {};
+        int index {}; double p0 {}; double p1 {}; double pec {}; double sigmaPec {};
+        while(std::getline(lineStreamer, value, '\t'))
+        {
+            switch (column)
+            {
+            case 0:
+                side = value;
+                break;
+            case 1:
+                index = std::stoi(value) - 1;//to work always with 0...5 values, indexes of vector
+                break;
+            case 2:
+                p0 = std::stod(value);
+                break;
+            case 3:
+                p1 = std::stod(value);
+                break;
+            case 4:
+                pec = std::stod(value);
+                break;
+            case 5:
+                sigmaPec = std::stod(value);
+                break;
+            default:
+                continue;
+            }
+            column++;
+        }
+        fSiliconSideCalibrations[side][index] = std::vector<double>{p0, p1, pec, sigmaPec};
+    }
 }
 
 void ActCalibrations::ReadSilicon01SCalibrations(std::string &coefsFile, std::string panel)

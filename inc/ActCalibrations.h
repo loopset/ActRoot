@@ -9,6 +9,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include <TCanvas.h>
@@ -23,6 +24,8 @@ class ActCalibrations
 	std::vector<std::vector<double>> fPadAlignCoefs;
 	std::map<std::string, std::vector<std::vector<double>>> fSilicon01SCalibrations {}; //not initialized in constructor
 	std::vector<std::vector<double>> fSiliconBeamCalibrations;
+
+    std::map<std::string, std::map<int, std::vector<double>>> fSiliconSideCalibrations {};
 
 	//store conversion to physical units
 	double fXYToLengthUnits { ActParameters::padSideLength};//should be constant!
@@ -44,8 +47,10 @@ class ActCalibrations
 
 	void ReadSilicon01SCalibrations (std::string& coefsFile, std::string panel);
 	void ReadSiliconBeamCalibrations(std::string& coefsFile);
+    void ReadSiliconSideCalibrations(const std::string& file);
 	const std::map<std::string, std::vector<std::vector<double>>>& GetSilicon01SCalibrations() const { return fSilicon01SCalibrations; }
 	const std::vector<std::vector<double>>& GetSiliconBeamCalibrations() const { return fSiliconBeamCalibrations; }
+    const std::map<std::string, std::map<int, std::vector<double>>>& GetSiliconSideCalibrations() const { return fSiliconSideCalibrations; }
 
 	//////////////////////////////////////////////////////////////////////////
 	//drift velocity and converto-to-physical-units coefs.
