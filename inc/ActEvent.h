@@ -51,7 +51,7 @@ class ActEvent
 	void ReadEvent(const ActCalibrations& calibrations, const MEvent* Evt, const MEventReduced* EvtRed, bool checkOverlap = true);
 	//two functions that split reading to our structures; ReadTriggers should be run before ReadHits
 	void ReadTriggersAndGates(const MEvent* Evt, const MEventReduced* EvtRed);
-	void ReadHits(const ActCalibrations& calibrations, const MEventReduced* EvtRed);
+	void ReadHits(const ActCalibrations& calibrations, const MEventReduced* EvtRed, bool alignPads = true);
 
 	//clean fHitArray from saturated pads
 	void CleanSaturatedHits(double chargeThreshold, int minDimZToDelete = 20);

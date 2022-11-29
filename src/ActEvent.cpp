@@ -153,10 +153,10 @@ void ActEvent::ReadTriggersAndGates(const MEvent *Evt, const MEventReduced *EvtR
 	}
 }
 
-void ActEvent::ReadHits(const ActCalibrations &calibrations, const MEventReduced *EvtRed)
+void ActEvent::ReadHits(const ActCalibrations &calibrations, const MEventReduced *EvtRed, bool alignPads)
 {
 	auto TABLE { calibrations.GetTABLE()};
-	auto PadAlignCoefs { calibrations.GetPadAlignCoefs()};
+	std::vector<std::vector<double>> PadAlignCoefs { (alignPads) ? calibrations.GetPadAlignCoefs() : std::vector<std::vector<double>>{} };
 
 	int hitID { 0};
 	//read to array of ActHits without considering rebinning by now
@@ -181,8 +181,17 @@ void ActEvent::ReadHits(const ActCalibrations &calibrations, const MEventReduced
 					if(z_position > 0.)
 					{
 						auto Qiaux { EvtRed->CoboAsad[it].peakheight[hit]};
-						auto Qiaux_align { PadAlignCoefs[where][0] + PadAlignCoefs[where][1] * Qiaux
-						 				   + PadAlignCoefs[where][2] * Qiaux * Qiaux};
+                        double Qiaux_align {};
+                        if(alignPads)
+                        {
+                            Qiaux_align = PadAlignCoefs[where][0] + PadAlignCoefs[where][1] * Qiaux
+                                + PadAlignCoefs[where][2] * Qiaux * Qiaux;
+                        }
+                        else
+                        {
+                            Qiaux_align = Qiaux;
+                        }
+                        
 						double xval { static_cast<double>(TABLE[4][where])};
 						double yval { static_cast<double>(TABLE[5][where])};
 
