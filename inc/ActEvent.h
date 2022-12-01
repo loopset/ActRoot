@@ -12,6 +12,7 @@
 
 #include <Math/Point3Dfwd.h>
 #include <Math/Vector3Dfwd.h>
+#include <utility>
 #include <vector>
 
 class ActEvent 
@@ -25,6 +26,7 @@ class ActEvent
 	std::vector<ActHit> fHitArray {};
 	Silicons fSilicons {};
 	TriggersAndGates fTriggers {};
+    EventInfo fEventInfo {};
 	std::vector<ActTrack> fTracks {};
 
 	private:
@@ -33,7 +35,9 @@ class ActEvent
 	std::vector<int> indexOfVoxelInHitArray {};
 	//auxiliar vector to CleanSaturatedHits
 	std::vector<std::vector<double>> chargeInPad {};
+    std::vector<std::vector<bool>> saturationMatrix {};
 	std::vector<int> globalIndexToReset {};
+    std::vector<std::pair<int, int>> pairToReset {};
 
 	public:
 	ActEvent();//not default bc we have to initialize voxel and indexOfVoxelInHitArray
@@ -52,9 +56,13 @@ class ActEvent
 	//two functions that split reading to our structures; ReadTriggers should be run before ReadHits
 	void ReadTriggersAndGates(const MEvent* Evt, const MEventReduced* EvtRed);
 	void ReadHits(const ActCalibrations& calibrations, const MEventReduced* EvtRed, bool alignPads = true);
-
+    
+    //count saturated pads
+    void CountSaturatedPads();
 	//clean fHitArray from saturated pads
 	void CleanSaturatedHits(double chargeThreshold, int minDimZToDelete = 20);
+    //compute charge average
+    void ComputeChargeAverage();
 	
 	//calibrate our data using ActCalibrations info
 	void CalibrateSilicons(const ActCalibrations& calibrations);
@@ -83,9 +91,16 @@ class ActEvent
 	TriggersAndGates& GetEventTriggers() { return fTriggers; }
 	const TriggersAndGates& GetConstEventTriggers() const { return fTriggers; }
 
+    EventInfo& GetEventInfo() { return fEventInfo; }
+    const EventInfo& GetConstEventInfo() const { return fEventInfo; }
+
 	//tracks
 	std::vector<ActTrack>& GetEventTracks() { return fTracks; }
 	const std::vector<ActTrack>& GetConstEventTracks() const { return fTracks; }
+
+    //saturation matrix
+    std::vector<std::vector<bool>>& GetSaturationMatrix() { return saturationMatrix; }
+    const std::vector<std::vector<bool>>& GetConstSaturationMatrix() const { return saturationMatrix; }
 
 	protected:
 	//splitted functions by types of silicons

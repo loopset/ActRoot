@@ -26,11 +26,12 @@ protected:
 	Double_t fCharge{-1};
 	XYZPoint fPosition{XYZPoint(0, 0, -1000)};
 	Int_t fHitID{-1}; //unique identifier of hit in chamber
+    bool fIsSaturated {false};
 
 	
 public://member functions
 	ActHit() = default;//default
-	ActHit(Int_t hitID, XYZPoint location, Double_t charge);
+	ActHit(Int_t hitID, XYZPoint location, Double_t charge, bool hasSaturated = false);
 	ActHit(const ActHit& ) = default; //copy constructor
 	ActHit(ActHit&& ) = default; //move constructor
 	ActHit &operator=(const ActHit& ) = default; // copy assignment
@@ -41,10 +42,12 @@ public://member functions
 	void SetCharge(Double_t charge){ fCharge = charge; }
 	void SetPosition(const XYZPoint& pos){ fPosition = pos; }
 	void SetHitID(Int_t hitID){ fHitID = hitID; }
+    void SetIsSaturated(bool val){ fIsSaturated = val; }
 
 	Int_t GetHitID() const { return fHitID; }
 	Double_t GetCharge() const { return fCharge; }
 	const XYZPoint& GetPosition() const { return fPosition; }
+    bool GetIsSaturated() const { return fIsSaturated; }
 	
 	//for ROOT class definiton
 	ClassDef(ActHit, 1);

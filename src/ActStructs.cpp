@@ -30,15 +30,15 @@ void Silicons::Print()
         int silIndex {0};
         for(const auto& val : vecRaw)
         {
-            std::cout<<"\tSide: "<<side<<" sil: "<<silIndex<<" RAW: "<<val<<" Channel CAL: "<<fSilSide0_cal.at(side).at(silIndex)<<" MeV"<<'\n';
+            std::cout<<"\tSide: "<<side<<" sil: "<<silIndex + 1<<" RAW: "<<val<<" Channel CAL: "<<fSilSide0_cal.at(side).at(silIndex)<<" MeV"<<'\n';
 
             silIndex++;
         }
     }
-    std::cout<<"----------"<<'\n';
+    std::cout<<"------------------------------------------------"<<'\n';
     std::cout<<"Left-> M: "<<fData.at("left").at("M")<<" P: "<<fData.at("left").at("P")<<" E: "<<fData.at("left").at("E")<<'\n';
 	std::cout<<"Right-> M: "<<fData.at("right").at("M")<<" P: "<<fData.at("right").at("P")<<" E: "<<fData.at("right").at("E")<<'\n';
-	std::cout<<"=========="<<RESET<<'\n';
+	std::cout<<"================================================"<<RESET<<'\n';
 }
 
 void TrackPhysics::Print(std::string mode)
@@ -56,6 +56,7 @@ void TrackPhysics::Print(std::string mode)
 	}
 	else if (mode == "preliminary")
 	{
+        std::cout<<" Number of saturated pads along track : "<<fSaturatedPads<<'\n';
 		std::cout<<" RP in pads/time buckets at X: "<<fReactionPoint.X()<<" Y: "<<fReactionPoint.Y()<<" Z: "<<fReactionPoint.Z()<<'\n';
 		std::cout<<" SP at "<<fSiliconPlace<<" with coordinates in pads/time buckets"<<'\n';
 		std::cout<<"  X: "<<fSiliconPoint.X()<<" Y: "<<fSiliconPoint.Y()<<" Z: "<<fSiliconPoint.Z()<<'\n';
@@ -65,6 +66,14 @@ void TrackPhysics::Print(std::string mode)
 		std::cout<<BOLDRED<<"Wrong string passed to TrackPhysics::Print -> Should be full or preliminary!"<<RESET<<'\n';
 	}
 	std::cout<<BOLDGREEN<<"============"<<RESET<<'\n'; 
+}
+
+void EventInfo::Print() const
+{
+    std::cout<<BOLDMAGENTA<<"===== Auxiliar Event Info ====="<<'\n';
+    std::cout<<"Number of saturated pads  : "<<fSaturatedPads<<'\n';
+    std::cout<<"Charge averaged over pads : "<<fAveragedCharge<<'\n';
+    std::cout<<BOLDMAGENTA<<"==============================="<<'\n';
 }
 
 void TrackPhysics::SetTrackFullPhysics(ActCalibrations& calibrations)

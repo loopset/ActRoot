@@ -10,8 +10,8 @@ ClassImp(ActHit);
 //constructor initialization
 //ActHit::ActHit(Int_t hitID) : ActHit(hitID, XYZPoint(0, 0, -1000), -1) {}
 
-ActHit::ActHit(Int_t hitID, XYZPoint location, Double_t charge)
-	: fHitID(hitID), fPosition(location), fCharge(charge)
+ActHit::ActHit(Int_t hitID, XYZPoint location, Double_t charge, bool hasSaturated)
+	: fHitID(hitID), fPosition(location), fCharge(charge), fIsSaturated(hasSaturated)
 {
 }
 

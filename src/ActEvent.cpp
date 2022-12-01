@@ -19,6 +19,7 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <sys/types.h>
 #include <utility>
 #include <vector>
 #include <math.h>
@@ -28,7 +29,8 @@
 ActEvent::ActEvent()
 	: voxel(ActParameters::g_NPADX *  ActParameters::g_NPADY *  ActParameters::g_NPADZ),
 	  indexOfVoxelInHitArray(ActParameters::g_NPADX * ActParameters::g_NPADY * ActParameters::g_NPADZ, -1),
-	  chargeInPad(ActParameters::g_NPADX, std::vector<double>(ActParameters::g_NPADY))
+	  chargeInPad(ActParameters::g_NPADX, std::vector<double>(ActParameters::g_NPADY)),
+      saturationMatrix(ActParameters::g_NPADX, std::vector<bool>(ActParameters::g_NPADY, false))
 {
 }
 
@@ -39,6 +41,7 @@ void ActEvent::Reset(std::string mode)
 		fEventID = -1;
 		fTriggers = {};
 		fSilicons = {};
+        fEventInfo = {};
 	}
 	else if(mode == "deep")//fully reset events which go through gates
 	{
@@ -46,12 +49,17 @@ void ActEvent::Reset(std::string mode)
 		fTriggers = {};
 		fHitArray.clear();
 		fSilicons = {};
-		for(auto indexToReset : globalIndexToReset)
+        fEventInfo = {};
+		for(const auto& indexToReset : globalIndexToReset)
 		{
 			voxel[indexToReset] = 0;
 			indexOfVoxelInHitArray[indexToReset] = -1;
 		}
 		globalIndexToReset.clear();
+        for(const auto& pair : pairToReset)
+        {
+            saturationMatrix.at(pair.first).at(pair.second) = false;
+        }
 		//voxel.assign(voxel.size(), 0);
 		//indexOfVoxelInHitArray.assign(indexOfVoxelInHitArray.size(), -1);
 		//reset of chargeInPad is done in its method! (so it is done only when method is called)
@@ -161,17 +169,26 @@ void ActEvent::ReadHits(const ActCalibrations &calibrations, const MEventReduced
 			as * ActParameters::g_NB_AGET * ActParameters::g_NB_CHANNEL +
 			ag * ActParameters::g_NB_CHANNEL +
 			ch ;
+             
 		// Read HITS in 3D!
 		if((co != 31) && (co != 16))
 		{
+            auto xval { static_cast<int>(TABLE[4][where])};
+            auto yval { static_cast<int>(TABLE[5][where])};
+            if(EvtRed->CoboAsad[it].hasSaturation)
+            {
+                saturationMatrix.at(xval).at(yval) = true;
+                pairToReset.push_back({xval, yval});
+            }
+            
 			for(int hit = 0; hit < EvtRed->CoboAsad[it].peakheight.size(); hit++)
 			{
-				if(TABLE[5][where] != -1)
-				{
-					double z_position { EvtRed->CoboAsad[it].peaktime[hit]};
-					if(z_position > 0.)
-					{
-						auto Qiaux { EvtRed->CoboAsad[it].peakheight[hit]};
+                if(TABLE[5][where] != -1)
+                {
+                    double z_position { EvtRed->CoboAsad[it].peaktime[hit]};
+                    if(z_position > 0.)
+                    {
+                        auto Qiaux { EvtRed->CoboAsad[it].peakheight[hit]};
                         double Qiaux_align {};
                         if(alignPads)
                         {
@@ -182,34 +199,32 @@ void ActEvent::ReadHits(const ActCalibrations &calibrations, const MEventReduced
                         {
                             Qiaux_align = Qiaux;
                         }
-                        
-						double xval { static_cast<double>(TABLE[4][where])};
-						double yval { static_cast<double>(TABLE[5][where])};
 
-						//HOPEFULLY, final version
-						ActHit candidate { hitID, XYZPoint(xval, yval, z_position), Qiaux_align};
-						//define a global index for 1D vectors voxel and indexOfHit
-						int globalIndex { static_cast<int>(xval + yval * ActParameters::g_NPADX
-										  + z_position * ActParameters::g_NPADX * ActParameters::g_NPADY)};
-						//increase count on voxel
-						voxel[globalIndex] += 1;
-						indexOfVoxelInHitArray[globalIndex] = hitID;
-						globalIndexToReset.push_back(globalIndex);
+                        //HOPEFULLY, final version
+                        ActHit candidate { hitID, XYZPoint(xval, yval, z_position), Qiaux_align};
+                        //define a global index for 1D vectors voxel and indexOfHit
+                        int globalIndex { static_cast<int>(xval + yval * ActParameters::g_NPADX
+                                                           + z_position * ActParameters::g_NPADX * ActParameters::g_NPADY)};
+                        //increase count on voxel
+                        voxel[globalIndex] += 1;
+                        indexOfVoxelInHitArray[globalIndex] = hitID;
+                        globalIndexToReset.push_back(globalIndex);
 						
-						if(voxel[globalIndex] > 1)//then we have to append charge to already existent hit
-						{
-							//std::cout<<BOLDCYAN<<"Found coincidence in fHitArray -> Resetting hit"<<RESET<<'\n';
-							//we already have the index in fHitArray!!!
-							auto alreadyCharge { fHitArray[indexOfVoxelInHitArray[globalIndex]].GetCharge()};
-							fHitArray[indexOfVoxelInHitArray[globalIndex]].SetCharge(alreadyCharge + Qiaux_align);
-						}
-						else//otherwise (by default, do not check)
-						{
-							fHitArray.push_back(candidate);
-							hitID++;
-						}
-					}
-				}
+                        if(voxel[globalIndex] > 1)//then we have to append charge to already existent hit
+                        {
+                            //std::cout<<BOLDCYAN<<"Found coincidence in fHitArray -> Resetting hit"<<RESET<<'\n';
+                            //we already have the index in fHitArray!!!
+                            auto alreadyCharge { fHitArray[indexOfVoxelInHitArray[globalIndex]].GetCharge()};
+                            fHitArray[indexOfVoxelInHitArray[globalIndex]].SetCharge(alreadyCharge + Qiaux_align);
+                        }
+                        else//otherwise (by default, do not check)
+                        {
+                            fHitArray.push_back(candidate);
+                            hitID++;
+                        }
+                    }
+                }
+				
 			}
 		}
 	}
@@ -230,10 +245,10 @@ void ActEvent::CalibrateSideSilicons(const ActCalibrations& calibrations)
             // std::cout<<"p1: "<<cal.at(side).at(silIndex + 1).at(1)<<'\n';
             // std::cout<<"Predefined value: "<<fSilicons.fSilSide0_cal.at(side).at(silIndex)<<'\n';
             // std::cout<<"Here"<<'\n';
-             // if(raw == 0.0 || raw == std::pow(2, 14) - 1)//saturated
-             // {
-             //     fSilicons.fSilSide0_cal.at(side).at(silIndex) = cal.at(side).at(silIndex).at(0) + cal.at(side).at(silIndex).at(1) * std::pow(2, 14) -1 ;
-             // }
+             if(raw == 0.0 || raw == std::pow(2, 14) - 1)//saturated
+             {
+                 fSilicons.fSilSide0_cal.at(side).at(silIndex) = cal.at(side).at(silIndex).at(0) + cal.at(side).at(silIndex).at(1) * std::pow(2, 14) -1 ;
+             }
              if(raw < cal.at(side).at(silIndex).at(2))//below is threshold
              {
                  fSilicons.fSilSide0_cal.at(side).at(silIndex) = 0.0;
@@ -265,7 +280,7 @@ void ActEvent::ReadSideSiliconsData()
             {
                 multiplicity += 1;
                 Eside = energy;
-                pad = silIndex;
+                pad = silIndex + 1;//add one to silicon number!
             }
 
             silIndex++;
@@ -485,10 +500,43 @@ void ActEvent::ReadSiliconsSData()
 
 void ActEvent::ReadSiliconsData()
 {
+    //NOT VALID FOR NFS EXPERIMENTS
 	//call subfunctions
 	ReadSilicons01FData();
 	ReadSiliconsSData();
 	//missing beam?
+}
+
+void ActEvent::CountSaturatedPads()
+{
+    int counter {0};
+    for(const auto& xVector : saturationMatrix)
+    {
+        for(const auto& val : xVector)
+        {
+            if(val)
+                counter++;
+        }
+    }
+    fEventInfo.fSaturatedPads = counter;
+}
+
+void ActEvent::ComputeChargeAverage()
+{
+    //global charge average
+    double chargeSum     {};
+    int numberOfPads     {};
+    for(const auto& hit : fHitArray)
+    {
+        double charge {hit.GetCharge()};
+        if(charge > 0.0)
+        {
+            chargeSum += charge;
+            numberOfPads++;
+        }
+    }
+    //return average
+    fEventInfo.fAveragedCharge =  chargeSum / numberOfPads;  
 }
 
 void ActEvent::CleanSaturatedHits(double chargeThreshold, int minDimZToDelete)

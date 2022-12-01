@@ -100,11 +100,13 @@ struct TrackPhysics
 	double fTrackLengthInGas {-1.};
 	double fTotalCharge {-1.};
 	double fAverageCharge {-1.};
+    double fAverageChargeInChamber {-1};
 	std::string fReactionPlace {""};
 	//std::string fBoundaryPlace {""};
 	std::string fSiliconPlace {""};
 	bool fRPInChamber {false};
 	bool fSPInArray   {false};
+    int fSaturatedPads {-1};
 	
 	TrackPhysics() = default;
 	~TrackPhysics() = default;
@@ -128,6 +130,17 @@ private:
 		auto interesection { Pt + (((Pp - Pt).Dot(vp)) / (vt.Dot(vp))) * vt};
 		return interesection;
 	}
+};
+
+struct EventInfo
+{
+    int fSaturatedPads {};
+    double fAveragedCharge {};
+
+    EventInfo() = default;
+    ~EventInfo() = default;
+
+    void Print() const;
 };
 
 #endif //ACTSTRUCTS_H

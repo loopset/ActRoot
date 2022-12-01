@@ -2,6 +2,7 @@
 
 #include "ActParameters.h"
 #include "ActStructs.h"
+#include "TString.h"
 
 #include <TH2.h>
 #include <TCanvas.h>
@@ -160,27 +161,56 @@ void ActCalibrations::InitDriftVelocityHist()
 
 void ActCalibrations::FillDriftVelocityHist(std::vector<TrackPhysics>& tracks, Silicons& silicons)
 {
-	//if multiplicity in silicon is > 1, we cannot guarantee that hit silicon is number 4, so we skip event
-	if(silicons.fData["S"]["M"] > 1)
-	{
-		//std::cout<<BOLDRED<<"Drift: M > 1"<<RESET<<'\n';
-		return;
-	}
-	//this algorithm is designed for silicon 4!
-	if(silicons.fData["S"]["P"] != 4)
-	{
-		return;
-	}
-	for(auto& track : tracks)
-	{
-		//silicon 4 is placed at left in E796
-		if(track.fSiliconPlace == ActParameters::trackHitsSiliconSideLeft)
-		{
+    int silIndex {2};
+    auto sideFinder = [&](const TrackPhysics& tr)
+    {
+        auto silPlace {TString(tr.fSiliconPlace)};
+        std::string side {};
+        if(silPlace.Contains("left"))
+            side = "left";
+        else if(silPlace.Contains("right"))
+            side = "right";
+        else
+            side = "none";
+        return side;
+    };
+    for(const auto& track : tracks)
+    {
+        auto side { sideFinder(track)};
+        if(side == "none")
+            continue;
+        //check multiplicity
+        if(silicons.fData.at(side).at("M") > 1)
+            continue;;
+        //check silicon number matches desired by us
+        if(silicons.fData.at(side).at("P") != silIndex)
+            continue;;
+
+        //otherwise, fill
+        fHistDrift->Fill(track.fSiliconPoint.X(), track.fSiliconPoint.Z(),
+							 silicons.fData.at(side).at("E"));
+    }
+	// //if multiplicity in silicon is > 1, we cannot guarantee that hit silicon is the chosen, so we skip event
+	// if(silicons.fData.at("S").at("M") > 1)
+	// {
+	// 	//std::cout<<BOLDRED<<"Drift: M > 1"<<RESET<<'\n';
+	// 	return;
+	// }
+	// //this algorithm is designed for silicon 4!
+	// if(silicons.fData["S"]["P"] != 4)
+	// {
+	// 	return;
+	// }
+	// for(auto& track : tracks)
+	// {
+	// 	//silicon 4 is placed at left in E796
+	// 	if(track.fSiliconPlace == ActParameters::trackHitsSiliconSideLeft)
+	// 	{
 		
-			fHistDrift->Fill(track.fSiliconPoint.X(), track.fSiliconPoint.Z(),
-							 silicons.fData["S"]["ES"]);//fill with energy
-		}
-	}
+	// 		fHistDrift->Fill(track.fSiliconPoint.X(), track.fSiliconPoint.Z(),
+	// 						 silicons.fData["S"]["ES"]);//fill with energy
+	// 	}
+	// }
 	
 }
 

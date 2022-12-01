@@ -4,6 +4,7 @@
 #include "ActCalibrations.h"
 #include "ActHit.h"
 #include "ActClusteringResults.h"
+#include "ActParameters.h"
 #include "ActTrack.h"
 #include "ActStructs.h"
 
@@ -63,16 +64,16 @@ class ActDraw
 	std::unique_ptr<TH2D> fHistVisualProfile;
 
 	//binning and size of histograms
-	Int_t fNbinsX { 128};
-	Int_t fNbinsY { 128};
-	Int_t fNbinsZ { 512};
+	Int_t fNbinsX { ActParameters::g_NPADX};
+	Int_t fNbinsY { ActParameters::g_NPADY};
+	Int_t fNbinsZ { ActParameters::g_NPADZ};
 
 	Double_t fMinX { 0.};
-	Double_t fMaxX { 128.};
-	Double_t fMinY { 0.};
-	Double_t fMaxY { 128.};
+	Double_t fMaxX { ActParameters::g_NPADX};
+	Double_t fMinY { 0};
+	Double_t fMaxY { ActParameters::g_NPADY};
 	Double_t fMinZ { 0.};
-	Double_t fMaxZ { 512.};
+	Double_t fMaxZ { ActParameters::g_NPADZ};
 
 	//Plotting options
 	//Double_t fOverrideHits { 15.};//value for a hit assigned to multiple tracks

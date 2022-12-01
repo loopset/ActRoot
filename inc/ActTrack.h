@@ -71,26 +71,19 @@ public:
 	void SetSPIsInArray(Bool_t good){ fSPInArray = good; }
 	
 	//setters for physical info
+    //inner functions to set values
+	//two for raw units, if we dont have drift coefs available
 	void SetMinimalTrackPhysics();
+    void CalculateSiliconPointRawUnits();
+    void CalculateReactionPointRawUnits();
+    void CalculateTrackTotalCharge();
 	void SetTrackPhysics(TrackPhysics& info){ fTrackPhysics = info; }
+    void CalculateNumberOfSaturatedPads(const std::vector<std::vector<bool>> saturationMatrix);
 	//setter with self info
 	//void SetTrackPhysics(ActCalibrations& calibrations);
 
 private:
-	//inner functions to set values
-	//two for raw units, if we dont have drift coefs available
-	void CalculateSiliconPointRawUnits();
-	void CalculateReactionPointRawUnits();
-	//these ones work in physical units (mm or pad units)
-	//void CalculateThetaTrack(ActCalibrations& calibrations);
-	//void CalculatePhiTrack();
-	//void CalculateReactionPoint(ActCalibrations& calibrations);
-	//void CalculateSiliconPoint(ActCalibrations& calibrations);
-	//void CalculateTrackLength();
-	void CalculateTrackTotalCharge();
-	//void CalculateTrackAverageCharge();
-
-	inline XYZPoint IntersectionTrackPlane(XYZPoint Pp, XYZVector vp, ActTrack& track)
+    inline XYZPoint IntersectionTrackPlane(XYZPoint Pp, XYZVector vp, ActTrack& track)
 	{
 		auto Pt { track.GetLine().GetPoint()};//point of plane
 		auto vt { track.GetLine().GetDirection().Unit()};//vt is a normal vector to plane

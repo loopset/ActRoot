@@ -2,7 +2,6 @@
 #define ACTPARAMETERS_H
 
 //Colored output
-#include <map>
 #define RESET   "\033[0m"
 #define BLACK   "\033[30m"      /* Black */
 #define RED     "\033[31m"      /* Red */
@@ -27,15 +26,17 @@
 #include <TString.h>
 #include <string>
 #include <vector>
+#include "Math/Point3D.h"
 #include <map>
 
 namespace ActParameters
 {
+    using XYZPoint = ROOT::Math::XYZPoint;
 	//////////////////////////////////////////////
 	///// PAD SIZES AND READ COBO VARIABLES //////
 	//pad size
 	inline constexpr int g_NPADX { 64};
-	inline constexpr int g_NPADY { 64};
+	inline constexpr int g_NPADY { 32};
 	inline constexpr int g_NPADZ { 512};
 
 	//pad side in mm
@@ -61,6 +62,14 @@ namespace ActParameters
     inline constexpr int NSilFront0{0};//front layer 1
     inline constexpr int NSilFront1{0};//2nd
     inline constexpr int NSilBeam  {0};//beam silicons
+
+    ///////// FIND PHYSICS OF TRACKS ////////////
+	//number of pads above chamber boundaries where silicons are placed
+    inline constexpr double NPadsSideLeft {7.0 / padSideLength};//7 cm to pads
+    inline constexpr double NPadsSideRight{7.0 / padSideLength};
+
+    inline const std::map<std::string, XYZPoint> siliconsPlacement {{"left", XYZPoint(0., ActParameters::g_NPADY + ActParameters::NPadsSideLeft, 0.)},
+                                                                     {"right", XYZPoint(0., -ActParameters::NPadsSideRight, 0.)},};
 
 	////////////////////////////////////////////
 	///// CALIBRATION FILES PARAMETERS ////////
@@ -95,13 +104,11 @@ namespace ActParameters
 	//////////////////////////////////////////////
 
 	/////////////////////////////////////////////
-	///////// FIND PHYSICS OF TRACKS ////////////
-	//number of pads above chamber boundaries where silicons are placed
-	inline constexpr double g_NPADSISIDE { 42.5}; //8.5 cm
+    inline constexpr double g_NPADSISIDE { 42.5}; //8.5 cm
 	inline constexpr double g_NPADSSIFRONT { 50}; //10 cm
 
 	//[temporary] position of beam plane in Y
-	inline constexpr double beamPlaneY { 64.};// = g_NPADY / 2
+	inline constexpr double beamPlaneY { static_cast<double>(g_NPADY) / 2};// = g_NPADY / 2
 	
 	//strings passed when classifying ActTracks
 	inline const std::string trackChamber { "chamber"};

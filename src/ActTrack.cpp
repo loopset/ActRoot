@@ -102,10 +102,6 @@ void ActTrack::CalculateReactionPointRawUnits()
 void ActTrack::CalculateSiliconPointRawUnits()
 {
 	//computute intersection point with silicons
-	std::map<std::string, XYZPoint> siliconsPlacement = { {"S_left", XYZPoint(0., ActParameters::g_NPADY + ActParameters::g_NPADSISIDE, 0.)},
-														  {"S_right", XYZPoint(0., -ActParameters::g_NPADSISIDE, 0.)},
-														  {"F", XYZPoint(ActParameters::g_NPADX + ActParameters::g_NPADSSIFRONT, 0., 0.)}};
-
 	//get correct direction taking into account reaction point and gravity center
 	auto direction { fLine.GetPoint() - //fLine.GetPoint is intended to represent gravitypoint
 					 fTrackPhysics.fReactionPoint};
@@ -116,13 +112,13 @@ void ActTrack::CalculateSiliconPointRawUnits()
 	if(direction.Y() >= 0)//left silicons
 	{
 		label = ActParameters::trackHitsSiliconSideLeft;
-		intersectionY = IntersectionTrackPlane(siliconsPlacement["S_left"], XYZVector(0., 1., 0.), *this);
+		intersectionY = IntersectionTrackPlane(ActParameters::siliconsPlacement.at("left"), XYZVector(0., 1., 0.), *this);
 		
 	}
 	else
 	{
 		label = ActParameters::trackHitsSiliconSideRight;
-		intersectionY = IntersectionTrackPlane(siliconsPlacement["S_right"], XYZVector(0., 1., 0.), *this);
+		intersectionY = IntersectionTrackPlane(ActParameters::siliconsPlacement.at("right"), XYZVector(0., 1., 0.), *this);
 	}
 	if(IsInSiliconPlane(intersectionY, "S"))
 	{
@@ -131,31 +127,31 @@ void ActTrack::CalculateSiliconPointRawUnits()
 		fSPInArray = true;
 		fTrackPhysics.fSPInArray = true;
 	}
-	else
+	else//no front silicons in NFS
 	{
-		//check FRONT
-		XYZPoint intersectionX {};
-		if(direction.X() >= 0)
-		{
-			label = ActParameters::trackHitsSiliconFront;
-			intersectionX = IntersectionTrackPlane(siliconsPlacement["F"], XYZVector(1., 0., 0.), *this);
-		}
-		else
-		{
-			intersectionX = XYZPoint(-999, -999, -999);
-		}
-		if(IsInSiliconPlane(intersectionX, "F"))
-		{
-			fTrackPhysics.fSiliconPlace = label;
-			fTrackPhysics.fSiliconPoint = intersectionX;
-			fSPInArray = true;
-			fTrackPhysics.fSPInArray = true;
+		// //check FRONT
+		// XYZPoint intersectionX {};
+		// if(direction.X() >= 0)
+		// {
+		// 	label = ActParameters::trackHitsSiliconFront;
+		// 	intersectionX = IntersectionTrackPlane(siliconsPlacement["F"], XYZVector(1., 0., 0.), *this);
+		// }
+		// else
+		// {
+		// 	intersectionX = XYZPoint(-999, -999, -999);
+		// }
+		// if(IsInSiliconPlane(intersectionX, "F"))
+		// {
+		// 	fTrackPhysics.fSiliconPlace = label;
+		// 	fTrackPhysics.fSiliconPoint = intersectionX;
+		// 	fSPInArray = true;
+		// 	fTrackPhysics.fSPInArray = true;
 			
-		}
-		else
-		{
-			fTrackPhysics.fSiliconPlace = ActParameters::trackHitsSiliconOutside;
-		}
+		// }
+		// else
+		// {
+        fTrackPhysics.fSiliconPlace = ActParameters::trackHitsSiliconOutside;
+        // }
 	}
 }
 
@@ -167,7 +163,20 @@ void ActTrack::CalculateTrackTotalCharge()
 									   0.,
 									   [](double sum, const ActHit& hit){return hit.GetCharge() + sum;});
 
-	fTrackPhysics.fTotalCharge = totalCharge;
+	fTrackPhysics.fTotalCharge            = totalCharge;
+    fTrackPhysics.fAverageChargeInChamber = totalCharge / fHitArray.size();
+}
+
+void ActTrack::CalculateNumberOfSaturatedPads(const std::vector<std::vector<bool>> saturationMatrix)
+{
+    int counter {0};
+    for(const auto& hit : fHitArray)
+    {
+        auto position { hit.GetPosition()};
+        if(saturationMatrix.at(static_cast<int>(position.X())).at(static_cast<int>(position.Y())))
+            counter++;
+    }
+    fTrackPhysics.fSaturatedPads = counter;
 }
 
 //2nd, set physical values

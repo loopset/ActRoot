@@ -37,6 +37,7 @@
 #pragma link C++ struct Silicons +;
 #pragma link C++ struct TriggersAndGates +;
 #pragma link C++ struct TrackPhysics +;
+#pragma link C++ struct EventInfo + ;
 #pragma link C++ class std::vector<TrackPhysics>+;//in order to generate I/O streamer to write std::vector of TrackPhysics
 
 #pragma link C++ class ActEvent +;
