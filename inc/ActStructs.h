@@ -102,10 +102,13 @@ struct TrackPhysics
 	double fAverageCharge {-1.};
     double fAverageChargeInChamber {-1};
 	std::string fReactionPlace {""};
-	//std::string fBoundaryPlace {""};
+    XYZPoint  fGravityPoint {-1, -1, -1};
+	XYZVector fUnitaryDirection {-1, -1, -1};
 	std::string fSiliconPlace {""};
+    int fSiliconIndex {-1};
 	bool fRPInChamber {false};
 	bool fSPInArray   {false};
+    bool fBPInChamber {false};
     int fSaturatedPads {-1};
 	
 	TrackPhysics() = default;

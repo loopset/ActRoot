@@ -61,8 +61,8 @@ void ActDraw::Init()
 	fCanvAllcluster->Divide(3, 2);
 	
 	fHistPadAllcluster = std::make_unique<TH2I>("fHistPadAllcluster", "Tracks in pad;X [pad];Y [pad]", fNbinsX, fMinX, fMaxX, fNbinsY, fMinY, fMaxY);
-	fHistFrontAllcluster = std::make_unique<TH2I>("fHistFrontAllcluster", "Tracks in front;X [pad];Z [time bucket]", fNbinsY, fMinY, fMaxY, fNbinsZ, fMinZ, fMaxZ);
-	fHistProfileAllcluster = std::make_unique<TH2I>("fHistProfileAllcluster", "Tracks in profile;Y [pad];Z [time bucket]", fNbinsX, fMinX, fMaxX, fNbinsZ, fMinZ, fMaxZ);
+	fHistFrontAllcluster = std::make_unique<TH2I>("fHistFrontAllcluster", "Tracks in front;Y [pad];Z [time bucket]", fNbinsY, fMinY, fMaxY, fNbinsZ, fMinZ, fMaxZ);
+	fHistProfileAllcluster = std::make_unique<TH2I>("fHistProfileAllcluster", "Tracks in profile;X [pad];Z [time bucket]", fNbinsX, fMinX, fMaxX, fNbinsZ, fMinZ, fMaxZ);
 
 
 	////////3D results

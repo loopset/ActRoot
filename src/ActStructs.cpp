@@ -60,6 +60,9 @@ void TrackPhysics::Print(std::string mode)
 		std::cout<<" RP in pads/time buckets at X: "<<fReactionPoint.X()<<" Y: "<<fReactionPoint.Y()<<" Z: "<<fReactionPoint.Z()<<'\n';
 		std::cout<<" SP at "<<fSiliconPlace<<" with coordinates in pads/time buckets"<<'\n';
 		std::cout<<"  X: "<<fSiliconPoint.X()<<" Y: "<<fSiliconPoint.Y()<<" Z: "<<fSiliconPoint.Z()<<'\n';
+        std::cout<<" BP at "<<fSiliconPlace<<" with coordinates in pads/time buckets"<<'\n';
+		std::cout<<"  X: "<<fBoundaryPoint.X()<<" Y: "<<fBoundaryPoint.Y()<<" Z: "<<fBoundaryPoint.Z()<<'\n';
+        std::cout<<"  and is in chamber ? "<<fBPInChamber<<'\n';
 	}
 	else
 	{

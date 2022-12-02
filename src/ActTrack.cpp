@@ -5,6 +5,8 @@
 #include "ActHit.h"
 #include "ActLine.h"
 #include "ActStructs.h"
+#include "TMathBase.h"
+#include "TUrl.h"
 
 
 #include <Rtypes.h>
@@ -18,6 +20,7 @@
 #include <map>
 #include <memory>
 #include <numeric>
+#include <stdexcept>
 #include <string>
 #include <type_traits>
 #include <utility>
@@ -155,6 +158,107 @@ void ActTrack::CalculateSiliconPointRawUnits()
 	}
 }
 
+void ActTrack::CalculateSiliconPointRawUnits(const std::string& side, int silIndex)
+{
+     auto point {fLine.GetPoint()};
+    XYZPoint goodSigns {
+            ActParameters::siliconDirection.at(side).at(silIndex).first - point.X(),
+            ActParameters::siliconsPlacement.at(side).Y()               - point.Y(),
+            ActParameters::siliconDirection.at(side).at(silIndex).second- point.Z()
+        };
+
+    auto oldDirection {fLine.GetDirection()};
+    XYZVector newDirection {
+        TMath::Sign(oldDirection.X(), goodSigns.X()),
+        TMath::Sign(oldDirection.Y(), goodSigns.Y()),
+        TMath::Sign(oldDirection.Z(), goodSigns.Z()),
+    };
+
+    //write correct value to struct, since we dont have the VERTEX
+    fTrackPhysics.fGravityPoint     = fLine.GetPoint();
+    fTrackPhysics.fUnitaryDirection = newDirection.Unit();
+    //finally compute intersection with this new direction
+	//SIDES
+	XYZPoint intersection {};
+    intersection = IntersectionTrackPlane(ActParameters::siliconsPlacement.at(side), XYZVector(0., 1., 0.), fTrackPhysics.fGravityPoint, fTrackPhysics.fUnitaryDirection);
+   
+    fTrackPhysics.fSiliconPlace = side;
+    fTrackPhysics.fSiliconPoint = intersection;
+    fTrackPhysics.fSiliconIndex = silIndex; 
+}
+
+void ActTrack::CalculateBoundaryPointRawUnits()
+{
+    auto lambda = [&](const XYZPoint& Pp, const XYZVector& vp)
+    {
+        auto Pt { fTrackPhysics.fGravityPoint};
+        auto vt { fTrackPhysics.fUnitaryDirection};
+        auto interesection { Pt + (((Pp - Pt).Dot(vp)) / (vt.Dot(vp))) * vt};
+		return interesection;
+    };
+
+    if(fTrackPhysics.fSiliconPlace == ActParameters::trackHitsSiliconSideLeft)
+	{
+		XYZPoint planePoint { 0., ActParameters::g_NPADY, 0.};
+		XYZVector normalVector {0., 1., 0.};
+		fTrackPhysics.fBoundaryPoint = lambda(planePoint, normalVector);
+	}
+	else
+	{
+		XYZPoint planePoint { 0., 0., 0.};
+		XYZVector normalVector {0., -1., 0.};
+		fTrackPhysics.fBoundaryPoint = lambda(planePoint, normalVector);
+	}
+    if(IsInChamber(fTrackPhysics.fBoundaryPoint))
+    {
+        fTrackPhysics.fBPInChamber = true;
+    }
+
+}
+
+void ActTrack::ComputeChargeAndLengthInRegion(double yWidth,
+                                              const std::vector<std::vector<double>>& pad,
+                                              double& length,
+                                              double& charge)
+{
+    auto lambda = [&](const XYZPoint& Pp, const XYZVector& vp)
+    {
+        auto Pt { fTrackPhysics.fGravityPoint};
+        auto vt { fTrackPhysics.fUnitaryDirection};
+        auto interesection { Pt + (((Pp - Pt).Dot(vp)) / (vt.Dot(vp))) * vt};
+		return interesection;
+    };
+    
+    auto side { fTrackPhysics.fSiliconPlace};
+    int yBP {};
+    int yThreshold {};
+    if(side == ActParameters::trackHitsSiliconSideLeft)
+    {
+        yBP        = ActParameters::g_NPADY;
+        yThreshold = yBP - yWidth;
+    }
+    else
+    {
+        yBP         = 0;
+        yThreshold = yBP + yWidth;
+    }
+    XYZPoint planePoint { 0., yThreshold, 0.};
+    XYZVector normalVector {0., 1., 0.};
+    XYZPoint innerPoint { lambda(planePoint, normalVector)};
+    double   lengthInRegion { TMath::Sqrt((innerPoint - fTrackPhysics.fBoundaryPoint).Mag2())};
+    double chargeInRegion {};
+    for(int y = 0; y < ActParameters::g_NPADY; y++)
+    {
+        if(std::abs(y - yBP) > yWidth)
+            continue;
+        for(int x = 0; x < ActParameters::g_NPADX; x++)
+        {
+            chargeInRegion += pad[x][y];
+        }
+    }
+    length = lengthInRegion;
+    charge = chargeInRegion;
+}
 
 void ActTrack::CalculateTrackTotalCharge()
 {

@@ -29,7 +29,7 @@
 ActEvent::ActEvent()
 	: voxel(ActParameters::g_NPADX *  ActParameters::g_NPADY *  ActParameters::g_NPADZ),
 	  indexOfVoxelInHitArray(ActParameters::g_NPADX * ActParameters::g_NPADY * ActParameters::g_NPADZ, -1),
-	  chargeInPad(ActParameters::g_NPADX, std::vector<double>(ActParameters::g_NPADY)),
+	  chargeInPad(ActParameters::g_NPADX, std::vector<double>(ActParameters::g_NPADY, -1.)),
       saturationMatrix(ActParameters::g_NPADX, std::vector<bool>(ActParameters::g_NPADY, false))
 {
 }
@@ -56,10 +56,12 @@ void ActEvent::Reset(std::string mode)
 			indexOfVoxelInHitArray[indexToReset] = -1;
 		}
 		globalIndexToReset.clear();
-        for(const auto& pair : pairToReset)
+        for(const auto& pair : padToReset)
         {
             saturationMatrix.at(pair.first).at(pair.second) = false;
+            chargeInPad.at(pair.first).at(pair.second)      = -1.;
         }
+        padToReset.clear();
 		//voxel.assign(voxel.size(), 0);
 		//indexOfVoxelInHitArray.assign(indexOfVoxelInHitArray.size(), -1);
 		//reset of chargeInPad is done in its method! (so it is done only when method is called)
@@ -178,7 +180,7 @@ void ActEvent::ReadHits(const ActCalibrations &calibrations, const MEventReduced
             if(EvtRed->CoboAsad[it].hasSaturation)
             {
                 saturationMatrix.at(xval).at(yval) = true;
-                pairToReset.push_back({xval, yval});
+                padToReset.push_back({xval, yval});
             }
             
 			for(int hit = 0; hit < EvtRed->CoboAsad[it].peakheight.size(); hit++)
@@ -199,7 +201,9 @@ void ActEvent::ReadHits(const ActCalibrations &calibrations, const MEventReduced
                         {
                             Qiaux_align = Qiaux;
                         }
-
+                        //add to pad matrix
+                        chargeInPad.at(xval).at(yval) += Qiaux_align;
+                        
                         //HOPEFULLY, final version
                         ActHit candidate { hitID, XYZPoint(xval, yval, z_position), Qiaux_align};
                         //define a global index for 1D vectors voxel and indexOfHit

@@ -37,7 +37,7 @@ class ActEvent
 	std::vector<std::vector<double>> chargeInPad {};
     std::vector<std::vector<bool>> saturationMatrix {};
 	std::vector<int> globalIndexToReset {};
-    std::vector<std::pair<int, int>> pairToReset {};
+    std::vector<std::pair<int, int>> padToReset {};
 
 	public:
 	ActEvent();//not default bc we have to initialize voxel and indexOfVoxelInHitArray
@@ -101,6 +101,9 @@ class ActEvent
     //saturation matrix
     std::vector<std::vector<bool>>& GetSaturationMatrix() { return saturationMatrix; }
     const std::vector<std::vector<bool>>& GetConstSaturationMatrix() const { return saturationMatrix; }
+     //pad matrix
+    std::vector<std::vector<double>>& GetPadMatrix() { return chargeInPad; }
+    const std::vector<std::vector<double>>& GetConstPadMatrix() const { return chargeInPad; }
 
 	protected:
 	//splitted functions by types of silicons

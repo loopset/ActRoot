@@ -75,10 +75,16 @@ public:
 	//two for raw units, if we dont have drift coefs available
 	void SetMinimalTrackPhysics();
     void CalculateSiliconPointRawUnits();
+    void CalculateSiliconPointRawUnits(const std::string& side, int silIndex);
     void CalculateReactionPointRawUnits();
     void CalculateTrackTotalCharge();
 	void SetTrackPhysics(TrackPhysics& info){ fTrackPhysics = info; }
     void CalculateNumberOfSaturatedPads(const std::vector<std::vector<bool>> saturationMatrix);
+    void CalculateBoundaryPointRawUnits();
+    void ComputeChargeAndLengthInRegion(double yWidth,
+                                        const std::vector<std::vector<double>>& pad,
+                                        double& length,
+                                        double& charge);
 	//setter with self info
 	//void SetTrackPhysics(ActCalibrations& calibrations);
 
@@ -87,6 +93,14 @@ private:
 	{
 		auto Pt { track.GetLine().GetPoint()};//point of plane
 		auto vt { track.GetLine().GetDirection().Unit()};//vt is a normal vector to plane
+		//following https://math.stackexchange.com/questions/3412199/how-to-calculate-the-intersection-point-of-a-vector-and-a-plane-defined-as-a-poi
+		auto interesection { Pt + (((Pp - Pt).Dot(vp)) / (vt.Dot(vp))) * vt};
+		return interesection;
+	}
+    inline XYZPoint IntersectionTrackPlane(XYZPoint Pp, XYZVector vp, XYZPoint Tp, XYZVector Tv)
+	{
+		auto Pt { Tp};//point of plane
+		auto vt { Tv};//vt is a normal vector to plane
 		//following https://math.stackexchange.com/questions/3412199/how-to-calculate-the-intersection-point-of-a-vector-and-a-plane-defined-as-a-poi
 		auto interesection { Pt + (((Pp - Pt).Dot(vp)) / (vt.Dot(vp))) * vt};
 		return interesection;
