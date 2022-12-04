@@ -58,10 +58,14 @@ void ActEvent::Reset(std::string mode)
 		globalIndexToReset.clear();
         for(const auto& pair : padToReset)
         {
-            saturationMatrix.at(pair.first).at(pair.second) = false;
             chargeInPad.at(pair.first).at(pair.second)      = -1.;
         }
         padToReset.clear();
+        for(const auto& pair : saturationToReset)
+        {
+            saturationMatrix.at(pair.first).at(pair.second) = false;
+        }
+        saturationToReset.clear();
 		//voxel.assign(voxel.size(), 0);
 		//indexOfVoxelInHitArray.assign(indexOfVoxelInHitArray.size(), -1);
 		//reset of chargeInPad is done in its method! (so it is done only when method is called)
@@ -180,9 +184,9 @@ void ActEvent::ReadHits(const ActCalibrations &calibrations, const MEventReduced
             if(EvtRed->CoboAsad[it].hasSaturation)
             {
                 saturationMatrix.at(xval).at(yval) = true;
-                padToReset.push_back({xval, yval});
+                saturationToReset.push_back({xval, yval});
             }
-            
+            padToReset.push_back({xval, yval});//outside of inner for loop to avoid repetitions
 			for(int hit = 0; hit < EvtRed->CoboAsad[it].peakheight.size(); hit++)
 			{
                 if(TABLE[5][where] != -1)

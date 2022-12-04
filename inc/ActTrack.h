@@ -74,6 +74,10 @@ public:
     //inner functions to set values
 	//two for raw units, if we dont have drift coefs available
 	void SetMinimalTrackPhysics();
+    void SetMinimalTrackInfoNFS(const std::string& side,
+                                int silIndex,
+                                int yWidth,
+                                const std::vector<std::vector<double>> &pad);
     void CalculateSiliconPointRawUnits();
     void CalculateSiliconPointRawUnits(const std::string& side, int silIndex);
     void CalculateReactionPointRawUnits();
@@ -81,7 +85,9 @@ public:
 	void SetTrackPhysics(TrackPhysics& info){ fTrackPhysics = info; }
     void CalculateNumberOfSaturatedPads(const std::vector<std::vector<bool>> saturationMatrix);
     void CalculateBoundaryPointRawUnits();
-    void ComputeChargeAndLengthInRegion(double yWidth,
+    void CalculateInnerPointRawUnits(int yWidth,
+                                     const std::vector<std::vector<double>>& pad);
+    void ComputeChargeAndLengthInRegion(int yWidth,
                                         const std::vector<std::vector<double>>& pad,
                                         double& length,
                                         double& charge);

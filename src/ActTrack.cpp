@@ -67,6 +67,19 @@ void ActTrack::SetMinimalTrackPhysics()
 	
 }
 
+void ActTrack::SetMinimalTrackInfoNFS(const std::string& side,
+                                      int silIndex,
+                                      int yWidth,
+                                      const std::vector<std::vector<double>> &pad)
+{
+    fTrackPhysics.fTrackID = fTrackID;
+    CalculateSiliconPointRawUnits(side, silIndex);
+    CalculateBoundaryPointRawUnits();
+    if(!fTrackPhysics.fBPInChamber)
+        return;
+    CalculateInnerPointRawUnits(yWidth, pad);
+}
+
 void ActTrack::CalculateReactionPointRawUnits()
 {
 	XYZPoint pointPlane { 0., ActParameters::beamPlaneY, 0.};
@@ -160,12 +173,12 @@ void ActTrack::CalculateSiliconPointRawUnits()
 
 void ActTrack::CalculateSiliconPointRawUnits(const std::string& side, int silIndex)
 {
-     auto point {fLine.GetPoint()};
+    auto point {fLine.GetPoint()};
     XYZPoint goodSigns {
-            ActParameters::siliconDirection.at(side).at(silIndex).first - point.X(),
-            ActParameters::siliconsPlacement.at(side).Y()               - point.Y(),
-            ActParameters::siliconDirection.at(side).at(silIndex).second- point.Z()
-        };
+        ActParameters::siliconDirection.at(side).at(silIndex).first - point.X(),
+        ActParameters::siliconsPlacement.at(side).Y()               - point.Y(),
+        ActParameters::siliconDirection.at(side).at(silIndex).second- point.Z()
+    };
 
     auto oldDirection {fLine.GetDirection()};
     XYZVector newDirection {
@@ -216,19 +229,8 @@ void ActTrack::CalculateBoundaryPointRawUnits()
 
 }
 
-void ActTrack::ComputeChargeAndLengthInRegion(double yWidth,
-                                              const std::vector<std::vector<double>>& pad,
-                                              double& length,
-                                              double& charge)
+void ActTrack::CalculateInnerPointRawUnits(int yWidth, const std::vector<std::vector<double>> &pad)
 {
-    auto lambda = [&](const XYZPoint& Pp, const XYZVector& vp)
-    {
-        auto Pt { fTrackPhysics.fGravityPoint};
-        auto vt { fTrackPhysics.fUnitaryDirection};
-        auto interesection { Pt + (((Pp - Pt).Dot(vp)) / (vt.Dot(vp))) * vt};
-		return interesection;
-    };
-    
     auto side { fTrackPhysics.fSiliconPlace};
     int yBP {};
     int yThreshold {};
@@ -237,15 +239,16 @@ void ActTrack::ComputeChargeAndLengthInRegion(double yWidth,
         yBP        = ActParameters::g_NPADY;
         yThreshold = yBP - yWidth;
     }
-    else
+    else//right
     {
         yBP         = 0;
         yThreshold = yBP + yWidth;
     }
-    XYZPoint planePoint { 0., yThreshold, 0.};
+    XYZPoint planePoint { 0., static_cast<double>(yThreshold), 0.};
     XYZVector normalVector {0., 1., 0.};
-    XYZPoint innerPoint { lambda(planePoint, normalVector)};
-    double   lengthInRegion { TMath::Sqrt((innerPoint - fTrackPhysics.fBoundaryPoint).Mag2())};
+    XYZPoint innerPoint { IntersectionTrackPlane(planePoint, normalVector, fTrackPhysics.fGravityPoint, fTrackPhysics.fUnitaryDirection)};
+    //set inner point
+    fTrackPhysics.fInnerPoint = innerPoint;
     double chargeInRegion {};
     for(int y = 0; y < ActParameters::g_NPADY; y++)
     {
@@ -256,8 +259,7 @@ void ActTrack::ComputeChargeAndLengthInRegion(double yWidth,
             chargeInRegion += pad[x][y];
         }
     }
-    length = lengthInRegion;
-    charge = chargeInRegion;
+    fTrackPhysics.fChargeInRegion = chargeInRegion;
 }
 
 void ActTrack::CalculateTrackTotalCharge()

@@ -41,7 +41,7 @@ void Silicons::Print()
 	std::cout<<"================================================"<<RESET<<'\n';
 }
 
-void TrackPhysics::Print(std::string mode)
+void TrackPhysics::Print(std::string mode) const
 {
 	std::cout<<BOLDGREEN<<"===== Track "<<fTrackID<<" ====="<<RESET<<'\n';
 	std::cout<<" Total charge: "<<fTotalCharge<<'\n';
@@ -51,6 +51,8 @@ void TrackPhysics::Print(std::string mode)
 	std::cout<<" Boundary point in mm at X: "<<fBoundaryPoint.X()<< " Y: "<<fBoundaryPoint.Y()<<" Z: "<<fBoundaryPoint.Z()<<'\n';
 	std::cout<<" Silicon point "<<fSiliconPlace<<" with coordinates in mm"<<'\n';
 	std::cout<<"  X: "<<fSiliconPoint.X()<<" Y: "<<fSiliconPoint.Y()<<" Z: "<<fSiliconPoint.Z()<<'\n';
+    std::cout<<" Inner point in mm at X   : "<<fInnerPoint.X()<<" Y: "<<fInnerPoint.Y()<<" Z: "<<fInnerPoint.Z()<<'\n';
+    std::cout<<" Charge in region         : "<<fChargeInRegion<<" and length in region: "<<fTrackLengthInRegion<<" mm"<<'\n';
 	std::cout<<" Track length: "<<fTrackLength<< " mm and average charge: "<<fAverageCharge<<" / mm"<<'\n';
 	std::cout<<" Theta: "<<fTheta<<" degrees and phi: "<<fPhi<<" degrees"<<'\n';
 	}
@@ -63,6 +65,9 @@ void TrackPhysics::Print(std::string mode)
         std::cout<<" BP at "<<fSiliconPlace<<" with coordinates in pads/time buckets"<<'\n';
 		std::cout<<"  X: "<<fBoundaryPoint.X()<<" Y: "<<fBoundaryPoint.Y()<<" Z: "<<fBoundaryPoint.Z()<<'\n';
         std::cout<<"  and is in chamber ? "<<fBPInChamber<<'\n';
+        std::cout<<" IP at "<<fSiliconPlace<<" with coordinates in pads/time buckets"<<'\n';
+		std::cout<<"  X: "<<fInnerPoint.X()<<" Y: "<<fInnerPoint.Y()<<" Z: "<<fInnerPoint.Z()<<'\n';
+        std::cout<<"  with charge in region (BP - IP): "<<fChargeInRegion<<" au"<<'\n';
 	}
 	else
 	{
@@ -96,6 +101,33 @@ void TrackPhysics::SetTrackFullPhysics(ActCalibrations& calibrations)
 	CalculatePhiTrack();
 }
 
+TrackPhysics::XYZPoint TrackPhysics::ScalePoint(const ActCalibrations& calibrations, const XYZPoint& oldPoint)
+{
+	XYZPoint newPoint;
+	newPoint.SetX(oldPoint.X() * calibrations.GetXYToLengthUnitsCoef());
+	newPoint.SetY(oldPoint.Y() * calibrations.GetXYToLengthUnitsCoef());
+	newPoint.SetZ(oldPoint.Z() * calibrations.GetZToLengthUnitsCoef());
+
+	return newPoint;
+}
+
+void TrackPhysics::SetTrackPhysicsForNFS(const ActCalibrations &calibrations)
+{
+    //rescale points
+    fSiliconPoint  = ScalePoint(calibrations, fSiliconPoint);
+    fBoundaryPoint = ScalePoint(calibrations, fBoundaryPoint);
+    fInnerPoint    = ScalePoint(calibrations, fInnerPoint);
+    //we have to scale direction too!
+
+    //and compute inner region distance correctly
+    CalculateLengthInRegion();
+}
+
+void TrackPhysics::CalculateLengthInRegion()
+{
+    fTrackLengthInRegion = TMath::Sqrt((fBoundaryPoint - fInnerPoint).Mag2());//now in mm!
+}
+
 void TrackPhysics::CalculateThetaTrack()
 {
 	XYZVector vector { fSiliconPoint - fReactionPoint};
@@ -114,7 +146,7 @@ void TrackPhysics::CalculatePhiTrack()
 	fPhi = TMath::RadToDeg() * phi;
 }
 
-void TrackPhysics::CalculateReactionPoint(ActCalibrations& calibrations)
+void TrackPhysics::CalculateReactionPoint(const ActCalibrations& calibrations)
 {
 	//once reaction point is computed in raw units, we have to convert it to physical units
 	//here, we convert it to mm
@@ -127,7 +159,7 @@ void TrackPhysics::CalculateReactionPoint(ActCalibrations& calibrations)
 	fReactionPoint = newPoint;
 }
 
-void TrackPhysics::CalculateSiliconPoint(ActCalibrations& calibrations)
+void TrackPhysics::CalculateSiliconPoint(const ActCalibrations& calibrations)
 {
 	auto oldPoint { fSiliconPoint};
 	XYZPoint newPoint;
@@ -138,7 +170,7 @@ void TrackPhysics::CalculateSiliconPoint(ActCalibrations& calibrations)
 	fSiliconPoint = newPoint;
 }
 
-void TrackPhysics::CalculateBoundaryPoint(ActCalibrations& calibrations)
+void TrackPhysics::CalculateBoundaryPoint(const ActCalibrations& calibrations)
 {
 	if(fSiliconPlace == ActParameters::trackHitsSiliconSideLeft)
 	{

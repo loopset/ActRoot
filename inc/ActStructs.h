@@ -104,27 +104,33 @@ struct TrackPhysics
 	std::string fReactionPlace {""};
     XYZPoint  fGravityPoint {-1, -1, -1};
 	XYZVector fUnitaryDirection {-1, -1, -1};
+    XYZPoint fInnerPoint {-1, -1, -1};
 	std::string fSiliconPlace {""};
     int fSiliconIndex {-1};
 	bool fRPInChamber {false};
 	bool fSPInArray   {false};
     bool fBPInChamber {false};
     int fSaturatedPads {-1};
+    double fChargeInRegion {-1};
+    double fTrackLengthInRegion {-1.};
 	
 	TrackPhysics() = default;
 	~TrackPhysics() = default;
 
-	void Print(std::string mode = "full");
+	void Print(std::string mode = "full") const;
 	void SetTrackFullPhysics(ActCalibrations& calibrations);
+    void SetTrackPhysicsForNFS(const ActCalibrations& calibrations);
 
 private:
 	void CalculateThetaTrack();
 	void CalculatePhiTrack();
-	void CalculateReactionPoint(ActCalibrations& calibrations);
-	void CalculateSiliconPoint(ActCalibrations& calibrations);
-	void CalculateBoundaryPoint(ActCalibrations& calibrations);
+	void CalculateReactionPoint(const ActCalibrations& calibrations);
+	void CalculateSiliconPoint(const ActCalibrations& calibrations);
+	void CalculateBoundaryPoint(const ActCalibrations& calibrations);
 	void CalculateTrackLength();
 	void CalculateTrackAverageCharge();
+
+    void CalculateLengthInRegion();
 
 	inline XYZPoint IntersectionTrackPlane(XYZPoint Pp, XYZVector vp)
 	{
@@ -133,6 +139,8 @@ private:
 		auto interesection { Pt + (((Pp - Pt).Dot(vp)) / (vt.Dot(vp))) * vt};
 		return interesection;
 	}
+    //general function to scale points according to calibration
+    XYZPoint ScalePoint(const ActCalibrations& calibrations, const XYZPoint& oldPoint);
 };
 
 struct EventInfo
