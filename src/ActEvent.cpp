@@ -526,7 +526,7 @@ void ActEvent::CountSaturatedPads()
                 counter++;
         }
     }
-    fEventInfo.fSaturatedPads = counter;
+    fEventInfo.fSaturatedPadsEvent = counter;
 }
 
 void ActEvent::ComputeChargeAverage()
@@ -544,7 +544,7 @@ void ActEvent::ComputeChargeAverage()
         }
     }
     //return average
-    fEventInfo.fAveragedCharge =  chargeSum / numberOfPads;  
+    fEventInfo.fAverageChargeEvent =  chargeSum / numberOfPads;  
 }
 
 void ActEvent::CleanSaturatedHits(double chargeThreshold, int minDimZToDelete)
@@ -616,4 +616,52 @@ void ActEvent::ReadEventTracks(ActClusteringResults &results)
 	{
 		fTracks.push_back(track);
 	}
+}
+
+bool ActEvent::CheckTopology(const std::string &side, int silIndex)
+{
+    int xWidth {2};
+    int yWidth {2};
+    bool crossesFront {false};
+    bool crossesSide  {false};
+    //Front boundary
+    //we also check for this only if a narrower window in Y
+    int xMin { ActParameters::g_NPADX - xWidth};
+    int xMax { ActParameters::g_NPADX};
+    int yMinFront { 7};//raw estimation, better use maximum angle to reach last silicon along beam
+    int yMaxFront { 25};//32-7
+    //Side boundary
+    int yMin {}; int yMax {};
+    if(side == ActParameters::trackHitsSiliconSideLeft)
+    {
+        yMax = yWidth;
+        yMin = 0;
+    }
+    else if(side == ActParameters::trackHitsSiliconSideRight)
+    {
+        yMax = ActParameters::g_NPADY;
+        yMin = yMax - yWidth;
+    }
+    else
+    {
+        throw std::runtime_error("CheckTopology received a wrong string for side");
+    }
+
+    for(const auto& hit : fHitArray)
+    {
+        auto pos { hit.GetPosition()};
+        if(yMin <= pos.Y() && pos.Y() <= yMax)
+        {
+            crossesSide = true;
+        }
+        if(yMinFront<= pos.Y() && yMaxFront <= pos.Y())
+        {
+            if(xMin <= pos.X() && pos.X() <= xMax)
+            {
+                crossesFront = true;
+            }
+        }
+    }
+
+    return !(crossesSide || crossesFront);
 }

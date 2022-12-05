@@ -1,4 +1,5 @@
 #include "ActTrackGeometry.h"
+#include "ActEvent.h"
 #include "ActParameters.h"
 #include "ActTrack.h"
 #include "SimGeometry.h"
@@ -11,31 +12,42 @@
 #include <stdexcept>
 #include <utility>
 
-ActTrackGeometry::ActTrackGeometry(const ActTrack& track, const std::string& side, int silIndex)
+ActTrackGeometry::ActTrackGeometry(const ActEvent& event,
+                                   const ActTrack& track, const std::string& side, int silIndex)
     : fSiliconPlace(side), fSilIndex(silIndex)
 {
     fTrackID = track.GetTrackID();
-    FillBasicInfo(track);
-    FillPadMatrix(track);
+    fGravityPoint = track.GetLine().GetPoint();
+    FillMatrices(event, track);
+    CalculateChargesAndSaturatedPads();
     CalculateUnitaryDirectionAndSiliconPoint(track);
     CalculateBoundaryPoint();
 }
 
-void ActTrackGeometry::FillBasicInfo(const ActTrack& track)
+void ActTrackGeometry::CalculateChargesAndSaturatedPads()
 {
-    fNSaturatedPads            = track.GetConstTrackPhysics().fSaturatedPads;
-    fTotalCharge               = track.GetConstTrackPhysics().fTotalCharge;
-    fAverageChargeAlongPads    = track.GetConstTrackPhysics().fAverageChargeInChamber;
-    fGravityPoint              = track.GetLine().GetPoint();
+    double totalCharge {}; int nSaturated {};
+    for(const auto& [pair, charge] : fPad)
+    {
+        totalCharge += charge;
+        if(fSatMatrix.at(pair))
+            nSaturated++;
+    }
+    fNSaturatedPads            = nSaturated;
+    fTotalCharge               = totalCharge;
+    fAverageChargeAlongPads    = totalCharge / fPad.size();
 }
 
-void ActTrackGeometry::FillPadMatrix(const ActTrack& track)
+void ActTrackGeometry::FillMatrices(const ActEvent& event, const ActTrack& track)
 {
+    auto satMatrixEvent { event.GetConstSaturationMatrix()};
     for(const auto& hit : track.GetHitArrayConst())
     {
         auto position {hit.GetPosition()};
         auto charge   {hit.GetCharge()};
         fPad[{static_cast<int>(position.X()), static_cast<int>(position.Y())}] += charge;
+        fSatMatrix[{static_cast<int>(position.X()), static_cast<int>(position.Y())}] =
+            satMatrixEvent.at(static_cast<int>(position.X())).at(static_cast<int>(position.Y()));
     }
 }
 

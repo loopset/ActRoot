@@ -48,7 +48,6 @@ ActClusteringResults ActRANSAC::Solve(const std::vector<ActHit>& hitArray)
 		if(inliers > fMinPatternPoints)
 			sortedLines.insert(std::move(line));
 	}
-
 	//and now we extract the points that fit each line
 	auto remainHits = hitArray;
 	ActClusteringResults clusters;

@@ -6,6 +6,7 @@
 #include <TMath.h>
 #include <iostream>
 #include <string>
+#include <utility>
 
 Silicons::Silicons()
 	: fSilLeft0(ActParameters::NSilLeft0), fSilLeft0_cal(ActParameters::NSilLeft0),
@@ -20,7 +21,7 @@ Silicons::Silicons()
 {
 }
 
-void Silicons::Print()
+void Silicons::Print() const
 {
 	std::cout<<BOLDCYAN<<"=========== Event Silicons =========="<<RESET<<'\n';
 	// std::cout<<"Side-> M: "<<fData["S"]["M"]<<" P: "<<fData["S"]["P"]<<" ES: "<<fData["S"]["ES"]<<'\n';
@@ -39,6 +40,24 @@ void Silicons::Print()
     std::cout<<"Left-> M: "<<fData.at("left").at("M")<<" P: "<<fData.at("left").at("P")<<" E: "<<fData.at("left").at("E")<<'\n';
 	std::cout<<"Right-> M: "<<fData.at("right").at("M")<<" P: "<<fData.at("right").at("P")<<" E: "<<fData.at("right").at("E")<<'\n';
 	std::cout<<"================================================"<<RESET<<'\n';
+}
+
+std::pair<std::string, int> Silicons::GetSilSideAndIndex() const
+{
+    //return first side with M = 1 and its index
+    int silIndex {-1};
+    std::string side {"none"};
+    for(const auto& [key, innerMap] : fData)
+    {
+        if(innerMap.at("M") == 1)
+        {
+            side     = key;
+            silIndex = innerMap.at("P");
+            break;
+        }
+    }
+
+    return {side, silIndex};
 }
 
 void TrackPhysics::Print(std::string mode) const
@@ -79,9 +98,15 @@ void TrackPhysics::Print(std::string mode) const
 void EventInfo::Print() const
 {
     std::cout<<BOLDMAGENTA<<"===== Auxiliar Event Info ====="<<'\n';
-    std::cout<<"Number of saturated pads  : "<<fSaturatedPads<<'\n';
-    std::cout<<"Charge averaged over pads : "<<fAveragedCharge<<'\n';
-    std::cout<<BOLDMAGENTA<<"==============================="<<'\n';
+    std::cout<<" Number of saturated pads in EVENT : "<<fSaturatedPadsEvent<<'\n';
+    std::cout<<" Charge averaged over pads in EVENT: "<<fAverageChargeEvent<<'\n';
+    for(int i = 0; i < fTrackID.size(); i++)
+    {
+        std::cout<<" For track ID: "<<fTrackID.at(i);
+        std::cout<<"  Number of saturated pads  : "<<fSaturatedPads.at(i)<<'\n';
+        std::cout<<"  Charge averaged over pads : "<<fAverageChargeAlongPads.at(i)<<'\n';
+    }
+    std::cout<<BOLDMAGENTA<<"==============================="<<RESET<<'\n';
 }
 
 void TrackPhysics::SetTrackFullPhysics(ActCalibrations& calibrations)

@@ -7,6 +7,7 @@
 #include <Math/Vector3Dfwd.h>
 #include <Math/Vector3D.h>
 
+#include <utility>
 #include <vector>
 #include <map>
 #include <string>
@@ -34,7 +35,8 @@ struct Silicons
 	Silicons();
 	~Silicons() = default;
 
-	void Print();
+	void Print() const;
+    std::pair<std::string, int> GetSilSideAndIndex() const;
 };
 
 struct TriggersAndGates
@@ -145,8 +147,11 @@ private:
 
 struct EventInfo
 {
-    int fSaturatedPads {};
-    double fAveragedCharge {};
+    int fSaturatedPadsEvent {};
+    double fAverageChargeEvent {};
+    std::vector<int> fTrackID {};
+    std::vector<int> fSaturatedPads {};
+    std::vector<double> fAverageChargeAlongPads {};
 
     EventInfo() = default;
     ~EventInfo() = default;

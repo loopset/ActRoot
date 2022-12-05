@@ -12,6 +12,7 @@
 
 #include <Math/Point3Dfwd.h>
 #include <Math/Vector3Dfwd.h>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -64,7 +65,9 @@ class ActEvent
 	void CleanSaturatedHits(double chargeThreshold, int minDimZToDelete = 20);
     //compute charge average
     void ComputeChargeAverage();
-	
+
+    bool CheckTopology(const std::string& side, int silIndex);
+    
 	//calibrate our data using ActCalibrations info
 	void CalibrateSilicons(const ActCalibrations& calibrations);
     void CalibrateSideSilicons(const ActCalibrations& calibrations);

@@ -1,6 +1,7 @@
 #ifndef ACTTRACKGEOMETRY_H
 #define ACTTRACKGEOMETRY_H
 #include "ActCalibrations.h"
+#include "ActEvent.h"
 #include "ActTrack.h"
 #include "SimGeometry.h"
 
@@ -56,14 +57,17 @@ public:
     double fPhi   {-1.};
     
     std::map<std::pair<int, int>, double> fPad {};
-    
+    std::map<std::pair<int, int>, bool> fSatMatrix {};
 public:
     ActTrackGeometry() = default;
-    ActTrackGeometry(const ActTrack& track, const std::string& side, int silIndex);
+    ActTrackGeometry(const ActEvent& event,
+                     const ActTrack& track,
+                     const std::string& side, int silIndex);
     ~ActTrackGeometry() = default;
 
     const std::map<std::pair<int, int>, double>& GetTrackPad() const { return fPad; }
-    
+    const std::map<std::pair<int, int>, bool>&   GetSaturationMatrix() const { return fSatMatrix; }
+
     void Print(std::string mode = "pad") const;
         
     void ConvertToLengthUnits(const ActCalibrations& calibrations);
@@ -71,9 +75,9 @@ public:
     void ComputeAngles();
 
 private:
-    void FillBasicInfo(const ActTrack& track);
+    void CalculateChargesAndSaturatedPads();
     
-    void FillPadMatrix(const ActTrack& track);
+    void FillMatrices(const ActEvent& event, const ActTrack& track);
     
     void CalculateUnitaryDirectionAndSiliconPoint(const ActTrack& track);
 
