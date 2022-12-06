@@ -47,17 +47,23 @@ std::pair<std::string, int> Silicons::GetSilSideAndIndex() const
     //return first side with M = 1 and its index
     int silIndex {-1};
     std::string side {"none"};
+    int counter {0};
     for(const auto& [key, innerMap] : fData)
     {
         if(innerMap.at("M") == 1)
         {
-            side     = key;
-            silIndex = innerMap.at("P");
-            break;
+            counter++;
+            if(counter <= 1)
+            {
+                side     = key;
+                silIndex = innerMap.at("P");
+            }
         }
     }
-
-    return {side, silIndex};
+    if(counter <= 1)
+        return {side, silIndex};
+    else
+        return {"both", -11};
 }
 
 void TrackPhysics::Print(std::string mode) const

@@ -1,4 +1,5 @@
 #include "ActTrackGeometry.h"
+#include "ActCalibrations.h"
 #include "ActEvent.h"
 #include "ActParameters.h"
 #include "ActTrack.h"
@@ -6,11 +7,14 @@
 #include "TMath.h"
 #include "TMathBase.h"
 #include "TUrl.h"
+#include <algorithm>
 #include <cmath>
 #include <ios>
+#include <iostream>
 #include <memory>
 #include <stdexcept>
 #include <utility>
+#include <vector>
 
 ActTrackGeometry::ActTrackGeometry(const ActEvent& event,
                                    const ActTrack& track, const std::string& side, int silIndex)
@@ -45,6 +49,7 @@ void ActTrackGeometry::FillMatrices(const ActEvent& event, const ActTrack& track
     {
         auto position {hit.GetPosition()};
         auto charge   {hit.GetCharge()};
+        fHits.push_back(hit);
         fPad[{static_cast<int>(position.X()), static_cast<int>(position.Y())}] += charge;
         fSatMatrix[{static_cast<int>(position.X()), static_cast<int>(position.Y())}] =
             satMatrixEvent.at(static_cast<int>(position.X())).at(static_cast<int>(position.Y()));
@@ -223,4 +228,155 @@ void ActTrackGeometry::ComputeAngles()
 	auto dot2 { n_z.Dot(fUnitaryDirectionMM.Unit())};
 	auto phi { TMath::ACos(dot2)};
 	fPhi = TMath::RadToDeg() * phi;
+}
+
+void ActTrackGeometry::ComputeRPFromChargeProfile(const ActCalibrations &calibrations, TH1D*& histProfile)
+{
+    auto getDistanceProjToBP = [](const XYZVector& lineVector,
+                                  const XYZVector& binVector)
+    {
+        auto projectionVector { (binVector.Dot(lineVector) / TMath::Sqrt(lineVector.Mag2()))
+            * lineVector};
+
+        return TMath::Sqrt(projectionVector.Mag2());
+    };
+
+    //set reference point and fine granularity for XY plane
+    const XYZPoint& reference {fBoundaryPointMM};
+    auto xyOffset {calibrations.GetXYToLengthUnitsCoef() / 4};//pad +0.5 three times
+    for(const auto& hit : fHits)
+    {
+        auto pos { ScalePoint(calibrations, hit.GetPosition())};//HIT MUST BE CONVERTED TO MM
+        auto ch  { hit.GetCharge()};
+        //we divide each pad in 3 * 3 * 1 subpads (Z is already too granular)
+        for(int kx = 0; kx <= 3; kx++)
+        {
+            for(int ky = 0; ky <= 3; ky++)
+            {
+                XYZPoint bin {pos.X() + kx * xyOffset,
+                    pos.Y() + ky * xyOffset,
+                    pos.Z()};
+
+                auto binVector { bin - reference};
+                //ensure correct signs for direction
+                auto lineVector { (fGravityPointMM - fBoundaryPointMM).Unit()};
+                auto dist { getDistanceProjToBP(lineVector, binVector)};
+                //std::cout<<"X: "<<bin.x()<<" Y: "<<bin.y()<<" Z: "<<bin.z()<<'\n';
+                //std::cout<<"Distance: "<<distance.back()<<'\n';
+                //std::cout<<"to BP X: "<<reference.x()<<" Y: "<<bin.y()<<" Z: "<<bin.z()<<'\n'; 
+                histProfile->Fill(dist, ch / 9);
+                
+            }
+        }
+    }
+    //smooth
+    histProfile->Smooth();
+    //find range according to last bin filled in histProfile
+    for(int i = 1; i <= histProfile->GetNbinsX(); i++)
+    {
+        auto content {histProfile->GetBinContent(i)};
+        auto center  {histProfile->GetBinCenter(i)};
+        if(content > 0.0)
+            fRangeInChamber = center;
+    }
+    //and backpropagate from BP to obtain reaction point
+    fReactionPoint = (fGravityPointMM - fBoundaryPointMM).Unit() * fRangeInChamber + fBoundaryPointMM;
+}
+
+void ActTrackGeometry::ComputeRP(const ActCalibrations &calibrations)
+{
+    auto* histProfile { new TH1D("histProfile", "Charge profile;Distance [mm];Charge [au]", 70, 0.0, 100.)};
+    ComputeRPFromChargeProfile(calibrations, histProfile);
+    delete histProfile;
+}
+
+TH1D* ActTrackGeometry::ComputeRPAndReturnProfile(const ActCalibrations &calibrations)
+{
+    auto* histProfile { new TH1D("histProfile", "Charge profile;Distance [mm];Charge [au]", 70, 0.0, 100.)};
+    ComputeRPFromChargeProfile(calibrations, histProfile);
+    return std::move(histProfile);
+}
+
+void ActTrackGeometry::GetRangeProfile(const ActCalibrations& calibrations, TH1D*& histProfile, TH1D*& histDer)
+{
+    auto getDistance = [](const XYZVector& lineVector,
+                          const XYZVector& binVector)
+    {
+        auto projectionVector { (binVector.Dot(lineVector) / TMath::Sqrt(lineVector.Mag2()))};
+
+        return projectionVector;
+    };
+    
+    const XYZPoint& reference {fBoundaryPointMM};
+    auto xyOffset {calibrations.GetXYToLengthUnitsCoef() / 4};
+    std::vector<double> distance {};
+    std::vector<double> charge {};
+    for(const auto& hit : fHits)
+    {
+        auto pos { ScalePoint(calibrations, hit.GetPosition())};
+        auto ch  { hit.GetCharge()};
+        //we divide each pad in 3 * 3 * 3 subpads
+        for(int kx = -1; kx < 2; kx++)
+        {
+            for(int ky = -1; ky < 2; ky++)
+            {
+                for(int kz = -1; kz < 0; kz++)//no loop on Z by now
+                {
+                    XYZPoint bin {pos.X() + kx * xyOffset,
+                        pos.Y() + ky * xyOffset,
+                        pos.Z()};
+
+                    auto binVector { bin - reference};
+                    //ensure correct signs for direction
+                    auto lineVector { (fGravityPointMM - fBoundaryPointMM).Unit()};
+                    distance.push_back(getDistance(lineVector, binVector));
+                    charge.push_back(ch / 9);
+                    histProfile->Fill(distance.back(), charge.back());
+                    //cout
+                    std::cout<<"============================="<<'\n';
+                    std::cout<<"Reference X: "<<reference.x()<<" Y: "<<reference.y()<<" Z: "<<reference.z()<<" mm\n";
+                    std::cout<<"Bin X: "<<bin.x()<<" Y: "<<bin.y()<<" Z: "<<bin.z()<<" mm\n";
+                    std::cout<<"BinVector X: "<<binVector.x()<<" Y: "<<binVector.y()<<" Z: "<<binVector.z()<<" mm\n";
+                    std::cout<<"lineVector X: "<<lineVector.x()<<" Y: "<<lineVector.y()<<" Z: "<<lineVector.z()<<" mm\n";
+                    auto proj {reference + lineVector*distance.back()};
+                    std::cout<<"Proj X: "<<proj.x()<<" Y: "<<proj.y()<<" Z: "<<proj.z()<<" mm\n";
+                    std::cout<<"Distance: "<<distance.back()<<" mm\n";
+                }
+            }
+        }
+    }
+    //smooth
+    histProfile->Smooth();
+
+    //compute derivative
+    for(int i = 1; i < histProfile->GetNbinsX(); i++)
+    {
+        histDer->SetBinContent(i, histProfile->GetBinContent(i+1) -
+                               histProfile->GetBinContent(i));
+    }
+    //smooth
+    histDer->Smooth();
+    //find range according to last bin filled in histProfile
+    for(int i = 1; i <= histProfile->GetNbinsX(); i++)
+    {
+        auto content {histProfile->GetBinContent(i)};
+        auto center  {histProfile->GetBinCenter(i)};
+        if(content > 0.0)
+            fRangeInChamber = center;
+    }
+    std::cout<<"Range value: "<<fRangeInChamber<<'\n';
+}
+
+void ActTrackGeometry::ComputeRPDistance(const ActCalibrations &calibrations)
+{
+    double range {};
+    const auto& reference { fBoundaryPointMM};
+    for(const auto& hit : fHits)
+    {
+        auto pos { ScalePoint(calibrations, hit.GetPosition())};
+        double aux {TMath::Sqrt((pos - reference).Mag2())};
+        if(aux > range)
+            range = aux;
+    }
+    std::cout<<"Range with distance: "<<range<<'\n';
 }

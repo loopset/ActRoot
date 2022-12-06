@@ -1,8 +1,9 @@
 #ifndef ACTTRACKGEOMETRY_H
 #define ACTTRACKGEOMETRY_H
-#include "ActCalibrations.h"
 #include "ActEvent.h"
+#include "ActHit.h"
 #include "ActTrack.h"
+#include "ActCalibrations.h"
 #include "SimGeometry.h"
 
 #include "TCanvas.h"
@@ -55,7 +56,11 @@ public:
     //5-other info
     double fTheta {-1.};
     double fPhi   {-1.};
+    //6-vertex reconstruction
+    double fRangeInChamber {-1};
+    XYZPoint fReactionPoint {-1,-1,-1};
     
+    std::vector<ActHit> fHits {};
     std::map<std::pair<int, int>, double> fPad {};
     std::map<std::pair<int, int>, bool> fSatMatrix {};
 public:
@@ -74,9 +79,16 @@ public:
     std::pair<double, double> ComputeChargeInRegion(int yPads, const ActCalibrations& calibrations);
     void ComputeAngles();
 
+    //to obtain energy deposit profile
+    void ComputeRPDistance(const ActCalibrations& calibrations);
+    void ComputeRPFromChargeProfile(const ActCalibrations& calibrations, TH1D*& histProfile);
+    void ComputeRP(const ActCalibrations& calibrations);
+    TH1D* ComputeRPAndReturnProfile(const ActCalibrations& calibrations);
+    void GetRangeProfile(const ActCalibrations& calibrations, TH1D*& histProfile, TH1D*& histDer);
+
 private:
     void CalculateChargesAndSaturatedPads();
-    
+   
     void FillMatrices(const ActEvent& event, const ActTrack& track);
     
     void CalculateUnitaryDirectionAndSiliconPoint(const ActTrack& track);
@@ -88,7 +100,7 @@ private:
     T ScalePoint(const ActCalibrations& calibrations, const T& oldPoint);
     
     
-     inline XYZPoint IntersectionTrackPlane(XYZPoint Pp, XYZVector vp, XYZPoint Tp, XYZVector Tv)
+    inline XYZPoint IntersectionTrackPlane(XYZPoint Pp, XYZVector vp, XYZPoint Tp, XYZVector Tv)
 	{
 		auto Pt { Tp};//point of track
 		auto vt { Tv};//vt is the direction vector of the track

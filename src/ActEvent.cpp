@@ -622,12 +622,15 @@ bool ActEvent::CheckTopology(const std::string &side, int silIndex)
 {
     int xWidth {2};
     int yWidth {2};
+    bool crossesWindow{false};
     bool crossesFront {false};
     bool crossesSide  {false};
     //Front boundary
     //we also check for this only if a narrower window in Y
-    int xMin { ActParameters::g_NPADX - xWidth};
-    int xMax { ActParameters::g_NPADX};
+    int xMaxFront { ActParameters::g_NPADX - 1};
+    int xMinFront { xMaxFront - xWidth};
+    int xMaxWindow {xWidth};
+    int xMinWindow { 0};
     int yMinFront { 7};//raw estimation, better use maximum angle to reach last silicon along beam
     int yMaxFront { 25};//32-7
     //Side boundary
@@ -639,7 +642,7 @@ bool ActEvent::CheckTopology(const std::string &side, int silIndex)
     }
     else if(side == ActParameters::trackHitsSiliconSideRight)
     {
-        yMax = ActParameters::g_NPADY;
+        yMax = ActParameters::g_NPADY - 1;
         yMin = yMax - yWidth;
     }
     else
@@ -650,18 +653,25 @@ bool ActEvent::CheckTopology(const std::string &side, int silIndex)
     for(const auto& hit : fHitArray)
     {
         auto pos { hit.GetPosition()};
+        //side check
         if(yMin <= pos.Y() && pos.Y() <= yMax)
         {
             crossesSide = true;
         }
-        if(yMinFront<= pos.Y() && yMaxFront <= pos.Y())
+        //front X check
+        if(yMinFront<= pos.Y() && pos.Y() <= yMaxFront)
         {
-            if(xMin <= pos.X() && pos.X() <= xMax)
+            if(xMinFront <= pos.X() && pos.X() <= xMaxFront)
             {
                 crossesFront = true;
             }
         }
+        //window X check
+        if(xMinWindow <= pos.X() && pos.X() <= xMaxWindow)
+        {
+            crossesWindow = true;
+        }
     }
 
-    return !(crossesSide || crossesFront);
+    return !(crossesSide || crossesFront || crossesWindow);
 }

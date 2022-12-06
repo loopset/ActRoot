@@ -2,6 +2,7 @@
 
 #include "ActParameters.h"
 #include "ActStructs.h"
+#include "ActTrackGeometry.h"
 #include "TString.h"
 
 #include <TH2.h>
@@ -190,28 +191,18 @@ void ActCalibrations::FillDriftVelocityHist(std::vector<TrackPhysics>& tracks, S
         fHistDrift->Fill(track.fSiliconPoint.X(), track.fSiliconPoint.Z(),
 							 silicons.fData.at(side).at("E"));
     }
-	// //if multiplicity in silicon is > 1, we cannot guarantee that hit silicon is the chosen, so we skip event
-	// if(silicons.fData.at("S").at("M") > 1)
-	// {
-	// 	//std::cout<<BOLDRED<<"Drift: M > 1"<<RESET<<'\n';
-	// 	return;
-	// }
-	// //this algorithm is designed for silicon 4!
-	// if(silicons.fData["S"]["P"] != 4)
-	// {
-	// 	return;
-	// }
-	// for(auto& track : tracks)
-	// {
-	// 	//silicon 4 is placed at left in E796
-	// 	if(track.fSiliconPlace == ActParameters::trackHitsSiliconSideLeft)
-	// 	{
-		
-	// 		fHistDrift->Fill(track.fSiliconPoint.X(), track.fSiliconPoint.Z(),
-	// 						 silicons.fData["S"]["ES"]);//fill with energy
-	// 	}
-	// }
-	
+}
+
+void ActCalibrations::FillDriftVelocityHist(const ActTrackGeometry& track, const Silicons& silicons)
+{
+    //sil index to fill histogram (for both sides!)
+    int chosenSil {2};//it is at center for both sides
+    if(track.fSilIndex == chosenSil)
+    {
+        fHistDrift->Fill(track.fSiliconPoint.X(), track.fSiliconPoint.Z(),
+                         silicons.fData.at(track.fSiliconPlace).at("E"));
+    
+    }
 }
 
 void ActCalibrations::ComputeDriftCoefsFromHist()
@@ -291,4 +282,49 @@ void ActCalibrations::ReadDriftCoefsFromFile(std::string fileName)
 	streamer >> aux;
 	fZToPadUnits = aux;
 	streamer.close();
+}
+
+void ActCalibrations::ComputeZDriftCoefsFromDriftVelocity(const std::string &fileName)
+{
+    //file must contain the following information
+    std::ifstream streamer {fileName.c_str()};
+    if(!streamer)
+    {
+        throw std::runtime_error("Error reading drift coefficients from file!");
+    }
+    double vdrift {-1};
+    double freq   {-1};
+    std::string line {};
+    int row {0};
+    while(std::getline(streamer, line, '\n'))
+    {
+        std::istringstream lineStreamer {line};
+        std::string value {};
+        int column {0};
+        while(std::getline(lineStreamer,value, ' '))
+        {
+            if(column == 1)
+            {
+                switch (row)
+                {
+                case 0:
+                    freq = std::stod(value);
+                    break;
+                case 1:
+                    vdrift = std::stod(value);
+                    break;
+                default:
+                    break;
+                }
+            }
+            column++;
+        }
+        row++;
+    }
+    std::cout<<"Drift velocity : "<<vdrift<<" cm/mus"<<'\n';
+    std::cout<<"Samplig freq   : "<<freq<<" MHz"<<'\n';
+    //v is given in cm/us
+    //freq in MHz, so we only need to convert cm -> mm
+    fZToLengthUnits = 10.0 * vdrift / freq;
+    fZToPadUnits    = fZToLengthUnits / ActParameters::padSideLength;
 }

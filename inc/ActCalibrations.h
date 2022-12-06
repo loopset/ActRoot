@@ -15,6 +15,8 @@
 #include <TCanvas.h>
 #include <TH2.h>
 
+class ActTrackGeometry;
+
 class ActCalibrations
 {
 	protected:
@@ -62,10 +64,12 @@ class ActCalibrations
 	double GetXYToLengthUnitsCoef() const { return fXYToLengthUnits; }
 	void InitDriftVelocityHist();//initialize histogram and fill it with physics
 	void FillDriftVelocityHist(std::vector<TrackPhysics>& tracks, Silicons& silicons);
+    void FillDriftVelocityHist(const ActTrackGeometry& tracks, const Silicons& silicons);
 	void ComputeDriftCoefsFromHist();//compute coefs once hist is filled
 	void PlotDriftVelocityHist();//plot it
 	void WriteDriftCoefsToFile(std::string fileName);//write it to files
 	void ReadDriftCoefsFromFile(std::string fileName);//read file
+    void ComputeZDriftCoefsFromDriftVelocity(const std::string& fileName);
 	std::unique_ptr<TH2D> GetDriftVelocityHist(){ return std::move(fHistDrift); }//get histo to write it to ttree
 	//////////////////////////////////////////////////////////////////////////
 };
