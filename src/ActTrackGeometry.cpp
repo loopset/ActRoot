@@ -123,11 +123,13 @@ T ActTrackGeometry::ScalePoint(const ActCalibrations& calibrations, const T& old
 void ActTrackGeometry::ConvertToLengthUnits(const ActCalibrations &calibrations)
 {
     //silicon points
-    fSiliconPointMM = ScalePoint(calibrations, fSiliconPoint);
+    fSiliconPointMM     = ScalePoint(calibrations, fSiliconPoint);
     //boundary point
-    fBoundaryPointMM = ScalePoint(calibrations, fBoundaryPoint);
+    fBoundaryPointMM    = ScalePoint(calibrations, fBoundaryPoint);
     //unitary direction
     fUnitaryDirectionMM = ScalePoint(calibrations, fUnitaryDirection).Unit();
+    //gravity point
+    fGravityPointMM     = ScalePoint(calibrations, fGravityPoint);
 }
 
 void ActTrackGeometry::Print(std::string mode) const
@@ -160,6 +162,8 @@ void ActTrackGeometry::Print(std::string mode) const
         std::cout<<" And charge in region defined by (BP - IP) of"<<'\n';
         std::cout<<"  Q: "<<fChargeInRegion<<" along a length of "<<fLengthInRegion<<" mm"<<'\n';
         std::cout<<" Theta: "<<fTheta<<" degrees and phi: "<<fPhi<<" degrees"<<'\n';
+        std::cout<<" RP at with coordinates in mm"<<'\n';
+		std::cout<<"  X: "<<fReactionPointMM.X()<<" Y: "<<fReactionPointMM.Y()<<" Z: "<<fReactionPointMM.Z()<<'\n';
     }
     std::cout<<BOLDGREEN<<"=================="<<RESET<<'\n';
 }
@@ -235,23 +239,22 @@ void ActTrackGeometry::ComputeRPFromChargeProfile(const ActCalibrations &calibra
     auto getDistanceProjToBP = [](const XYZVector& lineVector,
                                   const XYZVector& binVector)
     {
-        auto projectionVector { (binVector.Dot(lineVector) / TMath::Sqrt(lineVector.Mag2()))
-            * lineVector};
-
-        return TMath::Sqrt(projectionVector.Mag2());
+        auto dotProduct { (binVector.Dot(lineVector) / TMath::Sqrt(lineVector.Mag2()))};
+            
+        return dotProduct;
     };
 
     //set reference point and fine granularity for XY plane
     const XYZPoint& reference {fBoundaryPointMM};
-    auto xyOffset {calibrations.GetXYToLengthUnitsCoef() / 4};//pad +0.5 three times
+    auto xyOffset {calibrations.GetXYToLengthUnitsCoef() / 3};//pad +0.5 three times
     for(const auto& hit : fHits)
     {
         auto pos { ScalePoint(calibrations, hit.GetPosition())};//HIT MUST BE CONVERTED TO MM
         auto ch  { hit.GetCharge()};
         //we divide each pad in 3 * 3 * 1 subpads (Z is already too granular)
-        for(int kx = 0; kx <= 3; kx++)
+        for(int kx = -1; kx < 2; kx++)
         {
-            for(int ky = 0; ky <= 3; ky++)
+            for(int ky = -1; ky < 2; ky++)
             {
                 XYZPoint bin {pos.X() + kx * xyOffset,
                     pos.Y() + ky * xyOffset,
@@ -261,11 +264,7 @@ void ActTrackGeometry::ComputeRPFromChargeProfile(const ActCalibrations &calibra
                 //ensure correct signs for direction
                 auto lineVector { (fGravityPointMM - fBoundaryPointMM).Unit()};
                 auto dist { getDistanceProjToBP(lineVector, binVector)};
-                //std::cout<<"X: "<<bin.x()<<" Y: "<<bin.y()<<" Z: "<<bin.z()<<'\n';
-                //std::cout<<"Distance: "<<distance.back()<<'\n';
-                //std::cout<<"to BP X: "<<reference.x()<<" Y: "<<bin.y()<<" Z: "<<bin.z()<<'\n'; 
                 histProfile->Fill(dist, ch / 9);
-                
             }
         }
     }
@@ -280,7 +279,7 @@ void ActTrackGeometry::ComputeRPFromChargeProfile(const ActCalibrations &calibra
             fRangeInChamber = center;
     }
     //and backpropagate from BP to obtain reaction point
-    fReactionPoint = (fGravityPointMM - fBoundaryPointMM).Unit() * fRangeInChamber + fBoundaryPointMM;
+    fReactionPointMM = (fGravityPointMM - fBoundaryPointMM).Unit() * fRangeInChamber + fBoundaryPointMM;
 }
 
 void ActTrackGeometry::ComputeRP(const ActCalibrations &calibrations)
@@ -335,6 +334,7 @@ void ActTrackGeometry::GetRangeProfile(const ActCalibrations& calibrations, TH1D
                     //cout
                     std::cout<<"============================="<<'\n';
                     std::cout<<"Reference X: "<<reference.x()<<" Y: "<<reference.y()<<" Z: "<<reference.z()<<" mm\n";
+                    std::cout<<"Gravity  X: "<<fGravityPointMM.x()<<" Y: "<<fGravityPointMM.y()<<" Z: "<<fGravityPointMM.z()<<" mm\n";
                     std::cout<<"Bin X: "<<bin.x()<<" Y: "<<bin.y()<<" Z: "<<bin.z()<<" mm\n";
                     std::cout<<"BinVector X: "<<binVector.x()<<" Y: "<<binVector.y()<<" Z: "<<binVector.z()<<" mm\n";
                     std::cout<<"lineVector X: "<<lineVector.x()<<" Y: "<<lineVector.y()<<" Z: "<<lineVector.z()<<" mm\n";
