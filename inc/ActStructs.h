@@ -159,4 +159,36 @@ struct EventInfo
     void Print() const;
 };
 
+struct TimeOfFlight
+{
+    double tSilR13 {-1};
+    double tSilR46 {-1};
+    double tSilL13 {-1};
+    double tSilL46 {-1};
+
+    TimeOfFlight() = default;
+    ~TimeOfFlight() = default;
+
+    void Print() const;
+};
+
+struct Analysis
+{
+  	using XYZPoint = ROOT::Math::XYZPoint;
+	//using XYZVector = ROOT::Math::XYZVector;
+
+    int runID {-1};
+    int eventID {-1};
+    double EnKinematics {-1};
+    double theta {-1};//in degrees
+    double phi {-1};//degrees
+    double EAtVertex {-1};
+    double ESil {-1};
+    std::string silSide {""};
+    int silIndex {-1};
+    TimeOfFlight tof {};
+    XYZPoint silPoint {-1,-1,-1};
+    XYZPoint reactionPoint {-1,-1,-1};//aka vertex
+};
+
 #endif //ACTSTRUCTS_H

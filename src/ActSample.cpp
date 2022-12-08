@@ -112,7 +112,7 @@ std::vector<int> ActSample::sampleIndicesFromCDF(int N, std::vector<int> vetoed)
 	{
         if(counter > 10)//bugfix: cut to avoid infinite loop
         {
-            std::cout<<BOLDRED<<"Avoiding infinile loop in sampleIndicesFromCDF"<<'\n';
+            //std::cout<<BOLDRED<<"Avoiding infinile loop in sampleIndicesFromCDF"<<'\n';
             while(sampledInd.size() < N)
             {//fallback to Uniform
                 sampledInd.push_back(static_cast<int>(gRandom->Uniform() * fHitArray->size()));

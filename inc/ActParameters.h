@@ -63,20 +63,31 @@ namespace ActParameters
     inline constexpr int NSilFront1{0};//2nd
     inline constexpr int NSilBeam  {0};//beam silicons
 
+    //strings passed when classifying ActTracks
+	inline const std::string trackChamber { "chamber"};
+	inline const std::string trackWindow  { "likelyWindow"};
+	inline const std::string trackDump    { "likelyDump"};
+	inline const std::string trackDelta   { "likelyDelta"};
+	inline const std::string trackHitsSiliconSideLeft { "left"};
+	inline const std::string trackHitsSiliconSideRight { "right"};
+	inline const std::string trackHitsSiliconFront{ "front"};
+	inline const std::string trackHitsSiliconOutside{ "outside"};
+	/////////////////////////////////////////////////
+
     ///////// FIND PHYSICS OF TRACKS ////////////
 	//number of pads above chamber boundaries where silicons are placed
     inline constexpr double NPadsSideLeft {70.0 / padSideLength};//7 cm to pads
     inline constexpr double NPadsSideRight{70.0 / padSideLength};
 
-    inline const std::map<std::string, XYZPoint> siliconsPlacement {{"left", XYZPoint(0., ActParameters::g_NPADY + ActParameters::NPadsSideLeft, 0.)},
-                                                                     {"right", XYZPoint(0., -ActParameters::NPadsSideRight, 0.)},};
+    inline const std::map<std::string, XYZPoint> siliconsPlacement {{trackHitsSiliconSideLeft, XYZPoint(0., ActParameters::g_NPADY + ActParameters::NPadsSideLeft, 0.)},
+                                                                     {trackHitsSiliconSideRight, XYZPoint(0., -ActParameters::NPadsSideRight, 0.)},};
 
     //silicon layers to correct direction signs
     inline constexpr double silicon1X { (50.0 / padSideLength) / 2};//Y is in reality X dimension
     inline constexpr double silicon1Z {  static_cast<double>(g_NPADZ) / 2};//since we cant convert yet to distance
     //according to side, we can determine the correct slope sign for each component!
     inline std::map<std::string, std::map<int, std::pair<double, double>>> siliconDirection {
-        {"left",{
+        {trackHitsSiliconSideLeft,{
                 {1, std::make_pair(+5* silicon1X ,  +silicon1Z)},
                 {2, std::make_pair(+3 * silicon1X , +silicon1Z)},
                 {3, std::make_pair(+1 * silicon1X , +silicon1Z)},
@@ -84,7 +95,7 @@ namespace ActParameters
                 {5, std::make_pair(+3 * silicon1X , +silicon1Z)},
                 {6, std::make_pair(+5 * silicon1X , +silicon1Z)}}
         },
-        {"right", {
+        {trackHitsSiliconSideRight, {
                 {1, std::make_pair(+1 * silicon1X , +silicon1Z)},
                 {2, std::make_pair(+3 * silicon1X , +silicon1Z)},
                 {3, std::make_pair(+5 * silicon1X , +silicon1Z)},
@@ -92,6 +103,11 @@ namespace ActParameters
                 {5, std::make_pair(+3 * silicon1X , +silicon1Z)},
                 {6, std::make_pair(+1 * silicon1X , +silicon1Z)}
             }}
+    };
+    //SILICON ENERGY THRESHOLDS!
+    inline std::map<std::string, std::vector<double>> g_SilSide0Thresholds {
+        {trackHitsSiliconSideLeft, {0.8, 0.8, 0.8, 0.6, 0.6, 0.7}},
+        {trackHitsSiliconSideRight, {1.1, 1.1, 2.1, 0.6, 0.8, 0.8}}
     };
 
 	////////////////////////////////////////////
@@ -133,24 +149,16 @@ namespace ActParameters
 	//[temporary] position of beam plane in Y
 	inline constexpr double beamPlaneY { static_cast<double>(g_NPADY) / 2};// = g_NPADY / 2
 	
-	//strings passed when classifying ActTracks
-	inline const std::string trackChamber { "chamber"};
-	inline const std::string trackWindow  { "likelyWindow"};
-	inline const std::string trackDump    { "likelyDump"};
-	inline const std::string trackDelta   { "likelyDelta"};
-	inline const std::string trackHitsSiliconSideLeft { "left"};
-	inline const std::string trackHitsSiliconSideRight { "right"};
-	inline const std::string trackHitsSiliconFront{ "front"};
-	inline const std::string trackHitsSiliconOutside{ "outside"};
-	/////////////////////////////////////////////////
-
+	
 	/////////////////////////////////////////////////
 	/////////// MEvent PARAMETERS ///////////////////
 	//MEvent parameters names
 	inline const std::vector<TString> VXINames {"SI_L", "SI_R",
-                                                "INCONF", "GATCONF"};
+        "INCONF", "GATCONF",
+        "THF_SIR13", "THF_SIR46", "THF_SIL13", "THF_SIL46"};
 	inline std::vector<int> VXINumbers {6, 6,
-                                        0, 0};
+        0, 0,
+        0, 0, 0, 0};
 	
 }
 

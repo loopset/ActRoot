@@ -5,6 +5,7 @@
 
 #include <TMath.h>
 #include <iostream>
+#include <ostream>
 #include <string>
 #include <utility>
 
@@ -244,4 +245,14 @@ void TrackPhysics::CalculateTrackLength()
 void TrackPhysics::CalculateTrackAverageCharge()
 {
 	fAverageCharge = fTotalCharge / fTrackLengthInGas;
+}
+
+void TimeOfFlight::Print() const
+{
+    std::cout<<BOLDGREEN<<" =========== TOF Data ========== "<<RESET<<std::endl;
+    std::cout<<"For SilR13 : "<<tSilR13<<" units"<<std::endl;
+    std::cout<<"For SilR46 : "<<tSilR46<<" units"<<std::endl;
+    std::cout<<"For SilL13 : "<<tSilL13<<" units"<<std::endl;
+    std::cout<<"For SilL46 : "<<tSilL46<<" units"<<std::endl;
+    std::cout<<BOLDGREEN<<" ============================== "<<RESET<<std::endl;
 }

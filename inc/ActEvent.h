@@ -29,6 +29,7 @@ class ActEvent
 	TriggersAndGates fTriggers {};
     EventInfo fEventInfo {};
 	std::vector<ActTrack> fTracks {};
+    TimeOfFlight fTOF {};
 
 	private:
 	//auxiliar vectors to ReadHits
@@ -98,6 +99,9 @@ class ActEvent
     EventInfo& GetEventInfo() { return fEventInfo; }
     const EventInfo& GetConstEventInfo() const { return fEventInfo; }
 
+    TimeOfFlight& GetEventTOF() { return fTOF; }
+    const TimeOfFlight& GetConstEventTOF() const { return fTOF; }
+    
 	//tracks
 	std::vector<ActTrack>& GetEventTracks() { return fTracks; }
 	const std::vector<ActTrack>& GetConstEventTracks() const { return fTracks; }

@@ -42,6 +42,7 @@ void ActEvent::Reset(std::string mode)
 		fTriggers = {};
 		fSilicons = {};
         fEventInfo = {};
+        fTOF = {};
 	}
 	else if(mode == "deep")//fully reset events which go through gates
 	{
@@ -50,6 +51,7 @@ void ActEvent::Reset(std::string mode)
 		fHitArray.clear();
 		fSilicons = {};
         fEventInfo = {};
+        fTOF = {};
 		for(const auto& indexToReset : globalIndexToReset)
 		{
 			voxel[indexToReset] = 0;
@@ -66,10 +68,7 @@ void ActEvent::Reset(std::string mode)
             saturationMatrix.at(pair.first).at(pair.second) = false;
         }
         saturationToReset.clear();
-		//voxel.assign(voxel.size(), 0);
-		//indexOfVoxelInHitArray.assign(indexOfVoxelInHitArray.size(), -1);
-		//reset of chargeInPad is done in its method! (so it is done only when method is called)
-		fTracks.clear();
+        fTracks.clear();
 	}
 	else
 	{
@@ -90,14 +89,13 @@ void ActEvent::ReadTriggersAndGates(const MEvent *Evt, const MEventReduced *EvtR
 			ag * ActParameters::g_NB_CHANNEL +
 			ch ;
 
-		//Read SILICON data
 		if( co == 31 ){
 			for(unsigned int hit = 0; hit < EvtRed->CoboAsad[it].peaktime.size(); hit++)
 			{
 
 				int index = Evt->labelVXI[(int)(EvtRed->CoboAsad[it].peaktime[hit])];
 				int counter = 0 ;
-
+                //Read SILICON data
 				if(index > -1 && index < 6)
 				{
 					int SilLeft0Index { index};
@@ -113,9 +111,13 @@ void ActEvent::ReadTriggersAndGates(const MEvent *Evt, const MEventReduced *EvtR
 					fSilicons.fSilSide0.at("right").at(SilRight0Index) = value;
 				}
 				
-				//Triggers and Gates
+				//Triggers and Gates and TOF
 				if(index == 2000  ){ fTriggers.INCONF         = EvtRed->CoboAsad[it].peakheight[hit] ; }
-				if(index == 3000  ){ fTriggers.GATCONF        = EvtRed->CoboAsad[it].peakheight[hit] ; } 
+				if(index == 3000  ){ fTriggers.GATCONF        = EvtRed->CoboAsad[it].peakheight[hit] ; }
+                if(index == 4000  ){ fTOF.tSilR13             = EvtRed->CoboAsad[it].peakheight[hit] ; }
+                if(index == 5000  ){ fTOF.tSilR46             = EvtRed->CoboAsad[it].peakheight[hit] ; }
+                if(index == 6000  ){ fTOF.tSilL13             = EvtRed->CoboAsad[it].peakheight[hit] ; }
+                if(index == 7000  ){ fTOF.tSilL46             = EvtRed->CoboAsad[it].peakheight[hit] ; }
 				// if(index == 8000  ){ fTriggers.TVAL_CFA_HF    = EvtRed->CoboAsad[it].peakheight[hit] ; }
 				// if(index == 9000  ){ fTriggers.TVAL_CFA_CATD4 = EvtRed->CoboAsad[it].peakheight[hit] ; }
 				// if(index == 10000 ){ fTriggers.TVAL_CFA_CATD6 = EvtRed->CoboAsad[it].peakheight[hit] ; }
@@ -284,7 +286,7 @@ void ActEvent::ReadSideSiliconsData()
         for(const auto& energy : vec)
         {
             //  std::cout<<"Side: "<<side<<" silicon: "<<silIndex<<" energy: "<<energy<<'\n';
-            if(energy > ActParameters::minESiSToIncreaseMultiplicity)
+            if(energy > ActParameters::g_SilSide0Thresholds.at(side).at(silIndex))
             {
                 multiplicity += 1;
                 Eside = energy;

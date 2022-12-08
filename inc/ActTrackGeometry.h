@@ -112,7 +112,7 @@ private:
 	inline bool IsInChamber(XYZPoint point)
 	{
 		bool condX { point.X() >= 0. && point.X() <= ActParameters::g_NPADX};
-        //WARNING! Cast to int to avoid double over/underflow after computing interesection point! Only in fixed dimension
+        //WARNING! Cast to int to avoid double over/underflow after computing interesection point! Only in fixed dimension = Y
 		bool condY { static_cast<int>(point.Y()) >= 0 && static_cast<int>(point.Y()) <= ActParameters::g_NPADY};
 		bool condZ { point.Z() >= 0. && point.Z() <= ActParameters::g_NPADZ};
 		return (condX && condY && condZ);

@@ -44,11 +44,11 @@ void ActTrackGeometry::CalculateChargesAndSaturatedPads()
 
 void ActTrackGeometry::FillMatrices(const ActEvent& event, const ActTrack& track)
 {
-    auto satMatrixEvent { event.GetConstSaturationMatrix()};
+    const auto& satMatrixEvent { event.GetConstSaturationMatrix()};
     for(const auto& hit : track.GetHitArrayConst())
     {
-        auto position {hit.GetPosition()};
-        auto charge   {hit.GetCharge()};
+        const auto& position {hit.GetPosition()};
+        const auto& charge   {hit.GetCharge()};
         fHits.push_back(hit);
         fPad[{static_cast<int>(position.X()), static_cast<int>(position.Y())}] += charge;
         fSatMatrix[{static_cast<int>(position.X()), static_cast<int>(position.Y())}] =
