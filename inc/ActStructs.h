@@ -179,6 +179,7 @@ struct Analysis
 
     int runID {-1};
     int eventID {-1};
+    int entryID {-1};
     double EnKinematics {-1};
     double theta {-1};//in degrees
     double phi {-1};//degrees
