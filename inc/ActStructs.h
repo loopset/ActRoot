@@ -190,6 +190,8 @@ struct Analysis
     TimeOfFlight tof {};
     XYZPoint silPoint {-1,-1,-1};
     XYZPoint reactionPoint {-1,-1,-1};//aka vertex
+
+    void Print() const;
 };
 
 #endif //ACTSTRUCTS_H

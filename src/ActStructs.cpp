@@ -256,3 +256,16 @@ void TimeOfFlight::Print() const
     std::cout<<"For SilL46 : "<<tSilL46<<" units"<<std::endl;
     std::cout<<BOLDGREEN<<" ============================== "<<RESET<<std::endl;
 }
+
+void Analysis::Print() const
+{
+    std::cout<<BOLDGREEN<<"===== Track ====="<<RESET<<'\n';
+    std::cout<<" SP at "<<silSide<<" index "<<silIndex<<" with coordinates in mm"<<'\n';
+    std::cout<<"  X: "<<silPoint.X()<<" Y: "<<silPoint.Y()<<" Z: "<<silPoint.Z()<<'\n';
+    std::cout<<"  with silEnergy: "<<ESil<<" MeV"<<'\n';
+    std::cout<<" Theta: "<<theta<<" degrees and phi: "<<phi<<" degrees"<<'\n';
+    std::cout<<" RP at with coordinates in mm"<<'\n';
+    std::cout<<"  X: "<<reactionPoint.X()<<" Y: "<<reactionPoint.Y()<<" Z: "<<reactionPoint.Z()<<'\n';
+    std::cout<<" Reconstructed Beam energy: "<<EnKinematics<<" MeV"<<'\n';
+    std::cout<<BOLDGREEN<<"=================="<<RESET<<std::endl;
+}
