@@ -269,3 +269,37 @@ void Analysis::Print() const
     std::cout<<" Reconstructed Beam energy: "<<EnKinematics<<" MeV"<<'\n';
     std::cout<<BOLDGREEN<<"=================="<<RESET<<std::endl;
 }
+
+void SiliconsPlus::Print() const
+{
+    std::cout<<BOLDGREEN<<"===== Silicons ====="<<RESET<<std::endl;
+    for(const auto& [side, innerMap] : fData)
+    {
+        std::cout<<" "<<side<<" with E: "<<innerMap.at("E")<<" MeV and pad: "<<innerMap.at("P")<<'\n';   
+    }
+    std::cout<<BOLDGREEN<<"=================="<<RESET<<std::endl;
+}
+
+std::pair<std::string, int> SiliconsPlus::GetSilSideAndIndex() const
+{
+    //return first side with M = 1 and its index
+    int silIndex {-1};
+    std::string side {"none"};
+    int counter {0};
+    for(const auto& [key, innerMap] : fData)
+    {
+        if(innerMap.at("M") == 1)
+        {
+            counter++;
+            if(counter <= 1)
+            {
+                side     = key;
+                silIndex = innerMap.at("P");
+            }
+        }
+    }
+    if(counter <= 1)
+        return {side, silIndex};
+    else
+        return {"both", -11};
+}

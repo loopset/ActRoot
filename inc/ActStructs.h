@@ -1,6 +1,7 @@
 #ifndef ACTSTRUCTS_H
 #define ACTSTRUCTS_H
 
+#include "ActHit.h"
 #include <Math/Point3Dfwd.h>
 #include <Math/Point3D.h>
 
@@ -145,6 +146,18 @@ private:
     XYZPoint ScalePoint(const ActCalibrations& calibrations, const XYZPoint& oldPoint);
 };
 
+struct Voxels
+{
+    std::vector<ActHit> fHits {};
+};
+
+struct SiliconsPlus
+{
+    std::map<std::string, std::map<std::string, double>> fData {};
+
+    void Print() const;
+    std::pair<std::string, int> GetSilSideAndIndex() const;
+};
 struct EventInfo
 {
     int fSaturatedPadsEvent {};
@@ -157,6 +170,7 @@ struct EventInfo
     ~EventInfo() = default;
 
     void Print() const;
+    std::pair<std::string, int> GetSilSideAndIndex() const;
 };
 
 struct TimeOfFlight

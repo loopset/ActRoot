@@ -40,11 +40,15 @@
 #pragma link C++ struct EventInfo + ;
 #pragma link C++ struct TimeOfFlight + ;
 #pragma link C++ struct Analysis + ;
+#pragma link C++ struct SiliconsPlus + ;
+#pragma link C++ struct Voxels + ;
 #pragma link C++ class std::vector<Analysis> + ;
 #pragma link C++ class std::vector<TrackPhysics>+;//in order to generate I/O streamer to write std::vector of TrackPhysics
 
 #pragma link C++ class ActTrackGeometry + ;
 #pragma link C++ class std::vector<ActTrackGeometry> + ;
+
+#pragma link C++ class ActEventPlus + ;
 
 #pragma link C++ class ActEvent +;
 
