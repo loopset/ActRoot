@@ -4,6 +4,8 @@
 
 #include "ActStructs.h"
 #include "MEventReduced.h"
+#include <map>
+#include <tuple>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -23,6 +25,8 @@ void ActEventPlus::ReadData(ActCalibrations* calibrations, MEvent*& Evt, MEventR
     //legacy old silicons to write raw data
     Silicons oldSilicons {};
     int hitID {0};
+    //to avoid repeating hits
+    std::map<int, std::vector<int>> overrideHits {};
     for(int it = 0; it < EvtRed->CoboAsad.size(); it++)
     {
         int co = EvtRed->CoboAsad[it].globalchannelid>>11 ;
@@ -41,7 +45,8 @@ void ActEventPlus::ReadData(ActCalibrations* calibrations, MEvent*& Evt, MEventR
         if((co != 31) && (co != 16))
         {
             ReadHits(Evt, EvtRed,
-                    hitID, TABLE,
+                     hitID, TABLE,
+                     overrideHits,
                     it, where);
         }
     }
@@ -88,6 +93,7 @@ void ActEventPlus::ReadHits(MEvent* Evt,
                             MEventReduced* EvtRed,
                             int& hitID,
                             const std::vector<std::vector<int>>& TABLE,
+                            std::map<int, std::vector<int>>& overrideHits,
                             const int& it, const int& where)
 {
     auto xval { static_cast<int>(TABLE[4][where])};
@@ -103,8 +109,28 @@ void ActEventPlus::ReadHits(MEvent* Evt,
                 double Qiaux_align {Qiaux};
 
                 ActHit candidate { hitID, XYZPoint(xval, yval, z_position), Qiaux_align, EvtRed->CoboAsad[it].hasSaturation};
-                voxel.fHits.push_back(candidate);
-                hitID++;
+                //update hit if it is repeated
+                int globalIndex { static_cast<int>(xval + yval * ActParameters::g_NPADX
+                                                           + z_position * ActParameters::g_NPADX * ActParameters::g_NPADY)};
+                overrideHits[globalIndex].push_back(hitID);
+                if(overrideHits.at(globalIndex).size() > 1)
+                {
+                    // std::cout<<"Updating hit"<<'\n';
+                    // for(const auto& i : overrideHits.at(globalIndex))
+                    // {
+                    //     std::cout<<"\tindexes in vector: "<<i<<'\n';
+                    // }
+                    auto dim { overrideHits.at(globalIndex).size()};
+                    auto index { overrideHits.at(globalIndex).at(dim - 2)};
+                    //std::cout<<"\t\tIndex to update: "<<index<<'\n';
+                    auto alreadyCharge { voxel.fHits.at(index).GetCharge()};
+                    voxel.fHits.at(index).SetCharge(alreadyCharge + Qiaux_align);
+                }
+                else
+                {
+                    voxel.fHits.push_back(candidate);
+                    hitID++;
+                }
 
                 // //fill pad
                 // voxel.fPad[{xval, yval}].first += Qiaux_align;

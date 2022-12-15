@@ -42,6 +42,7 @@ private:
     void ReadHits(MEvent* Evt,
                   MEventReduced* EvtRed,
                   int& hitID, const std::vector<std::vector<int>>& TABLE,
+                  std::map<int, std::vector<int>>& overrideHits,
                   const int& it, const int& where);
 
     void ReadAndCalibrateSilicons(Silicons& oldSilicons, ActCalibrations* calibrations);
