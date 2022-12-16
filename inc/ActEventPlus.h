@@ -9,7 +9,9 @@
 #include "Math/Point3Dfwd.h"
 #include "Math/Vector3Dfwd.h"
 #include <map>
+#include <string>
 #include <tuple>
+#include <utility>
 #include <vector>
 #include <unordered_map>
 
@@ -24,16 +26,25 @@ public:
     TriggersAndGates triggers {};
     TimeOfFlight tof {};
     SiliconsPlus silicons {};
-    int eventID {-1};
+    unsigned int eventID {};
+    unsigned int entryID {};
+    unsigned int runID {};
 
     
 public:
     ActEventPlus() = default;
-    ActEventPlus(ActCalibrations* calibrations, MEvent*& Evt, MEventReduced*& EvtRed);
+    ActEventPlus(const unsigned int& run, const unsigned int& entry,
+                 ActCalibrations* calibrations, MEvent*& Evt, MEventReduced*& EvtRed);
     ~ActEventPlus() = default;
 
     void ReadData(ActCalibrations* calibrations, MEvent*& Evt, MEventReduced*& EvtRed);
 
+    bool CheckTopology(const std::string& silSide, const int& silIndex);
+
+    std::map<std::pair<int, int>, std::pair<double, bool>> GetPadMatrix() const;
+
+    int CountSaturatedPads();
+    
 private:
     void ReadAllButHits(MEvent* Evt,
                         MEventReduced* EvtRed,
@@ -46,7 +57,7 @@ private:
                   const int& it, const int& where);
 
     void ReadAndCalibrateSilicons(Silicons& oldSilicons, ActCalibrations* calibrations);
-    
+
 };
 
 #endif

@@ -50,6 +50,9 @@
 
 #pragma link C++ class ActEventPlus + ;
 
+#pragma link C++ class ActTrackPlus + ;
+#pragma link C++ class std::vector<ActTrackPlus> + ;
+
 #pragma link C++ class ActEvent +;
 
 #pragma link C++ class ActAnalyzer + ;

@@ -10,10 +10,10 @@
 #include <utility>
 #include <vector>
 
-ActEventPlus::ActEventPlus(ActCalibrations* calibrations, MEvent*& Evt, MEventReduced*& EvtRed)
+ActEventPlus::ActEventPlus(const unsigned int& run, const unsigned int& entry,
+                           ActCalibrations* calibrations, MEvent*& Evt, MEventReduced*& EvtRed)
+    : eventID(EvtRed->event), entryID(entry), runID(run)
 {
-    //Set event ID
-     eventID = EvtRed->event;
      //read data
      ReadData(calibrations, Evt, EvtRed);
 }
@@ -198,4 +198,90 @@ void ActEventPlus::ReadAndCalibrateSilicons(Silicons& oldSilicons,
             silicons.fData[side]["E"] = Eside;
         }
     }    
+}
+
+bool ActEventPlus::CheckTopology(const std::string &silSide, const int &silIndex)
+{
+    int xWidth {2};
+    int yWidth {2};
+    bool crossesWindow{false};
+    bool crossesFront {false};
+    bool crossesSide  {false};
+    //Front boundary
+    //we also check for this only if a narrower window in Y
+    int xMaxFront { ActParameters::g_NPADX - 1};
+    int xMinFront { xMaxFront - xWidth};
+    int xMaxWindow {xWidth};
+    int xMinWindow { 0};
+    int yMinFront { 7};//raw estimation, better use maximum angle to reach last silicon along beam
+    int yMaxFront { 25};//32-7
+    //Side boundary
+    int yMin {}; int yMax {};
+    if(silSide == ActParameters::trackHitsSiliconSideLeft)
+    {
+        yMax = yWidth;
+        yMin = 0;
+    }
+    else if(silSide == ActParameters::trackHitsSiliconSideRight)
+    {
+        yMax = ActParameters::g_NPADY - 1;
+        yMin = yMax - yWidth;
+    }
+    else
+    {
+        throw std::runtime_error("CheckTopology received a wrong string for side");
+    }
+
+    for(const auto& hit : voxel.fHits)
+    {
+        const auto& pos { hit.GetPosition()};
+        //side check
+        if(yMin <= pos.Y() && pos.Y() <= yMax)
+        {
+            crossesSide = true;
+        }
+        //front X check
+        if(yMinFront<= pos.Y() && pos.Y() <= yMaxFront)
+        {
+            if(xMinFront <= pos.X() && pos.X() <= xMaxFront)
+            {
+                crossesFront = true;
+            }
+        }
+        //window X check
+        if(xMinWindow <= pos.X() && pos.X() <= xMaxWindow)
+        {
+            crossesWindow = true;
+        }
+    }
+
+    return !(crossesSide || crossesFront || crossesWindow);
+}
+
+std::map<std::pair<int, int>, std::pair<double, bool>> ActEventPlus::GetPadMatrix() const
+{
+    std::map<std::pair<int, int>, std::pair<double, bool>> pad {};
+    for(const auto& hit : voxel.fHits)
+    {
+        const auto& pos { hit.GetPosition()};
+        const auto& charge { hit.GetCharge()};
+        pad[{pos.X(), pos.Y()}].first += charge;
+        if(hit.GetIsSaturated())
+        {
+            pad.at({pos.X(), pos.Y()}).second = true;
+        }
+    }
+    return pad;
+}
+
+int ActEventPlus::CountSaturatedPads()
+{
+    auto pad { GetPadMatrix()};
+    int counter {};
+    for(const auto& [pos, vals] : pad)
+    {
+        if(vals.second)
+            counter++;
+    }
+    return counter;
 }
