@@ -7,6 +7,9 @@
 #include "ActStructs.h"
 #include "ActTrack.h"
 
+#include "SimSRIM.h"
+#include "SimKinematics.h"
+
 #include "Math/Point3D.h"
 #include "Math/Vector3D.h"
 #include "TCanvas.h"
@@ -30,7 +33,10 @@ public:
     double fChargeInRegion {-1};
     double fLengthInRegion {-1};
     double fLengthInChamber {-1};
+    double fTrackLength {-1};
     double fSilEnergy {-1};
+    double fRPEnergy {-1};
+    double fReconstructedBeamEnergy {-1};
     double fTheta {-1};
     double fPhi   {-1};
     std::string fSiliconSide {"-1"};
@@ -42,6 +48,7 @@ public:
     unsigned int fEventID {};
     unsigned int fRunID   {};
     bool fBPInChamber {};
+    bool fInsideAnalysisCuts {};
 
     ActTrackPlus() = default;
     ActTrackPlus(unsigned int run, unsigned int eve, unsigned int entry,
@@ -57,6 +64,10 @@ public:
     void ComputeReactionPointFromChargeProfile(const ActEventPlus& data,
                                                const ActCalibrations& calibrations,
                                                TCanvas* canv = nullptr);
+
+    void ComputeEnergyAtVertexWithSRIM(SimSRIM* srim, const std::string& srimString);
+
+    void ReconstructBeamEnergyFromLAB(SimKinematics* kinematics);
 
     void Print() const;
     

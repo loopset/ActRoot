@@ -1,12 +1,16 @@
 #include "ActTrackPlus.h"
+#include "ActParameters.h"
 #include "ActStructs.h"
 #include "ActTrack.h"
 #include "TCanvas.h"
+#include "TMath.h"
+#include <iostream>
+#include <string>
 
 ActTrackPlus::ActTrackPlus(unsigned int run, unsigned int eve, unsigned int entry,
                            const ActTrack& track, const SiliconsPlus& silicons)
     : fRunID(run), fEventID(eve), fEntryID(entry), fTrackID(track.GetTrackID()),
-    fGravityPoint(track.GetLine().GetPoint())
+      fGravityPoint(track.GetLine().GetPoint())
 {
     FillPadMatrix(track);
     CalculateSiliconPoint(track, silicons);
@@ -37,7 +41,8 @@ void ActTrackPlus::FillPadMatrix(const ActTrack& track)
 void ActTrackPlus::CalculateSiliconPoint(const ActTrack& track, const SiliconsPlus& silicons)
 {
     auto [silSide, silIndex] = silicons.GetSilSideAndIndex();
-    fSiliconSide = silSide;
+    fSilEnergy    = silicons.fData.at(silSide).at("E");
+    fSiliconSide  = silSide;
     fSiliconIndex = silIndex;
     
     fSiliconPoint = IntersectionTrackPlane(ActParameters::siliconsPlacement.at(fSiliconSide), XYZVector(0.0, 1.0, 0.0),
@@ -50,7 +55,7 @@ void ActTrackPlus::CalculateBoundaryPoint()
     
     if(fSiliconSide == ActParameters::trackHitsSiliconSideLeft)
     {
-        XYZPoint planePoint {0.0, ActParameters::g_NPADY, 0.0};
+        XYZPoint planePoint {0.0, ActParameters::g_NPADY - 1, 0.0};//because pads go from [0,31] (32 excluded)
         XYZVector normalVector { 0.0, 1.0, 0.0};
         fBoundaryPoint = IntersectionTrackPlane(planePoint, normalVector,
                                                 fGravityPoint, unitaryDirection);
@@ -106,12 +111,12 @@ void ActTrackPlus::ComputeChargeInRegion(int yPads, const ActCalibrations &calib
     int yBP {}; int yThreshold {};
     if(fSiliconSide == ActParameters::trackHitsSiliconSideLeft)
     {
-        yBP        = static_cast<int>(fBoundaryPoint.Y());
+        yBP        = ActParameters::g_NPADY - 1;
         yThreshold = yBP - fRegionWidth;
     }
     else if(fSiliconSide == ActParameters::trackHitsSiliconSideRight)
     {
-        yBP        = static_cast<int>(fBoundaryPoint.Y());
+        yBP        = 0;
         yThreshold = yBP + fRegionWidth;
     }
     else
@@ -119,11 +124,13 @@ void ActTrackPlus::ComputeChargeInRegion(int yPads, const ActCalibrations &calib
         throw std::runtime_error("Wrong fSiliconSide passed to ComputeChargeInRegion");
     }
     XYZPoint planePoint { 0., static_cast<double>(yThreshold), 0.};
+    planePoint = ScalePointOrVector(calibrations, planePoint);
+    
     XYZVector normalVector {0., 1., 0.};
     auto unitaryDirection {(fSiliconPoint - fGravityPoint).Unit()};
     auto innerPoint { IntersectionTrackPlane(planePoint, normalVector,
                                              fGravityPoint, unitaryDirection)};
-    innerPoint = ScalePointOrVector(calibrations, innerPoint);
+    //innerPoint = ScalePointOrVector(calibrations, innerPoint);
 
     //AND NOW COMPUTE CHARGE IN REGION
     double chargeInRegion {};
@@ -133,10 +140,10 @@ void ActTrackPlus::ComputeChargeInRegion(int yPads, const ActCalibrations &calib
         const auto& [x,y] = pos;
         if(std::abs(y - yBP) > fRegionWidth)
             continue;
-        chargeInRegion += vals.second;
+        chargeInRegion += vals.first;
         countPadsInRegion++;
     }
-    if(countPadsInRegion < fPadMatrix.size())
+    if(countPadsInRegion <= fPadMatrix.size())
     {
         //COMPUTE LENGTH IN REGION IN MM
         fChargeInRegion = chargeInRegion;
@@ -217,9 +224,37 @@ void ActTrackPlus::ComputeReactionPointFromChargeProfile(const ActEventPlus& dat
     delete histProfile;
 }
 
+void ActTrackPlus::ComputeEnergyAtVertexWithSRIM(SimSRIM *srim, const std::string& srimString)
+{
+    fTrackLength = TMath::Sqrt((fSiliconPoint - fReactionPoint).Mag2());
+    double RAtSil { srim->EvalDirect(srimString, fSilEnergy)};
+    fRPEnergy = srim->EvalInverse(srimString, RAtSil + fTrackLength);
+}
+
+void ActTrackPlus::ReconstructBeamEnergyFromLAB(SimKinematics *kinematics)
+{
+    fReconstructedBeamEnergy = kinematics->ReconstructBeamEnergyFromLabKinematics(fRPEnergy, TMath::DegToRad() * fTheta);
+}
+
 void ActTrackPlus::Print() const
 {
     std::cout<<BOLDGREEN<<"===== Track "<<fTrackID<<" ====="<<RESET<<'\n';
-
+    std::cout<<" Number of saturated pads along track : "<<fNSatPads<<'\n';
+    std::cout<<"  of a total of "<<fPadMatrix.size()<<" pads filled"<<'\n';
+    std::cout<<" Total charge of "<<fTotalCharge<<" and averaged over pads "<<fChargePerPad<<'\n';
+    std::cout<<" SP at "<<fSiliconSide<<" index "<<fSiliconIndex<<" with coordinates in mm"<<'\n';
+    std::cout<<"  X: "<<fSiliconPoint.X()<<" Y: "<<fSiliconPoint.Y()<<" Z: "<<fSiliconPoint.Z()<<'\n';
+    std::cout<<"  and silicon energy: "<<fSilEnergy<<" MeV"<<'\n';
+    std::cout<<" BP at "<<fSiliconSide<<" with coordinates in mm"<<'\n';
+    std::cout<<"  X: "<<fBoundaryPoint.X()<<" Y: "<<fBoundaryPoint.Y()<<" Z: "<<fBoundaryPoint.Z()<<'\n';
+    std::cout<<"  and is in chamber ? "<<std::boolalpha<<fBPInChamber<<'\n';
+    std::cout<<" And charge in region defined by BP - "<<fRegionWidth<<" pads of"<<'\n';
+    std::cout<<"  Q: "<<fChargeInRegion<<" along a length of "<<fLengthInRegion<<" mm"<<'\n';
+    std::cout<<" Theta: "<<fTheta<<" degrees and phi: "<<fPhi<<" degrees"<<'\n';
+    std::cout<<" RP at with coordinates in mm"<<'\n';
+    std::cout<<"  X: "<<fReactionPoint.X()<<" Y: "<<fReactionPoint.Y()<<" Z: "<<fReactionPoint.Z()<<'\n';
+    std::cout<<" Total track length of "<<fTrackLength<<" mm"<<'\n';
+    std::cout<<" And recoil energy at RP: "<<fRPEnergy<<" MeV"<<'\n';
+    std::cout<<" Beam energy reconstructed: "<<fReconstructedBeamEnergy<<" MeV"<<'\n';
     std::cout<<BOLDGREEN<<"=================="<<RESET<<std::endl;
 }

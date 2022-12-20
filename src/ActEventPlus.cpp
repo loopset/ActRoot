@@ -120,8 +120,7 @@ void ActEventPlus::ReadHits(MEvent* Evt,
                     // {
                     //     std::cout<<"\tindexes in vector: "<<i<<'\n';
                     // }
-                    auto dim { overrideHits.at(globalIndex).size()};
-                    auto index { overrideHits.at(globalIndex).at(dim - 2)};
+                    auto index { overrideHits.at(globalIndex).front()};//hit index to reset is always the first in the vector
                     //std::cout<<"\t\tIndex to update: "<<index<<'\n';
                     auto alreadyCharge { voxel.fHits.at(index).GetCharge()};
                     voxel.fHits.at(index).SetCharge(alreadyCharge + Qiaux_align);

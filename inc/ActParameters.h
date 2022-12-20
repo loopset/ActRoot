@@ -79,8 +79,10 @@ namespace ActParameters
     inline constexpr double NPadsSideLeft {70.0 / padSideLength};//7 cm to pads
     inline constexpr double NPadsSideRight{70.0 / padSideLength};
 
-    inline const std::map<std::string, XYZPoint> siliconsPlacement {{trackHitsSiliconSideLeft, XYZPoint(0., ActParameters::g_NPADY + ActParameters::NPadsSideLeft, 0.)},
-                                                                     {trackHitsSiliconSideRight, XYZPoint(0., -ActParameters::NPadsSideRight, 0.)},};
+    inline const std::map<std::string, XYZPoint> siliconsPlacement {{trackHitsSiliconSideLeft,
+            XYZPoint(0., ActParameters::g_NPADY - 1 + ActParameters::NPadsSideLeft, 0.)},
+                                                                    {trackHitsSiliconSideRight,
+                                                                     XYZPoint(0., -ActParameters::NPadsSideRight, 0.)},};
 
     //silicon layers to correct direction signs
     inline constexpr double silicon1X { (50.0 / padSideLength) / 2};//Y is in reality X dimension
