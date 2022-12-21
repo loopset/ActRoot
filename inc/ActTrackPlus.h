@@ -4,6 +4,7 @@
 //The best version of a track, improving ActTrackGeometry
 #include "ActCalibrations.h"
 #include "ActEventPlus.h"
+#include "ActHit.h"
 #include "ActStructs.h"
 #include "ActTrack.h"
 
@@ -13,16 +14,20 @@
 #include "Math/Point3D.h"
 #include "Math/Vector3D.h"
 #include "TCanvas.h"
+#include "TF1.h"
+#include "TH1.h"
 
 #include <map>
 #include <string>
 #include <utility>
+#include <vector>
 class ActTrackPlus
 {
 public:
     using XYZPoint = ROOT::Math::XYZPoint;
     using XYZVector = ROOT::Math::XYZVector;
 
+    TH1D fHistProfile {};
     std::map<std::pair<int, int>, std::pair<double, bool>> fPadMatrix {};
     XYZPoint fGravityPoint {-1, -1, -1};
     XYZPoint fSiliconPoint {-1, -1, -1};
@@ -32,6 +37,7 @@ public:
     double fChargePerPad {-1};
     double fChargeInRegion {-1};
     double fLengthInRegion {-1};
+    double fPIDInRegion {-1};
     double fLengthInChamber {-1};
     double fTrackLength {-1};
     double fSilEnergy {-1};
@@ -43,11 +49,13 @@ public:
     unsigned int fNSatPads {};
     unsigned int fSiliconIndex {};
     unsigned int fRegionWidth {};
+    unsigned int fNPeaksInChargeProfile {};
     unsigned int fTrackID {};
     unsigned int fEntryID {};
     unsigned int fEventID {};
     unsigned int fRunID   {};
     bool fBPInChamber {};
+    bool fIsPIDCorrected {};
     bool fInsideAnalysisCuts {};
 
     ActTrackPlus() = default;
@@ -61,13 +69,19 @@ public:
 
     void ComputeChargeInRegion(int yPads, const ActCalibrations& calibrations);
 
-    void ComputeReactionPointFromChargeProfile(const ActEventPlus& data,
+    void ComputeReactionPointFromChargeProfile(const ActTrack& cluster,
                                                const ActCalibrations& calibrations,
                                                TCanvas* canv = nullptr);
 
+    void CountNumberOfPeaksInChargeProfile(double sigma = 2,
+                                           std::string options = "noMarkov nobackground",
+                                           double threshold = 0.5);
+    
     void ComputeEnergyAtVertexWithSRIM(SimSRIM* srim, const std::string& srimString);
 
     void ReconstructBeamEnergyFromLAB(SimKinematics* kinematics);
+
+    void CorrectPIDInRegion(TF1* funCorr);
 
     void Print() const;
     
@@ -75,7 +89,7 @@ private:
     void FillPadMatrix(const ActTrack& track);
     void CalculateSiliconPoint(const ActTrack& track, const SiliconsPlus& silicons);
     void CalculateBoundaryPoint();
-    void GetChargeProfile(const ActEventPlus& data,
+    void GetChargeProfile(const ActTrack& cluster,
                           const ActCalibrations& calibrations,
                           TH1D*& histProfile);
     

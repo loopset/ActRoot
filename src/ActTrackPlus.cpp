@@ -2,6 +2,7 @@
 #include "ActParameters.h"
 #include "ActStructs.h"
 #include "ActTrack.h"
+#include "RtypesCore.h"
 #include "TCanvas.h"
 #include "TMath.h"
 #include <iostream>
@@ -148,15 +149,17 @@ void ActTrackPlus::ComputeChargeInRegion(int yPads, const ActCalibrations &calib
         //COMPUTE LENGTH IN REGION IN MM
         fChargeInRegion = chargeInRegion;
         fLengthInRegion = TMath::Sqrt((fBoundaryPoint - innerPoint).Mag2());
+        fPIDInRegion    = fChargeInRegion / fLengthInRegion;
     }
     else
     {
         fChargeInRegion = -11;
         fLengthInRegion = -11;
+        fPIDInRegion    = -11;
     }
 }
 
-void ActTrackPlus::GetChargeProfile(const ActEventPlus& data,
+void ActTrackPlus::GetChargeProfile(const ActTrack& cluster,
                                     const ActCalibrations& calibrations,
                                     TH1D*& histProfile)
 {
@@ -170,7 +173,7 @@ void ActTrackPlus::GetChargeProfile(const ActEventPlus& data,
     //set reference point and fine granularity for XY plane
     const XYZPoint& reference {fBoundaryPoint};
     auto xyOffset {calibrations.GetXYToLengthUnitsCoef() / 3};//pad +0.5 three times
-    for(const auto& hit : data.voxel.fHits)
+    for(const auto& hit : cluster.GetHitArrayConst())
     {
         //MUST BE CONVERTED TO MM
         auto pos { ScalePointOrVector(calibrations, hit.GetPosition())};
@@ -206,12 +209,12 @@ void ActTrackPlus::GetChargeProfile(const ActEventPlus& data,
     fReactionPoint = (fGravityPoint - fBoundaryPoint).Unit() * fLengthInChamber + fBoundaryPoint;
 }
 
-void ActTrackPlus::ComputeReactionPointFromChargeProfile(const ActEventPlus& data,
+void ActTrackPlus::ComputeReactionPointFromChargeProfile(const ActTrack& cluster,
                                                          const ActCalibrations& calibrations,
                                                          TCanvas* canv)
 {
-    auto* histProfile { new TH1D("histProfile", "Charge profile;Distance [mm];Charge [au]", 70, 0.0, 100.)};
-    GetChargeProfile(data, calibrations, histProfile);
+    auto* histProfile { new TH1D("histProfile", "Charge profile;Distance to BP [mm];Charge [au]", 65, -5.0, 100.)};
+    GetChargeProfile(cluster, calibrations, histProfile);
     if(canv)
     {
         canv->cd();
@@ -221,7 +224,19 @@ void ActTrackPlus::ComputeReactionPointFromChargeProfile(const ActEventPlus& dat
         canv->cd();
         canv->WaitPrimitive();
     }
+    //save histo to file
+    TH1::AddDirectory(kFALSE);
+    histProfile->Copy(fHistProfile);
     delete histProfile;
+}
+
+void ActTrackPlus::CountNumberOfPeaksInChargeProfile(double sigma, std::string options, double threshold)
+{
+    //use TSpectrum to compute number of peaks along charge profile
+    //why? carbon reactions deposit a huge amount of charge in a narrow region -> only one peak
+    fNPeaksInChargeProfile = fHistProfile.ShowPeaks(sigma,
+                                                    (options + "goff nodraw").c_str(),
+                                                    threshold);
 }
 
 void ActTrackPlus::ComputeEnergyAtVertexWithSRIM(SimSRIM *srim, const std::string& srimString)
@@ -234,6 +249,13 @@ void ActTrackPlus::ComputeEnergyAtVertexWithSRIM(SimSRIM *srim, const std::strin
 void ActTrackPlus::ReconstructBeamEnergyFromLAB(SimKinematics *kinematics)
 {
     fReconstructedBeamEnergy = kinematics->ReconstructBeamEnergyFromLabKinematics(fRPEnergy, TMath::DegToRad() * fTheta);
+}
+
+void ActTrackPlus::CorrectPIDInRegion(TF1 *funCorr)
+{
+    //corrects PID in region by flattening the Q/L distribution along Z_{Sil}, to avoid dependence on drift along Z
+    fPIDInRegion = fPIDInRegion + funCorr->Eval(fSiliconPoint.Z());
+    fIsPIDCorrected = true;
 }
 
 void ActTrackPlus::Print() const
