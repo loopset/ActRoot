@@ -4,7 +4,9 @@
 #include "ActTrack.h"
 #include "RtypesCore.h"
 #include "TCanvas.h"
+#include "TGraph.h"
 #include "TMath.h"
+#include <cmath>
 #include <iostream>
 #include <string>
 
@@ -136,15 +138,27 @@ void ActTrackPlus::ComputeChargeInRegion(int yPads, const ActCalibrations &calib
     //AND NOW COMPUTE CHARGE IN REGION
     double chargeInRegion {};
     int countPadsInRegion {};
+    bool anyPadBeyondRegion {};
     for(const auto& [pos, vals] : fPadMatrix)
     {
         const auto& [x,y] = pos;
+        //check if tracks in longer than region
+        if(fSiliconSide == ActParameters::trackHitsSiliconSideLeft)
+        {
+            if(y < yThreshold)
+                anyPadBeyondRegion = true;
+        }
+        else if(fSiliconSide == ActParameters::trackHitsSiliconSideRight)
+        {
+            if(y > yThreshold)
+                anyPadBeyondRegion = true;
+        }
         if(std::abs(y - yBP) > fRegionWidth)
             continue;
         chargeInRegion += vals.first;
         countPadsInRegion++;
     }
-    if(countPadsInRegion <= fPadMatrix.size())
+    if(anyPadBeyondRegion)
     {
         //COMPUTE LENGTH IN REGION IN MM
         fChargeInRegion = chargeInRegion;
@@ -237,6 +251,32 @@ void ActTrackPlus::CountNumberOfPeaksInChargeProfile(double sigma, std::string o
     fNPeaksInChargeProfile = fHistProfile.ShowPeaks(sigma,
                                                     (options + "goff nodraw").c_str(),
                                                     threshold);
+}
+
+bool ActTrackPlus::ComputeRMSInChargeProfile(double threshold)
+{
+    //if RMS is above threshold, there is high likelihood that the tracks is of a carbon reaction
+    auto* graph = new TGraph();
+    auto xMin { fHistProfile.GetBinCenter(fHistProfile.FindFirstBinAbove(0.0))};
+    auto xMax { fHistProfile.GetBinCenter(fHistProfile.FindLastBinAbove(0.0))};
+    auto safeDistance {4.0};//mm
+    for(int i = 1; i <= fHistProfile.GetNbinsX(); i++)
+    {
+        auto center { fHistProfile.GetBinCenter(i)};
+        auto content{ fHistProfile.GetBinContent(i)};
+        if(content <= 0.0)
+            continue;
+        //avoid points at the beginning and end of track! there the profile always goes to 0
+        if(!((xMin + safeDistance) <= center && center <= (xMax - safeDistance)))
+            continue;
+        graph->SetPoint(graph->GetN(), center, content);
+    }
+    double yRMS {graph->GetRMS(2)};//2 for Y axis
+    delete graph;
+    if(std::abs(yRMS) > threshold)
+        return true;
+    else
+        return false;
 }
 
 void ActTrackPlus::ComputeEnergyAtVertexWithSRIM(SimSRIM *srim, const std::string& srimString)

@@ -76,6 +76,8 @@ public:
     void CountNumberOfPeaksInChargeProfile(double sigma = 2,
                                            std::string options = "noMarkov nobackground",
                                            double threshold = 0.5);
+
+    bool ComputeRMSInChargeProfile(double threhold = 1000);
     
     void ComputeEnergyAtVertexWithSRIM(SimSRIM* srim, const std::string& srimString);
 

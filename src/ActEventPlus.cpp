@@ -201,30 +201,41 @@ void ActEventPlus::ReadAndCalibrateSilicons(Silicons& oldSilicons,
 
 bool ActEventPlus::CheckTopology(const std::string &silSide, const int &silIndex)
 {
-    int xWidth {2};
-    int yWidth {2};
+    int xWidth {3};
+    int yWidth {3};
+    int yProperWidth {5};//wider region for high energy particles just in case
     bool crossesWindow{false};
     bool crossesFront {false};
-    bool crossesSide  {false};
+    bool crossesOppositeSide {false};
+    bool crossesProperSide {false};//check if we have track in silSide!
     //Front boundary
-    //we also check for this only if a narrower window in Y
+    //we also check for this only in a narrower window in Y
     int xMaxFront { ActParameters::g_NPADX - 1};
     int xMinFront { xMaxFront - xWidth};
+    //window: where the beam enters
     int xMaxWindow {xWidth};
     int xMinWindow { 0};
     int yMinFront { 7};//raw estimation, better use maximum angle to reach last silicon along beam
     int yMaxFront { 25};//32-7
     //Side boundary
     int yMin {}; int yMax {};
+    //proper side
+    int yProperMin {}; int yProperMax {};
     if(silSide == ActParameters::trackHitsSiliconSideLeft)
     {
-        yMax = yWidth;
+        yMax = yWidth - 1;//remember that pads go [0,31]
         yMin = 0;
+
+        yProperMax = ActParameters::g_NPADY - 1;
+        yProperMin = yProperMax - yProperWidth;
     }
     else if(silSide == ActParameters::trackHitsSiliconSideRight)
     {
         yMax = ActParameters::g_NPADY - 1;
         yMin = yMax - yWidth;
+
+        yProperMax = yProperWidth - 1;
+        yProperMin = 0;
     }
     else
     {
@@ -234,10 +245,15 @@ bool ActEventPlus::CheckTopology(const std::string &silSide, const int &silIndex
     for(const auto& hit : voxel.fHits)
     {
         const auto& pos { hit.GetPosition()};
-        //side check
+        //check if we have charge where it corresponds
+        if(yProperMin <= pos.Y() && pos.Y() <= yProperMax)
+        {
+            crossesProperSide = true;
+        }
+        //opposite side check
         if(yMin <= pos.Y() && pos.Y() <= yMax)
         {
-            crossesSide = true;
+            crossesOppositeSide = true;
         }
         //front X check
         if(yMinFront<= pos.Y() && pos.Y() <= yMaxFront)
@@ -254,7 +270,8 @@ bool ActEventPlus::CheckTopology(const std::string &silSide, const int &silIndex
         }
     }
 
-    return !(crossesSide || crossesFront || crossesWindow);
+    //if not charge in any of the other flanges and YES charge in its proper side....
+    return !(crossesOppositeSide || crossesFront || crossesWindow) && crossesProperSide;
 }
 
 std::map<std::pair<int, int>, std::pair<double, bool>> ActEventPlus::GetPadMatrix() const
