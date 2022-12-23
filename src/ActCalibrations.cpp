@@ -153,11 +153,13 @@ void ActCalibrations::ReadSiliconBeamCalibrations(std::string &coefsFile)
 	streamer.close();
 }
 
-void ActCalibrations::InitDriftVelocityHist()
+void ActCalibrations::InitDriftVelocityHist(const std::string& silSide, const int& silIndex)
 {
-	fHistDrift = std::make_unique<TH2D>("fHistDrift", "Drift velocity",
-										100, 0., ActParameters::g_NPADX,
-										100, 0., ActParameters::g_NPADZ);
+    fSilSide  = silSide;
+    fSilIndex = silIndex;
+	fHistDrift = std::make_unique<TH2D>("fHistDrift", ("XZ Silicon Point for " + fSilSide + " and index " + fSilIndex),
+										ActParameters::g_NPADX, 0., ActParameters::g_NPADX,
+										ActParameters::g_NPADZ, 0., ActParameters::g_NPADZ);
 }
 
 void ActCalibrations::FillDriftVelocityHist(std::vector<TrackPhysics>& tracks, Silicons& silicons)
@@ -202,6 +204,15 @@ void ActCalibrations::FillDriftVelocityHist(const ActTrackGeometry& track, const
         fHistDrift->Fill(track.fSiliconPoint.X(), track.fSiliconPoint.Z(),
                          silicons.fData.at(track.fSiliconPlace).at("E"));
     
+    }
+}
+
+void ActCalibrations::FillDriftVelocityHistPlus(const XYZPoint& point, const std::string& silSide, const int& silIndex, const double& silEnergy)
+{
+    if(silSide == fSilSide && silIndex == fSilIndex)
+    {
+        fHistDrift->Fill(point.X(), point.Z(),
+                         silEnergy);
     }
 }
 
@@ -321,10 +332,14 @@ void ActCalibrations::ComputeZDriftCoefsFromDriftVelocity(const std::string &fil
         }
         row++;
     }
-    std::cout<<"Drift velocity : "<<vdrift<<" cm/mus"<<'\n';
-    std::cout<<"Samplig freq   : "<<freq<<" MHz"<<'\n';
     //v is given in cm/us
     //freq in MHz, so we only need to convert cm -> mm
     fZToLengthUnits = 10.0 * vdrift / freq;
     fZToPadUnits    = fZToLengthUnits / ActParameters::padSideLength;
+    //print
+    std::cout<<BOLDGREEN<<" == Given drift parameters == "<<'\n';
+    std::cout<<"Drift velocity     : "<<vdrift<<" cm/mus"<<'\n';
+    std::cout<<"Samplig freq       : "<<freq<<" MHz"<<'\n';
+    std::cout<<"Time buckets to mm : "<<fZToLengthUnits<<" mm/tb"<<'\n';
+    std::cout<<" ==================== "<<RESET<<std::endl;
 }

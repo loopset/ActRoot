@@ -1,10 +1,13 @@
 #include "ActEventPlus.h"
+#include "ActHit.h"
 #include "ActParameters.h"
 #include "ActCalibrations.h"
 
 #include "ActStructs.h"
+#include "ActTrackPlus.h"
 #include "MEventReduced.h"
 #include <map>
+#include <stdexcept>
 #include <tuple>
 #include <unordered_map>
 #include <utility>
@@ -47,7 +50,7 @@ void ActEventPlus::ReadData(ActCalibrations* calibrations, MEvent*& Evt, MEventR
             ReadHits(Evt, EvtRed,
                      hitID, TABLE,
                      overrideHits,
-                    it, where);
+                     it, where);
         }
     }
 
@@ -199,7 +202,19 @@ void ActEventPlus::ReadAndCalibrateSilicons(Silicons& oldSilicons,
     }    
 }
 
-bool ActEventPlus::CheckTopology(const std::string &silSide, const int &silIndex)
+void ActEventPlus::CleanPileUp(const double &zMin, const double &zMax)
+{
+    for(auto it = voxel.fHits.begin(); it != voxel.fHits.end();)
+    {
+        const auto& pos {it->GetPosition()};
+        if(!(zMin <= pos.Z() && pos.Z() <= zMax))
+            it = voxel.fHits.erase(it);
+        else
+            it++;
+    }
+}
+
+bool ActEventPlus::CheckTopologyInnerFunction(const std::string &silSide, const int &silIndex, const std::vector<ActHit>& hits)
 {
     int xWidth {3};
     int yWidth {3};
@@ -242,13 +257,14 @@ bool ActEventPlus::CheckTopology(const std::string &silSide, const int &silIndex
         throw std::runtime_error("CheckTopology received a wrong string for side");
     }
 
-    for(const auto& hit : voxel.fHits)
+    for(const auto& hit : hits)
     {
         const auto& pos { hit.GetPosition()};
         //check if we have charge where it corresponds
         if(yProperMin <= pos.Y() && pos.Y() <= yProperMax)
         {
             crossesProperSide = true;
+            //std::cout<<"Y proper side: "<<pos.Y()<<" with charge "<<hit.GetCharge()<<" properSide? "<<std::boolalpha<<crossesProperSide<<'\n';
         }
         //opposite side check
         if(yMin <= pos.Y() && pos.Y() <= yMax)
@@ -269,9 +285,17 @@ bool ActEventPlus::CheckTopology(const std::string &silSide, const int &silIndex
             crossesWindow = true;
         }
     }
-
+    
     //if not charge in any of the other flanges and YES charge in its proper side....
     return !(crossesOppositeSide || crossesFront || crossesWindow) && crossesProperSide;
+}
+
+bool ActEventPlus::CheckTopology(const std::string &silSide, const int &silIndex, const std::vector<ActHit>& hits)
+{
+    if(hits.size() != 0)
+        return CheckTopologyInnerFunction(silSide, silIndex, hits);
+    else
+        return CheckTopologyInnerFunction(silSide, silIndex, voxel.fHits);
 }
 
 std::map<std::pair<int, int>, std::pair<double, bool>> ActEventPlus::GetPadMatrix() const

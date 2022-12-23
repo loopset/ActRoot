@@ -39,7 +39,9 @@ public:
 
     void ReadData(ActCalibrations* calibrations, MEvent*& Evt, MEventReduced*& EvtRed);
 
-    bool CheckTopology(const std::string& silSide, const int& silIndex);
+    void CleanPileUp(const double& zMin, const double& zMax);
+    
+    bool CheckTopology(const std::string& silSide, const int& silIndex, const std::vector<ActHit>& hits = {});
 
     std::map<std::pair<int, int>, std::pair<double, bool>> GetPadMatrix() const;
 
@@ -57,6 +59,8 @@ private:
                   const int& it, const int& where);
 
     void ReadAndCalibrateSilicons(Silicons& oldSilicons, ActCalibrations* calibrations);
+
+    bool CheckTopologyInnerFunction(const std::string& silSide, const int& silIndex, const std::vector<ActHit>& hits);
 
 };
 

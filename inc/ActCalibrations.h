@@ -4,6 +4,7 @@
 
 #include "ActParameters.h"
 #include "ActStructs.h"
+#include "Math/Point3Dfwd.h"
 
 #include <algorithm>
 #include <map>
@@ -19,7 +20,9 @@ class ActTrackGeometry;
 
 class ActCalibrations
 {
-	protected:
+public:
+    using XYZPoint = ROOT::Math::XYZPoint;    
+protected:
 	//Table with equivalences of pads and electronic channels
 	std::vector<std::vector<int>> fTABLE;//has to be initialized in constructor
 	//pad align coefficients
@@ -35,6 +38,8 @@ class ActCalibrations
 	double fZToPadUnits {};
 	//compute drift velocity from TH2D when filling ActEvent
 	std::unique_ptr<TH2D> fHistDrift { nullptr};
+    std::string fSilSide {};
+    int fSilIndex {};
 
 
 	public:
@@ -62,9 +67,10 @@ class ActCalibrations
 	double GetZToLengthUnitsCoef() const { return fZToLengthUnits; }
 	double GetZToPadUnitsCoef() const { return fZToPadUnits; }
 	double GetXYToLengthUnitsCoef() const { return fXYToLengthUnits; }
-	void InitDriftVelocityHist();//initialize histogram and fill it with physics
+	void InitDriftVelocityHist(const std::string& silSide, const int& silIndex);//initialize histogram to fill it with physics
 	void FillDriftVelocityHist(std::vector<TrackPhysics>& tracks, Silicons& silicons);
     void FillDriftVelocityHist(const ActTrackGeometry& tracks, const Silicons& silicons);
+    void FillDriftVelocityHistPlus(const XYZPoint& point, const std::string& silSide, const int& silIndex, const double& silEnergy);
 	void ComputeDriftCoefsFromHist();//compute coefs once hist is filled
 	void PlotDriftVelocityHist();//plot it
 	void WriteDriftCoefsToFile(std::string fileName);//write it to files

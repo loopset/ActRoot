@@ -7,6 +7,7 @@
 #include "TGraph.h"
 #include "TMath.h"
 #include <cmath>
+#include <ios>
 #include <iostream>
 #include <string>
 
@@ -301,22 +302,24 @@ void ActTrackPlus::CorrectPIDInRegion(TF1 *funCorr)
 void ActTrackPlus::Print() const
 {
     std::cout<<BOLDGREEN<<"===== Track "<<fTrackID<<" ====="<<RESET<<'\n';
+    std::cout<<BOLDCYAN<<"== Run "<<fRunID<<" Entry "<<fEntryID<<" =="<<RESET<<'\n';
     std::cout<<" Number of saturated pads along track : "<<fNSatPads<<'\n';
     std::cout<<"  of a total of "<<fPadMatrix.size()<<" pads filled"<<'\n';
     std::cout<<" Total charge of "<<fTotalCharge<<" and averaged over pads "<<fChargePerPad<<'\n';
-    std::cout<<" SP at "<<fSiliconSide<<" index "<<fSiliconIndex<<" with coordinates in mm"<<'\n';
-    std::cout<<"  X: "<<fSiliconPoint.X()<<" Y: "<<fSiliconPoint.Y()<<" Z: "<<fSiliconPoint.Z()<<'\n';
-    std::cout<<"  and silicon energy: "<<fSilEnergy<<" MeV"<<'\n';
-    std::cout<<" BP at "<<fSiliconSide<<" with coordinates in mm"<<'\n';
-    std::cout<<"  X: "<<fBoundaryPoint.X()<<" Y: "<<fBoundaryPoint.Y()<<" Z: "<<fBoundaryPoint.Z()<<'\n';
+    std::cout<<" SiliconPoint at "<<'\n';
+    std::cout<<BOLDGREEN<<"  Side: "<<fSiliconSide<<" with Index: "<<fSiliconIndex<<RESET<<'\n';
+    std::cout<<"  Coordinates "<<fSiliconPoint<<" mm and Energy: "<<fSilEnergy<<" MeV"<<'\n'; 
+    std::cout<<" BoundaryPoint at "<<fSiliconSide<<'\n';
+    std::cout<<"  with coordinates "<<fBoundaryPoint<<" mm"<<'\n';
     std::cout<<"  and is in chamber ? "<<std::boolalpha<<fBPInChamber<<'\n';
-    std::cout<<" And charge in region defined by BP - "<<fRegionWidth<<" pads of"<<'\n';
+    std::cout<<" Charge in region defined by BP - "<<fRegionWidth<<" pads of"<<'\n';
     std::cout<<"  Q: "<<fChargeInRegion<<" along a length of "<<fLengthInRegion<<" mm"<<'\n';
-    std::cout<<" Theta: "<<fTheta<<" degrees and phi: "<<fPhi<<" degrees"<<'\n';
-    std::cout<<" RP at with coordinates in mm"<<'\n';
-    std::cout<<"  X: "<<fReactionPoint.X()<<" Y: "<<fReactionPoint.Y()<<" Z: "<<fReactionPoint.Z()<<'\n';
+    std::cout<<BOLDGREEN<<" Theta: "<<fTheta<<RESET<<" degrees and phi: "<<fPhi<<" degrees"<<'\n';
+    std::cout<<" ReactionPoint with coordinates "<<fReactionPoint<<" mm"<<'\n';
+    std::cout<<BOLDGREEN<<"  energy at RP "<<fRPEnergy<<" MeV"<<RESET<<'\n';
     std::cout<<" Total track length of "<<fTrackLength<<" mm"<<'\n';
     std::cout<<" And recoil energy at RP: "<<fRPEnergy<<" MeV"<<'\n';
     std::cout<<" Beam energy reconstructed: "<<fReconstructedBeamEnergy<<" MeV"<<'\n';
+    std::cout<<" Goes over Analysis Cuts ? "<<BOLDGREEN<<std::boolalpha<<fInsideAnalysisCuts<<RESET<<'\n';
     std::cout<<BOLDGREEN<<"=================="<<RESET<<std::endl;
 }
