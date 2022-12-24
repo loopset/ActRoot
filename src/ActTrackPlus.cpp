@@ -91,6 +91,13 @@ void ActTrackPlus::ConvertToLengthUnits(const ActCalibrations &calibrations)
     fGravityPoint = ScalePointOrVector(calibrations, fGravityPoint);
 }
 
+void ActTrackPlus::MatchSPWithRealPlacement()
+{
+    auto xLims {ActParameters::siliconsXPlacement.at(fSiliconSide).at(fSiliconIndex)};
+    if(xLims.first <= fSiliconPoint.X() && fSiliconPoint.X() <= xLims.second)
+        fMatchesRealSilicon = true;
+}
+
 void ActTrackPlus::ComputeAngles()
 {
     auto unitaryDirection {(fSiliconPoint - fGravityPoint).Unit()};
@@ -228,7 +235,7 @@ void ActTrackPlus::ComputeReactionPointFromChargeProfile(const ActTrack& cluster
                                                          const ActCalibrations& calibrations,
                                                          TCanvas* canv)
 {
-    auto* histProfile { new TH1D("histProfile", "Charge profile;Distance to BP [mm];Charge [au]", 65, -5.0, 100.)};
+    auto* histProfile { new TH1D("histProfile", "Charge profile;Distance to BP [mm];Charge [au]", 90, -5.0, 145.)};//maximum length of a track in the chamber
     GetChargeProfile(cluster, calibrations, histProfile);
     if(canv)
     {
@@ -280,6 +287,27 @@ bool ActTrackPlus::ComputeRMSInChargeProfile(double threshold)
         return false;
 }
 
+bool ActTrackPlus::ComputeBraggPeakInChargeProfile(double threshold)
+{
+    //it's as simple as getting the maximum
+    double xMax {};
+    double contentMax {};
+    for(int binx = 1; binx <= fHistProfile.GetNbinsX(); binx++)
+    {
+        auto content { fHistProfile.GetBinContent(binx)};
+        if(content > contentMax)
+        {
+            contentMax = content;
+            xMax = fHistProfile.GetBinCenter(binx);
+        }
+    }
+    auto rate { xMax / fLengthInChamber};
+    if(rate > threshold)
+        return true;
+    else
+        return false;
+}
+
 void ActTrackPlus::ComputeEnergyAtVertexWithSRIM(SimSRIM *srim, const std::string& srimString)
 {
     fTrackLength = TMath::Sqrt((fSiliconPoint - fReactionPoint).Mag2());
@@ -308,7 +336,8 @@ void ActTrackPlus::Print() const
     std::cout<<" Total charge of "<<fTotalCharge<<" and averaged over pads "<<fChargePerPad<<'\n';
     std::cout<<" SiliconPoint at "<<'\n';
     std::cout<<BOLDGREEN<<"  Side: "<<fSiliconSide<<" with Index: "<<fSiliconIndex<<RESET<<'\n';
-    std::cout<<"  Coordinates "<<fSiliconPoint<<" mm and Energy: "<<fSilEnergy<<" MeV"<<'\n'; 
+    std::cout<<"  Coordinates "<<fSiliconPoint<<" mm and Energy: "<<fSilEnergy<<" MeV"<<'\n';
+    std::cout<<BOLDGREEN<<"  And matches real Sil placement ? "<<std::boolalpha<<fMatchesRealSilicon<<RESET<<'\n';
     std::cout<<" BoundaryPoint at "<<fSiliconSide<<'\n';
     std::cout<<"  with coordinates "<<fBoundaryPoint<<" mm"<<'\n';
     std::cout<<"  and is in chamber ? "<<std::boolalpha<<fBPInChamber<<'\n';

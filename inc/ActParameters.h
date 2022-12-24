@@ -2,6 +2,7 @@
 #define ACTPARAMETERS_H
 
 //Colored output
+#include <utility>
 #define RESET   "\033[0m"
 #define BLACK   "\033[30m"      /* Black */
 #define RED     "\033[31m"      /* Red */
@@ -83,6 +84,30 @@ namespace ActParameters
             XYZPoint(0., ActParameters::g_NPADY - 1 + ActParameters::NPadsSideLeft, 0.)},
                                                                     {trackHitsSiliconSideRight,
                                                                      XYZPoint(0., -ActParameters::NPadsSideRight, 0.)},};
+    inline const std::map<std::string, std::map<int, std::pair<double, double>>> siliconsXPlacement {//refered to our standard system
+        {
+            trackHitsSiliconSideLeft,
+            {
+                {1, {89.0, 139.0}},
+                {2, {39.0, 89.0}},
+                {3, {-11.0, 39.0}},
+                {4, {-11.0, 39.0}},
+                {5, {39.0, 89.0}},
+                {6, {89.0, 139.0}}
+            }
+        },
+        {
+            trackHitsSiliconSideRight,
+            {
+                {1, {-11.0, 39.0}},
+                {2, {39.0, 89.0}},
+                {3, {89.0, 139.0}},
+                {4, {89.0, 139.0}},
+                {5, {39.0, 89.0}},
+                {6, {-11.0, 39.0}},
+            }
+        },
+    };
 
     //silicon layers to correct direction signs
     inline constexpr double silicon1X { (50.0 / padSideLength) / 2};//Y is in reality X dimension

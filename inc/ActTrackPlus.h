@@ -54,6 +54,7 @@ public:
     unsigned int fEntryID {};
     unsigned int fEventID {};
     unsigned int fRunID   {};
+    bool fMatchesRealSilicon {};
     bool fBPInChamber {};
     bool fIsPIDCorrected {};
     bool fInsideAnalysisCuts {};
@@ -65,6 +66,8 @@ public:
 
     void ConvertToLengthUnits(const ActCalibrations& calibrations);
 
+    void MatchSPWithRealPlacement();
+    
     void ComputeAngles();
 
     void ComputeChargeInRegion(int yPads, const ActCalibrations& calibrations);
@@ -77,7 +80,9 @@ public:
                                            std::string options = "noMarkov nobackground",
                                            double threshold = 0.5);
 
-    bool ComputeRMSInChargeProfile(double threhold = 1000);
+    bool ComputeRMSInChargeProfile(double threshold = 1000);
+
+    bool ComputeBraggPeakInChargeProfile(double threshold = 0.7);
     
     void ComputeEnergyAtVertexWithSRIM(SimSRIM* srim, const std::string& srimString);
 

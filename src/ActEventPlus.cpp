@@ -216,9 +216,9 @@ void ActEventPlus::CleanPileUp(const double &zMin, const double &zMax)
 
 bool ActEventPlus::CheckTopologyInnerFunction(const std::string &silSide, const int &silIndex, const std::vector<ActHit>& hits)
 {
-    int xWidth {3};
-    int yWidth {3};
-    int yProperWidth {5};//wider region for high energy particles just in case
+    int xWidth {4};//counting reference pad
+    int yWidth {4};
+    int yProperWidth {1};//always hit closer to side
     bool crossesWindow{false};
     bool crossesFront {false};
     bool crossesOppositeSide {false};
@@ -226,9 +226,9 @@ bool ActEventPlus::CheckTopologyInnerFunction(const std::string &silSide, const 
     //Front boundary
     //we also check for this only in a narrower window in Y
     int xMaxFront { ActParameters::g_NPADX - 1};
-    int xMinFront { xMaxFront - xWidth};
+    int xMinFront { xMaxFront - (xWidth - 1)};
     //window: where the beam enters
-    int xMaxWindow {xWidth};
+    int xMaxWindow {(xWidth - 1)};
     int xMinWindow { 0};
     int yMinFront { 7};//raw estimation, better use maximum angle to reach last silicon along beam
     int yMaxFront { 25};//32-7
@@ -238,18 +238,18 @@ bool ActEventPlus::CheckTopologyInnerFunction(const std::string &silSide, const 
     int yProperMin {}; int yProperMax {};
     if(silSide == ActParameters::trackHitsSiliconSideLeft)
     {
-        yMax = yWidth - 1;//remember that pads go [0,31]
+        yMax = yWidth - 1;//remember that pads go [0,31] and that we are counting the yMax/yMin in the width
         yMin = 0;
 
         yProperMax = ActParameters::g_NPADY - 1;
-        yProperMin = yProperMax - yProperWidth;
+        yProperMin = yProperMax - (yProperWidth - 1);
     }
     else if(silSide == ActParameters::trackHitsSiliconSideRight)
     {
         yMax = ActParameters::g_NPADY - 1;
-        yMin = yMax - yWidth;
+        yMin = yMax - (yWidth - 1);
 
-        yProperMax = yProperWidth - 1;
+        yProperMax = (yProperWidth - 1);
         yProperMin = 0;
     }
     else
