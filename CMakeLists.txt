@@ -34,6 +34,7 @@ set(sources
   ${CMAKE_SOURCE_DIR}/src/ActTrackGeometry.cpp
   ${CMAKE_SOURCE_DIR}/src/ActEventPlus.cpp
   ${CMAKE_SOURCE_DIR}/src/ActTrackPlus.cpp
+  ${CMAKE_SOURCE_DIR}/src/ActDBSCAN.cpp
 )
 
 set(headers
@@ -54,6 +55,7 @@ set(headers
   ${CMAKE_SOURCE_DIR}/inc/ActTrackGeometry.h
   ${CMAKE_SOURCE_DIR}/inc/ActEventPlus.h
   ${CMAKE_SOURCE_DIR}/inc/ActTrackPlus.h
+  ${CMAKE_SOURCE_DIR}/inc/ActDBSCAN.h
 )
 
 # ActRoot LinkDef and dict generation

@@ -61,4 +61,6 @@
 
 #pragma link C++ class ActKinematics + ;
 
+#pragma link C++ class ActDBSCAN + ;
+
 #endif

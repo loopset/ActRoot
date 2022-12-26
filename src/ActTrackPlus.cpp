@@ -166,7 +166,7 @@ void ActTrackPlus::ComputeChargeInRegion(int yPads, const ActCalibrations &calib
         chargeInRegion += vals.first;
         countPadsInRegion++;
     }
-    if(anyPadBeyondRegion)
+    if(anyPadBeyondRegion && countPadsInRegion > 0)
     {
         //COMPUTE LENGTH IN REGION IN MM
         fChargeInRegion = chargeInRegion;
