@@ -159,7 +159,7 @@ void ActCalibrations::InitDriftVelocityHist(const std::string& silSide, const in
     fSilIndex = silIndex;
 	fHistDrift = std::make_unique<TH2D>("fHistDrift", ("XZ Silicon Point for " + fSilSide + " and index " + fSilIndex),
 										ActParameters::g_NPADX, 0., ActParameters::g_NPADX,
-										ActParameters::g_NPADZ, 0., ActParameters::g_NPADZ);
+										ActParameters::g_NBINSZ, 0., ActParameters::g_NPADZ);
 }
 
 void ActCalibrations::FillDriftVelocityHist(std::vector<TrackPhysics>& tracks, Silicons& silicons)

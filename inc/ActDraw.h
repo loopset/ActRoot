@@ -66,7 +66,7 @@ class ActDraw
 	//binning and size of histograms
 	Int_t fNbinsX { ActParameters::g_NPADX};
 	Int_t fNbinsY { ActParameters::g_NPADY};
-	Int_t fNbinsZ { ActParameters::g_NPADZ};
+	Int_t fNbinsZ { ActParameters::g_NBINSZ};//new! to admit rebinning in Z!
 
 	Double_t fMinX { 0.};
 	Double_t fMaxX { ActParameters::g_NPADX};

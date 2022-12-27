@@ -111,10 +111,14 @@ void ActEventPlus::ReadHits(MEvent* Evt,
                 auto Qiaux { EvtRed->CoboAsad[it].peakheight[hit]};
                 double Qiaux_align {Qiaux};
 
-                ActHit candidate { hitID, XYZPoint(xval, yval, z_position), Qiaux_align, EvtRed->CoboAsad[it].hasSaturation};
+                //this new version allows Z rebinning, just tuning two parameters in ActParameters!
+                int zBin {(int)z_position / ActParameters::g_REBINZ};
+                //if bin width == 1, assume value the bin index, not the bin center (would be val + 0.5)
+                double zval {ActParameters::g_REBINZ * zBin + ((ActParameters::g_REBINZ <= 1) ? 0.0 : (double)ActParameters::g_REBINZ / 2)};
+                ActHit candidate { hitID, XYZPoint(xval, yval, zval), Qiaux_align, EvtRed->CoboAsad[it].hasSaturation};
                 //update hit if it is repeated
                 int globalIndex { static_cast<int>(xval + yval * ActParameters::g_NPADX
-                                                           + z_position * ActParameters::g_NPADX * ActParameters::g_NPADY)};
+                                                           + zBin * ActParameters::g_NPADX * ActParameters::g_NPADY)};
                 overrideHits[globalIndex].push_back(hitID);
                 if(overrideHits.at(globalIndex).size() > 1)
                 {

@@ -2,6 +2,7 @@
 #define ACTPARAMETERS_H
 
 //Colored output
+#include <tuple>
 #include <utility>
 #define RESET   "\033[0m"
 #define BLACK   "\033[30m"      /* Black */
@@ -39,7 +40,8 @@ namespace ActParameters
 	inline constexpr int g_NPADX { 64};
 	inline constexpr int g_NPADY { 32};
 	inline constexpr int g_NPADZ { 512};
-
+    inline constexpr int g_REBINZ {2};
+    inline constexpr int g_NBINSZ { g_NPADZ / g_REBINZ};
 	//pad side in mm
 	inline constexpr double padSideLength { 2.};//mm
 	
