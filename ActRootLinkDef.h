@@ -42,6 +42,7 @@
 #pragma link C++ struct Analysis + ;
 #pragma link C++ struct SiliconsPlus + ;
 #pragma link C++ struct Voxels + ;
+#pragma link C++ struct EventPlusCuts + ;
 #pragma link C++ class std::vector<Analysis> + ;
 #pragma link C++ class std::vector<TrackPhysics>+;//in order to generate I/O streamer to write std::vector of TrackPhysics
 

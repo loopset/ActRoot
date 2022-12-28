@@ -24,13 +24,13 @@ public:
     using XYZPoint = ROOT::Math::XYZPoint;    
 protected:
 	//Table with equivalences of pads and electronic channels
-	std::vector<std::vector<int>> fTABLE;//has to be initialized in constructor
+	std::vector<std::vector<int>> fTABLE;
 	//pad align coefficients
 	std::vector<std::vector<double>> fPadAlignCoefs;
-	std::map<std::string, std::vector<std::vector<double>>> fSilicon01SCalibrations {}; //not initialized in constructor
+	std::map<std::string, std::vector<std::vector<double>>> fSilicon01SCalibrations;
 	std::vector<std::vector<double>> fSiliconBeamCalibrations;
 
-    std::map<std::string, std::map<int, std::vector<double>>> fSiliconSideCalibrations {};
+    std::map<std::string, std::map<int, std::vector<double>>> fSiliconSideCalibrations;
 
 	//store conversion to physical units
 	double fXYToLengthUnits { ActParameters::padSideLength};//should be constant!
@@ -41,9 +41,12 @@ protected:
     std::string fSilSide {};
     int fSilIndex {};
 
+    //ZPileUp cuts
+    double fZPileUpMean;
+    double fZPileUpWidth;
 
 	public:
-	ActCalibrations();
+	ActCalibrations() = default;
 	~ActCalibrations() = default;
 
 	void ReadTABLE(std::string& tableFile);
@@ -77,7 +80,13 @@ protected:
 	void ReadDriftCoefsFromFile(std::string fileName);//read file
     void ComputeZDriftCoefsFromDriftVelocity(const std::string& fileName);
 	std::unique_ptr<TH2D> GetDriftVelocityHist(){ return std::move(fHistDrift); }//get histo to write it to ttree
-	//////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////
+
+    //PILEUP READS
+    void ReadPileUpSetup(const std::string& fileName);
+    double GetZPileUpMean() const { return fZPileUpMean; }
+    double GetZPileUpWidth() const { return fZPileUpWidth; }
+    
 };
 
 

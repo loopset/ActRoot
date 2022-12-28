@@ -8,6 +8,7 @@
 #include "MEventReduced.h"
 #include "Math/Point3Dfwd.h"
 #include "Math/Vector3Dfwd.h"
+#include <fstream>
 #include <map>
 #include <string>
 #include <tuple>
@@ -46,6 +47,8 @@ public:
     std::map<std::pair<int, int>, std::pair<double, bool>> GetPadMatrix() const;
 
     int CountSaturatedPads();
+
+    void WriteToStreamer(std::ofstream& streamer) const;
     
 private:
     void ReadAllButHits(MEvent* Evt,

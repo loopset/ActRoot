@@ -159,6 +159,18 @@ struct SiliconsPlus
     std::pair<std::string, int> GetSilSideAndIndex() const;
 };
 
+struct EventPlusCuts
+{
+    double fZPileUpMean;
+    double fZPileUpWidth;
+    unsigned int fNSat;
+    bool fSilCut;
+    bool fTopoCut;
+
+    EventPlusCuts() = default;
+    ~EventPlusCuts() = default;
+};
+
 struct EventInfo
 {
     int fSaturatedPadsEvent {};

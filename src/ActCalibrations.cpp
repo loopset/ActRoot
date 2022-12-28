@@ -17,18 +17,13 @@
 #include <vector>
 #include <string>
 
-ActCalibrations::ActCalibrations()
-	: fTABLE(6, std::vector<int>(ActParameters::g_NB_COBO *
-								 ActParameters::g_NB_ASAD *
-								 ActParameters::g_NB_AGET *
-								 ActParameters::g_NB_CHANNEL, 0)),
-	  fPadAlignCoefs(ActParameters::NCoefRows, std::vector<double>(3)),
-	  fSiliconBeamCalibrations(ActParameters::NrowsSiBeam, std::vector<double>(ActParameters::NcolsSiBeam))
-{
-}
-
 void ActCalibrations::ReadTABLE(std::string& tableFile)
 {
+    //Initialize table
+    fTABLE = std::vector<std::vector<int>>(6, std::vector<int>(ActParameters::g_NB_COBO *
+                                                               ActParameters::g_NB_ASAD *
+                                                               ActParameters::g_NB_AGET *
+                                                               ActParameters::g_NB_CHANNEL, 0));
 	std::ifstream streamer(tableFile.c_str());
 	if(streamer.fail())
 	{
@@ -47,7 +42,9 @@ void ActCalibrations::ReadTABLE(std::string& tableFile)
 
 void ActCalibrations::ReadPadAlignCoefs(std::string &coefsFile)
 {
-	std::ifstream streamer(coefsFile.c_str());
+    //initialize
+    fPadAlignCoefs = std::vector<std::vector<double>>(ActParameters::NCoefRows, std::vector<double>(3));
+    std::ifstream streamer(coefsFile.c_str());
 	if(streamer.fail())
 	{
 		throw std::runtime_error("Error opening PadAligCoefs file!");
@@ -65,6 +62,7 @@ void ActCalibrations::ReadPadAlignCoefs(std::string &coefsFile)
 
 void ActCalibrations::ReadSiliconSideCalibrations(const std::string &file)
 {
+    
     std::ifstream streamer {file.c_str()};
     if(!streamer)
     {
@@ -138,6 +136,8 @@ void ActCalibrations::ReadSilicon01SCalibrations(std::string &coefsFile, std::st
 
 void ActCalibrations::ReadSiliconBeamCalibrations(std::string &coefsFile)
 {
+    //initialize
+    fSiliconBeamCalibrations = std::vector<std::vector<double>>(ActParameters::NrowsSiBeam, std::vector<double>(ActParameters::NcolsSiBeam));
 	std::ifstream streamer(coefsFile.c_str());
 	if(streamer.fail())
 	{
@@ -342,4 +342,55 @@ void ActCalibrations::ComputeZDriftCoefsFromDriftVelocity(const std::string &fil
     std::cout<<"Samplig freq       : "<<freq<<" MHz"<<'\n';
     std::cout<<"Time buckets to mm : "<<fZToLengthUnits<<" mm/tb"<<'\n';
     std::cout<<" ==================== "<<RESET<<std::endl;
+}
+
+void ActCalibrations::ReadPileUpSetup(const std::string &fileName)
+{
+    //file must contain in the following order
+    // zMean(time buckets): xx.x (separated by a blank space!)
+    // zWidth(time buckets): zz.z
+    std::ifstream streamer {fileName.c_str()};
+    if(!streamer)
+    {
+        throw std::runtime_error("Error reading PileUp configuration from file!");
+    }
+    double mean {-1};
+    double width   {-1};
+    std::string line {};
+    int row {0};
+    while(std::getline(streamer, line, '\n'))
+    {
+        std::istringstream lineStreamer {line};
+        std::string value {};
+        int column {0};
+        while(std::getline(lineStreamer,value, ' '))
+        {
+            if(column == 1)
+            {
+                switch (row)
+                {
+                case 0:
+                    mean = std::stod(value);
+                    break;
+                case 1:
+                    width = std::stod(value);
+                    break;
+                default:
+                    break;
+                }
+            }
+            column++;
+        }
+        row++;
+    }
+    //v is given in cm/us
+    //freq in MHz, so we only need to convert cm -> mm
+    fZPileUpMean  = mean;
+    fZPileUpWidth = width;
+    //print
+    std::cout<<BOLDCYAN<<"== PileUp Configuration =="<<'\n';
+    std::cout<<" Read file : "<<fileName<<'\n';
+    std::cout<<" zMean     : "<<fZPileUpMean<<" tb"<<'\n';
+    std::cout<<" zWidth    : "<<fZPileUpWidth<<" tb"<<'\n';
+    std::cout<<"========================"<<RESET<<std::endl;
 }

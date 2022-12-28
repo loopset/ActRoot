@@ -40,7 +40,7 @@ namespace ActParameters
 	inline constexpr int g_NPADX { 64};
 	inline constexpr int g_NPADY { 32};
 	inline constexpr int g_NPADZ { 512};
-    inline constexpr int g_REBINZ {2};
+    inline constexpr int g_REBINZ { 4};
     inline constexpr int g_NBINSZ { g_NPADZ / g_REBINZ};
 	//pad side in mm
 	inline constexpr double padSideLength { 2.};//mm

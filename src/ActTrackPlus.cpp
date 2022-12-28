@@ -352,3 +352,11 @@ void ActTrackPlus::Print() const
     std::cout<<" Goes over Analysis Cuts ? "<<BOLDGREEN<<std::boolalpha<<fInsideAnalysisCuts<<RESET<<'\n';
     std::cout<<BOLDGREEN<<"=================="<<RESET<<std::endl;
 }
+
+void ActTrackPlus::WriteToStreamer(std::ofstream &streamer, const int& anaEntry) const
+{
+    if(anaEntry != -1)
+        streamer<<fRunID<<" "<<fEntryID<<" "<<anaEntry<<'\n';
+    else
+        streamer<<fRunID<<" "<<fEntryID<<'\n';
+}

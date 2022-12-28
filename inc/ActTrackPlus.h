@@ -17,6 +17,7 @@
 #include "TF1.h"
 #include "TH1.h"
 
+#include <fstream>
 #include <map>
 #include <string>
 #include <utility>
@@ -91,6 +92,8 @@ public:
     void CorrectPIDInRegion(TF1* funCorr);
 
     void Print() const;
+
+    void WriteToStreamer(std::ofstream& streamer, const int& anaEntry = {-1}) const;
     
 private:
     void FillPadMatrix(const ActTrack& track);

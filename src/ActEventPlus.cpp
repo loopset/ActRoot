@@ -131,6 +131,8 @@ void ActEventPlus::ReadHits(MEvent* Evt,
                     //std::cout<<"\t\tIndex to update: "<<index<<'\n';
                     auto alreadyCharge { voxel.fHits.at(index).GetCharge()};
                     voxel.fHits.at(index).SetCharge(alreadyCharge + Qiaux_align);
+                    if(candidate.GetIsSaturated())//update also IsSaturated flag to true if ANY repeated hit is saturated
+                        voxel.fHits.at(index).SetIsSaturated(true);
                 }
                 else
                 {
@@ -234,8 +236,9 @@ bool ActEventPlus::CheckTopologyInnerFunction(const std::string &silSide, const 
     //window: where the beam enters
     int xMaxWindow {(xWidth - 1)};
     int xMinWindow { 0};
-    int yMinFront { 7};//raw estimation, better use maximum angle to reach last silicon along beam
-    int yMaxFront { 25};//32-7
+    //front
+    int yMinFront {};//NOT intersecting with yProperSide
+    int yMaxFront {};
     //Side boundary
     int yMin {}; int yMax {};
     //proper side
@@ -247,6 +250,9 @@ bool ActEventPlus::CheckTopologyInnerFunction(const std::string &silSide, const 
 
         yProperMax = ActParameters::g_NPADY - 1;
         yProperMin = yProperMax - (yProperWidth - 1);
+
+        yMaxFront = yProperMin - 1;
+        yMinFront = yMin;
     }
     else if(silSide == ActParameters::trackHitsSiliconSideRight)
     {
@@ -255,6 +261,9 @@ bool ActEventPlus::CheckTopologyInnerFunction(const std::string &silSide, const 
 
         yProperMax = (yProperWidth - 1);
         yProperMin = 0;
+
+        yMaxFront = yMax;
+        yMinFront = yProperMax - 1;
     }
     else
     {
@@ -328,4 +337,9 @@ int ActEventPlus::CountSaturatedPads()
             counter++;
     }
     return counter;
+}
+
+void ActEventPlus::WriteToStreamer(std::ofstream &streamer) const
+{
+    streamer<<runID<<" "<<entryID<<'\n';
 }
