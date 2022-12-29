@@ -57,8 +57,8 @@ public:
     unsigned int fRunID   {};
     bool fMatchesRealSilicon {};
     bool fBPInChamber {};
-    bool fIsPIDCorrected {};
-    bool fInsideAnalysisCuts {};
+    //bool fIsPIDCorrected {};
+    //bool fInsideAnalysisCuts {};
 
     ActTrackPlus() = default;
     ActTrackPlus(unsigned int run, unsigned int eve, unsigned int entry,
@@ -89,7 +89,7 @@ public:
 
     void ReconstructBeamEnergyFromLAB(SimKinematics* kinematics);
 
-    void CorrectPIDInRegion(TF1* funCorr);
+    double CorrectPIDInRegion(TF1* funCorr) const;//doesnt modify internal value!
 
     void Print() const;
 

@@ -209,7 +209,10 @@ void ActTrackPlus::GetChargeProfile(const ActTrack& cluster,
 
     //set reference point and fine granularity for XY plane
     const XYZPoint& reference {fBoundaryPoint};
+    //ensure correct signs for line vector
+    auto lineVector { (fGravityPoint - fBoundaryPoint).Unit()};
     auto xyOffset {calibrations.GetXYToLengthUnitsCoef() / 3};//pad +0.5 three times
+    auto zOffset  {(calibrations.GetZToLengthUnitsCoef() * ActParameters::g_REBINZ) / 3};
     for(const auto& hit : cluster.GetHitArrayConst())
     {
         //MUST BE CONVERTED TO MM
@@ -220,15 +223,16 @@ void ActTrackPlus::GetChargeProfile(const ActTrack& cluster,
         {
             for(int ky = -1; ky < 2; ky++)
             {
-                XYZPoint bin {pos.X() + kx * xyOffset,
-                    pos.Y() + ky * xyOffset,
-                    pos.Z()};
+                for(int kz = -1; kz < 2; kz++)
+                {
+                    XYZPoint bin {pos.X() + kx * xyOffset,
+                        pos.Y() + ky * xyOffset,
+                        pos.Z() + kz * zOffset};
 
-                auto binVector { bin - reference};
-                //ensure correct signs for direction
-                auto lineVector { (fGravityPoint - fBoundaryPoint).Unit()};
-                auto dist { getDistanceProjToBP(lineVector, binVector)};
-                histProfile->Fill(dist, ch / 9);
+                    auto binVector { bin - reference};
+                    auto dist { getDistanceProjToBP(lineVector, binVector)};
+                    histProfile->Fill(dist, ch / 27);
+                }
             }
         }
     }
@@ -337,11 +341,11 @@ void ActTrackPlus::ReconstructBeamEnergyFromLAB(SimKinematics *kinematics)
         fReconstructedBeamEnergy = -11;
 }
 
-void ActTrackPlus::CorrectPIDInRegion(TF1 *funCorr)
+double ActTrackPlus::CorrectPIDInRegion(TF1 *funCorr) const
 {
     //corrects PID in region by flattening the Q/L distribution along Z_{Sil}, to avoid dependence on drift along Z
-    fPIDInRegion = fPIDInRegion + funCorr->Eval(fSiliconPoint.Z());
-    fIsPIDCorrected = true;
+    return fPIDInRegion + funCorr->Eval(fSiliconPoint.Z());
+    //fIsPIDCorrected = true;
 }
 
 void ActTrackPlus::Print() const
@@ -366,7 +370,7 @@ void ActTrackPlus::Print() const
     std::cout<<" Total track length of "<<fTrackLength<<" mm"<<'\n';
     std::cout<<" And recoil energy at RP: "<<fRPEnergy<<" MeV"<<'\n';
     std::cout<<" Beam energy reconstructed: "<<fReconstructedBeamEnergy<<" MeV"<<'\n';
-    std::cout<<" Goes over Analysis Cuts ? "<<BOLDGREEN<<std::boolalpha<<fInsideAnalysisCuts<<RESET<<'\n';
+    //std::cout<<" Goes over Analysis Cuts ? "<<BOLDGREEN<<std::boolalpha<<fInsideAnalysisCuts<<RESET<<'\n';
     std::cout<<BOLDGREEN<<"=================="<<RESET<<std::endl;
 }
 
