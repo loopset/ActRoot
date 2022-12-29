@@ -129,6 +129,13 @@ private:
         newPoint.SetZ(oldPoint.Z() * calibrations.GetZToLengthUnitsCoef());
         return newPoint;
     }
+    template<typename T>
+    static inline bool isInVector(T val, std::vector<T> vec)
+	{
+		if (vec.size() == 0)
+			return false;
+		return std::find(vec.begin(), vec.end(), val) != vec.end();
+	}
     
 };
 

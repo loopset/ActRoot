@@ -10,6 +10,7 @@
 #include <ios>
 #include <iostream>
 #include <string>
+#include <vector>
 
 ActTrackPlus::ActTrackPlus(unsigned int run, unsigned int eve, unsigned int entry,
                            const ActTrack& track, const SiliconsPlus& silicons)
@@ -120,15 +121,20 @@ void ActTrackPlus::ComputeChargeInRegion(int yPads, const ActCalibrations &calib
 
     //auxiliar pad values
     int yBP {}; int yThreshold {};
+    std::vector<int> yValsToBeChecked;
     if(fSiliconSide == ActParameters::trackHitsSiliconSideLeft)
     {
         yBP        = ActParameters::g_NPADY - 1;
-        yThreshold = yBP - fRegionWidth;
+        yThreshold = yBP - (fRegionWidth - 1);
+        for(auto y = yThreshold; y <= yBP; y++)
+            yValsToBeChecked.push_back(y);
     }
     else if(fSiliconSide == ActParameters::trackHitsSiliconSideRight)
     {
         yBP        = 0;
-        yThreshold = yBP + fRegionWidth;
+        yThreshold = yBP + (fRegionWidth - 1);
+        for(auto y = yBP; y <= yThreshold; y++)
+            yValsToBeChecked.push_back(y);
     }
     else
     {
@@ -147,6 +153,7 @@ void ActTrackPlus::ComputeChargeInRegion(int yPads, const ActCalibrations &calib
     double chargeInRegion {};
     int countPadsInRegion {};
     bool anyPadBeyondRegion {};
+    std::vector<int> yValsFilled;
     for(const auto& [pos, vals] : fPadMatrix)
     {
         const auto& [x,y] = pos;
@@ -165,8 +172,16 @@ void ActTrackPlus::ComputeChargeInRegion(int yPads, const ActCalibrations &calib
             continue;
         chargeInRegion += vals.first;
         countPadsInRegion++;
+        yValsFilled.push_back(y);
     }
-    if(anyPadBeyondRegion && countPadsInRegion > 0)
+    //CHECK THAT REGION HAS ALL BINS EMPTY BINS (IN Y)
+    bool regionIsEmpty {};
+    for(const auto& y : yValsToBeChecked)
+    {
+        if(!isInVector(y, yValsFilled))
+            regionIsEmpty = true;
+    }
+    if(anyPadBeyondRegion && !regionIsEmpty)
     {
         //COMPUTE LENGTH IN REGION IN MM
         fChargeInRegion = chargeInRegion;
@@ -318,6 +333,8 @@ void ActTrackPlus::ComputeEnergyAtVertexWithSRIM(SimSRIM *srim, const std::strin
 void ActTrackPlus::ReconstructBeamEnergyFromLAB(SimKinematics *kinematics)
 {
     fReconstructedBeamEnergy = kinematics->ReconstructBeamEnergyFromLabKinematics(fRPEnergy, TMath::DegToRad() * fTheta);
+    if(fReconstructedBeamEnergy < 0.0 || fReconstructedBeamEnergy > 500.0)
+        fReconstructedBeamEnergy = -11;
 }
 
 void ActTrackPlus::CorrectPIDInRegion(TF1 *funCorr)
