@@ -17,46 +17,9 @@ include_directories(${CMAKE_SOURCE_DIR}/../../NFS-Simulations/ActSim/inc)
 ## for ROOT includes in Ubuntu
 include_directories(${ROOT_INCLUDE_DIRS})
 
-set(sources
-  ${CMAKE_SOURCE_DIR}/src/ActHit.cpp
-  ${CMAKE_SOURCE_DIR}/src/ActTrack.cpp
-  ${CMAKE_SOURCE_DIR}/src/ActClusteringResults.cpp
-  ${CMAKE_SOURCE_DIR}/src/ActLine.cpp
-  ${CMAKE_SOURCE_DIR}/src/ActSample.cpp
-  ${CMAKE_SOURCE_DIR}/src/ActRANSAC.cpp
-  ${CMAKE_SOURCE_DIR}/src/ActDraw.cpp
-  ${CMAKE_SOURCE_DIR}/src/ActCalibrations.cpp
-  ${CMAKE_SOURCE_DIR}/src/ActStructs.cpp
-  ${CMAKE_SOURCE_DIR}/src/ActEvent.cpp
-  ${CMAKE_SOURCE_DIR}/src/ActAnalyzer.cpp
-  ${CMAKE_SOURCE_DIR}/src/ActSRIM.cpp
-  ${CMAKE_SOURCE_DIR}/src/ActKinematics.cpp
-  ${CMAKE_SOURCE_DIR}/src/ActTrackGeometry.cpp
-  ${CMAKE_SOURCE_DIR}/src/ActEventPlus.cpp
-  ${CMAKE_SOURCE_DIR}/src/ActTrackPlus.cpp
-  ${CMAKE_SOURCE_DIR}/src/ActDBSCAN.cpp
-)
-
-set(headers
-  ${CMAKE_SOURCE_DIR}/inc/ActParameters.h
-  ${CMAKE_SOURCE_DIR}/inc/ActHit.h
-  ${CMAKE_SOURCE_DIR}/inc/ActTrack.h
-  ${CMAKE_SOURCE_DIR}/inc/ActClusteringResults.h
-  ${CMAKE_SOURCE_DIR}/inc/ActLine.h
-  ${CMAKE_SOURCE_DIR}/inc/ActSample.h
-  ${CMAKE_SOURCE_DIR}/inc/ActRANSAC.h
-  ${CMAKE_SOURCE_DIR}/inc/ActDraw.h
-  ${CMAKE_SOURCE_DIR}/inc/ActStructs.h
-  ${CMAKE_SOURCE_DIR}/inc/ActCalibrations.h
-  ${CMAKE_SOURCE_DIR}/inc/ActEvent.h
-  ${CMAKE_SOURCE_DIR}/inc/ActAnalyzer.h
-  ${CMAKE_SOURCE_DIR}/inc/ActSRIM.h
-  ${CMAKE_SOURCE_DIR}/inc/ActKinematics.h
-  ${CMAKE_SOURCE_DIR}/inc/ActTrackGeometry.h
-  ${CMAKE_SOURCE_DIR}/inc/ActEventPlus.h
-  ${CMAKE_SOURCE_DIR}/inc/ActTrackPlus.h
-  ${CMAKE_SOURCE_DIR}/inc/ActDBSCAN.h
-)
+## set files to compile
+file(GLOB sources ${CMAKE_SOURCE_DIR}/src/*.cpp)
+file(GLOB headers ${CMAKE_SOURCE_DIR}/inc/*.h)
 
 # ActRoot LinkDef and dict generation
 set(LINKDEF_LOCATION ${CMAKE_SOURCE_DIR}/ActRootLinkDef.h)

@@ -2,7 +2,7 @@
 
 #include "ActParameters.h"
 #include "ActStructs.h"
-#include "ActTrackGeometry.h"
+#include "ActTrackPlus.h"
 #include "TString.h"
 
 #include <TH2.h>
@@ -162,47 +162,15 @@ void ActCalibrations::InitDriftVelocityHist(const std::string& silSide, const in
 										ActParameters::g_NBINSZ, 0., ActParameters::g_NPADZ);
 }
 
-void ActCalibrations::FillDriftVelocityHist(std::vector<TrackPhysics>& tracks, Silicons& silicons)
-{
-    int silIndex {2};
-    auto sideFinder = [&](const TrackPhysics& tr)
-    {
-        auto silPlace {TString(tr.fSiliconPlace)};
-        std::string side {};
-        if(silPlace.Contains("left"))
-            side = "left";
-        else if(silPlace.Contains("right"))
-            side = "right";
-        else
-            side = "none";
-        return side;
-    };
-    for(const auto& track : tracks)
-    {
-        auto side { sideFinder(track)};
-        if(side == "none")
-            continue;
-        //check multiplicity
-        if(silicons.fData.at(side).at("M") > 1)
-            continue;;
-        //check silicon number matches desired by us
-        if(silicons.fData.at(side).at("P") != silIndex)
-            continue;;
 
-        //otherwise, fill
-        fHistDrift->Fill(track.fSiliconPoint.X(), track.fSiliconPoint.Z(),
-							 silicons.fData.at(side).at("E"));
-    }
-}
-
-void ActCalibrations::FillDriftVelocityHist(const ActTrackGeometry& track, const Silicons& silicons)
+void ActCalibrations::FillDriftVelocityHist(const ActTrackPlus& track, const Silicons& silicons)
 {
     //sil index to fill histogram (for both sides!)
     int chosenSil {2};//it is at center for both sides
-    if(track.fSilIndex == chosenSil)
+    if(track.fSiliconIndex == chosenSil)
     {
         fHistDrift->Fill(track.fSiliconPoint.X(), track.fSiliconPoint.Z(),
-                         silicons.fData.at(track.fSiliconPlace).at("E"));
+                         silicons.fData.at(track.fSiliconSide).at("E"));
     
     }
 }

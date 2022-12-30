@@ -16,7 +16,7 @@
 #include <TCanvas.h>
 #include <TH2.h>
 
-class ActTrackGeometry;
+class ActTrackPlus;
 
 class ActCalibrations
 {
@@ -71,8 +71,7 @@ protected:
 	double GetZToPadUnitsCoef() const { return fZToPadUnits; }
 	double GetXYToLengthUnitsCoef() const { return fXYToLengthUnits; }
 	void InitDriftVelocityHist(const std::string& silSide, const int& silIndex);//initialize histogram to fill it with physics
-	void FillDriftVelocityHist(std::vector<TrackPhysics>& tracks, Silicons& silicons);
-    void FillDriftVelocityHist(const ActTrackGeometry& tracks, const Silicons& silicons);
+    void FillDriftVelocityHist(const ActTrackPlus& tracks, const Silicons& silicons);
     void FillDriftVelocityHistPlus(const XYZPoint& point, const std::string& silSide, const int& silIndex, const double& silEnergy);
 	void ComputeDriftCoefsFromHist();//compute coefs once hist is filled
 	void PlotDriftVelocityHist();//plot it
