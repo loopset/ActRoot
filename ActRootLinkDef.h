@@ -43,4 +43,6 @@
 
 #pragma link C++ class ActDBSCAN + ;
 
+#pragma link C++ class ActRunManager + ;
+
 #endif

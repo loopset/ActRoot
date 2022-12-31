@@ -9,6 +9,7 @@
 #include <TCanvas.h>
 
 #include <TROOT.h>
+#include <cmath>
 #include <fstream>
 #include <iostream>
 #include <memory>
@@ -252,7 +253,7 @@ void ActCalibrations::WriteDriftCoefsToFile(std::string fileName)
 	streamer.close();
 }
 
-void ActCalibrations::ReadDriftCoefsFromFile(std::string fileName)
+void ActCalibrations::ReadDriftCoefsFromFile(const std::string& fileName)
 {
 	std::ifstream streamer(fileName.c_str());
 	double aux;
@@ -305,7 +306,7 @@ void ActCalibrations::ComputeZDriftCoefsFromDriftVelocity(const std::string &fil
     fZToLengthUnits = 10.0 * vdrift / freq;
     fZToPadUnits    = fZToLengthUnits / ActParameters::padSideLength;
     //print
-    std::cout<<BOLDGREEN<<" == Given drift parameters == "<<'\n';
+    std::cout<<BOLDGREEN<<"==== Auto drift parameters ===="<<'\n';
     std::cout<<"Drift velocity     : "<<vdrift<<" cm/mus"<<'\n';
     std::cout<<"Samplig freq       : "<<freq<<" MHz"<<'\n';
     std::cout<<"Time buckets to mm : "<<fZToLengthUnits<<" mm/tb"<<'\n';
@@ -361,4 +362,55 @@ void ActCalibrations::ReadPileUpSetup(const std::string &fileName)
     std::cout<<" zMean     : "<<fZPileUpMean<<" tb"<<'\n';
     std::cout<<" zWidth    : "<<fZPileUpWidth<<" tb"<<'\n';
     std::cout<<"========================"<<RESET<<std::endl;
+}
+
+void ActCalibrations::ReadManualDriftParameters(const std::string &fileName)
+{
+    std::ifstream streamer {fileName.c_str()};
+    if(!streamer)
+    {
+        throw std::runtime_error("Error reading MANUAL drift coefficients from file!");
+    }
+    double realSize {-1};
+    double zMax {-1};
+    double zMin   {-1};
+    std::string line {};
+    int row {0};
+    while(std::getline(streamer, line, '\n'))
+    {
+        std::istringstream lineStreamer {line};
+        std::string value {};
+        int column {0};
+        while(std::getline(lineStreamer,value, ' '))
+        {
+            if(column == 1)
+            {
+                switch (row)
+                {
+                case 0:
+                    realSize = std::stod(value);
+                    break;
+                case 1:
+                    zMax = std::stod(value);
+                    break;
+                case 2:
+                    zMin = std::stod(value);
+                    break;
+                default:
+                    break;
+                }
+            }
+            column++;
+        }
+        row++;
+    }
+    fZToLengthUnits = realSize / std::abs(zMax - zMin);
+    fZToPadUnits    = fZToLengthUnits / ActParameters::padSideLength;
+    //print
+    std::cout<<BOLDGREEN<<"==== Manual drift parameters ===="<<'\n';
+    std::cout<<"Real Z Sil size    : "<<realSize<<" mm"<<'\n';
+    std::cout<<"Histo Z Max        : "<<zMax<<" tb"<<'\n';
+    std::cout<<"Histo Z Min        : "<<zMin<<" tb"<<'\n';
+    std::cout<<"Time buckets to mm : "<<fZToLengthUnits<<" mm/tb"<<'\n';
+    std::cout<<"============================="<<RESET<<std::endl;
 }

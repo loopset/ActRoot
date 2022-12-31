@@ -76,8 +76,9 @@ protected:
 	void ComputeDriftCoefsFromHist();//compute coefs once hist is filled
 	void PlotDriftVelocityHist();//plot it
 	void WriteDriftCoefsToFile(std::string fileName);//write it to files
-	void ReadDriftCoefsFromFile(std::string fileName);//read file
+	void ReadDriftCoefsFromFile(const std::string& fileName);//read file
     void ComputeZDriftCoefsFromDriftVelocity(const std::string& fileName);
+    void ReadManualDriftParameters(const std::string& fileName);
 	std::unique_ptr<TH2D> GetDriftVelocityHist(){ return std::move(fHistDrift); }//get histo to write it to ttree
 	/////////////////////////////////////////////////////////////////////////
 
