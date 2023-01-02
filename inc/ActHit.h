@@ -23,9 +23,9 @@ public:
 	using XYZVector = ROOT::Math::XYZVector;
 
 protected:
-	Double_t fCharge{-1};
+	float fCharge{-1};
 	XYZPoint fPosition{XYZPoint(0, 0, -1000)};
-	Int_t fHitID{-1}; //unique identifier of hit in chamber
+	int fHitID{-1}; //unique identifier of hit in chamber
     bool fIsSaturated {false};
 
 	
@@ -44,8 +44,8 @@ public://member functions
 	void SetHitID(Int_t hitID){ fHitID = hitID; }
     void SetIsSaturated(bool val){ fIsSaturated = val; }
 
-	Int_t GetHitID() const { return fHitID; }
-	Double_t GetCharge() const { return fCharge; }
+	int GetHitID() const { return fHitID; }
+	float GetCharge() const { return fCharge; }
 	const XYZPoint& GetPosition() const { return fPosition; }
     bool GetIsSaturated() const { return fIsSaturated; }
 	

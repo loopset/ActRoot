@@ -14,17 +14,16 @@
 #include <vector>
 
 ActEventPlus::ActEventPlus(const unsigned int& run, const unsigned int& entry,
-                           ActCalibrations* calibrations, MEvent*& Evt, MEventReduced*& EvtRed)
+                           MEventReduced*& EvtRed)
     : eventID(EvtRed->event), entryID(entry), runID(run)
 {
-     //read data
-     ReadData(calibrations, Evt, EvtRed);
 }
 
-void ActEventPlus::ReadData(ActCalibrations* calibrations, MEvent*& Evt, MEventReduced*& EvtRed)
+void ActEventPlus::ReadData(ActCalibrations*& calibrations,
+                            const std::vector<std::vector<int>>& TABLE, const std::vector<std::vector<double>>& padAlignCoefs,
+                            MEvent*& Evt, MEventReduced*& EvtRed,
+                            bool alignCharge)
 {
-    //read TABLE
-    auto TABLE {calibrations->GetTABLE()};
     //legacy old silicons to write raw data
     Silicons oldSilicons {};
     int hitID {0};
@@ -48,8 +47,10 @@ void ActEventPlus::ReadData(ActCalibrations* calibrations, MEvent*& Evt, MEventR
         if((co != 31) && (co != 16))
         {
             ReadHits(Evt, EvtRed,
-                     hitID, TABLE,
+                     hitID,
+                     TABLE, padAlignCoefs,
                      overrideHits,
+                     alignCharge,
                      it, where);
         }
     }
@@ -58,8 +59,8 @@ void ActEventPlus::ReadData(ActCalibrations* calibrations, MEvent*& Evt, MEventR
     ReadAndCalibrateSilicons(oldSilicons, calibrations);
 }
 
-void ActEventPlus::ReadAllButHits(MEvent* Evt,
-                                  MEventReduced* EvtRed,
+void ActEventPlus::ReadAllButHits(MEvent*& Evt,
+                                  MEventReduced*& EvtRed,
                                   Silicons& oldSilicons,
                                   const int& it)
 {
@@ -92,11 +93,13 @@ void ActEventPlus::ReadAllButHits(MEvent* Evt,
         if(index == 7000  ){ tof.tSilL46             = EvtRed->CoboAsad[it].peakheight[hit] ; }}
 }
 
-void ActEventPlus::ReadHits(MEvent* Evt,
-                            MEventReduced* EvtRed,
+void ActEventPlus::ReadHits(MEvent*& Evt,
+                            MEventReduced*& EvtRed,
                             int& hitID,
                             const std::vector<std::vector<int>>& TABLE,
+                            const std::vector<std::vector<double>>& padAlignCoefs,
                             std::map<int, std::vector<int>>& overrideHits,
+                            const bool& alignCharge,
                             const int& it, const int& where)
 {
     auto xval { static_cast<int>(TABLE[4][where])};
@@ -109,13 +112,22 @@ void ActEventPlus::ReadHits(MEvent* Evt,
             if(z_position > 0.)
             {
                 auto Qiaux { EvtRed->CoboAsad[it].peakheight[hit]};
-                double Qiaux_align {Qiaux};
-
+                double Qiaux_align {};
+                if(!alignCharge)
+                    Qiaux_align = Qiaux;
+                else
+                {
+                    Qiaux_align = padAlignCoefs.at(where).at(0) + padAlignCoefs.at(where).at(1) * Qiaux +
+                        padAlignCoefs.at(where).at(2) * Qiaux * Qiaux;
+                }
+                
                 //this new version allows Z rebinning, just tuning two parameters in ActParameters!
                 int zBin {(int)z_position / ActParameters::g_REBINZ};
                 //if bin width == 1, assume value the bin index, not the bin center (would be val + 0.5)
                 double zval {ActParameters::g_REBINZ * zBin + ((ActParameters::g_REBINZ <= 1) ? 0.0 : (double)ActParameters::g_REBINZ / 2)};
+                
                 ActHit candidate { hitID, XYZPoint(xval, yval, zval), Qiaux_align, EvtRed->CoboAsad[it].hasSaturation};
+                
                 //update hit if it is repeated
                 int globalIndex { static_cast<int>(xval + yval * ActParameters::g_NPADX
                                                            + zBin * ActParameters::g_NPADX * ActParameters::g_NPADY)};
@@ -150,7 +162,7 @@ void ActEventPlus::ReadHits(MEvent* Evt,
 }
 
 void ActEventPlus::ReadAndCalibrateSilicons(Silicons& oldSilicons,
-                                            ActCalibrations* calibrations)
+                                            ActCalibrations*& calibrations)
 {
     auto cal { calibrations->GetSiliconSideCalibrations()};
     //CALIBRATE

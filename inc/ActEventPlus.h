@@ -35,10 +35,13 @@ public:
 public:
     ActEventPlus() = default;
     ActEventPlus(const unsigned int& run, const unsigned int& entry,
-                 ActCalibrations* calibrations, MEvent*& Evt, MEventReduced*& EvtRed);
+                 MEventReduced*& EvtRed);
     ~ActEventPlus() = default;
 
-    void ReadData(ActCalibrations* calibrations, MEvent*& Evt, MEventReduced*& EvtRed);
+    void ReadData(ActCalibrations*& calibrations,
+                  const std::vector<std::vector<int>>& TABLE, const std::vector<std::vector<double>>& padAlignCoefs,
+                  MEvent*& Evt, MEventReduced*& EvtRed,
+                  bool alignCharge = false);
 
     void CleanPileUp(const double& zMin, const double& zMax);
     
@@ -51,17 +54,20 @@ public:
     void WriteToStreamer(std::ofstream& streamer) const;
     
 private:
-    void ReadAllButHits(MEvent* Evt,
-                        MEventReduced* EvtRed,
+    void ReadAllButHits(MEvent*& Evt,
+                        MEventReduced*& EvtRed,
                         Silicons& oldSilicons,
                         const int& it);
-    void ReadHits(MEvent* Evt,
-                  MEventReduced* EvtRed,
-                  int& hitID, const std::vector<std::vector<int>>& TABLE,
+    void ReadHits(MEvent*& Evt,
+                  MEventReduced*& EvtRed,
+                  int& hitID,
+                  const std::vector<std::vector<int>>& TABLE,
+                  const std::vector<std::vector<double>>& padAlignCoefs,
                   std::map<int, std::vector<int>>& overrideHits,
+                  const bool& alignCharge,
                   const int& it, const int& where);
 
-    void ReadAndCalibrateSilicons(Silicons& oldSilicons, ActCalibrations* calibrations);
+    void ReadAndCalibrateSilicons(Silicons& oldSilicons, ActCalibrations*& calibrations);
 
     bool CheckTopologyInnerFunction(const std::string& silSide, const int& silIndex, const std::vector<ActHit>& hits);
 
