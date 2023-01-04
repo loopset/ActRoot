@@ -280,13 +280,12 @@ void ActTrackPlus::CountNumberOfPeaksInChargeProfile(double sigma, std::string o
                                                     threshold);
 }
 
-bool ActTrackPlus::ComputeRMSInChargeProfile(double threshold)
+bool ActTrackPlus::ComputeRMSInChargeProfile(double threshold, double safeDistance)
 {
     //if RMS is above threshold, there is high likelihood that the tracks is of a carbon reaction
     auto* graph = new TGraph();
     auto xMin { fHistProfile.GetBinCenter(fHistProfile.FindFirstBinAbove(0.0))};
     auto xMax { fHistProfile.GetBinCenter(fHistProfile.FindLastBinAbove(0.0))};
-    auto safeDistance {4.0};//mm
     for(int i = 1; i <= fHistProfile.GetNbinsX(); i++)
     {
         auto center { fHistProfile.GetBinCenter(i)};

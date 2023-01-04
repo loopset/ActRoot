@@ -81,7 +81,7 @@ public:
                                            std::string options = "noMarkov nobackground",
                                            double threshold = 0.5);
 
-    bool ComputeRMSInChargeProfile(double threshold = 1000);
+    bool ComputeRMSInChargeProfile(double threshold = 1000, double safeDistance = 0.0);
 
     bool ComputeBraggPeakInChargeProfile(double threshold = 0.7);
     

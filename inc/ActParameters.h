@@ -40,7 +40,7 @@ namespace ActParameters
 	inline constexpr int g_NPADX { 64};
 	inline constexpr int g_NPADY { 32};
 	inline constexpr int g_NPADZ { 512};
-    inline constexpr int g_REBINZ { 4};
+    inline constexpr int g_REBINZ { 4};//rebin factor of 4!
     inline constexpr int g_NBINSZ { g_NPADZ / g_REBINZ};
 	//pad side in mm
 	inline constexpr double padSideLength { 2.};//mm
@@ -111,28 +111,6 @@ namespace ActParameters
         },
     };
 
-    //silicon layers to correct direction signs
-    inline constexpr double silicon1X { (50.0 / padSideLength) / 2};//Y is in reality X dimension
-    inline constexpr double silicon1Z {  static_cast<double>(g_NPADZ) / 2};//since we cant convert yet to distance
-    //according to side, we can determine the correct slope sign for each component!
-    inline std::map<std::string, std::map<int, std::pair<double, double>>> siliconDirection {
-        {trackHitsSiliconSideLeft,{
-                {1, std::make_pair(+5* silicon1X ,  +silicon1Z)},
-                {2, std::make_pair(+3 * silicon1X , +silicon1Z)},
-                {3, std::make_pair(+1 * silicon1X , +silicon1Z)},
-                {4, std::make_pair(+1 * silicon1X , +silicon1Z)},
-                {5, std::make_pair(+3 * silicon1X , +silicon1Z)},
-                {6, std::make_pair(+5 * silicon1X , +silicon1Z)}}
-        },
-        {trackHitsSiliconSideRight, {
-                {1, std::make_pair(+1 * silicon1X , +silicon1Z)},
-                {2, std::make_pair(+3 * silicon1X , +silicon1Z)},
-                {3, std::make_pair(+5 * silicon1X , +silicon1Z)},
-                {4, std::make_pair(+5 * silicon1X , +silicon1Z)},
-                {5, std::make_pair(+3 * silicon1X , +silicon1Z)},
-                {6, std::make_pair(+1 * silicon1X , +silicon1Z)}
-            }}
-    };
     //SILICON ENERGY THRESHOLDS!
     inline std::map<std::string, std::vector<double>> g_SilSide0Thresholds {
         {trackHitsSiliconSideLeft, {0.8, 0.8, 0.8, 0.6, 0.6, 0.7}},
@@ -141,8 +119,6 @@ namespace ActParameters
 
 	////////////////////////////////////////////
 	///// CALIBRATION FILES PARAMETERS ////////
-	//number of pads in calibration file!
-	inline constexpr int NCoefRows { 17408};
 
 	// size of vectors in silicon calibrations
 	//Silicon array sizes

@@ -9,6 +9,7 @@
 #include <stdexcept>
 #include <string>
 #include <filesystem>
+#include <vector>
 
 void ActRunManager::ReadFile(const std::string &fileName)
 {
@@ -19,6 +20,7 @@ void ActRunManager::ReadFile(const std::string &fileName)
     }
     std::string line {};
     int row {0};
+    std::vector<int> localRuns;
     while(std::getline(streamer, line, '\n'))
     {
         std::istringstream lineStreamer {line};
@@ -46,6 +48,7 @@ void ActRunManager::ReadFile(const std::string &fileName)
                                 throw std::runtime_error(("Run " + std::to_string(run) + " repeaded in file " + fileName));
                             }
                             fRuns.push_back(run);
+                            localRuns.push_back(run);
                         }
                     }
                     else
@@ -53,19 +56,22 @@ void ActRunManager::ReadFile(const std::string &fileName)
                         std::istringstream valueStreamer {value};
                         std::string runString {};
                         while(std::getline(valueStreamer, runString, ','))
+                        {
                             fRuns.push_back(std::stoi(runString));
+                            localRuns.push_back(std::stoi(runString));
+                        }
                     }
                     break;
                 case 1://PileUp file
-                    for(const auto& run : fRuns)
+                    for(const auto& run : localRuns)
                         fPileUpFile[run] = value;
                     break;
                 case 2://Auto Drift file
-                    for(const auto& run : fRuns)
+                    for(const auto& run : localRuns)
                         fAutoDriftFile[run] = value;
                     break;
                 case 3://MANUAL drift file
-                    for(const auto& run : fRuns)
+                    for(const auto& run : localRuns)
                         fManualDriftFile[run] = value;
                     break;
                 default:

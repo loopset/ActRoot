@@ -44,20 +44,29 @@ void ActCalibrations::ReadTABLE(std::string& tableFile)
 void ActCalibrations::ReadPadAlignCoefs(std::string &coefsFile)
 {
     //initialize
-    fPadAlignCoefs = std::vector<std::vector<double>>(ActParameters::NCoefRows, std::vector<double>(3));
+    fPadAlignCoefs = {};
     std::ifstream streamer(coefsFile.c_str());
 	if(streamer.fail())
 	{
 		throw std::runtime_error("Error opening PadAligCoefs file!");
 	}
-	double aux0, aux1, aux2;
-	for(int i = 0; i < ActParameters::NCoefRows; i++)
-	{
-		streamer >> aux0 >> aux1 >> aux2;
-		fPadAlignCoefs[i][0] = aux0;
-		fPadAlignCoefs[i][1] = aux1;
-		fPadAlignCoefs[i][2] = aux2;
-	}
+    //new version with auto column and row number
+    std::string line {};
+    int row {};
+    while(std::getline(streamer, line, '\n'))
+    {
+        std::istringstream lineStreamer {line};
+        std::string value {};
+        int column {};
+        fPadAlignCoefs.push_back({});
+        while(std::getline(lineStreamer, value, ' '))
+        {
+            //std::cout<<"Row: "<<row<<" column: "<<column<<" value: "<<value<<'\n';
+            fPadAlignCoefs.at(row).push_back(std::stod(value));
+            column++;
+        }
+        row++;
+    }
 	streamer.close();
 }
 

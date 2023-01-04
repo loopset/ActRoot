@@ -6,6 +6,8 @@
 #include "ActStructs.h"
 #include "ActTrackPlus.h"
 #include "MEventReduced.h"
+#include "TMath.h"
+#include <cmath>
 #include <map>
 #include <stdexcept>
 #include <tuple>
@@ -117,8 +119,12 @@ void ActEventPlus::ReadHits(MEvent*& Evt,
                     Qiaux_align = Qiaux;
                 else
                 {
-                    Qiaux_align = padAlignCoefs.at(where).at(0) + padAlignCoefs.at(where).at(1) * Qiaux +
-                        padAlignCoefs.at(where).at(2) * Qiaux * Qiaux;
+                    int order {0};
+                    for(const auto& coef : padAlignCoefs.at(where))
+                    {
+                        Qiaux_align += coef * TMath::Power(Qiaux, order);
+                        order++;
+                    }
                 }
                 
                 //this new version allows Z rebinning, just tuning two parameters in ActParameters!
