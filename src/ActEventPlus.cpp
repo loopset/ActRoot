@@ -8,7 +8,10 @@
 #include "MEventReduced.h"
 #include "TMath.h"
 #include <cmath>
+#include <ios>
+#include <iostream>
 #include <map>
+#include <set>
 #include <stdexcept>
 #include <tuple>
 #include <unordered_map>
@@ -240,27 +243,23 @@ void ActEventPlus::CleanPileUp(const double &zMin, const double &zMax)
 
 bool ActEventPlus::CheckTopologyInnerFunction(const std::string &silSide, const int &silIndex, const std::vector<ActHit>& hits)
 {
+    //width settings
     int xWidth {4};//counting reference pad
     int yWidth {4};
-    int yProperWidth {1};//always hit closer to side
-    bool crossesWindow{false};
-    bool crossesFront {false};
-    bool crossesOppositeSide {false};
-    bool crossesProperSide {false};//check if we have track in silSide!
-    //Front boundary
-    //we also check for this only in a narrower window in Y
+    int yProperWidth {2};//proper side = to where the track points
+    //FRONT boundary
     int xMaxFront { ActParameters::g_NPADX - 1};
     int xMinFront { xMaxFront - (xWidth - 1)};
-    //window: where the beam enters
+    int yMinWindowFront {};
+    int yMaxWindowFront {};
+    //WINDOW: where the beam enters
     int xMaxWindow {(xWidth - 1)};
     int xMinWindow { 0};
-    //front
-    int yMinFront {};//NOT intersecting with yProperSide
-    int yMaxFront {};
-    //Side boundary
+    //SIDE boundary
     int yMin {}; int yMax {};
-    //proper side
+    //PROPER SIDE
     int yProperMin {}; int yProperMax {};
+    std::set<int> filledYVals {};
     if(silSide == ActParameters::trackHitsSiliconSideLeft)
     {
         yMax = yWidth - 1;//remember that pads go [0,31] and that we are counting the yMax/yMin in the width
@@ -268,9 +267,9 @@ bool ActEventPlus::CheckTopologyInnerFunction(const std::string &silSide, const 
 
         yProperMax = ActParameters::g_NPADY - 1;
         yProperMin = yProperMax - (yProperWidth - 1);
-
-        yMaxFront = yProperMin - 1;
-        yMinFront = yMin;
+              
+        yMaxWindowFront = yProperMin - 1;
+        yMinWindowFront = yMin + 1;
     }
     else if(silSide == ActParameters::trackHitsSiliconSideRight)
     {
@@ -280,43 +279,55 @@ bool ActEventPlus::CheckTopologyInnerFunction(const std::string &silSide, const 
         yProperMax = (yProperWidth - 1);
         yProperMin = 0;
 
-        yMaxFront = yMax;
-        yMinFront = yProperMax - 1;
+        yMaxWindowFront = yMin - 1;
+        yMinWindowFront = yProperMax + 1;
     }
     else
     {
         throw std::runtime_error("CheckTopology received a wrong string for side");
     }
-
+    //return values
+    bool crossesWindow{false};
+    bool crossesFront {false};
+    bool crossesOppositeSide {false};
     for(const auto& hit : hits)
     {
         const auto& pos { hit.GetPosition()};
-        //check if we have charge where it corresponds
+        //PROPER SIDE: check if all region has charge!
         if(yProperMin <= pos.Y() && pos.Y() <= yProperMax)
         {
-            crossesProperSide = true;
+            //crossesProperSide = true;
+            filledYVals.insert(pos.Y());
             //std::cout<<"Y proper side: "<<pos.Y()<<" with charge "<<hit.GetCharge()<<" properSide? "<<std::boolalpha<<crossesProperSide<<'\n';
         }
-        //opposite side check
+        //from these cuts it is enough having only one hit! (no need for set checking)
+        //OPPOSITE side check
         if(yMin <= pos.Y() && pos.Y() <= yMax)
         {
             crossesOppositeSide = true;
         }
-        //front X check
-        if(yMinFront<= pos.Y() && pos.Y() <= yMaxFront)
+        //FRONT and WINDOW
+        if(yMinWindowFront<= pos.Y() && pos.Y() <= yMaxWindowFront)
         {
             if(xMinFront <= pos.X() && pos.X() <= xMaxFront)
             {
                 crossesFront = true;
             }
-        }
-        //window X check
-        if(xMinWindow <= pos.X() && pos.X() <= xMaxWindow)
-        {
-            crossesWindow = true;
-        }
+            if(xMinWindow <= pos.X() && pos.X() <= xMaxWindow)
+            {
+                crossesWindow = true;
+            }
+        }      
     }
-    
+    //PROPER side check fill values
+    bool crossesProperSide {true};
+    for(int y = yProperMin; y <= yProperMax; y++)
+    {
+        const bool isInSet {filledYVals.find(y) != filledYVals.end()};
+        if(!isInSet)
+            crossesProperSide = false;
+        //std::cout<<"proper side y: "<<y<<" isInSet: "<<std::boolalpha<<isInSet<<'\n';
+    }
     //if not charge in any of the other flanges and YES charge in its proper side....
     return !(crossesOppositeSide || crossesFront || crossesWindow) && crossesProperSide;
 }

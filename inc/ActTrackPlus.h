@@ -75,6 +75,7 @@ public:
 
     void ComputeReactionPointFromChargeProfile(const ActTrack& cluster,
                                                const ActCalibrations& calibrations,
+                                               bool in2D = false,
                                                TCanvas* canv = nullptr);
 
     void CountNumberOfPeaksInChargeProfile(double sigma = 2,
@@ -84,6 +85,8 @@ public:
     bool ComputeRMSInChargeProfile(double threshold = 1000, double safeDistance = 0.0);
 
     bool ComputeBraggPeakInChargeProfile(double threshold = 0.7);
+
+    bool ComputeBraggPeakPosition(double slopeThreshold = 0.0, double xThreshold = 0.0);
     
     void ComputeEnergyAtVertexWithSRIM(SimSRIM* srim, const std::string& srimString);
 
@@ -101,7 +104,8 @@ private:
     void CalculateBoundaryPoint();
     void GetChargeProfile(const ActTrack& cluster,
                           const ActCalibrations& calibrations,
-                          TH1D*& histProfile);
+                          TH1D*& histProfile,
+                          bool in2D = false);
     
 
     inline XYZPoint IntersectionTrackPlane(XYZPoint Pp, XYZVector vp, XYZPoint Tp, XYZVector Tv)

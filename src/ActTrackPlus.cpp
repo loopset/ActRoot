@@ -10,7 +10,9 @@
 #include <ios>
 #include <iostream>
 #include <string>
+#include <utility>
 #include <vector>
+#include <set>
 
 ActTrackPlus::ActTrackPlus(unsigned int run, unsigned int eve, unsigned int entry,
                            const ActTrack& track, const SiliconsPlus& silicons)
@@ -153,7 +155,7 @@ void ActTrackPlus::ComputeChargeInRegion(int yPads, const ActCalibrations &calib
     double chargeInRegion {};
     int countPadsInRegion {};
     bool anyPadBeyondRegion {};
-    std::vector<int> yValsFilled;
+    std::set<int> yValsFilled;
     for(const auto& [pos, vals] : fPadMatrix)
     {
         const auto& [x,y] = pos;
@@ -172,13 +174,14 @@ void ActTrackPlus::ComputeChargeInRegion(int yPads, const ActCalibrations &calib
             continue;
         chargeInRegion += vals.first;
         countPadsInRegion++;
-        yValsFilled.push_back(y);
+        yValsFilled.insert(y);
     }
     //CHECK THAT REGION HAS ALL BINS EMPTY BINS (IN Y)
     bool regionIsEmpty {};
     for(const auto& y : yValsToBeChecked)
     {
-        if(!isInVector(y, yValsFilled))
+        const bool isInSet {yValsFilled.find(y) != yValsFilled.end()};
+        if(!isInSet)
             regionIsEmpty = true;
     }
     if(anyPadBeyondRegion && !regionIsEmpty)
@@ -198,7 +201,8 @@ void ActTrackPlus::ComputeChargeInRegion(int yPads, const ActCalibrations &calib
 
 void ActTrackPlus::GetChargeProfile(const ActTrack& cluster,
                                     const ActCalibrations& calibrations,
-                                    TH1D*& histProfile)
+                                    TH1D*& histProfile,
+                                    bool in2D)
 {
     auto getDistanceProjToBP = [](const XYZVector& lineVector,
                                   const XYZVector& binVector)
@@ -208,15 +212,22 @@ void ActTrackPlus::GetChargeProfile(const ActTrack& cluster,
     };
 
     //set reference point and fine granularity for XY plane
-    const XYZPoint& reference {fBoundaryPoint};
-    //ensure correct signs for line vector
-    auto lineVector { (fGravityPoint - fBoundaryPoint).Unit()};
+    XYZPoint reference {fBoundaryPoint};
+    if(in2D)
+        reference.SetZ(0.0);
+    //gravity point
+    XYZPoint gravity {fGravityPoint};
+    if(in2D)
+        gravity.SetZ(0.0);
+    auto lineVector { (gravity - reference).Unit()};
     auto xyOffset {calibrations.GetXYToLengthUnitsCoef() / 3};//pad +0.5 three times
     auto zOffset  {(calibrations.GetZToLengthUnitsCoef() * ActParameters::g_REBINZ) / 3};
     for(const auto& hit : cluster.GetHitArrayConst())
     {
         //MUST BE CONVERTED TO MM
         auto pos { ScalePointOrVector(calibrations, hit.GetPosition())};
+        if(in2D)
+            pos.SetZ(0.0);
         auto ch  { hit.GetCharge()};
         //we divide each pad in 3 * 3 * 1 subpads (Z is already too granular)
         for(int kx = -1; kx < 2; kx++)
@@ -246,16 +257,17 @@ void ActTrackPlus::GetChargeProfile(const ActTrack& cluster,
         if(content > 0.0)
             fLengthInChamber = center;
     }
-    //and backpropagate from BP to obtain reaction point
+    //and backpropagate from BP to obtain reaction point (done always in 3D!)
     fReactionPoint = (fGravityPoint - fBoundaryPoint).Unit() * fLengthInChamber + fBoundaryPoint;
 }
 
 void ActTrackPlus::ComputeReactionPointFromChargeProfile(const ActTrack& cluster,
                                                          const ActCalibrations& calibrations,
+                                                         bool in2D,
                                                          TCanvas* canv)
 {
     auto* histProfile { new TH1D("histProfile", "Charge profile;Distance to BP [mm];Charge [au]", 90, -5.0, 145.)};//maximum length of a track in the chamber
-    GetChargeProfile(cluster, calibrations, histProfile);
+    GetChargeProfile(cluster, calibrations, histProfile, in2D);
     if(canv)
     {
         canv->cd();
@@ -324,6 +336,47 @@ bool ActTrackPlus::ComputeBraggPeakInChargeProfile(double threshold)
         return true;
     else
         return false;
+}
+
+bool ActTrackPlus::ComputeBraggPeakPosition(double slopeThreshold, double xThreshold)
+{
+    //Find maximum and locate boundaries
+    auto maxBin {fHistProfile.GetMaximumBin()};
+    auto maxContent {fHistProfile.GetBinContent(maxBin)};
+    auto xMin {fHistProfile.FindFirstBinAbove(xThreshold * maxContent)};
+    auto xMax {fHistProfile.FindLastBinAbove(xThreshold * maxContent)};
+
+    std::vector<double> contentsInRange {};
+    for(int bin = xMin; bin <= xMax; bin++)
+    {
+        contentsInRange.push_back(fHistProfile.GetBinContent(bin));
+    }
+
+    //Theil-Sen lambda
+    //method based on
+    //  https://github.com/mmhs013/pyMannKendall/blob/c2be737a199a694e481d98677e0e2c2c5d21b89d/pymannkendall/pymannkendall.py#L148
+    auto theil_sen = [](const std::vector<double>& x)
+    {
+        auto n { x.size()};
+        std::vector<double> slopes {};
+        //get every slope using two points without repeating them
+        for(int i = 0; i < n-1; i++)
+        {
+            for(int j = i+1; j < n; j++)
+            {
+                slopes.push_back((x[j] - x[i]) / (j - i));
+            }
+        }
+        auto slope {TMath::Median(slopes.size(), &(slopes[0]))};
+        auto intercept {TMath::Median(n, &(x[0]))
+            - (static_cast<double>(n - 1) / 2) * slope};
+        return std::make_pair(intercept, slope);
+    };
+    auto [intercept, slope] = theil_sen(contentsInRange);
+    if(slope <= slopeThreshold)
+        return true;//if negative, bragg peak is towards silicons
+    else
+        return false;//else, it is towards chamber
 }
 
 void ActTrackPlus::ComputeEnergyAtVertexWithSRIM(SimSRIM *srim, const std::string& srimString)
