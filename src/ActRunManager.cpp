@@ -74,6 +74,17 @@ void ActRunManager::ReadFile(const std::string &fileName)
                     for(const auto& run : localRuns)
                         fManualDriftFile[run] = value;
                     break;
+                case 4://PID uncorrected
+                    for(const auto& run : localRuns)
+                        fPIDUncorrectedFile[run] = value;
+                    break;
+                case 5:
+                    for(const auto& run : localRuns)
+                        fPIDCorrectedFile[run] = value;
+                    break;
+                case 6:
+                    for(const auto& run : localRuns)
+                        fPIDCorrectionSlope[run] = std::stod(value);
                 default:
                     break;
                 }

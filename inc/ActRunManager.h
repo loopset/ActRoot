@@ -12,6 +12,9 @@ public:
     std::map<unsigned int, std::string> fPileUpFile;
     std::map<unsigned int, std::string> fAutoDriftFile;
     std::map<unsigned int, std::string> fManualDriftFile;
+    std::map<unsigned int, std::string> fPIDUncorrectedFile;
+    std::map<unsigned int, std::string> fPIDCorrectedFile;
+    std::map<unsigned int, double> fPIDCorrectionSlope;
 public:
     ActRunManager() = default;
     ~ActRunManager() = default;
