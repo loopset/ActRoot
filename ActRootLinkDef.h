@@ -6,15 +6,14 @@
 #pragma link off all classes;
 #pragma link off all functions;
 
-//classes inherited from TObject/TNamed
+#pragma link C++ nestedclass;
+#pragma link C++ nestedtypedef;
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////// ANALYSIS ////////////////////////////////////////////
 #pragma link C++ class ActHit + ;
 #pragma link C++ class ActTrack + ;
 #pragma link C++ class ActClusteringResults + ;
 #pragma link C++ class ActLine + ;
-
-//recommended if we use namespaces
-#pragma link C++ nestedclass;
-#pragma link C++ nestedtypedef;
 
 #pragma link C++ namespace ActParameters ;
 
@@ -44,5 +43,28 @@
 #pragma link C++ class ActDBSCAN + ;
 
 #pragma link C++ class ActRunManager + ;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////// SIMULATION ////////////////////////////////////////////////
+#pragma link C++ class SimKinematics + ;
+
+#pragma link C++ class SimGeometry + ;
+
+#pragma link C++ struct SilInfo + ;
+#pragma link C++ struct DriftInfo + ;
+#pragma link C++ struct IterationInfo + ;
+#pragma link C++ struct ExperimentInfo + ;
+#pragma link C++ struct SimulationParameters + ;
+
+#pragma link C++ class SimRunner + ;
+
+#pragma link C++ class SimSRIM + ;
+
+#pragma link C++ class SimCrossSection + ;
+
+#pragma link C++ class SimBeam + ;
+
+#pragma link C++ class SimHistos + ;
+
 
 #endif
