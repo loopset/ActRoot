@@ -1,4 +1,5 @@
 #include "SimKinematics.h"
+#include "TMathBase.h"
 
 #include <Math/Vector3D.h>
 #include <Math/Vector4D.h>
@@ -8,6 +9,7 @@
 #include <iomanip>
 #include <stdexcept>
 #include <string>
+#include <tuple>
 #include <utility>
 
 SimKinematics::SimKinematics(double m1, double m2, double m3, double m4,
@@ -35,6 +37,33 @@ SimKinematics::SimKinematics(double m1, double m2, double m3, double m4,
 	gamma = BoostTransformation.Gamma();
 	PInitialCM = BoostTransformation(PInitialLab);
 	Ecm = PInitialCM.E();
+}
+
+double SimKinematics::GetMass(unsigned int index) const
+{
+    switch(index)
+    {
+    case 1:
+        return m1;
+        break;
+    case 2:
+        return m2;
+        break;
+    case 3:
+        return m3;
+        break;
+    case 4:
+        return m4;
+        break;
+    default:
+        throw std::runtime_error("Index out of range: 1, 2, 3 or 4");
+        break;
+    }
+}
+
+std::tuple<double, double, double, double> SimKinematics::GetMasses() const
+{
+    return std::make_tuple(m1, m2, m3, m4);
 }
 
 void SimKinematics::SetRecoilsCMKinematicsThrough3(double theta3CMRads, double phi3CMRads)
@@ -114,7 +143,7 @@ void SimKinematics::ComputeRecoilKinematics(double thetaCMRads, double phiCMRads
     //(in this way we save computation time)
 }
 
-void SimKinematics::Print()
+void SimKinematics::Print() const
 {
 	std::cout<<std::fixed<<std::setprecision(2);
 	std::cout<<"> Beam with energy: "<<T1Lab<<" MeV\n";
@@ -190,4 +219,28 @@ double SimKinematics::ReconstructExcitationEnergy(double argT3, double argTheta3
     //we use the general +: - is already included in beta!
     double recEex {TMath::Sqrt(invariant4Mass) - m4};
     return recEex;
+}
+
+double SimKinematics::ComputeTheoreticalT3(double argTheta3LabRads, const std::string& sol)
+{
+    double A { (TMath::Power(Ecm, 2) + m3 * m3 - (m4 + Eex) * (m4 + Eex)) / (2.0 * gamma * Ecm)};
+    double B { TMath::Abs(beta) * TMath::Cos(argTheta3LabRads)};
+    double Delta { A*A * B*B - B*B * m3*m3 * (1.0 - B*B)};
+    if(Delta < 0)
+        return -11;
+    double denom { 1.0 - B*B};
+    if(sol == "pos")
+    {
+        auto val { (A + TMath::Sqrt(Delta)) / denom - m3};
+        return val;
+    }
+    else if(sol == "neg")
+    {
+        auto val { (A - TMath::Sqrt(Delta)) / denom - m3};
+        return val;
+    }
+    else
+    {
+        throw std::runtime_error("sol arg only admits two options: pos or neg!");
+    }
 }

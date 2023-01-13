@@ -4,6 +4,7 @@
 #include <Math/Vector3Dfwd.h>
 #include <Math/Vector4Dfwd.h>
 #include <Math/GenVector/BoostX.h>
+#include <tuple>
 #include <utility>
 
 class SimKinematics
@@ -14,12 +15,12 @@ public:
 	using LorentzBoostX = ROOT::Math::BoostX;
 	
 private:
-	double m1;
-	double m2;
-	double m3;
-	double m4;
-	double Eex;
-	double T1Lab;
+	double m1 {};
+	double m2 {};
+	double m3 {};
+	double m4 {};
+	double Eex {};
+	double T1Lab {};
 	double gamma {};
 	double beta {};
     double Qvalue {};
@@ -58,8 +59,9 @@ public:
                                  int anglesFrom = 4, bool computeBoth = false);
     double ReconstructBeamEnergyFromLabKinematics(double T3, double theta3LabRads);
     double ReconstructExcitationEnergy(double argT3, double argTheta3LabRads);
+    double ComputeTheoreticalT3(double argTheta3LabRads, const std::string& sol = {"pos"});
     
-	void Print();
+	void Print() const;
 
 	//getters
     double GetT1Lab() const { return T1Lab; }
@@ -76,6 +78,9 @@ public:
 	double GetBeta() const { return beta; }
 	double GetGamma() const { return gamma; }
     double GetECM() const { return Ecm; }
+    double GetEex() const { return Eex; }
+    double GetMass(unsigned int index) const;
+    std::tuple<double, double, double, double> GetMasses() const;
 	
 private:
 	void SetRecoilsCMKinematicsThrough3(double theta3CMRads, double phi3CMRads);
