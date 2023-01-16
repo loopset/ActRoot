@@ -129,13 +129,18 @@ void ActEventPlus::ReadHits(MEvent*& Evt,
                         order++;
                     }
                 }
-                
+                // if(yval == 28 && xval == 7)//to check if parameters are OK!
+                //     std::cout<<"Pad Y = 28"<<" Pad X = 7 and where = "<<where<<'\n';
                 //this new version allows Z rebinning, just tuning two parameters in ActParameters!
                 int zBin {(int)z_position / ActParameters::g_REBINZ};
                 //if bin width == 1, assume value the bin index, not the bin center (would be val + 0.5)
                 double zval {ActParameters::g_REBINZ * zBin + ((ActParameters::g_REBINZ <= 1) ? 0.0 : (double)ActParameters::g_REBINZ / 2)};
                 
                 ActHit candidate { hitID, XYZPoint(xval, yval, zval), Qiaux_align, EvtRed->CoboAsad[it].hasSaturation};
+
+                //check saturation
+                // if(candidate.GetIsSaturated() && entryID == 2216)
+                //     std::cout<<"IsSaturated with Q = "<<Qiaux_align<<" at "<<candidate.GetPosition()<<'\n';
                 
                 //update hit if it is repeated
                 int globalIndex { static_cast<int>(xval + yval * ActParameters::g_NPADX
@@ -346,12 +351,17 @@ std::map<std::pair<int, int>, std::pair<double, bool>> ActEventPlus::GetPadMatri
     for(const auto& hit : voxel.fHits)
     {
         const auto& pos { hit.GetPosition()};
-        const auto& charge { hit.GetCharge()};
+        auto charge { hit.GetCharge()};
         pad[{pos.X(), pos.Y()}].first += charge;
         if(hit.GetIsSaturated())
         {
             pad.at({pos.X(), pos.Y()}).second = true;
         }
+    }
+    for(const auto& [pos, vals] : pad)
+    {
+        if(vals.second)
+            std::cout<<"Sat at X = "<<pos.first<<" Y = "<<pos.second<<" Q= "<<vals.first<<'\n';
     }
     return pad;
 }
@@ -363,7 +373,10 @@ int ActEventPlus::CountSaturatedPads()
     for(const auto& [pos, vals] : pad)
     {
         if(vals.second)
+        {
+            //std::cout<<"Sat pad at X = "<<pos.first<<" Y = "<<pos.second<<" with Q = "<<vals.first<<'\n';
             counter++;
+        }
     }
     return counter;
 }

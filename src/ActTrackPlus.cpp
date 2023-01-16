@@ -30,8 +30,8 @@ void ActTrackPlus::FillPadMatrix(const ActTrack& track)
     for(const auto& hit : track.GetHitArrayConst())
     {
         const auto& pos { hit.GetPosition()};
-        const auto& charge { hit.GetCharge()};
-        const auto& satFlag { hit.GetIsSaturated()};
+        auto charge { hit.GetCharge()};
+        auto satFlag { hit.GetIsSaturated()};
         fPadMatrix[{pos.X(), pos.Y()}].first += charge;
         if(satFlag)
         {
@@ -40,6 +40,12 @@ void ActTrackPlus::FillPadMatrix(const ActTrack& track)
         }
         totalQ += charge;
     }
+    for(const auto& [pos, vals] : fPadMatrix)
+    {
+        if(vals.second)
+            std::cout<<"Sat at X = "<<pos.first<<" Y = "<<pos.second<<" with Q = "<<vals.first<<'\n';
+    }
+    std::cout<<"NSat = "<<satPads<<'\n';
     fNSatPads = satPads;
     fTotalCharge = totalQ;
     fChargePerPad = totalQ / fPadMatrix.size();
