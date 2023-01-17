@@ -1,4 +1,5 @@
 #include "ActTrackPlus.h"
+#include "ActEventPlus.h"
 #include "ActParameters.h"
 #include "ActStructs.h"
 #include "ActTrack.h"
@@ -15,37 +16,53 @@
 #include <set>
 
 ActTrackPlus::ActTrackPlus(unsigned int run, unsigned int eve, unsigned int entry,
+                           ActEventPlus* eveplus,
                            const ActTrack& track, const SiliconsPlus& silicons)
     : fRunID(run), fEventID(eve), fEntryID(entry), fTrackID(track.GetTrackID()),
       fGravityPoint(track.GetLine().GetPoint())
 {
-    FillPadMatrix(track);
+    FillPadMatrix(eveplus, track);
     CalculateSiliconPoint(track, silicons);
     CalculateBoundaryPoint();
 }
 
-void ActTrackPlus::FillPadMatrix(const ActTrack& track)
+void ActTrackPlus::FillPadMatrix(ActEventPlus*& eveplus, const ActTrack& track)
 {
+    auto originalPad {eveplus->GetPadMatrix()};
+    std::set<std::pair<int, int>> posToFill {};
     double totalQ {}; unsigned int satPads {};
     for(const auto& hit : track.GetHitArrayConst())
     {
-        const auto& pos { hit.GetPosition()};
-        auto charge { hit.GetCharge()};
-        auto satFlag { hit.GetIsSaturated()};
-        fPadMatrix[{pos.X(), pos.Y()}].first += charge;
-        if(satFlag)
-        {
-            fPadMatrix.at({pos.X(), pos.Y()}).second = true;
-            satPads++;
+        const auto& pos {hit.GetPosition()};
+        auto it = posToFill.insert({pos.X(), pos.Y()});
+        if(it.second)//insertion took place: key not already present
+        {//*it.first returns key inserted
+            fPadMatrix[*it.first] = originalPad.at(*it.first);
+            totalQ += fPadMatrix.at(*it.first).first;
+            if(fPadMatrix.at(*it.first).second)
+                satPads++;
         }
-        totalQ += charge;
     }
-    for(const auto& [pos, vals] : fPadMatrix)
-    {
-        if(vals.second)
-            std::cout<<"Sat at X = "<<pos.first<<" Y = "<<pos.second<<" with Q = "<<vals.first<<'\n';
-    }
-    std::cout<<"NSat = "<<satPads<<'\n';
+    // double totalQ {}; unsigned int satPads {};
+    // for(const auto& hit : track.GetHitArrayConst())
+    // {
+    //     const auto& pos { hit.GetPosition()};
+    //     auto charge { hit.GetCharge()};
+    //     auto satFlag { hit.GetIsSaturated()};
+    //     fPadMatrix[{pos.X(), pos.Y()}].first += charge;
+    //     if(satFlag)
+    //     {
+    //         fPadMatrix.at({pos.X(), pos.Y()}).second = true;
+    //         satPads++;
+    //     }
+    //     totalQ += charge;
+    // }
+    // for(const auto& [pos, vals] : fPadMatrix)
+    // {
+    //     if(vals.second)
+    //         std::cout<<"Sat at X = "<<pos.first<<" Y = "<<pos.second<<" with Q = "<<vals.first<<'\n';
+    // }
+    // std::cout<<"NSat = "<<satPads<<'\n';
     fNSatPads = satPads;
     fTotalCharge = totalQ;
     fChargePerPad = totalQ / fPadMatrix.size();
@@ -265,6 +282,8 @@ void ActTrackPlus::GetChargeProfile(const ActTrack& cluster,
     }
     //and backpropagate from BP to obtain reaction point (done always in 3D!)
     fReactionPoint = (fGravityPoint - fBoundaryPoint).Unit() * fLengthInChamber + fBoundaryPoint;
+    //finally, compute full track length
+    fTrackLength = TMath::Sqrt((fSiliconPoint - fReactionPoint).Mag2());
 }
 
 void ActTrackPlus::ComputeReactionPointFromChargeProfile(const ActTrack& cluster,
@@ -385,9 +404,25 @@ bool ActTrackPlus::ComputeBraggPeakPosition(double slopeThreshold, double xThres
         return false;//else, it is towards chamber
 }
 
+void ActTrackPlus::ComputeChargeCloseToRP(double padRadius)
+{
+    double chargeInRadius {};
+    //we have to recover fReactionPoint (x,y) coordinates to pads! -> use ActParameters::padSideLength
+    XYZPoint xyRP {fReactionPoint.X() / ActParameters::padSideLength,
+        fReactionPoint.Y() / ActParameters::padSideLength,
+        0.0};
+    for(const auto& [pos, vals] : fPadMatrix)
+    {
+        XYZPoint xyPad {(double)pos.first, (double)pos.second, 0.0};
+        double dist {TMath::Sqrt((xyPad - xyRP).Mag2())};
+        if(dist <= padRadius)
+            chargeInRadius += vals.first;
+    }
+    fChargeCloseToRP = chargeInRadius;    
+}
+
 void ActTrackPlus::ComputeEnergyAtVertexWithSRIM(SimSRIM *srim, const std::string& srimString)
 {
-    fTrackLength = TMath::Sqrt((fSiliconPoint - fReactionPoint).Mag2());
     double RAtSil { srim->EvalDirect(srimString, fSilEnergy)};
     fRPEnergy = srim->EvalInverse(srimString, RAtSil + fTrackLength);
 }
@@ -404,6 +439,11 @@ double ActTrackPlus::CorrectPIDInRegion(TF1 *funCorr) const
     //corrects PID in region by flattening the Q/L distribution along Z_{Sil}, to avoid dependence on drift along Z
     return fPIDInRegion + funCorr->Eval(fSiliconPoint.Z());
     //fIsPIDCorrected = true;
+}
+
+double ActTrackPlus::CorrectPIDInChamber(TF1*& funCorr) const
+{
+    return fTotalCharge / fLengthInChamber + funCorr->Eval(fSiliconPoint.Z());
 }
 
 void ActTrackPlus::Print() const

@@ -57,6 +57,8 @@ namespace ActParameters
 	inline constexpr int g_NB_SAMPLES { 512};
 	////////////////////////////////////////////
 
+    inline constexpr double gMinChargeToSaturate {3300.0};//computed from gaussian fit
+
     ///SILICON PARAMETERS
     inline constexpr int NSilLeft0 {6};//first layer
     inline constexpr int NSilLeft1 {0};//second layer

@@ -358,10 +358,12 @@ std::map<std::pair<int, int>, std::pair<double, bool>> ActEventPlus::GetPadMatri
             pad.at({pos.X(), pos.Y()}).second = true;
         }
     }
-    for(const auto& [pos, vals] : pad)
+    //correct by minimum charge in pad to reassert isSaturated = true
+    for(auto& [pos, vals] : pad)
     {
-        if(vals.second)
-            std::cout<<"Sat at X = "<<pos.first<<" Y = "<<pos.second<<" Q= "<<vals.first<<'\n';
+        if(vals.second)//check that saturated pads have Q > minChargeToSaturate!!
+            if(vals.first < ActParameters::gMinChargeToSaturate)
+                vals.second = false;
     }
     return pad;
 }

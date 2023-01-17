@@ -44,6 +44,7 @@ public:
     double fSilEnergy {-1};
     double fRPEnergy {-1};
     double fReconstructedBeamEnergy {-1};
+    double fChargeCloseToRP {-1};
     double fTheta {-1};
     double fPhi   {-1};
     std::string fSiliconSide {"-1"};
@@ -62,6 +63,7 @@ public:
 
     ActTrackPlus() = default;
     ActTrackPlus(unsigned int run, unsigned int eve, unsigned int entry,
+                 ActEventPlus* eveplus,
                  const ActTrack& track, const SiliconsPlus& silicons);
     ~ActTrackPlus() = default;
 
@@ -90,16 +92,20 @@ public:
     
     void ComputeEnergyAtVertexWithSRIM(SimSRIM* srim, const std::string& srimString);
 
+    void ComputeChargeCloseToRP(double padRadius = 5);
+
     void ReconstructBeamEnergyFromLAB(SimKinematics* kinematics);
 
     double CorrectPIDInRegion(TF1* funCorr) const;//doesnt modify internal value!
+
+    double CorrectPIDInChamber(TF1*& funCorr) const;
 
     void Print() const;
 
     void WriteToStreamer(std::ofstream& streamer, const int& anaEntry = {-1}) const;
     
 private:
-    void FillPadMatrix(const ActTrack& track);
+    void FillPadMatrix(ActEventPlus*& eveplus, const ActTrack& track);
     void CalculateSiliconPoint(const ActTrack& track, const SiliconsPlus& silicons);
     void CalculateBoundaryPoint();
     void GetChargeProfile(const ActTrack& cluster,
