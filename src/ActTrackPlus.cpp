@@ -257,15 +257,20 @@ void ActTrackPlus::GetChargeProfile(const ActTrack& cluster,
         {
             for(int ky = -1; ky < 2; ky++)
             {
+                int zCounter {1};
                 for(int kz = -1; kz < 2; kz++)
                 {
+                    if(in2D && (zCounter > 1))
+                        break;
                     XYZPoint bin {pos.X() + kx * xyOffset,
                         pos.Y() + ky * xyOffset,
                         pos.Z() + kz * zOffset};
 
                     auto binVector { bin - reference};
                     auto dist { getDistanceProjToBP(lineVector, binVector)};
-                    histProfile->Fill(dist, ch / 27);
+                    double qFactor {(in2D) ? 9.0 : 27.0};
+                    histProfile->Fill(dist, ch / qFactor);
+                    zCounter++;
                 }
             }
         }
@@ -317,7 +322,7 @@ void ActTrackPlus::CountNumberOfPeaksInChargeProfile(double sigma, std::string o
                                                     threshold);
 }
 
-bool ActTrackPlus::ComputeRMSInChargeProfile(double threshold, double safeDistance)
+std::pair<double, bool> ActTrackPlus::ComputeRMSInChargeProfile(double threshold, double safeDistance)
 {
     //if RMS is above threshold, there is high likelihood that the tracks is of a carbon reaction
     auto* graph = new TGraph();
@@ -337,9 +342,9 @@ bool ActTrackPlus::ComputeRMSInChargeProfile(double threshold, double safeDistan
     double yRMS {graph->GetRMS(2)};//2 for Y axis
     delete graph;
     if(std::abs(yRMS) > threshold)
-        return true;
+        return {yRMS, true};
     else
-        return false;
+        return {yRMS, false};
 }
 
 bool ActTrackPlus::ComputeBraggPeakInChargeProfile(double threshold)
@@ -363,7 +368,7 @@ bool ActTrackPlus::ComputeBraggPeakInChargeProfile(double threshold)
         return false;
 }
 
-bool ActTrackPlus::ComputeBraggPeakPosition(double slopeThreshold, double xThreshold)
+std::pair<double, bool> ActTrackPlus::ComputeBraggPeakPosition(double slopeThreshold, double xThreshold)
 {
     //Find maximum and locate boundaries
     auto maxBin {fHistProfile.GetMaximumBin()};
@@ -399,9 +404,9 @@ bool ActTrackPlus::ComputeBraggPeakPosition(double slopeThreshold, double xThres
     };
     auto [intercept, slope] = theil_sen(contentsInRange);
     if(slope <= slopeThreshold)
-        return true;//if negative, bragg peak is towards silicons
+        return {slope, true};//if negative, bragg peak is towards silicons
     else
-        return false;//else, it is towards chamber
+        return {slope, false};//else, it is towards chamber
 }
 
 void ActTrackPlus::ComputeChargeCloseToRP(double padRadius)

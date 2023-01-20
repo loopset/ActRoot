@@ -74,7 +74,12 @@ public:
     void ComputeAngles();
 
     void ComputeChargeInRegion(int yPads, const ActCalibrations& calibrations);
-
+    //this function doesnt store histogram in class!
+    void GetChargeProfile(const ActTrack& cluster,
+                          const ActCalibrations& calibrations,
+                          TH1D*& histProfile,
+                          bool in2D = false);
+    
     void ComputeReactionPointFromChargeProfile(const ActTrack& cluster,
                                                const ActCalibrations& calibrations,
                                                bool in2D = false,
@@ -84,11 +89,11 @@ public:
                                            std::string options = "noMarkov nobackground",
                                            double threshold = 0.5);
 
-    bool ComputeRMSInChargeProfile(double threshold = 1000, double safeDistance = 0.0);
+    std::pair<double, bool> ComputeRMSInChargeProfile(double threshold = 1000, double safeDistance = 0.0);
 
     bool ComputeBraggPeakInChargeProfile(double threshold = 0.7);
 
-    bool ComputeBraggPeakPosition(double slopeThreshold = 0.0, double xThreshold = 0.0);
+    std::pair<double, bool> ComputeBraggPeakPosition(double slopeThreshold = 0.0, double xThreshold = 0.0);
     
     void ComputeEnergyAtVertexWithSRIM(SimSRIM* srim, const std::string& srimString);
 
@@ -107,12 +112,7 @@ public:
 private:
     void FillPadMatrix(ActEventPlus*& eveplus, const ActTrack& track);
     void CalculateSiliconPoint(const ActTrack& track, const SiliconsPlus& silicons);
-    void CalculateBoundaryPoint();
-    void GetChargeProfile(const ActTrack& cluster,
-                          const ActCalibrations& calibrations,
-                          TH1D*& histProfile,
-                          bool in2D = false);
-    
+    void CalculateBoundaryPoint(); 
 
     inline XYZPoint IntersectionTrackPlane(XYZPoint Pp, XYZVector vp, XYZPoint Tp, XYZVector Tv)
 	{
