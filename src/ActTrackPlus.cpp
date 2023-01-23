@@ -139,88 +139,88 @@ void ActTrackPlus::ComputeAngles()
 	fPhi = TMath::RadToDeg() * phi;
 }
 
-void ActTrackPlus::ComputeChargeInRegion(int yPads, const ActCalibrations &calibrations)
-{
-    //CALCULATE INNER POINT
-    fRegionWidth = yPads;
+// void ActTrackPlus::ComputeChargeInRegion(int yPads, const ActCalibrations &calibrations)
+// {
+//     //CALCULATE INNER POINT
+//     fRegionWidth = yPads;
 
-    //auxiliar pad values
-    int yBP {}; int yThreshold {};
-    std::vector<int> yValsToBeChecked;
-    if(fSiliconSide == ActParameters::trackHitsSiliconSideLeft)
-    {
-        yBP        = ActParameters::g_NPADY - 1;
-        yThreshold = yBP - (fRegionWidth - 1);
-        for(auto y = yThreshold; y <= yBP; y++)
-            yValsToBeChecked.push_back(y);
-    }
-    else if(fSiliconSide == ActParameters::trackHitsSiliconSideRight)
-    {
-        yBP        = 0;
-        yThreshold = yBP + (fRegionWidth - 1);
-        for(auto y = yBP; y <= yThreshold; y++)
-            yValsToBeChecked.push_back(y);
-    }
-    else
-    {
-        throw std::runtime_error("Wrong fSiliconSide passed to ComputeChargeInRegion");
-    }
-    XYZPoint planePoint { 0., static_cast<double>(yThreshold), 0.};
-    planePoint = ScalePointOrVector(calibrations, planePoint);
+//     //auxiliar pad values
+//     int yBP {}; int yThreshold {};
+//     std::vector<int> yValsToBeChecked;
+//     if(fSiliconSide == ActParameters::trackHitsSiliconSideLeft)
+//     {
+//         yBP        = ActParameters::g_NPADY - 1;
+//         yThreshold = yBP - (fRegionWidth - 1);
+//         for(auto y = yThreshold; y <= yBP; y++)
+//             yValsToBeChecked.push_back(y);
+//     }
+//     else if(fSiliconSide == ActParameters::trackHitsSiliconSideRight)
+//     {
+//         yBP        = 0;
+//         yThreshold = yBP + (fRegionWidth - 1);
+//         for(auto y = yBP; y <= yThreshold; y++)
+//             yValsToBeChecked.push_back(y);
+//     }
+//     else
+//     {
+//         throw std::runtime_error("Wrong fSiliconSide passed to ComputeChargeInRegion");
+//     }
+//     XYZPoint planePoint { 0., static_cast<double>(yThreshold), 0.};
+//     planePoint = ScalePointOrVector(calibrations, planePoint);
     
-    XYZVector normalVector {0., 1., 0.};
-    auto unitaryDirection {(fSiliconPoint - fGravityPoint).Unit()};
-    auto innerPoint { IntersectionTrackPlane(planePoint, normalVector,
-                                             fGravityPoint, unitaryDirection)};
-    //innerPoint = ScalePointOrVector(calibrations, innerPoint);
+//     XYZVector normalVector {0., 1., 0.};
+//     auto unitaryDirection {(fSiliconPoint - fGravityPoint).Unit()};
+//     auto innerPoint { IntersectionTrackPlane(planePoint, normalVector,
+//                                              fGravityPoint, unitaryDirection)};
+//     //innerPoint = ScalePointOrVector(calibrations, innerPoint);
 
-    //AND NOW COMPUTE CHARGE IN REGION
-    double chargeInRegion {};
-    int countPadsInRegion {};
-    bool anyPadBeyondRegion {};
-    std::set<int> yValsFilled;
-    for(const auto& [pos, vals] : fPadMatrix)
-    {
-        const auto& [x,y] = pos;
-        //check if tracks in longer than region
-        if(fSiliconSide == ActParameters::trackHitsSiliconSideLeft)
-        {
-            if(y < yThreshold)
-                anyPadBeyondRegion = true;
-        }
-        else if(fSiliconSide == ActParameters::trackHitsSiliconSideRight)
-        {
-            if(y > yThreshold)
-                anyPadBeyondRegion = true;
-        }
-        if(std::abs(y - yBP) > fRegionWidth)
-            continue;
-        chargeInRegion += vals.first;
-        countPadsInRegion++;
-        yValsFilled.insert(y);
-    }
-    //CHECK THAT REGION HAS ALL BINS EMPTY BINS (IN Y)
-    bool regionIsEmpty {};
-    for(const auto& y : yValsToBeChecked)
-    {
-        const bool isInSet {yValsFilled.find(y) != yValsFilled.end()};
-        if(!isInSet)
-            regionIsEmpty = true;
-    }
-    if(anyPadBeyondRegion && !regionIsEmpty)
-    {
-        //COMPUTE LENGTH IN REGION IN MM
-        fChargeInRegion = chargeInRegion;
-        fLengthInRegion = TMath::Sqrt((fBoundaryPoint - innerPoint).Mag2());
-        fPIDInRegion    = fChargeInRegion / fLengthInRegion;
-    }
-    else
-    {
-        fChargeInRegion = -11;
-        fLengthInRegion = -11;
-        fPIDInRegion    = -11;
-    }
-}
+//     //AND NOW COMPUTE CHARGE IN REGION
+//     double chargeInRegion {};
+//     int countPadsInRegion {};
+//     bool anyPadBeyondRegion {};
+//     std::set<int> yValsFilled;
+//     for(const auto& [pos, vals] : fPadMatrix)
+//     {
+//         const auto& [x,y] = pos;
+//         //check if tracks in longer than region
+//         if(fSiliconSide == ActParameters::trackHitsSiliconSideLeft)
+//         {
+//             if(y < yThreshold)
+//                 anyPadBeyondRegion = true;
+//         }
+//         else if(fSiliconSide == ActParameters::trackHitsSiliconSideRight)
+//         {
+//             if(y > yThreshold)
+//                 anyPadBeyondRegion = true;
+//         }
+//         if(std::abs(y - yBP) > fRegionWidth)
+//             continue;
+//         chargeInRegion += vals.first;
+//         countPadsInRegion++;
+//         yValsFilled.insert(y);
+//     }
+//     //CHECK THAT REGION HAS ALL BINS EMPTY BINS (IN Y)
+//     bool regionIsEmpty {};
+//     for(const auto& y : yValsToBeChecked)
+//     {
+//         const bool isInSet {yValsFilled.find(y) != yValsFilled.end()};
+//         if(!isInSet)
+//             regionIsEmpty = true;
+//     }
+//     if(anyPadBeyondRegion && !regionIsEmpty)
+//     {
+//         //COMPUTE LENGTH IN REGION IN MM
+//         fChargeInRegion = chargeInRegion;
+//         fLengthInRegion = TMath::Sqrt((fBoundaryPoint - innerPoint).Mag2());
+//         fPIDInRegion    = fChargeInRegion / fLengthInRegion;
+//     }
+//     else
+//     {
+//         fChargeInRegion = -11;
+//         fLengthInRegion = -11;
+//         fPIDInRegion    = -11;
+//     }
+// }
 
 void ActTrackPlus::GetChargeProfile(const ActTrack& cluster,
                                     const ActCalibrations& calibrations,
@@ -341,6 +341,7 @@ std::pair<double, bool> ActTrackPlus::ComputeRMSInChargeProfile(double threshold
     }
     double yRMS {graph->GetRMS(2)};//2 for Y axis
     delete graph;
+    fProfileRMS = yRMS;
     if(std::abs(yRMS) > threshold)
         return {yRMS, true};
     else
@@ -403,6 +404,7 @@ std::pair<double, bool> ActTrackPlus::ComputeBraggPeakPosition(double slopeThres
         return std::make_pair(intercept, slope);
     };
     auto [intercept, slope] = theil_sen(contentsInRange);
+    fTheilSenSlope = slope;
     if(slope <= slopeThreshold)
         return {slope, true};//if negative, bragg peak is towards silicons
     else
@@ -435,16 +437,16 @@ void ActTrackPlus::ComputeEnergyAtVertexWithSRIM(SimSRIM *srim, const std::strin
 void ActTrackPlus::ReconstructBeamEnergyFromLAB(SimKinematics *kinematics)
 {
     fReconstructedBeamEnergy = kinematics->ReconstructBeamEnergyFromLabKinematics(fRPEnergy, TMath::DegToRad() * fTheta);
-    if(fReconstructedBeamEnergy < 0.0 || fReconstructedBeamEnergy > 500.0)
+    if(fReconstructedBeamEnergy < 0.0 || fReconstructedBeamEnergy > 100.0)
         fReconstructedBeamEnergy = -11;
 }
 
-double ActTrackPlus::CorrectPIDInRegion(TF1 *funCorr) const
-{
-    //corrects PID in region by flattening the Q/L distribution along Z_{Sil}, to avoid dependence on drift along Z
-    return fPIDInRegion + funCorr->Eval(fSiliconPoint.Z());
-    //fIsPIDCorrected = true;
-}
+// double ActTrackPlus::CorrectPIDInRegion(TF1 *funCorr) const
+// {
+//     //corrects PID in region by flattening the Q/L distribution along Z_{Sil}, to avoid dependence on drift along Z
+//     return fPIDInRegion + funCorr->Eval(fSiliconPoint.Z());
+//     //fIsPIDCorrected = true;
+// }
 
 double ActTrackPlus::CorrectPIDInChamber(TF1*& funCorr) const
 {
@@ -465,8 +467,8 @@ void ActTrackPlus::Print() const
     std::cout<<" BoundaryPoint at "<<fSiliconSide<<'\n';
     std::cout<<"  with coordinates "<<fBoundaryPoint<<" mm"<<'\n';
     std::cout<<"  and is in chamber ? "<<std::boolalpha<<fBPInChamber<<'\n';
-    std::cout<<" Charge in region defined by BP - "<<fRegionWidth<<" pads of"<<'\n';
-    std::cout<<"  Q: "<<fChargeInRegion<<" along a length of "<<fLengthInRegion<<" mm"<<'\n';
+    // std::cout<<" Charge in region defined by BP - "<<fRegionWidth<<" pads of"<<'\n';
+    // std::cout<<"  Q: "<<fChargeInRegion<<" along a length of "<<fLengthInRegion<<" mm"<<'\n';
     std::cout<<BOLDGREEN<<" Theta: "<<fTheta<<RESET<<" degrees and phi: "<<fPhi<<" degrees"<<'\n';
     std::cout<<" ReactionPoint with coordinates "<<fReactionPoint<<" mm"<<'\n';
     std::cout<<BOLDGREEN<<"  energy at RP "<<fRPEnergy<<" MeV"<<RESET<<'\n';

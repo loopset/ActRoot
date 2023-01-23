@@ -36,9 +36,9 @@ public:
     XYZPoint fReactionPoint {-1, -1, -1};
     double fTotalCharge {-1};
     double fChargePerPad {-1};
-    double fChargeInRegion {-1};
-    double fLengthInRegion {-1};
-    double fPIDInRegion {-1};
+    // double fChargeInRegion {-1};
+    // double fLengthInRegion {-1};
+    // double fPIDInRegion {-1};
     double fLengthInChamber {-1};
     double fTrackLength {-1};
     double fSilEnergy {-1};
@@ -47,6 +47,8 @@ public:
     double fChargeCloseToRP {-1};
     double fTheta {-1};
     double fPhi   {-1};
+    double fTheilSenSlope {-1};
+    double fProfileRMS {};
     std::string fSiliconSide {"-1"};
     unsigned int fNSatPads {};
     unsigned int fSiliconIndex {};
@@ -73,7 +75,7 @@ public:
     
     void ComputeAngles();
 
-    void ComputeChargeInRegion(int yPads, const ActCalibrations& calibrations);
+    //void ComputeChargeInRegion(int yPads, const ActCalibrations& calibrations);
     //this function doesnt store histogram in class!
     void GetChargeProfile(const ActTrack& cluster,
                           const ActCalibrations& calibrations,
@@ -101,7 +103,7 @@ public:
 
     void ReconstructBeamEnergyFromLAB(SimKinematics* kinematics);
 
-    double CorrectPIDInRegion(TF1* funCorr) const;//doesnt modify internal value!
+    // double CorrectPIDInRegion(TF1* funCorr) const;//doesnt modify internal value!
 
     double CorrectPIDInChamber(TF1*& funCorr) const;
 
