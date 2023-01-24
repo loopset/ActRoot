@@ -33,6 +33,7 @@
 #pragma link C++ struct SiliconsPlus + ;
 #pragma link C++ struct Voxels + ;
 #pragma link C++ struct EventPlusCuts + ;
+#pragma link C++ struct RunInfo + ;
 
 //new classes
 #pragma link C++ class ActEventPlus + ;

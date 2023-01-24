@@ -100,3 +100,11 @@ std::pair<std::string, int> SiliconsPlus::GetSilSideAndIndex() const
     else
         return {"both", -11};
 }
+
+void RunInfo::Print() const
+{
+    std::cout<<BOLDMAGENTA<<" == RunInfo =="<<'\n';
+    std::cout<<" Total events : "<<fTotalRecordedEvents<<'\n';
+    std::cout<<" Duration     : "<<fRunDuration<<" s";
+    std::cout<<RESET<<std::endl<<std::flush;
+}

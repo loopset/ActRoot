@@ -58,12 +58,12 @@ struct TriggersAndGates
 	// unsigned long DT_VXI_UP {};
 	// unsigned long DT_VXI {};
 
-	// unsigned long CTR_TIMEH_UP {};
-	// unsigned long CTR_TIMEH {};
-	// unsigned long CTR_TIMEML_UP {};
-	// unsigned long CTR_TIMEML {};
-	// unsigned long CTR_EVT_UP {};
-	// unsigned long CTR_EVT {};
+	unsigned long CTR_TIMEH_UP {};
+	unsigned long CTR_TIMEH {};
+	unsigned long CTR_TIMEML_UP {};
+	unsigned long CTR_TIMEML {};
+	unsigned long CTR_EVT_UP {};
+    unsigned long CTR_EVT {};
 
 	// unsigned long SCA_TiD3_UP {};
 	// unsigned long SCA_TiD3 {};	
@@ -86,6 +86,14 @@ struct TriggersAndGates
 
 	TriggersAndGates() = default;
 	~TriggersAndGates() = default;
+
+    inline double GetTimeStampFromCTRs()
+    {
+        double val {std::pow(2, 16) * std::pow(2, 16) * std::pow(2, 16) * CTR_TIMEH_UP +
+            std::pow(2, 16) * std::pow(2, 16) * CTR_TIMEH + std::pow(2, 16) * CTR_TIMEML_UP +
+            CTR_TIMEML};
+        return val;
+    }
 };
 
 struct Voxels
@@ -126,4 +134,15 @@ struct TimeOfFlight
     void Print() const;
 };
 
+struct RunInfo
+{
+    double fRunDuration {};
+    unsigned long int fTotalRecordedEvents {};
+
+    void Print() const;
+    inline void ComputeDurationFromScalerSum(double ctrTimeMaximum)
+    {
+        fRunDuration = ctrTimeMaximum / 1.0E8;//1 unit = 10 ns!
+    }
+};
 #endif //ACTSTRUCTS_H

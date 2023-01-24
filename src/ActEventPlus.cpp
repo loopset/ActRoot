@@ -95,7 +95,14 @@ void ActEventPlus::ReadAllButHits(MEvent*& Evt,
         if(index == 4000  ){ tof.tSilR13             = EvtRed->CoboAsad[it].peakheight[hit] ; }
         if(index == 5000  ){ tof.tSilR46             = EvtRed->CoboAsad[it].peakheight[hit] ; }
         if(index == 6000  ){ tof.tSilL13             = EvtRed->CoboAsad[it].peakheight[hit] ; }
-        if(index == 7000  ){ tof.tSilL46             = EvtRed->CoboAsad[it].peakheight[hit] ; }}
+        if(index == 7000  ){ tof.tSilL46             = EvtRed->CoboAsad[it].peakheight[hit] ; }
+        if(index == 8000  ){ triggers.CTR_TIMEML_UP  = EvtRed->CoboAsad[it].peakheight[hit] ; }
+        if(index == 9000  ){ triggers.CTR_TIMEML     = EvtRed->CoboAsad[it].peakheight[hit] ; }
+        if(index == 10000 ){ triggers.CTR_TIMEH_UP   = EvtRed->CoboAsad[it].peakheight[hit] ; }
+        if(index == 11000 ){ triggers.CTR_TIMEH      = EvtRed->CoboAsad[it].peakheight[hit] ; }
+        if(index == 12000 ){ triggers.CTR_EVT_UP     = EvtRed->CoboAsad[it].peakheight[hit] ; }
+        if(index == 13000 ){ triggers.CTR_EVT        = EvtRed->CoboAsad[it].peakheight[hit] ; }
+    }
 }
 
 void ActEventPlus::ReadHits(MEvent*& Evt,
