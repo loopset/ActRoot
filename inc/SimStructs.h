@@ -82,11 +82,14 @@ struct ExperimentInfo
                    double gasMass, double gasPressure, double gasTemp = 293.15);
     ExperimentInfo(const DriftInfo& drift, double beamRadiusCm, double durationInDays,
                    double gasMass, double gasPressure, double gasTemp = 293.15);
+    ExperimentInfo(double beamRadiusCm, double lengthXCm, double durationInSec,
+                   double gasMass, double gasPressure, double gasTemp = 293.15);
     ~ExperimentInfo() = default;
 
-    void DurationToDays(double days);
+    void DurationFromDaysToSec(double days);
     void ComputeGasDensity();
     void ComputeNumberOfTargets(const DriftInfo& actar);
+    void ComputeNumberOfTargets(double x);
     void ComputeRate(TH1D* const & histYield);
     void Print();
         

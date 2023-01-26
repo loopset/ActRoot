@@ -191,7 +191,7 @@ void SimCrossSection::DrawScattering()
     canvScattering->cd();
     canvScattering->SetLogx();
     canvScattering->SetLogy();
-    functScattering->SetTitle("Scattering cross section;T_{n} [MeV];#sigma [b / sr]");
+    functScattering->SetTitle("Scattering cross section;T_{n} [MeV];#sigma [b]");
     functScattering->SetLineColor(kBlue);
     functScattering->SetLineWidth(3);
     functScattering->Draw();

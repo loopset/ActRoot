@@ -15,7 +15,7 @@ ExperimentInfo::ExperimentInfo(double beamRadiusCm,
     : beamRadius(beamRadiusCm), gasMass(gasMass),
       gasPressure(gasPressure), gasTemp(gasTemp)
 {
-    DurationToDays(durationInDays);
+    DurationFromDaysToSec(durationInDays);
     ComputeGasDensity();
     Print();
 }
@@ -28,13 +28,23 @@ ExperimentInfo::ExperimentInfo(const DriftInfo& drift, double beamRadiusCm,
     : beamRadius(beamRadiusCm), gasMass(gasMass),
       gasPressure(gasPressure), gasTemp(gasTemp)
 {
-    DurationToDays(durationInDays);
+    DurationFromDaysToSec(durationInDays);
     ComputeGasDensity();
     ComputeNumberOfTargets(drift);
     Print();
 }
 
-void ExperimentInfo::DurationToDays(double days)
+ExperimentInfo::ExperimentInfo(double beamRadiusCm, double lengthXCm, double durationInSec,
+                               double gasMass, double gasPressure, double gasTemp)
+    : beamRadius(beamRadiusCm), duration(durationInSec), gasMass(gasMass),
+      gasPressure(gasPressure), gasTemp(gasTemp)
+{
+    ComputeGasDensity();
+    ComputeNumberOfTargets(lengthXCm);
+    Print();
+}
+
+void ExperimentInfo::DurationFromDaysToSec(double days)
 {
     duration = days * 24 * 3600;//convert from days to seconds
 }
@@ -53,13 +63,21 @@ void ExperimentInfo::ComputeNumberOfTargets(const DriftInfo &actar)
         throw std::runtime_error("You must compute density first N_{targets}");
 
     //assuming beam along X axis
-    Nt = (6.022E23 * gasDensity) / gasMass * actar.X;
+    Nt = (6.022E23 * gasDensity) / gasMass * (2 * actar.X);//remember that DriftInfo contains half lengths!
+}
+
+void ExperimentInfo::ComputeNumberOfTargets(double x)
+{
+    if(gasDensity == 0)
+        throw std::runtime_error("You must compute density first N_{targets}");
+    //assuming beam along X axis
+    Nt = (6.022E23 * gasDensity) / gasMass * x;
 }
 
 void ExperimentInfo::Print()
 {
     std::cout<<"===== EXPERIMENT ====="<<'\n';
-    std::cout<<"With duration of : "<<duration / (24 * 3600)<<" effective days"<<'\n';
+    std::cout<<"With duration of : "<<duration<<" s"<<'\n';
     std::cout<<"Gas mass         : "<<gasMass<<" g / mol"<<'\n';
     std::cout<<"Gas pressure     : "<<gasPressure<<" mb"<<'\n';
     std::cout<<"Gas temperature  : "<<gasTemp<<" K"<<'\n';

@@ -5,6 +5,9 @@
 Class for store and manipulate beam energy distribution, flux and so on
 */
 
+#include "Math/Point3D.h"
+#include "Math/Vector3D.h"
+#include "SimGeometry.h"
 #include "SimStructs.h"
 #include "TF1.h"
 #include "TRandom3.h"
@@ -14,6 +17,9 @@ Class for store and manipulate beam energy distribution, flux and so on
 #include <vector>
 class SimBeam
 {
+public:
+    using XYZPoint = ROOT::Math::XYZPoint;
+    using XYZVector = ROOT::Math::XYZVector;
 private:
     std::vector<std::pair<double, double>> fPoints {};
     std::unique_ptr<TSpline3> splineBeam {};
@@ -26,6 +32,7 @@ private:
 public:
     SimBeam(double radius, std::vector<std::pair<double, double>> points = {});
     ~SimBeam() = default;
+    void SetBeamEnergyPDF(std::vector<std::pair<double, double>> points = {});
     void Draw();
     double SampleBeamEnergy(TRandom3* generator = nullptr) const;
     double GetIntegratedFlux(bool withRadius = true) const;
@@ -34,6 +41,7 @@ public:
     double ComputeScalingFactor(ExperimentInfo*& experiment,
                                      double Tn, long long iter,
                                      double scatteringXSAtTn);
+    XYZPoint SampleVertex(TRandom3* generator, const DriftInfo& actar);
     
 
     //for beam radius

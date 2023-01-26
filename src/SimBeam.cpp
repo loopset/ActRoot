@@ -10,6 +10,10 @@
 
 SimBeam::SimBeam(double radius, std::vector<std::pair<double, double>> points)
     : beamRadius(radius)
+{ 
+}
+
+void SimBeam::SetBeamEnergyPDF(std::vector<std::pair<double, double>> points)
 {
     if(points.size() != 0)
     {
@@ -39,8 +43,6 @@ SimBeam::SimBeam(double radius, std::vector<std::pair<double, double>> points)
     splineFluxEnergy = std::make_unique<TSpline3>("splineFluxEnergy", &(vE[0]), &(vFE[0]), vE.size(), "b2,e2", 0.0, 0.0);
     funcFluxEnergy   = std::make_unique<TF1>("funcFluxEnergy;T_{n} [MeV];#frac{d#phi}{dE} [cm^{-2}s^{-1}MeV^{-1}]",
                                        [this](double* x, double* p){return splineFluxEnergy->Eval(x[0]);}, vE.front(), vE.back(), 1);
-    
-
 }
 
 double SimBeam::SampleBeamEnergy(TRandom3* generator) const
@@ -81,6 +83,22 @@ double SimBeam::ComputeScalingFactor(ExperimentInfo* &experiment,
     double NpAtTn {GetFluxAtEnergy(Tn) * experiment->duration};
     double xs { scatteringXSAtTn * 1.0E-24}; //b to cm2
     return (experiment->Nt * NpAtTn * xs) / iter;
+}
+
+SimBeam::XYZPoint SimBeam::SampleVertex(TRandom3* generator,
+                                        const DriftInfo& actar)
+{
+    //Refered to actar drift chamber center
+    double y {0.0};
+    double z {0.0};
+    do
+    {
+        y = generator->Gaus(0.0, beamRadius);
+        z = generator->Gaus(0.0, beamRadius);
+    }
+    while( (std::fabs(y) >= actar.Y) || (std::fabs(z) >= actar.Z) );
+    double x { generator->Uniform(-1., 1.) * actar.X};
+    return { x, y, z};
 }
 
 void SimBeam::Draw()
