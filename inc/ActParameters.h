@@ -164,13 +164,18 @@ namespace ActParameters
         "INCONF", "GATCONF",
         "THF_SIR13", "THF_SIR46", "THF_SIL13", "THF_SIL46",
         "CTR_TIMEML_UP", "CTR_TIMEML", "CTR_TIMEH_UP", "CTR_TIMEH",
-        "CTR_EVT_UP", "CTR_EVT"
+        "CTR_EVT_UP", "CTR_EVT",
+        "DT_VXI_UP", "DT_VXI", "DT_GET_UP", "DT_GET",
+        "DT_CLK_UP", "DT_CLK",
     };
 	inline std::vector<int> VXINumbers {6, 6,
         0, 0,
         0, 0, 0, 0,
         0, 0, 0, 0,
-        0, 0};
+        0, 0,
+        0, 0, 0, 0,
+        0, 0,
+    };
 	
 }
 

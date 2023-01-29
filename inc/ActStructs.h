@@ -48,15 +48,15 @@ struct TriggersAndGates
 	// int TVAL_CFA_CATD4 {};
 	// int TVAL_CFA_CATD6 {};
 
-	// unsigned long DT_CLK_UP_UP {};
-	// unsigned long DT_CLK_UP {};
-	// unsigned long DT_CLK {};
+	//unsigned long DT_CLK_UP_UP {};
+	unsigned long DT_CLK_UP {};
+	unsigned long DT_CLK {};
 	// unsigned long DT_GET_UP_UP {};
-	// unsigned long DT_GET_UP {};
-	// unsigned long DT_GET {};
+	unsigned long DT_GET_UP {};
+	unsigned long DT_GET {};
 	// unsigned long DT_VXI_UP_UP {};
-	// unsigned long DT_VXI_UP {};
-	// unsigned long DT_VXI {};
+	unsigned long DT_VXI_UP {};
+	unsigned long DT_VXI {};
 
 	unsigned long CTR_TIMEH_UP {};
 	unsigned long CTR_TIMEH {};

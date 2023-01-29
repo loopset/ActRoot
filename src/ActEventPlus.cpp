@@ -102,6 +102,12 @@ void ActEventPlus::ReadAllButHits(MEvent*& Evt,
         if(index == 11000 ){ triggers.CTR_TIMEH      = EvtRed->CoboAsad[it].peakheight[hit] ; }
         if(index == 12000 ){ triggers.CTR_EVT_UP     = EvtRed->CoboAsad[it].peakheight[hit] ; }
         if(index == 13000 ){ triggers.CTR_EVT        = EvtRed->CoboAsad[it].peakheight[hit] ; }
+        if(index == 14000 ){ triggers.DT_VXI_UP      = EvtRed->CoboAsad[it].peakheight[hit] ; }
+        if(index == 15000 ){ triggers.DT_VXI         = EvtRed->CoboAsad[it].peakheight[hit] ; }
+        if(index == 16000 ){ triggers.DT_GET_UP      = EvtRed->CoboAsad[it].peakheight[hit] ; }
+        if(index == 17000 ){ triggers.DT_GET         = EvtRed->CoboAsad[it].peakheight[hit] ; }
+        if(index == 18000 ){ triggers.DT_CLK_UP      = EvtRed->CoboAsad[it].peakheight[hit] ; }
+        if(index == 19000 ){ triggers.DT_CLK         = EvtRed->CoboAsad[it].peakheight[hit] ; }
     }
 }
 
