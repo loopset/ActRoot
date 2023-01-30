@@ -4,6 +4,7 @@
 #include "ActHit.h"
 #include <Math/Point3Dfwd.h>
 #include <Math/Point3D.h>
+#include <TH1D.h>
 
 #include <Math/Vector3Dfwd.h>
 #include <Math/Vector3D.h>
@@ -137,12 +138,19 @@ struct TimeOfFlight
 struct RunInfo
 {
     double fRunDuration {};
+    double fDT_VXI {}; double fuDT_VXI {};
+    double fDT_GET {}; double fuDT_GET {};
     unsigned long int fTotalRecordedEvents {};
 
     void Print() const;
     inline void ComputeDurationFromScalerSum(double ctrTimeMaximum)
     {
         fRunDuration = ctrTimeMaximum / 1.0E8;//1 unit = 10 ns!
+    }
+    inline void ComputeDTsFromHistos(TH1D*& histVXI, TH1D*& histGET)
+    {
+        fDT_VXI = histVXI->GetMean(); fuDT_VXI = histVXI->GetMeanError();
+        fDT_GET = histGET->GetMean(); fuDT_GET = histGET->GetMeanError();
     }
 };
 #endif //ACTSTRUCTS_H
