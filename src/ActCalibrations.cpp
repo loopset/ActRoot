@@ -61,6 +61,10 @@ void ActCalibrations::ReadPadAlignCoefs(std::string &coefsFile)
         fPadAlignCoefs.push_back({});
         while(std::getline(lineStreamer, value, ' '))
         {
+            //clean whistespaces
+            value.erase(std::remove_if(value.begin(), value.end(), [](unsigned char x){ return std::isspace(x);}), value.end());
+            if(value.size() == 0)
+                continue;
             //std::cout<<"Row: "<<row<<" column: "<<column<<" value: "<<value<<'\n';
             fPadAlignCoefs.at(row).push_back(std::stod(value));
             column++;

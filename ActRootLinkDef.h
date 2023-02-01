@@ -8,6 +8,19 @@
 
 #pragma link C++ nestedclass;
 #pragma link C++ nestedtypedef;
+//////////////////////////////////////////////////////
+////////////// BASE ACTROOT
+#pragma link C++ class ActRoot + ;
+#pragma link C++ class ActLegacy + ;
+
+#pragma link C++ enum ChamberMode + ;
+#pragma link C++ enum SiliconMode + ;
+
+#pragma link C++ class ChamberDetector + ;
+#pragma link C++ class SiliconUnit + ;
+#pragma link C++ class SiliconLayer + ;
+#pragma link C++ class SiliconEnsemble + ;
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////// ANALYSIS ////////////////////////////////////////////
 #pragma link C++ class ActHit + ;
