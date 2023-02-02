@@ -15,11 +15,12 @@
 
 #pragma link C++ enum ChamberMode + ;
 #pragma link C++ enum SiliconMode + ;
+#pragma link C++ enum SiliconPanel + ;
 
 #pragma link C++ class ChamberDetector + ;
 #pragma link C++ class SiliconUnit + ;
 #pragma link C++ class SiliconLayer + ;
-#pragma link C++ class SiliconEnsemble + ;
+#pragma link C++ class SiliconDetector + ;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////// ANALYSIS ////////////////////////////////////////////

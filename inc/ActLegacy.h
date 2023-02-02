@@ -5,7 +5,6 @@
 #include "ActEventData.h"
 #include "TString.h"
 
-#include <unordered_map>
 #include <string>
 #include <utility>
 #include <vector>
@@ -13,7 +12,7 @@
 class ActLegacy//legacy functions to communicate with Thomas' classes
 {
 public:
-    std::unordered_map<std::string, std::pair<int, int>> fVXIActions {};//including indexes!
+    std::vector<std::pair<std::string, std::pair<int, int>>> fVXIActions {};//vector bc we want to keep the order from the .dat file!
         
     ActLegacy() = default;
     ~ActLegacy() = default;
@@ -23,5 +22,6 @@ public:
                                 SiliconRawData& silicons, TriggersAndGates& triggers);
     //to initialize MEvent and MEventReduced
     std::pair<std::vector<TString>, std::vector<int>> GetParNamesAndNumbers() const;
+    void Print() const;
 };
 #endif

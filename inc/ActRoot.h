@@ -7,11 +7,12 @@
 
 #include <map>
 #include <string>
+#include <unordered_set>
 class ActRoot
 {
 public:
     ChamberDetector chamber {};
-    std::map<SiliconMode, SiliconEnsemble> silicons {};
+    SiliconDetector silicons {};
     ActLegacy acq {};
 private:
     ActRoot() {};
@@ -22,6 +23,8 @@ public:
     void operator=(const ActRoot&) = delete;
 
     static ActRoot* GetInstance();
+    static ChamberDetector GetChamber();
+    static SiliconDetector GetSilicons();
     
     void SetChamber(ChamberMode mode, int rebinFactorZ = 1);
     void SetVXIActions(const std::string& fileName);

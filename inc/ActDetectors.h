@@ -4,6 +4,10 @@
 #include "Math/Point3D.h"
 #include "Math/Vector3D.h"
 #include <map>
+#include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <utility>
 #include <vector>
 
 ///// DRIFT CHAMBER AND GET ELECTRONICS PARAMETERS
@@ -37,6 +41,7 @@ public:
 
 ///// SILICONS
 enum class SiliconMode {kFront, kLeft, kRight};
+enum class SiliconPanel {kLayer0, kLayer1};
 
 class SiliconUnit
 {
@@ -47,9 +52,11 @@ public:
     XYZPoint fCentre {};//mm units
     double fWidth {};//mm units
     double fHeight {};//mm units
+    double fEnergyThreshold {};//MeV
     SiliconUnit() = default;
     SiliconUnit(const XYZPoint& centre, double width, double height);
     ~SiliconUnit() = default;
+    void Print() const;
 };
 
 class SiliconLayer
@@ -68,16 +75,28 @@ public:
     SiliconLayer(SiliconMode mode, double offsetInPads);
     ~SiliconLayer() = default;
     void AddUnit(int index, const SiliconUnit& unit){fPlacements[index] = unit; }
+    void ReadFile(const std::string& fileName);
 };
 
-class SiliconEnsemble
+// class SiliconEnsemble
+// {
+// public:
+//     SiliconLayer fLayer0;
+//     SiliconLayer fLayer1;
+//     SiliconEnsemble() = default;
+//     ~SiliconEnsemble() = default;
+//     void AddLayer0(const SiliconLayer& l0){ fLayer0 = l0; }
+//     void AddLayer1(const SiliconLayer& l1){ fLayer1 = l1; }
+// };
+
+class SiliconDetector
 {
 public:
-    SiliconLayer fLayer0;
-    SiliconLayer fLayer1;
-    SiliconEnsemble() = default;
-    ~SiliconEnsemble() = default;
-    void AddLayer0(const SiliconLayer& l0){ fLayer0 = l0; }
-    void AddLayer1(const SiliconLayer& l1){ fLayer1 = l1; }
+    std::unordered_map<SiliconMode, std::pair<SiliconPanel, SiliconLayer>> fSilicons {};
+    std::unordered_set<SiliconMode> fModes {};
+    SiliconDetector() = default;
+    ~SiliconDetector() = default;
+    void AddLayer(SiliconMode mode, SiliconPanel panel, const SiliconLayer& layer);
+    void SetModes(std::unordered_set<SiliconMode> modes){ fModes = modes; }
 };
 #endif

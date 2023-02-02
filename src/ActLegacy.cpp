@@ -3,6 +3,7 @@
 #include "TString.h"
 
 #include <fstream>
+#include <iostream>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -39,7 +40,7 @@ void ActLegacy::ReadVXI(const std::string &file)
             column++;
         }
         //fill map
-        fVXIActions[vxiName] = {vxiIndex, vxiIndex + vxiSize - 1};// - 1 bc we start in 0!
+        fVXIActions.push_back({vxiName, {vxiIndex, vxiIndex + vxiSize - 1}});// - 1 bc we start in 0!
         vxiIndex += 1000;//following Thomas' MEvent::ReadVXILabels....
         row++;
     }
@@ -109,4 +110,10 @@ void ActLegacy::MoveIteratorToItsClass(int it, double val,
         t.DT_VXI = val;
     else if(vxi == "DT_VXI_UP" || vxi == "DT_VXI_CLK_UP")
         t.DT_VXI_UP = val;
+}
+
+void ActLegacy::Print() const
+{
+    for(const auto& [key, vals] : fVXIActions)
+        std::cout<<"ParName = "<<key<<" indexes ["<<vals.first<<" , "<<vals.second<<"]"<<'\n';
 }

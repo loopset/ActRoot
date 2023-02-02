@@ -1,10 +1,10 @@
 #ifndef ACTDRAW_H
 #define ACTDRAW_H
 
+#include "ActRoot.h"
 #include "ActCalibrations.h"
 #include "ActHit.h"
 #include "ActClusteringResults.h"
-#include "ActParameters.h"
 #include "ActTrack.h"
 #include "ActStructs.h"
 
@@ -64,16 +64,16 @@ class ActDraw
 	std::unique_ptr<TH2D> fHistVisualProfile;
 
 	//binning and size of histograms
-	Int_t fNbinsX { ActParameters::g_NPADX};
-	Int_t fNbinsY { ActParameters::g_NPADY};
-	Int_t fNbinsZ { ActParameters::g_NBINSZ};//new! to admit rebinning in Z!
+	Int_t fNbinsX { ActRoot::GetChamber().fNPADSX};
+	Int_t fNbinsY { ActRoot::GetChamber().fNPADSY};
+	Int_t fNbinsZ { ActRoot::GetChamber().fNBINSZ};//new! to admit rebinning in Z!
 
 	Double_t fMinX { 0.};
-	Double_t fMaxX { ActParameters::g_NPADX};
+	Double_t fMaxX { static_cast<Double_t>(ActRoot::GetChamber().fNPADSX)};
 	Double_t fMinY { 0};
-	Double_t fMaxY { ActParameters::g_NPADY};
+	Double_t fMaxY { static_cast<Double_t>(ActRoot::GetChamber().fNPADSY)};
 	Double_t fMinZ { 0.};
-	Double_t fMaxZ { ActParameters::g_NPADZ};
+	Double_t fMaxZ { static_cast<Double_t>(ActRoot::GetChamber().fNPADSZ)};
 
 	//Plotting options
 	//Double_t fOverrideHits { 15.};//value for a hit assigned to multiple tracks
@@ -108,8 +108,10 @@ public:
 	void SetNbinsX(int nbins){ fNbinsX = nbins; }
 	
 protected:
-	inline void OverrideHistContent(std::unique_ptr<TH2I>& hist, const Double_t& maxVal,
-                                    const Double_t& val1, const Double_t& val2, const Double_t& val3)
+	inline void OverrideHistContent(std::unique_ptr<TH2I>& hist,
+                                    const Double_t& maxVal,
+                                    const Double_t& val1,
+                                    const Double_t& val2, const Double_t& val3)
 	{
 		if(hist == nullptr) return ;
 		Int_t Bin1 { hist->GetXaxis()->FindFixBin(val1) };
