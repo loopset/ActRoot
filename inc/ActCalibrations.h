@@ -5,6 +5,8 @@
 #include "ActParameters.h"
 #include "ActStructs.h"
 #include "Math/Point3Dfwd.h"
+#include "ActDetectors.h"
+#include "ActRoot.h"
 
 #include <algorithm>
 #include <map>
@@ -27,13 +29,16 @@ protected:
 	std::vector<std::vector<int>> fTABLE;
 	//pad align coefficients
 	std::vector<std::vector<double>> fPadAlignCoefs;
+    //silicon calibrations
 	std::map<std::string, std::vector<std::vector<double>>> fSilicon01SCalibrations;
 	std::vector<std::vector<double>> fSiliconBeamCalibrations;
-
+    //NEW SILICON CALIBRATIONS!
+    std::map<std::pair<SiliconMode, SiliconPanel>, std::map<int, std::vector<double>>> fAllSilCal {};
+    //legacy for NFS
     std::map<std::string, std::map<int, std::vector<double>>> fSiliconSideCalibrations;
 
 	//store conversion to physical units
-	double fXYToLengthUnits { ActParameters::padSideLength};//should be constant!
+	double fXYToLengthUnits {ActRoot::GetChamber().fPadSide};//should be constant!
 	double fZToLengthUnits {};
 	double fZToPadUnits {};
 	//compute drift velocity from TH2D when filling ActEvent
@@ -54,6 +59,13 @@ protected:
 
 	void ReadPadAlignCoefs(std::string& coefsFile);
 	const std::vector<std::vector<double>>& GetPadAlignCoefs() const { return fPadAlignCoefs; }
+
+    //new Silicon Calibrations
+    const std::map<std::pair<SiliconMode, SiliconPanel>, std::map<int, std::vector<double>>>& GetAllSiliconCalibrations() const { return fAllSilCal; }
+    const std::map<int, std::vector<double>> GetSiliconCalibration(SiliconMode mode, SiliconPanel panel) const { return fAllSilCal.at({mode, panel}); }
+    void ReadSiliconCalibration(SiliconMode mode, SiliconPanel panel,
+                                const std::string& fileName,
+                                const std::vector<int>& customIndex = {});
 
 	void ReadSilicon01SCalibrations (std::string& coefsFile, std::string panel);
 	void ReadSiliconBeamCalibrations(std::string& coefsFile);

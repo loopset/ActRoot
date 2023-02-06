@@ -10,6 +10,7 @@
 
 #include <TROOT.h>
 #include <cmath>
+#include <exception>
 #include <fstream>
 #include <iostream>
 #include <memory>
@@ -74,6 +75,68 @@ void ActCalibrations::ReadPadAlignCoefs(std::string &coefsFile)
 	streamer.close();
 }
 
+void ActCalibrations::ReadSiliconCalibration(SiliconMode mode, SiliconPanel panel,
+                                             const std::string& fileName,
+                                             const std::vector<int>& customIndex)
+{
+    std::ifstream streamer {fileName.c_str()};
+    if(!streamer)
+        throw std::runtime_error("Error reading silicon calibration for fAllSilCal!");
+    std::string line {};
+    int row {};
+    while(std::getline(streamer, line, '\n'))
+    {
+        std::istringstream lineStreamer {line};
+        std::string value {};
+        int column {0};
+        double p0 {}; double p1 {}; double pec {}; double sigmaPec {};
+        while(std::getline(lineStreamer, value, ' '))
+        {
+            //clean value from whitespaces
+            value.erase(std::remove_if(value.begin(), value.end(),
+                                       [](unsigned char x){return std::isspace(x);}),
+                        value.end());
+            if(value.size() == 0)
+                continue;
+            switch (column)
+            {
+            case 0:
+                p0 = std::stod(value);
+                break;
+            case 1:
+                p1 = std::stod(value);
+                break;
+            case 2:
+                pec = std::stod(value);
+                break;
+            case 3:
+                sigmaPec = std::stod(value);
+                break;
+            default:
+                continue;
+            }
+            column++;
+        }
+        int index {};
+        if(customIndex.size() != 0)
+        {
+            try
+            {
+                index = customIndex.at(row);
+            }
+            catch(std::exception& e)
+            {
+                throw std::runtime_error("Custom index out of range when reading fAllSilCal");
+            }
+        }
+        else
+            index = row;
+        fAllSilCal[{mode, panel}][row] = std::vector<double> {p0, p1, pec, sigmaPec};
+        row++;
+    }
+    streamer.close();
+}
+
 void ActCalibrations::ReadSiliconSideCalibrations(const std::string &file)
 {
     
@@ -119,6 +182,7 @@ void ActCalibrations::ReadSiliconSideCalibrations(const std::string &file)
         }
         fSiliconSideCalibrations[side][index] = std::vector<double>{p0, p1, pec, sigmaPec};
     }
+    streamer.close();
 }
 
 void ActCalibrations::ReadSilicon01SCalibrations(std::string &coefsFile, std::string panel)

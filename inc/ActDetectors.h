@@ -4,9 +4,10 @@
 #include "Math/Point3D.h"
 #include "Math/Vector3D.h"
 #include <map>
+#include <ostream>
 #include <string>
-#include <unordered_map>
-#include <unordered_set>
+#include <map>
+#include <set>
 #include <utility>
 #include <vector>
 
@@ -41,7 +42,10 @@ public:
 
 ///// SILICONS
 enum class SiliconMode {kFront, kLeft, kRight};
+std::ostream& operator<<(std::ostream& s, const SiliconMode& mode);
+
 enum class SiliconPanel {kLayer0, kLayer1};
+std::ostream& operator<<(std::ostream& s, const SiliconPanel& panel);
 
 class SiliconUnit
 {
@@ -54,7 +58,7 @@ public:
     double fHeight {};//mm units
     double fEnergyThreshold {};//MeV
     SiliconUnit() = default;
-    SiliconUnit(const XYZPoint& centre, double width, double height);
+    SiliconUnit(const XYZPoint& centre, double width, double height, double thresh = 0.0);
     ~SiliconUnit() = default;
     void Print() const;
 };
@@ -68,6 +72,7 @@ public:
     SiliconMode fMode {};
     double fOffsetInPads {};//PAD UNITS! only here
     XYZVector fNormalVector {};
+    double fCommonEnergyThreshold {-1};
     //for each silicon!
     std::map<int, SiliconUnit> fPlacements {};
 
@@ -76,6 +81,7 @@ public:
     ~SiliconLayer() = default;
     void AddUnit(int index, const SiliconUnit& unit){fPlacements[index] = unit; }
     void ReadFile(const std::string& fileName);
+    void SetCommonEnergyThreshold(double val) { fCommonEnergyThreshold = val; }
 };
 
 // class SiliconEnsemble
@@ -92,11 +98,11 @@ public:
 class SiliconDetector
 {
 public:
-    std::unordered_map<SiliconMode, std::pair<SiliconPanel, SiliconLayer>> fSilicons {};
-    std::unordered_set<SiliconMode> fModes {};
+    std::map<std::pair<SiliconMode, SiliconPanel>, SiliconLayer> fMap {};
+    std::set<std::pair<SiliconMode, SiliconPanel>> fModes {};
     SiliconDetector() = default;
     ~SiliconDetector() = default;
     void AddLayer(SiliconMode mode, SiliconPanel panel, const SiliconLayer& layer);
-    void SetModes(std::unordered_set<SiliconMode> modes){ fModes = modes; }
+    void SetModes(std::set<std::pair<SiliconMode, SiliconPanel>> modes){ fModes = modes; }
 };
 #endif

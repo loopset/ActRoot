@@ -1,5 +1,6 @@
 #include <vector>
-
+//#include <utility>
+//#include <map>
 #ifdef __CLING__
 
 #pragma link off all globals;
@@ -16,6 +17,7 @@
 #pragma link C++ enum ChamberMode + ;
 #pragma link C++ enum SiliconMode + ;
 #pragma link C++ enum SiliconPanel + ;
+//#pragma link C++ class std::map<std::pair<SiliconMode, SiliconPanel>, std::map<int, double>> + ;
 
 #pragma link C++ class ChamberDetector + ;
 #pragma link C++ class SiliconUnit + ;

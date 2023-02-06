@@ -7,6 +7,7 @@
 #include <ios>
 #include <iostream>
 #include <limits>
+#include <ostream>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -36,8 +37,28 @@ void ChamberDetector::Print() const
     std::cout<<"===================="<<'\n';
 }
 
-SiliconUnit::SiliconUnit(const XYZPoint& centre, double width, double height)
-    : fCentre(centre), fWidth(width), fHeight(height)
+std::ostream& operator<<(std::ostream& s, const SiliconMode& mode)
+{
+    if(mode == SiliconMode::kFront)
+        s << "Front" ;
+    else if(mode == SiliconMode::kLeft)
+        s << "Left" ;
+    else if(mode == SiliconMode::kRight)
+        s << "Right" ;
+    return s;
+}
+
+std::ostream& operator<<(std::ostream& s, const SiliconPanel& panel)
+{
+    if(panel == SiliconPanel::kLayer0)
+        s << "Layer 0" ;
+    else if(panel == SiliconPanel::kLayer1)
+        s << "Layer 1" ;
+    return s;
+}
+
+SiliconUnit::SiliconUnit(const XYZPoint& centre, double width, double height, double thresh)
+    : fCentre(centre), fWidth(width), fHeight(height), fEnergyThreshold(thresh)
 {
 }
 
@@ -49,7 +70,7 @@ void SiliconUnit::Print() const
 }
 
 SiliconLayer::SiliconLayer(SiliconMode mode, double offsetInPads)
-    : fMode(mode)
+    : fMode(mode), fOffsetInPads(offsetInPads)
 {
     //auto determination of silicon plane normal vector!
     if(fMode == SiliconMode::kLeft || fMode == SiliconMode::kRight)
@@ -77,6 +98,7 @@ void SiliconLayer::ReadFile(const std::string &fileName)
         int silIndex {};
         double width {}; double height {};
         double pos0 {}; double pos1 {};
+        double ethreshold {};
         while(std::getline(lineStreamer, value, ' '))
         {
             //clean from whitespaces
@@ -95,6 +117,8 @@ void SiliconLayer::ReadFile(const std::string &fileName)
                 pos0 = std::stod(value);
             if(column == 4)
                 pos1 = std::stod(value);
+            if(column == 5)
+                ethreshold = std::stod(value);
             column++;
         }
         SiliconUnit unit;
@@ -103,13 +127,15 @@ void SiliconLayer::ReadFile(const std::string &fileName)
                                         pos0,
                                         pos1),
                                width,
-                               height);
+                               height,
+                               ethreshold);
         else
             unit = SiliconUnit(XYZPoint(pos0,
                                         fOffsetInPads * ActRoot::GetChamber().fPadSide,
                                         pos1),
                                width,
-                               height);
+                               height,
+                               ethreshold);
         //and add it!
         fPlacements[silIndex] = unit;
         row++;
@@ -119,7 +145,6 @@ void SiliconLayer::ReadFile(const std::string &fileName)
 
 void SiliconDetector::AddLayer(SiliconMode mode, SiliconPanel panel, const SiliconLayer &layer)
 {
-    std::cout<<"Adding layer..."<<'\n';
-    fSilicons[mode] = {panel, std::move(layer)};
-    fModes.insert(mode);
+    fMap[{mode, panel}] = layer;
+    fModes.insert({mode, panel});
 }

@@ -1,4 +1,5 @@
 #include "ActLegacy.h"
+#include "ActDetectors.h"
 #include "ActEventData.h"
 #include "TString.h"
 
@@ -76,22 +77,24 @@ void ActLegacy::MoveIteratorToItsClass(int it, double val,
     if(vxi == "SI0_")
     {//auto determination of index!
         auto index {it - minIndex};
-        silicons.fSilFront0[index] += val;
+        silicons.fRaw[{SiliconMode::kFront, SiliconPanel::kLayer0}][index] += val;
+        std::cout<<"Front raw value "<<val<<" at index "<<index<<'\n';
     }
     else if(vxi == "SI1_")
     {
         auto index {it - minIndex};
-        silicons.fSilFront1[index] += val;
+        silicons.fRaw[{SiliconMode::kFront, SiliconPanel::kLayer1}][index] += val;
     }
     else if(vxi == "SIS_" || vxi == "SI_L")
     {
         auto index {it - minIndex};
-        silicons.fSilLeft0[index] += val;
+        silicons.fRaw[{SiliconMode::kLeft, SiliconPanel::kLayer0}][index] += val;
+        std::cout<<"Left raw value "<<val<<" at index "<<index<<'\n';
     }
     else if(vxi == "SI_R")
     {
         auto index {it - minIndex};
-        silicons.fSilRight0[index] += val;
+        silicons.fRaw[{SiliconMode::kRight, SiliconPanel::kLayer0}][index] += val;
     }
     ///ended silicons -- more values likely to appear in the future
     else if(vxi == "INCONF")

@@ -98,8 +98,14 @@ void ActDraw::Reset()
 	fCanvPoster->Clear("D");
 	
 	fHistFront->Reset();
+    fHistFront->GetXaxis()->UnZoom();
+    fHistFront->GetYaxis()->UnZoom();
 	fHistProfile->Reset();
+    fHistProfile->GetXaxis()->UnZoom();
+    fHistProfile->GetYaxis()->UnZoom();
 	fHistPad->Reset();
+    fHistPad->GetXaxis()->UnZoom();
+    fHistPad->GetYaxis()->UnZoom();
 	
 
 	fHistProfileAllcluster->Reset();
