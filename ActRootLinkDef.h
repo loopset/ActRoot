@@ -1,6 +1,4 @@
 #include <vector>
-//#include <utility>
-//#include <map>
 #ifdef __CLING__
 
 #pragma link off all globals;
@@ -10,14 +8,13 @@
 #pragma link C++ nestedclass;
 #pragma link C++ nestedtypedef;
 //////////////////////////////////////////////////////
-////////////// BASE ACTROOT
+////////////// BASE ACTROOT /////////////////////////
 #pragma link C++ class ActRoot + ;
 #pragma link C++ class ActLegacy + ;
 
 #pragma link C++ enum ChamberMode + ;
 #pragma link C++ enum SiliconMode + ;
 #pragma link C++ enum SiliconPanel + ;
-//#pragma link C++ class std::map<std::pair<SiliconMode, SiliconPanel>, std::map<int, double>> + ;
 
 #pragma link C++ class ChamberDetector + ;
 #pragma link C++ class SiliconUnit + ;
@@ -60,28 +57,5 @@
 #pragma link C++ class ActDBSCAN + ;
 
 #pragma link C++ class ActRunManager + ;
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////// SIMULATION ////////////////////////////////////////////////
-#pragma link C++ class SimKinematics + ;
-
-#pragma link C++ class SimGeometry + ;
-
-#pragma link C++ struct SilInfo + ;
-#pragma link C++ struct DriftInfo + ;
-#pragma link C++ struct IterationInfo + ;
-#pragma link C++ struct ExperimentInfo + ;
-#pragma link C++ struct SimulationParameters + ;
-
-#pragma link C++ class SimRunner + ;
-
-#pragma link C++ class SimSRIM + ;
-
-#pragma link C++ class SimCrossSection + ;
-
-#pragma link C++ class SimBeam + ;
-
-#pragma link C++ class SimHistos + ;
-
 
 #endif

@@ -30,13 +30,13 @@ void SiliconRawData::Calibrate(const std::map<int, std::vector<double>>& calibra
 
 void SiliconRawData::ReadAndWrite(SiliconData &fin, bool individualThreshold)
 {
-    
+    //final written index is obtained from ActRoot::SiliconDetector fIndexes!
     for(const auto& key : ActRoot::GetSilicons().fModes)
     {
         auto [mode, panel] = key;
         if(fCal.count(key))
         {
-            Float_t E {-1}; Int_t M {-1}; Int_t P {-1};
+            Float_t E {}; Int_t M {}; Int_t P {};
             for(const auto& [index, val] : fCal.at(key))
             {               
                 Float_t thresh {};
@@ -49,7 +49,14 @@ void SiliconRawData::ReadAndWrite(SiliconData &fin, bool individualThreshold)
                     {
                         E = val;
                         M += 1;
-                        P = index;
+                        //determination of index!
+                        const auto& indexVector {ActRoot::GetSilicons().fMap.at(key).fIndexes};
+                        if(indexVector.size() > 0)
+                            P = indexVector.at(index);
+                        else
+                            P = index;
+                        if(mode == SiliconMode::kLeft)
+                            std::cout<<"E = "<<E<<" M = "<<M<<" P = "<<P<<'\n';
                     }
                 }
                 else
@@ -60,11 +67,14 @@ void SiliconRawData::ReadAndWrite(SiliconData &fin, bool individualThreshold)
                     {
                         E = val;
                         M += 1;
-                        P = index;
+                        //determination of index!
+                        const auto& indexVector {ActRoot::GetSilicons().fMap.at(key).fIndexes};
+                        if(indexVector.size() > 0)
+                            P = indexVector.at(index);
+                        else
+                            P = index;
                     }
                 }
-                if(mode == SiliconMode::kLeft)
-                    std::cout<<"Val for left Si: "<<val<<'\n';
             }
             //and save data according to multiplicity
             if(M != 1)
@@ -88,4 +98,24 @@ void SiliconData::Print() const
         std::cout<<" E = "<<vals.at("E")<<" MeV and pad = "<<vals.at("P")<<'\n';
     }
     std::cout<<RESET<<std::flush;
+}
+
+void SiliconRawData::Print() const
+{
+    std::cout<<BOLDCYAN<<"===== SiliconRawData ===="<<'\n';
+    std::cout<<" RAW data: "<<'\n';
+    for(const auto& [key, inner] : fRaw)
+    {
+        std::cout<<"  At "<<key.first<<" and "<<key.second<<'\n';
+        for(const auto& [index, val] : inner)
+            std::cout<<"   Index = "<<index<<" rawVal = "<<val<<'\n';
+    }
+    std::cout<<" CAL data: "<<'\n';
+    for(const auto& [key, inner] : fCal)
+    {
+        std::cout<<"  At "<<key.first<<" and "<<key.second<<'\n';
+        for(const auto& [index, val] : inner)
+            std::cout<<"   Index = "<<index<<" calVal = "<<val<<'\n';
+    }
+    std::cout<<"==================="<<RESET<<std::endl;
 }

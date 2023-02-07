@@ -78,7 +78,6 @@ void ActLegacy::MoveIteratorToItsClass(int it, double val,
     {//auto determination of index!
         auto index {it - minIndex};
         silicons.fRaw[{SiliconMode::kFront, SiliconPanel::kLayer0}][index] += val;
-        std::cout<<"Front raw value "<<val<<" at index "<<index<<'\n';
     }
     else if(vxi == "SI1_")
     {
@@ -89,7 +88,6 @@ void ActLegacy::MoveIteratorToItsClass(int it, double val,
     {
         auto index {it - minIndex};
         silicons.fRaw[{SiliconMode::kLeft, SiliconPanel::kLayer0}][index] += val;
-        std::cout<<"Left raw value "<<val<<" at index "<<index<<'\n';
     }
     else if(vxi == "SI_R")
     {

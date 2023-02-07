@@ -13,6 +13,7 @@ find_package(ROOT 6.20 CONFIG REQUIRED COMPONENTS GenVector Geom MathMore)##othe
 
 ## because it is located outside this project! keep in mind directory structure so this can be feasible!!
 include_directories(${CMAKE_SOURCE_DIR}/../MyActarEvents/inc)
+include_directories(${CMAKE_SOURCE_DIR}/../ActSim/inc)
 ## for ROOT includes in Ubuntu
 include_directories(${ROOT_INCLUDE_DIRS})
 

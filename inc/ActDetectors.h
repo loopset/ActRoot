@@ -75,11 +75,12 @@ public:
     double fCommonEnergyThreshold {-1};
     //for each silicon!
     std::map<int, SiliconUnit> fPlacements {};
+    std::vector<int> fIndexes {};
 
     SiliconLayer() = default;
     SiliconLayer(SiliconMode mode, double offsetInPads);
     ~SiliconLayer() = default;
-    void AddUnit(int index, const SiliconUnit& unit){fPlacements[index] = unit; }
+    void AddUnit(int index, const SiliconUnit& unit){fPlacements[index] = unit; fIndexes.push_back(index);}
     void ReadFile(const std::string& fileName);
     void SetCommonEnergyThreshold(double val) { fCommonEnergyThreshold = val; }
 };

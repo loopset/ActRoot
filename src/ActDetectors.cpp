@@ -138,6 +138,7 @@ void SiliconLayer::ReadFile(const std::string &fileName)
                                ethreshold);
         //and add it!
         fPlacements[silIndex] = unit;
+        fIndexes.push_back(silIndex);
         row++;
     }
     streamer.close();

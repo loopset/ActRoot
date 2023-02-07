@@ -34,5 +34,7 @@ public:
                    const std::map<int, double>& raw,
                    std::map<int, double>& cal);
     void ReadAndWrite(SiliconData& fin, bool individualThreshold = false);
+
+    void Print() const;
 };
 #endif
