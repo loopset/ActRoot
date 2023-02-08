@@ -81,7 +81,7 @@ int ActRANSAC::EvaluateRANSAC(const std::vector<ActHit>& hitArray, ActLine& samp
 	int nbInliers {0};
 	for(const auto& hit : hitArray)
 	{
-		auto& pos = hit.GetPosition();
+		const auto& pos = hit.GetPosition();
 		double error = sampledLine.DistanceLineToHit(pos);
 		error = error * error;
 		if(error < (fDistanceThreshold * fDistanceThreshold))

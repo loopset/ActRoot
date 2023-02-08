@@ -1,4 +1,5 @@
 #include <vector>
+#include <utility>
 #ifdef __CLING__
 
 #pragma link off all globals;
@@ -15,6 +16,7 @@
 #pragma link C++ enum ChamberMode + ;
 #pragma link C++ enum SiliconMode + ;
 #pragma link C++ enum SiliconPanel + ;
+#pragma link C++ class std::pair<SiliconMode, SiliconPanel> + ;
 
 #pragma link C++ class ChamberDetector + ;
 #pragma link C++ class SiliconUnit + ;

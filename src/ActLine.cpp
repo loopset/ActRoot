@@ -88,7 +88,7 @@ void ActLine::FitCloudToLine(const std::vector<XYZPoint>& points, const std::vec
     Q = Xm = Ym = Zm = 0.;
     double total_charge = 0;
     Sxx = Syy = Szz = Sxy = Sxz = Syz = 0.;
-    bool doChargeWeight = points.size() == charge.size();
+    bool doChargeWeight = (points.size() == charge.size());
   
     for (int i = 0; i < points.size(); ++i) {
        const auto hitQ = doChargeWeight ? charge[i] : 1.;
@@ -163,7 +163,12 @@ void ActLine::FitCloudToLine(const std::vector<XYZPoint>& points, const std::vec
 	//temporary bug fix: detect if we have NaN values here dont redefine ActLine!
 	if(std::isnan(dm2))
 	{
-		std::cout<<BOLDMAGENTA<<"Warning: dm2 is NaN is ActLine::FitLineToCloud due to pad saturation -> Not fitting"<<RESET<<'\n';
+        // std::cout<<"c2 "<<c2<<'\n';
+        // std::cout<<"q "<<q<<'\n';
+        // std::cout<<"r "<<r<<'\n';
+        // std::cout<<"rho "<<rho<<'\n';
+        // std::cout<<"phi "<<phi<<'\n';
+		// std::cout<<BOLDMAGENTA<<"Warning: dm2 is NaN is ActLine::FitLineToCloud due to pad saturation -> Not fitting"<<RESET<<'\n';
 		//std::cout<<"Remaining line direction X: "<<GetDirection().X()<<" Y: "<<GetDirection().Y()<< " Z: "<<GetDirection().Z()<<'\n';
 		return;
 	}
