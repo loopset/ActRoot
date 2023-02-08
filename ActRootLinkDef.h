@@ -39,14 +39,18 @@
 
 #pragma link C++ class ActCalibrations + ;
 
-//structs
+//Event Data
 #pragma link C++ struct Silicons +;
-#pragma link C++ struct TriggersAndGates +;
-#pragma link C++ struct TimeOfFlight + ;
+#pragma link C++ class TriggersAndGates +;
+#pragma link C++ class TimeOfFlight + ;
 #pragma link C++ struct SiliconsPlus + ;
-#pragma link C++ struct Voxels + ;
+#pragma link C++ class Voxels + ;
 #pragma link C++ struct EventPlusCuts + ;
-#pragma link C++ struct RunInfo + ;
+#pragma link C++ class RunInfo + ;
+#pragma link C++ class SiliconRawData + ;
+#pragma link C++ class SiliconData + ;
+
+#pragma link C++  class ActEvent + ;
 
 //new classes
 #pragma link C++ class ActEventPlus + ;

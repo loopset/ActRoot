@@ -3,27 +3,27 @@
 #include "ActDetectors.h"
 #include <stdexcept>
 
-ActRoot* ActRoot::gActRoot = nullptr;
+ActRoot* ActRoot::fgActRoot = nullptr;
 
 ActRoot* ActRoot::Get()
 {
-    if(!gActRoot)
-        gActRoot = new ActRoot();
-    return gActRoot;
+    if(!fgActRoot)
+        fgActRoot = new ActRoot();
+    return fgActRoot;
 }
 
 ChamberDetector ActRoot::GetChamber()
 {
-    if(!gActRoot)
+    if(!fgActRoot)
         throw std::runtime_error("Error: gActRoot global pointer has not been initialized yet! See config macro!");
-    return gActRoot->chamber;
+    return fgActRoot->chamber;
 }
 
 SiliconDetector ActRoot::GetSilicons()
 {
-    if(!gActRoot)
+    if(!fgActRoot)
         throw std::runtime_error("Error: gActRoot global pointer has not been initialized yet! See config macro!");
-    return gActRoot->silicons;
+    return fgActRoot->silicons;
 }
 
 void ActRoot::SetChamber(ChamberMode mode, int rebinFactorZ)

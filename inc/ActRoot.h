@@ -38,7 +38,7 @@ public:
 private:
     ActRoot() {};
     //singleton model!
-    static ActRoot* gActRoot;
+    static ActRoot* fgActRoot;
 public:
     ActRoot(ActRoot& ) = delete;
     void operator=(const ActRoot&) = delete;

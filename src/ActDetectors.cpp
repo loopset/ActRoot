@@ -17,12 +17,12 @@ ChamberDetector::ChamberDetector(ChamberMode mode, int rebinFactorZ)
     fREBINZ = rebinFactorZ;
     fNBINSZ = fNPADSZ / fREBINZ;
     //pad plane according to mode
-    if(mode == ChamberMode::kACTAR_TPC)
+    if(mode == ChamberMode::EACTAR_TPC)
     {
         fNPADSX = 128;
         fNPADSY = 128;
     }
-    else if(mode == ChamberMode::kProtoACTAR_TPC)
+    else if(mode == ChamberMode::EProtoACTAR_TPC)
     {
         fNPADSX = 64;
         fNPADSY = 32;
@@ -39,20 +39,20 @@ void ChamberDetector::Print() const
 
 std::ostream& operator<<(std::ostream& s, const SiliconMode& mode)
 {
-    if(mode == SiliconMode::kFront)
+    if(mode == SiliconMode::EFront)
         s << "Front" ;
-    else if(mode == SiliconMode::kLeft)
+    else if(mode == SiliconMode::ELeft)
         s << "Left" ;
-    else if(mode == SiliconMode::kRight)
+    else if(mode == SiliconMode::ERight)
         s << "Right" ;
     return s;
 }
 
 std::ostream& operator<<(std::ostream& s, const SiliconPanel& panel)
 {
-    if(panel == SiliconPanel::kLayer0)
+    if(panel == SiliconPanel::ELayer0)
         s << "Layer 0" ;
-    else if(panel == SiliconPanel::kLayer1)
+    else if(panel == SiliconPanel::ELayer1)
         s << "Layer 1" ;
     return s;
 }
@@ -73,9 +73,9 @@ SiliconLayer::SiliconLayer(SiliconMode mode, double offsetInPads)
     : fMode(mode), fOffsetInPads(offsetInPads)
 {
     //auto determination of silicon plane normal vector!
-    if(fMode == SiliconMode::kLeft || fMode == SiliconMode::kRight)
+    if(fMode == SiliconMode::ELeft || fMode == SiliconMode::ERight)
         fNormalVector = {0.0, 1.0, 0.0};
-    else if(fMode == SiliconMode::kFront)
+    else if(fMode == SiliconMode::EFront)
         fNormalVector = {1.0, 0.0, 0.0};
     else
         throw std::runtime_error("Wrong SiliconMode passed to constructor! See enum class SiliconModes");
@@ -122,7 +122,7 @@ void SiliconLayer::ReadFile(const std::string &fileName)
             column++;
         }
         SiliconUnit unit;
-        if(fMode == SiliconMode::kFront)
+        if(fMode == SiliconMode::EFront)
             unit = SiliconUnit(XYZPoint(fOffsetInPads * ActRoot::GetChamber().fPadSide,
                                         pos0,
                                         pos1),

@@ -1,7 +1,6 @@
 #ifndef ACTLEGACY_H
 #define ACTLEGACY_H
 
-#include "ActStructs.h"
 #include "ActEventData.h"
 #include "TString.h"
 
@@ -19,7 +18,9 @@ public:
 
     void ReadVXI(const std::string& file);
     void MoveIteratorToItsClass(int it, double val,
-                                SiliconRawData& silicons, TriggersAndGates& triggers);
+                                SiliconRawData& silicons,
+                                TriggersAndGates& triggers,
+                                TimeOfFlight& tof);
     //to initialize MEvent and MEventReduced
     std::pair<std::vector<TString>, std::vector<int>> GetParNamesAndNumbers() const;
     void Print() const;

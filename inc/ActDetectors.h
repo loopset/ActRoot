@@ -12,7 +12,7 @@
 #include <vector>
 
 ///// DRIFT CHAMBER AND GET ELECTRONICS PARAMETERS
-enum class ChamberMode{kACTAR_TPC, kProtoACTAR_TPC};
+enum class ChamberMode{EACTAR_TPC, EProtoACTAR_TPC};
 class ChamberDetector
 {
 public:
@@ -41,10 +41,10 @@ public:
 };
 
 ///// SILICONS
-enum class SiliconMode {kFront, kLeft, kRight};
+enum class SiliconMode {EFront, ELeft, ERight};
 std::ostream& operator<<(std::ostream& s, const SiliconMode& mode);
 
-enum class SiliconPanel {kLayer0, kLayer1};
+enum class SiliconPanel {ELayer0, ELayer1};
 std::ostream& operator<<(std::ostream& s, const SiliconPanel& panel);
 
 class SiliconUnit

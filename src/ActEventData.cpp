@@ -55,8 +55,6 @@ void SiliconRawData::ReadAndWrite(SiliconData &fin, bool individualThreshold)
                             P = indexVector.at(index);
                         else
                             P = index;
-                        if(mode == SiliconMode::kLeft)
-                            std::cout<<"E = "<<E<<" M = "<<M<<" P = "<<P<<'\n';
                     }
                 }
                 else
@@ -118,4 +116,15 @@ void SiliconRawData::Print() const
             std::cout<<"   Index = "<<index<<" calVal = "<<val<<'\n';
     }
     std::cout<<"==================="<<RESET<<std::endl;
+}
+
+void RunInfo::Print() const
+{
+    std::cout<<BOLDMAGENTA<<"==== RunInfo ===="<<'\n';
+    std::cout<<" Total events : "<<fTotalRecordedEvents<<'\n';
+    std::cout<<" Duration     : "<<fRunDuration<<" s"<<'\n';
+    std::cout<<" DT for GET   : "<<fDT_GET<<" +-/ "<<fuDT_GET<<" %"<<'\n';
+    std::cout<<" DT for VXI   : "<<fDT_VXI<<" +/- "<<fuDT_VXI<<" %"<<'\n';
+    std::cout<<"=========================="<<'\n';
+    std::cout<<RESET<<std::endl<<std::flush;
 }

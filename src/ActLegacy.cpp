@@ -60,7 +60,9 @@ std::pair<std::vector<TString>, std::vector<int>> ActLegacy::GetParNamesAndNumbe
 }
 
 void ActLegacy::MoveIteratorToItsClass(int it, double val,
-                                       SiliconRawData &silicons, TriggersAndGates &t)
+                                       SiliconRawData &silicons,
+                                       TriggersAndGates &t,
+                                       TimeOfFlight& tof)
 {
     //find it value in map of VXI parameters
     std::string vxi {};
@@ -77,28 +79,26 @@ void ActLegacy::MoveIteratorToItsClass(int it, double val,
     if(vxi == "SI0_")
     {//auto determination of index!
         auto index {it - minIndex};
-        silicons.fRaw[{SiliconMode::kFront, SiliconPanel::kLayer0}][index] += val;
+        silicons.fRaw[{SiliconMode::EFront, SiliconPanel::ELayer0}][index] += val;
     }
     else if(vxi == "SI1_")
     {
         auto index {it - minIndex};
-        silicons.fRaw[{SiliconMode::kFront, SiliconPanel::kLayer1}][index] += val;
+        silicons.fRaw[{SiliconMode::EFront, SiliconPanel::ELayer1}][index] += val;
     }
     else if(vxi == "SIS_" || vxi == "SI_L")
     {
         auto index {it - minIndex};
-        silicons.fRaw[{SiliconMode::kLeft, SiliconPanel::kLayer0}][index] += val;
+        silicons.fRaw[{SiliconMode::ELeft, SiliconPanel::ELayer0}][index] += val;
     }
     else if(vxi == "SI_R")
     {
         auto index {it - minIndex};
-        silicons.fRaw[{SiliconMode::kRight, SiliconPanel::kLayer0}][index] += val;
+        silicons.fRaw[{SiliconMode::ERight, SiliconPanel::ELayer0}][index] += val;
     }
     ///ended silicons -- more values likely to appear in the future
-    else if(vxi == "INCONF")
-        t.INCONF = val;
-    else if(vxi == "GATCONF")
-        t.GATCONF = val;
+    else if(vxi == "INCONF") t.INCONF = val;
+    else if(vxi == "GATCONF") t.GATCONF = val;
     else if(vxi == "CLK_UP" || vxi == "DT_CLK_UP")
         t.DT_CLK_UP = val;
     else if(vxi == "CLK" || vxi == "DT_CLK")
@@ -111,6 +111,14 @@ void ActLegacy::MoveIteratorToItsClass(int it, double val,
         t.DT_VXI = val;
     else if(vxi == "DT_VXI_UP" || vxi == "DT_VXI_CLK_UP")
         t.DT_VXI_UP = val;
+    else if(vxi == "CTR_TIMEH_UP") t.CTR_TIMEH_UP = val;
+    else if(vxi == "CTR_TIMEH") t.CTR_TIMEH = val;
+    else if(vxi == "CTR_TIMEML_UP") t.CTR_TIMEML_UP = val;
+    else if(vxi == "CTR_TIMEML") t.CTR_TIMEML = val;
+    else if(vxi == "CTR_EVT_UP") t.CTR_EVT_UP = val;
+    else if(vxi == "CTR_EVT") t.CTR_EVT = val;
+    else if(vxi != "")
+        throw std::runtime_error("Error: " + vxi + " not added yet in ActLegagy::MoveIteratorToItsClass!");
 }
 
 void ActLegacy::Print() const
