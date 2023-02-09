@@ -47,7 +47,8 @@ public:
                   MEvent*& Evt, MEventReduced*& EvtRed,
                   bool alignCharge = true,
                   bool silIndividualThresh = false,
-                  bool writeSilicons = true);
+                  bool writeSilicons = true,
+                  bool debugSilicons = false);
 
 private:
     void ReadAllButHits(MEvent*& Evt,
@@ -64,7 +65,9 @@ private:
                   bool alignCharge,
                   int it, int where);
 
-    void CalibrateSilicons(ActCalibrations* calibrations, SiliconRawData& raw, bool silIndividualThresh);
+    void CalibrateSilicons(ActCalibrations* calibrations, SiliconRawData& raw,
+                           bool silIndividualThresh,
+                           bool debugSilicons);
 };
 
 #endif

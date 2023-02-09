@@ -30,7 +30,8 @@ void ActEvent::ReadData(ActCalibrations*& calibrations,
                         MEvent*& Evt, MEventReduced*& EvtRed,
                         bool alignCharge,
                         bool silIndividualThresh,
-                        bool writeSilicons)
+                        bool writeSilicons,
+                        bool debugSilicons)
 {
     //raw data is temporary only!
     SiliconRawData siliconraw {};
@@ -65,7 +66,7 @@ void ActEvent::ReadData(ActCalibrations*& calibrations,
 
     //AND NOW, SILICONS
     if(writeSilicons)
-        CalibrateSilicons(calibrations, siliconraw, silIndividualThresh);
+        CalibrateSilicons(calibrations, siliconraw, silIndividualThresh, debugSilicons);
 }
 
 void ActEvent::ReadAllButHits(MEvent*& Evt,
@@ -153,10 +154,12 @@ void ActEvent::ReadHits(MEvent*& Evt,
 	}		
 }
 
-void ActEvent::CalibrateSilicons(ActCalibrations *calibrations, SiliconRawData &raw, bool silIndividualThresh)
+void ActEvent::CalibrateSilicons(ActCalibrations *calibrations, SiliconRawData &raw,
+                                 bool silIndividualThresh,
+                                 bool debugSilicons)
 {
     //call to calibrate function!
-    for(const auto& key : ActRoot::GetSilicons().fModes)
+    for(const auto& key : ActRoot::Get()->silicons.fModes)
     {
         auto [mode, panel] = key;
         if(raw.fRaw.count(key))
@@ -172,7 +175,7 @@ void ActEvent::CalibrateSilicons(ActCalibrations *calibrations, SiliconRawData &
 
     //and now read and write data!
     raw.ReadAndWrite(silicons, silIndividualThresh);
-    //raw.Print();
-    //silicons.Print();
+    if(debugSilicons)raw.Print();
+    if(debugSilicons)silicons.Print();
     
 }

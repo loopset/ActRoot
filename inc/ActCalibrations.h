@@ -38,7 +38,7 @@ protected:
     std::map<std::string, std::map<int, std::vector<double>>> fSiliconSideCalibrations;
 
 	//store conversion to physical units
-	double fXYToLengthUnits {ActRoot::GetChamber().fPadSide};//should be constant!
+	double fXYToLengthUnits {ActRoot::Get()->chamber.fPadSide};//should be constant!
 	double fZToLengthUnits {};
 	double fZToPadUnits {};
 	//compute drift velocity from TH2D when filling ActEvent

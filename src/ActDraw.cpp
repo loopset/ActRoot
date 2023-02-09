@@ -379,7 +379,7 @@ std::unique_ptr<TPolyLine> ActDraw::GetPolyLine(const ActTrack& track, TString p
 	int Npoints { 500 };
 	std::vector<double> vecX, vecY, vecZ;
 	double x0 { fMinX};
-	double dx { 1. * static_cast<double>(ActRoot::GetChamber().fNPADSX) / Npoints };
+	double dx { 1. * static_cast<double>(ActRoot::Get()->chamber.fNPADSX) / Npoints };
 	for(int r = 0; r < Npoints; r++ )
 	{
 		double yval { offsetXY + slopeXY * x0 };
@@ -452,7 +452,7 @@ std::unique_ptr<TPolyLine3D> ActDraw::GetPolyLine3D(const ActTrack& track)
 	int Npoints { 50 };
 	std::vector<double> vecX, vecY, vecZ;
 	double x0 { 0. };
-	double dx { 1. * ActRoot::GetChamber().fNPADSX / Npoints };
+	double dx { 1. * ActRoot::Get()->chamber.fNPADSX / Npoints };
 	for(int r = 0; r < Npoints; r++ )
 	{
 		double yval { offsetXY + slopeXY * x0 };

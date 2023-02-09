@@ -64,16 +64,16 @@ class ActDraw
 	std::unique_ptr<TH2D> fHistVisualProfile;
 
 	//binning and size of histograms
-	Int_t fNbinsX { ActRoot::GetChamber().fNPADSX};
-	Int_t fNbinsY { ActRoot::GetChamber().fNPADSY};
-	Int_t fNbinsZ { ActRoot::GetChamber().fNBINSZ};//new! to admit rebinning in Z!
+	Int_t fNbinsX { ActRoot::Get()->chamber.fNPADSX};
+	Int_t fNbinsY { ActRoot::Get()->chamber.fNPADSY};
+	Int_t fNbinsZ { ActRoot::Get()->chamber.fNBINSZ};//new! to admit rebinning in Z!
 
 	Double_t fMinX { 0.};
-	Double_t fMaxX { static_cast<Double_t>(ActRoot::GetChamber().fNPADSX)};
+	Double_t fMaxX { static_cast<Double_t>(ActRoot::Get()->chamber.fNPADSX)};
 	Double_t fMinY { 0};
-	Double_t fMaxY { static_cast<Double_t>(ActRoot::GetChamber().fNPADSY)};
+	Double_t fMaxY { static_cast<Double_t>(ActRoot::Get()->chamber.fNPADSY)};
 	Double_t fMinZ { 0.};
-	Double_t fMaxZ { static_cast<Double_t>(ActRoot::GetChamber().fNPADSZ)};
+	Double_t fMaxZ { static_cast<Double_t>(ActRoot::Get()->chamber.fNPADSZ)};
 
 	//Plotting options
 	//Double_t fOverrideHits { 15.};//value for a hit assigned to multiple tracks

@@ -31,28 +31,30 @@ void SiliconRawData::Calibrate(const std::map<int, std::vector<double>>& calibra
 void SiliconRawData::ReadAndWrite(SiliconData &fin, bool individualThreshold)
 {
     //final written index is obtained from ActRoot::SiliconDetector fIndexes!
-    for(const auto& key : ActRoot::GetSilicons().fModes)
+    for(const auto& key : ActRoot::Get()->silicons.fModes)
     {
         auto [mode, panel] = key;
         if(fCal.count(key))
         {
             Float_t E {}; Int_t M {}; Int_t P {};
             for(const auto& [index, val] : fCal.at(key))
-            {               
+            {
                 Float_t thresh {};
                 //check threshold!
                 if(!individualThreshold)
                 {
-                    thresh = ActRoot::GetSilicons().fMap.at(key)
+                    thresh = ActRoot::Get()->silicons.fMap.at(key)
                         .fCommonEnergyThreshold;
                     if(val > thresh)
                     {
                         E = val;
                         M += 1;
                         //determination of index!
-                        const auto& indexVector {ActRoot::GetSilicons().fMap.at(key).fIndexes};
+                        const auto& indexVector {ActRoot::Get()->silicons.fMap.at(key).fIndexes};
                         if(indexVector.size() > 0)
+                        {
                             P = indexVector.at(index);
+                        }
                         else
                             P = index;
                     }
@@ -66,7 +68,7 @@ void SiliconRawData::ReadAndWrite(SiliconData &fin, bool individualThreshold)
                         E = val;
                         M += 1;
                         //determination of index!
-                        const auto& indexVector {ActRoot::GetSilicons().fMap.at(key).fIndexes};
+                        const auto& indexVector {ActRoot::Get()->silicons.fMap.at(key).fIndexes};
                         if(indexVector.size() > 0)
                             P = indexVector.at(index);
                         else

@@ -123,7 +123,7 @@ void SiliconLayer::ReadFile(const std::string &fileName)
         }
         SiliconUnit unit;
         if(fMode == SiliconMode::EFront)
-            unit = SiliconUnit(XYZPoint(fOffsetInPads * ActRoot::GetChamber().fPadSide,
+            unit = SiliconUnit(XYZPoint(fOffsetInPads * ActRoot::Get()->chamber.fPadSide,
                                         pos0,
                                         pos1),
                                width,
@@ -131,7 +131,7 @@ void SiliconLayer::ReadFile(const std::string &fileName)
                                ethreshold);
         else
             unit = SiliconUnit(XYZPoint(pos0,
-                                        fOffsetInPads * ActRoot::GetChamber().fPadSide,
+                                        fOffsetInPads * ActRoot::Get()->chamber.fPadSide,
                                         pos1),
                                width,
                                height,

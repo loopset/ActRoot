@@ -14,16 +14,18 @@ ActRoot* ActRoot::Get()
 
 ChamberDetector ActRoot::GetChamber()
 {
-    if(!fgActRoot)
-        throw std::runtime_error("Error: gActRoot global pointer has not been initialized yet! See config macro!");
-    return fgActRoot->chamber;
+    throw std::runtime_error("Error! Deprecated GetChamber()");
+    // if(!fgActRoot)
+    //     throw std::runtime_error("Error: gActRoot global pointer has not been initialized yet! See config macro!");
+    // return fgActRoot->chamber;
 }
 
 SiliconDetector ActRoot::GetSilicons()
 {
-    if(!fgActRoot)
-        throw std::runtime_error("Error: gActRoot global pointer has not been initialized yet! See config macro!");
-    return fgActRoot->silicons;
+    throw std::runtime_error("Error! Deprecated GetSilicons()");
+    // if(!fgActRoot)
+    //     throw std::runtime_error("Error: gActRoot global pointer has not been initialized yet! See config macro!");
+    // return fgActRoot->silicons;
 }
 
 void ActRoot::SetChamber(ChamberMode mode, int rebinFactorZ)
