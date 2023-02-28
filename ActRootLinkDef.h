@@ -64,4 +64,7 @@
 
 #pragma link C++ class ActRunManager + ;
 
+///FILTERS
+//#pragma link C++ class ActStatisticalRemovalFilter + ;
+
 #endif
