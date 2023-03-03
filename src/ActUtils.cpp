@@ -3,6 +3,7 @@
 #include "ActRoot.h"
 
 #include "TF1.h"
+#include "TFile.h"
 
 #include <algorithm>
 #include <cctype>
@@ -50,4 +51,57 @@ void ActUtils::GetExperimentalTH1Contours(TH1D* proj, double minLeft, double max
         std::cout<<"       p2 = "<<fRight->GetParameter(2)<<" "<<proj->GetXaxis()->GetTitle()<<'\n';
     }
     std::cout<<"===================================================="<<RESET<<std::endl;
+}
+
+void ActUtils::ActCutsManager::ReadGraphicalCut(const std::string& key,
+                                                const std::string& fileName,
+                                                bool verbose)
+{
+    auto assignColor = [this](){int val {(int)fCuts.size() + 1}; if(val == 0 || val == 10) return 46; else return val;};
+    if(verbose)
+        std::cout<<BOLDCYAN<<"ActCutsManager: Reading key: "<<key<<" in file: "<<fileName<<RESET<<'\n';
+    auto* file {new TFile(fileName.c_str())};
+    file->cd();
+    if(!fCuts.count(key))
+    {
+        fCuts[key] = file->Get<TCutG>("CUTG");
+        fKeys.insert(key);
+        if(!fCuts.at(key))
+            throw std::runtime_error("Error: nullptr in Get<TCutG>: check cut name in file");
+        fCuts.at(key)->SetLineWidth(2);
+        fCuts.at(key)->SetLineColor(assignColor());
+        fCuts.at(key)->SetTitle(("cut_" + key).c_str());
+    }
+    else
+    {
+        throw std::runtime_error("Reading TCutG with reapeated key : " + key);
+    }
+    file->Close();
+    delete file;
+}
+
+void ActUtils::ActCutsManager::DrawCuts(TVirtualPad *pad)
+{
+    pad->cd();
+    for(auto& [key, cut] : fCuts)
+    {
+        cut->Draw("same");
+    }
+}
+
+bool ActUtils::ActCutsManager::IsInside(const std::string &key, const double &x, const double &y)
+{
+    return fCuts.at(key)->IsInside(x, y);
+}
+
+std::string ActUtils::ActCutsManager::IdentifyKey(const double &x, const double &y)
+{
+    for(auto& [key,cut] : fCuts)
+    {
+        if(cut->IsInside(x, y))
+        {
+            return key;
+        }
+    }
+    return std::string("none");
 }

@@ -64,6 +64,10 @@
 
 #pragma link C++ class ActRunManager + ;
 
+/////////////UTILS
+#pragma link C++ namespace ActUtils;
+#pragma link C++ class ActUtils::ActCutsManager + ;
+
 ///FILTERS
 //#pragma link C++ class ActStatisticalRemovalFilter + ;
 
