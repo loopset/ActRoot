@@ -1,31 +1,33 @@
 <map id="ActRoot::HistogramPainter" name="ActRoot::HistogramPainter">
-<area shape="rect" id="Node000001" title="&lt; A class to plot physics info in histograms" alt="" coords="787,268,981,293"/>
-<area shape="rect" id="Node000002" href="$classActRoot_1_1InputWrapper.html" title=" " alt="" coords="495,175,665,200"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="636,202,842,265,841,270,635,207"/>
-<area shape="rect" id="Node000003" href="$classActRoot_1_1InputData.html" title=" " alt="" coords="186,5,331,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="346,22,403,34,460,57,497,84,530,116,573,173,568,176,526,120,494,88,457,62,402,39,344,27"/>
-<area shape="rect" id="Node000004" href="$classActRoot_1_1InputIterator.html" title=" " alt="" coords="177,55,340,80"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="354,74,407,85,460,102,491,118,521,137,566,172,563,177,518,141,489,123,458,107,406,90,353,79"/>
-<area shape="rect" id="Node000005" href="$classActRoot_1_1TPCData.html" title="Holder of physics info from an ACTAR TPC event." alt="" coords="190,123,327,148"/>
-<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="341,146,501,172,500,177,341,151"/>
-<area shape="rect" id="Node000006" href="$classActRoot_1_1VData.html" title=" " alt="" coords="5,197,127,223"/>
-<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="103,189,175,157,209,146,210,151,177,162,105,194"/>
-<area shape="rect" id="Node000007" href="$classActRoot_1_1SilData.html" title="A class holding simple Silicon data." alt="" coords="195,172,323,197"/>
-<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="140,198,194,190,195,196,141,203"/>
-<area shape="rect" id="Node000008" href="$classActRoot_1_1ModularData.html" title="A class storing ModularLeaf data." alt="" coords="176,221,341,247"/>
-<area shape="poly" id="edge9_Node000008_Node000006" title=" " alt="" coords="141,217,176,221,175,226,140,222"/>
-<area shape="rect" id="Node000009" href="$classActRoot_1_1MergerData.html" title=" " alt="" coords="179,271,338,296"/>
-<area shape="poly" id="edge11_Node000009_Node000006" title=" " alt="" coords="107,226,177,256,214,268,212,273,175,260,105,231"/>
-<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="337,183,365,183,495,184,495,190,365,189,337,188"/>
-<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="355,219,458,205,504,197,505,203,459,210,355,225"/>
-<area shape="poly" id="edge10_Node000002_Node000009" title=" " alt="" coords="350,265,458,238,551,198,553,202,460,243,351,271"/>
-<area shape="rect" id="Node000010" href="$classActRoot_1_1DetectorManager.html" title="Main class interfacing all analysis detectors, with calibrations and main methods." alt="" coords="483,244,677,269"/>
-<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="691,263,787,270,786,276,691,268"/>
-<area shape="rect" id="Node000011" href="$classActRoot_1_1TPCParameters.html" title=" " alt="" coords="490,293,670,319"/>
-<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="683,295,762,289,786,287,787,292,763,294,684,301"/>
-<area shape="rect" id="Node000012" href="$classActRoot_1_1VParameters.html" title=" " alt="" coords="177,332,341,357"/>
-<area shape="poly" id="edge14_Node000011_Node000012" title=" " alt="" coords="354,331,489,314,490,319,355,336"/>
-<area shape="rect" id="Node000013" href="$classActRoot_1_1SilParameters.html" title="A class holding basic silicon parameters." alt="" coords="495,343,665,368"/>
-<area shape="poly" id="edge16_Node000013_Node000012" title=" " alt="" coords="354,345,495,350,495,355,354,350"/>
-<area shape="poly" id="edge15_Node000001_Node000013" title=" " alt="" coords="660,337,762,314,842,291,844,296,763,319,661,343"/>
+<area shape="rect" id="Node000001" title="&lt; A class to plot physics info in histograms" alt="" coords="871,268,1065,293"/>
+<area shape="rect" id="Node000002" href="$classActRoot_1_1InputWrapper.html" title=" " alt="" coords="579,175,749,200"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="720,202,926,265,925,270,719,207"/>
+<area shape="rect" id="Node000003" href="$classActRoot_1_1InputData.html" title=" " alt="" coords="270,5,415,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="430,22,487,34,544,57,581,84,614,116,657,173,652,176,610,120,578,88,541,62,486,39,428,27"/>
+<area shape="rect" id="Node000004" href="$classActRoot_1_1InputIterator.html" title=" " alt="" coords="261,55,424,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="438,74,491,85,544,102,575,118,605,137,650,172,647,177,602,141,573,123,542,107,490,90,437,79"/>
+<area shape="rect" id="Node000005" href="$classActRoot_1_1TPCData.html" title="Holder of physics info from an ACTAR TPC event." alt="" coords="274,123,411,148"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="425,146,585,172,584,177,425,151"/>
+<area shape="rect" id="Node000006" href="$classActRoot_1_1VData.html" title=" " alt="" coords="22,189,143,215"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="144,183,183,173,290,145,291,151,185,178,145,188"/>
+<area shape="rect" id="Node000007" href="$classActRoot_1_1SilData.html" title="A class holding simple Silicon data." alt="" coords="279,172,407,197"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="157,194,278,186,279,192,158,200"/>
+<area shape="rect" id="Node000008" href="$classActRoot_1_1ModularData.html" title="A class storing ModularLeaf data." alt="" coords="260,221,425,247"/>
+<area shape="poly" id="edge9_Node000008_Node000006" title=" " alt="" coords="157,208,260,221,259,226,157,214"/>
+<area shape="rect" id="Node000009" href="$classActRoot_1_1MergerData.html" title="Ouput of the MergerDetector." alt="" coords="263,271,422,296"/>
+<area shape="poly" id="edge11_Node000009_Node000006" title=" " alt="" coords="137,216,261,255,301,268,300,273,259,261,136,221"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="421,183,449,183,579,184,579,190,449,189,421,188"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="439,219,542,205,588,197,589,203,543,210,439,225"/>
+<area shape="poly" id="edge10_Node000002_Node000009" title=" " alt="" coords="434,265,542,238,635,198,637,202,544,243,435,271"/>
+<area shape="rect" id="Node000010" href="$classActRoot_1_1BinaryData.html" title="A small class describing a Light or Heavy track in the Merger detector." alt="" coords="5,288,160,313"/>
+<area shape="poly" id="edge12_Node000009_Node000010" title=" " alt="" coords="174,299,236,297,266,293,267,299,236,302,174,305"/>
+<area shape="rect" id="Node000011" href="$classActRoot_1_1DetectorManager.html" title="Main class interfacing all analysis detectors, with calibrations and main methods." alt="" coords="567,244,761,269"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="775,263,871,270,870,276,775,268"/>
+<area shape="rect" id="Node000012" href="$classActRoot_1_1TPCParameters.html" title=" " alt="" coords="574,293,754,319"/>
+<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="767,295,846,289,870,287,871,292,847,294,768,301"/>
+<area shape="rect" id="Node000013" href="$classActRoot_1_1VParameters.html" title=" " alt="" coords="261,332,425,357"/>
+<area shape="poly" id="edge15_Node000012_Node000013" title=" " alt="" coords="438,331,573,314,574,319,439,336"/>
+<area shape="rect" id="Node000014" href="$classActRoot_1_1SilParameters.html" title="A class holding basic silicon parameters." alt="" coords="579,343,749,368"/>
+<area shape="poly" id="edge17_Node000014_Node000013" title=" " alt="" coords="438,345,579,350,579,355,438,350"/>
+<area shape="poly" id="edge16_Node000001_Node000014" title=" " alt="" coords="744,337,846,314,926,291,928,296,847,319,745,343"/>
 </map>

@@ -37,7 +37,8 @@ var searchData=
   ['applythreshold_34',['applythreshold',['../classActRoot_1_1CalibrationManager.html#ab442c4be39fc40c11d8b50123e738c67',1,'ActRoot::CalibrationManager::ApplyThreshold()'],['../classActPhysics_1_1SilLayer.html#a1cccf49d7ea66bd0e5e51c46de8c6fe4',1,'ActPhysics::SilLayer::ApplyThreshold()']]],
   ['assignclustertoregion_35',['AssignClusterToRegion',['../classActAlgorithm_1_1Actions_1_1SplitRegion.html#a1f0f89de39f8a1c18d3b4ce2ed232b0b',1,'ActAlgorithm::Actions::SplitRegion']]],
   ['assignrangetoregion_36',['AssignRangeToRegion',['../classActAlgorithm_1_1MultiRegion.html#af072e55d27a5045cde5919a3ccd7ee26',1,'ActAlgorithm::MultiRegion']]],
-  ['assignvoxeltoregion_37',['assignvoxeltoregion',['../classActAlgorithm_1_1Actions_1_1SplitRegion.html#a29696b5f6ab9a627379498144d595a75',1,'ActAlgorithm::Actions::SplitRegion::AssignVoxelToRegion()'],['../classActAlgorithm_1_1MultiRegion.html#a6bc2330f89477bf2d1e96e46fe5fdade',1,'ActAlgorithm::MultiRegion::AssignVoxelToRegion()']]],
-  ['attachbintocluster_38',['AttachBinToCluster',['../classActRoot_1_1HistogramPainter.html#a4f652b3ee8ab32509260438c14d8cdba',1,'ActRoot::HistogramPainter']]],
-  ['autoisinbeam_39',['AutoIsInBeam',['../classActAlgorithm_1_1MultiStep.html#abb6e9e5c809dca345ed3ffbb39eb28ec',1,'ActAlgorithm::MultiStep']]]
+  ['assignsptopad_37',['AssignSPtoPad',['../classActPhysics_1_1SilLayer.html#a7452018b0abc929932790cb43b2c8cb1',1,'ActPhysics::SilLayer']]],
+  ['assignvoxeltoregion_38',['assignvoxeltoregion',['../classActAlgorithm_1_1Actions_1_1SplitRegion.html#a29696b5f6ab9a627379498144d595a75',1,'ActAlgorithm::Actions::SplitRegion::AssignVoxelToRegion()'],['../classActAlgorithm_1_1MultiRegion.html#a6bc2330f89477bf2d1e96e46fe5fdade',1,'ActAlgorithm::MultiRegion::AssignVoxelToRegion()']]],
+  ['attachbintocluster_39',['AttachBinToCluster',['../classActRoot_1_1HistogramPainter.html#a4f652b3ee8ab32509260438c14d8cdba',1,'ActRoot::HistogramPainter']]],
+  ['autoisinbeam_40',['AutoIsInBeam',['../classActAlgorithm_1_1MultiStep.html#abb6e9e5c809dca345ed3ffbb39eb28ec',1,'ActAlgorithm::MultiStep']]]
 ];
