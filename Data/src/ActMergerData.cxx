@@ -5,6 +5,19 @@
 #include <iostream>
 #include <ostream>
 
+void ActRoot::BinaryData::Print() const
+{
+    std::cout << BOLDYELLOW << "-- BinaryData --" << '\n';
+    std::cout << " SP     : " << fSP << '\n';
+    std::cout << " TL     : " << fTL << '\n';
+    std::cout << " Qtotal : " << fQtotal << '\n';
+    std::cout << " Qave   : " << fQave << '\n';
+    std::cout << " Sil    :" << '\n';
+    for(int m = 0; m < fLayers.size(); m++)
+        std::cout << "    " << fLayers[m] << " P : " << fNs[m] << " E : " << fEs[m] << '\n';
+    std::cout << "--------------------" << RESET << '\n';
+}
+
 void ActRoot::MergerData::Clear()
 {
     // Reset but still keep run, entry number and flag

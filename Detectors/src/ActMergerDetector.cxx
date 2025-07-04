@@ -37,7 +37,6 @@
 #include <set>
 #include <stdexcept>
 #include <string>
-#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -436,9 +435,7 @@ bool ActRoot::MergerDetector::GateGATCONFandTrackMult()
 
 bool ActRoot::MergerDetector::GateSilMult()
 {
-    if(fPars.fIsL1)
-        return true;
-    // If not calibration mode
+    // If not in calibration mode
     if(!fPars.fIsCal)
     {
         // 1-> Apply finer thresholds in SilSpecs
@@ -448,33 +445,41 @@ bool ActRoot::MergerDetector::GateSilMult()
         int withMult {};
         for(const auto& layer : (fForceGATCONF ? fGatMap[(int)fModularData->Get("GATCONF")] : fSilData->GetLayers()))
         {
-            // Check if layer indeed exists (L1 trigger not registered in silicon)
+            // Check if layer exists (L1 trigger not registered in silicon)
             if(!fSilSpecs->CheckLayersExists(layer))
                 continue;
             // Check only layers with hits over threshold!
             if(int mult {fSilData->GetMult(layer)}; mult > 0)
             {
                 withHits++;
-                if(mult == 1) // and now add to multiplicity == 1 counter
+                if(fSilSpecs->GetLayer(layer).CheckMult(mult))
                 {
                     withMult++;
                     // Write data
-                    fMergerData->fSilLayers.push_back(layer);
-                    fMergerData->fSilEs.push_back(fSilData->fSiE[layer].front());
-                    fMergerData->fSilNs.push_back(fSilData->fSiN[layer].front());
+                    for(int m = 0; m < mult; m++)
+                    {
+                        fMergerData->fSilLayers.push_back(layer);
+                        fMergerData->fSilEs.push_back(fSilData->fSiE[layer][m]);
+                        fMergerData->fSilNs.push_back(fSilData->fSiN[layer][m]);
+                    }
                 }
             }
         }
-
+        // assert all layers with hits match their multiplicity conditions
         bool condHitsPerLayer {withHits == withMult};
-        bool condHits {withHits >
-                       0}; // bugfix: whitHits > 0 to avoid case in which GATCONF ok but no silicon hit above threshold!
+        // ensure we have at least one layer with one hit if no L1
+        bool condHits {false};
+        if(fPars.fIsL1) // if L1 ease this condition
+            condHits = true;
+        else
+            condHits = (withHits > 0);
 
         if(fIsVerbose)
         {
             std::cout << BOLDCYAN << "---- Merge valitation 2 ----" << '\n';
-            std::cout << "-> HasSilHits         ? " << std::boolalpha << condHits << '\n';
-            std::cout << "-> HasMult1PerLayer   ? " << std::boolalpha << condHitsPerLayer << '\n';
+            std::cout << "-> IsL1            ? " << std::boolalpha << fPars.fIsL1 << '\n';
+            std::cout << "-> HasSilHits      ? " << std::boolalpha << condHits << '\n';
+            std::cout << "-> HasMultPerLayer ? " << std::boolalpha << condHitsPerLayer << '\n';
         }
         return condHits && condHitsPerLayer;
     }
@@ -594,7 +599,7 @@ void ActRoot::MergerDetector::LightOrHeavy()
         auto ptr {&(*it)};
         if(ptr == fBeamPtr)
             continue;
-        // Orient track following RP and gravity point
+        // Align track following RP and gravity point
         // only if RP exists; if not, set X direction to be positive
         if(fPars.fUseRP)
             it->GetRefToLine().AlignUsingPoint(fMergerData->fRP);
@@ -621,13 +626,14 @@ void ActRoot::MergerDetector::LightOrHeavy()
     }
 }
 
-double ActRoot::MergerDetector::TrackLengthFromLightIt(bool scale)
+double ActRoot::MergerDetector::TrackLengthFromLightIt(bool scale, bool isLight)
 {
+    auto* ptr {isLight ? fLightPtr : fHeavyPtr};
     // Sort voxels
-    std::sort(fLightPtr->GetRefToVoxels().begin(), fLightPtr->GetRefToVoxels().end());
+    ptr->SortAlongDir();
     // Distance
-    auto begin {fLightPtr->GetRefToVoxels().front().GetPosition()};
-    auto end {fLightPtr->GetRefToVoxels().back().GetPosition()};
+    auto begin {ptr->GetRefToVoxels().front().GetPosition()};
+    auto end {ptr->GetRefToVoxels().back().GetPosition()};
     if(scale)
     {
         ScalePoint(begin, fTPCPars->GetPadSide(), fDriftFactor);
@@ -638,18 +644,116 @@ double ActRoot::MergerDetector::TrackLengthFromLightIt(bool scale)
 
 bool ActRoot::MergerDetector::ComputeSiliconPoint()
 {
-    if(fPars.fIsL1)
-        return true;
-    // Compute SP
-    bool isOk {};
-    std::tie(fMergerData->fSP, isOk) =
-        fSilSpecs->GetLayer(fMergerData->fSilLayers.front())
-            .GetSiliconPointOfTrack(fLightPtr->GetLine().GetPoint(), fLightPtr->GetLine().GetDirection());
-    // And compute track length
+    bool isOk {}; // Validate SP for light particle. For heavy for the moment we dont care
+    // Classify event layers into L or H
+    auto [llayers, hlayers] {fSilSpecs->ClassifyLayers(fMergerData->fSilLayers)};
+
+    // Light particle
+    bool firstLight {true}; // only write SP for first
+    for(const auto& layer : llayers)
+    {
+        // this function automatically write data to BinData class
+        auto auxOk {SolveSilMultiplicity(layer, true, firstLight)};
+        if(firstLight)
+            isOk = auxOk;
+        firstLight = false;
+    }
+
+    // Heavy particle
+    bool firstHeavy {true};
+    for(const auto& layer : hlayers)
+    {
+        SolveSilMultiplicity(layer, false, firstHeavy);
+        firstHeavy = false;
+    }
+
+
+    // Track length
+    // Legacy:
     if(fPars.fUseRP)
         fMergerData->fTrackLength = (fMergerData->fSP - fMergerData->fRP).R();
     else
-        fMergerData->fTrackLength = TrackLengthFromLightIt(false);
+        fMergerData->fTrackLength = TrackLengthFromLightIt(false, true);
+    // New:
+    int idx {};
+    for(auto* bin : {&fMergerData->fLight, &fMergerData->fHeavy})
+    {
+        if(fPars.fUseRP)
+            bin->fTL = (bin->fSP - fMergerData->fRP).R();
+        else
+            bin->fTL = TrackLengthFromLightIt(false, (idx < 0));
+        idx++;
+    }
+
+    // Legacy code for E796
+    // if(fPars.fIsL1)
+    //     return true;
+    // // Compute SP
+    // bool isOk {};
+    // std::tie(fMergerData->fSP, isOk) =
+    //     fSilSpecs->GetLayer(fMergerData->fSilLayers.front())
+    //         .GetSiliconPointOfTrack(fLightPtr->GetLine().GetPoint(), fLightPtr->GetLine().GetDirection());
+    // // And compute track length
+    // if(fPars.fUseRP)
+    //     fMergerData->fTrackLength = (fMergerData->fSP - fMergerData->fRP).R();
+    // else
+    //     fMergerData->fTrackLength = TrackLengthFromLightIt(false);
+    return isOk;
+}
+
+bool ActRoot::MergerDetector::SolveSilMultiplicity(const std::string& layer, bool isLight, bool isFirstLayer)
+{
+    auto* ptr {(isLight) ? fLightPtr : fHeavyPtr};
+    auto& data {(isLight) ? fMergerData->fLight : fMergerData->fHeavy};
+    // Compute SP
+    auto [sp, isOk] {
+        fSilSpecs->GetLayer(layer).GetSiliconPointOfTrack(ptr->GetLine().GetPoint(), ptr->GetLine().GetDirection())};
+    // Declare parameters of hit
+    float e {};
+    int n {};
+    // If mult == 1, stop calculation: there is nothing to solve
+    if(fSilData->GetMult(layer) == 1)
+    {
+        e = fSilData->fSiE[layer].front();
+        n = fSilData->fSiN[layer].front();
+    }
+    else
+    {
+        // And set reference point
+        XYZPoint ref {};
+        if(fMergerData->fRP.X() != -1)
+            ref = fMergerData->fRP;
+        else
+            ref = {0, (float)fTPCPars->GetNPADSY(), (float)fTPCPars->GetNPADSZ()};
+        // And direction vector
+        auto vsp {(sp - ref).Unit()};
+        // Write data
+        std::vector<int> ns;
+        std::vector<float> es;
+        for(int m = 0, mult = fSilData->GetMult(layer); m < mult; m++)
+        {
+            // Energy
+            es.push_back(fSilData->fSiE[layer][m]);
+            // Pad
+            ns.push_back(fSilData->fSiN[layer][m]);
+        }
+        // And call SilLayer to determine which pad agrees better with the SP
+        // WARNING: this computation is done in different scales.
+        // vsp is in pad and tb units while SilSpecs units are mm
+        // This should not affect the determination of the best pad corresponding to the particle
+        // but must be taken into consideration...
+        n = fSilSpecs->GetLayer(layer).AssignSPtoPad(vsp, ns);
+        // Find it
+        auto it {std::find(ns.begin(), ns.end(), n)};
+        auto idx {std::distance(ns.begin(), it)};
+        e = es[idx];
+    }
+    // Write data
+    if(isFirstLayer)
+        data.fSP = sp; // store sp of first layer only for each particle
+    data.fLayers.push_back(layer);
+    data.fEs.push_back(e);
+    data.fNs.push_back(n);
     return isOk;
 }
 
@@ -751,7 +855,7 @@ void ActRoot::MergerDetector::ConvertToPhysicalUnits()
     if(fPars.fUseRP && !fPars.fIsL1)
         fMergerData->fTrackLength = (fMergerData->fSP - fMergerData->fRP).R();
     else
-        fMergerData->fTrackLength = TrackLengthFromLightIt(true);
+        fMergerData->fTrackLength = TrackLengthFromLightIt(true, true);
 }
 
 void ActRoot::MergerDetector::ComputeAngles()
@@ -886,7 +990,7 @@ void ActRoot::MergerDetector::ComputeQProfile()
         std::sort(fLightPtr->GetRefToVoxels().begin(), fLightPtr->GetRefToVoxels().end());
         auto front {fLightPtr->GetVoxels().front().GetPosition()};
         ref = fLightPtr->GetLine().ProjectionPointOnLine(front);
-        needsOffset= true;
+        needsOffset = true;
     }
     // Sort voxels from ref to end of cluster
     fLightPtr->SortAlongDir();

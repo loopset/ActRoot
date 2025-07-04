@@ -9,9 +9,11 @@
 
 #include "TCanvas.h"
 #include "TH3.h"
+#include "TMath.h"
 #include "TPolyLine3D.h"
 #include "TVirtualPad.h"
 
+#include <algorithm>
 #include <cmath>
 #include <exception>
 #include <iostream>
@@ -138,9 +140,34 @@ void ActPhysics::SilLayer::ReadConfiguration(std::shared_ptr<ActRoot::InputBlock
     // 6-> Margin to match
     if(block->CheckTokenExists("MatchMargin", true))
         fMargin = block->GetDouble("MatchMargin");
-
-    // 7-> Build the silicon matrix with the info gathered here
+    // 7-> Type of particle hitting the silicon
+    if(block->CheckTokenExists("Particle"))
+    {
+        auto str {block->GetString("Particle")};
+        str = ActRoot::StripSpaces(str);
+        str = ActRoot::ToLower(str);
+        if(str == "light")
+            fPart = SilParticle::ELight;
+        else if(str == "heavy")
+            fPart = SilParticle::EHeavy;
+        else if(str == "both")
+            fPart = SilParticle::EBoth;
+        else
+            throw std::runtime_error("SilLayer::ReadConfig(): unrecognized Particle string");
+    }
+    // 8-> Accepted silicon multiplicities
+    if(block->CheckTokenExists("Mults"))
+    {
+        auto mults {block->GetDoubleVector("Mults")};
+        fMults.insert(mults.begin(), mults.end());
+    }
+    // -1-> Build the silicon matrix with the info gathered here
     fMatrix = BuildSilMatrix();
+}
+
+bool ActPhysics::SilLayer::CheckMult(int mult) const
+{
+    return (fMults.find(mult) != fMults.end());
 }
 
 template <typename T>
@@ -231,6 +258,30 @@ int ActPhysics::SilLayer::GetIndexOfMatch(const Point<T>& p) const
         }
     }
     return idx;
+}
+
+template <typename T>
+int ActPhysics::SilLayer::AssignSPtoPad(const Vector<T>& vsp, const std::vector<int>& pads) const
+{
+    // Algorithm:
+    // 1-> Compute direction vector between (fPoint -> PadPlacement)
+    // 2-> Dot with track direction vsp
+    // 3-> Best match should be given by lowest angle
+    std::vector<double> thetas;
+    for(const auto& pad : pads)
+    {
+        Point<float> padCentre {};
+        if(fSide == SilSide::EBack || fSide == SilSide::EFront)
+            padCentre = {fPoint.X(), (float)fPlacements.at(pad).first, (float)fPlacements.at(pad).second};
+        else
+            padCentre = {(float)fPlacements.at(pad).first, fPoint.Y(), (float)fPlacements.at(pad).second};
+        auto v {(padCentre - fPoint)};
+        auto theta {TMath::Abs(TMath::ACos(v.Unit().Dot(vsp.Unit())))};
+        thetas.push_back(theta);
+    }
+    // Find minimum
+    auto min {std::min_element(thetas.begin(), thetas.end())};
+    return *min;
 }
 
 void ActPhysics::SilLayer::UpdatePlacementsFromMatrix()
@@ -324,6 +375,28 @@ void ActPhysics::SilSpecs::EraseLayer(const std::string& name)
     auto it {fLayers.find(name)};
     if(it != fLayers.end())
         fLayers.erase(it);
+}
+
+
+ActPhysics::SilSpecs::PartPair ActPhysics::SilSpecs::ClassifyLayers(const std::vector<std::string>& names)
+{
+    PartPair ret;
+    for(const auto& name : names)
+    {
+        if(!CheckLayersExists(name))
+            continue;
+        auto type {fLayers[name].GetParticle()};
+        if(type == SilParticle::ELight)
+            ret.first.insert(name);
+        else if(type == SilParticle::EHeavy)
+            ret.second.insert(name);
+        else // is both
+        {
+            ret.first.insert(name);
+            ret.second.insert(name);
+        }
+    }
+    return ret;
 }
 
 void ActPhysics::SilSpecs::ReplaceWithMatrix(const std::string& name, SilMatrix* sm)
@@ -430,3 +503,6 @@ template bool ActPhysics::SilLayer::MatchesRealPlacement(int i, const Point<doub
 ////////////////////////////////////
 template int ActPhysics::SilLayer::GetIndexOfMatch(const Point<float>& p) const;
 template int ActPhysics::SilLayer::GetIndexOfMatch(const Point<double>& p) const;
+////////////////////////////////////
+template int ActPhysics::SilLayer::AssignSPtoPad(const Vector<float>& vsp, const std::vector<int>& pads) const;
+template int ActPhysics::SilLayer::AssignSPtoPad(const Vector<double>& vsp, const std::vector<int>& pads) const;

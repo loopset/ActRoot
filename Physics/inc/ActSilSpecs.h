@@ -18,8 +18,10 @@
 
 #include <map>
 #include <memory>
+#include <set>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 namespace ActPhysics
 {
@@ -29,6 +31,13 @@ enum class SilSide
     ERight,
     EFront,
     EBack
+};
+
+enum class SilParticle
+{
+    ELight,
+    EHeavy,
+    EBoth,
 };
 
 //! A class representing a unit of silicon detector: geometry specs
@@ -62,11 +71,13 @@ private:
     std::map<int, std::pair<double, double>> fPlacements;
     std::map<int, double> fThresholds;
     SilUnit fUnit;                         //!< Specifications of unit silicon
-    XYZPointF fPoint;                      //!< Point of layer: basically, contains offset
-    XYZVectorF fNormal;                    //!< Normal vector of silicon plane
+    XYZPointF fPoint;                      //!< Contains centre of layer, where beam is centered.
+    XYZVectorF fNormal;                    //!< Normal vector of silicon plane, needed to compute the SP
     double fMargin {};                     //!< Margin in mm to validate or not SP in MatchesRealPlacement function
     std::shared_ptr<SilMatrix> fMatrix {}; //!< Pointer to SiliconMatrix
     SilSide fSide;                         //!< Enum to spec side of layer with respect to ACTAR's frame
+    SilParticle fPart;                     //! Type of particle that can hit this silicon layer
+    std::set<int> fMults {};               //!< Allowed multiplicities for this silicon layer
     int fPadIdx {1};                       //!< In HistogramPainter, index of pad for this layer
 
 public:
@@ -88,22 +99,32 @@ public:
     const XYZVectorF& GetNormal() const { return fNormal; }
     const SilSide& GetSilSide() const { return fSide; }
     std::shared_ptr<SilMatrix> GetSilMatrix() const { return fMatrix; }
+    SilParticle GetParticle() const { return fPart; }
+    const std::set<int>& GetMults() const { return fMults; }
+    bool CheckMult(int mult) const;
     int GetPadIdx() const { return fPadIdx; }
+
     ////
     void SetPoint(const XYZPointF& pInPads) { fPoint = pInPads; }
 
-    // Operations
+    // Computation operations
     template <typename T>
     std::pair<Point<T>, bool>
     GetSiliconPointOfTrack(const Point<T>& point, const Vector<T>& vector, bool scale = false) const;
+
     template <typename T>
     Point<T> GetBoundaryPointOfTrack(int padx, int pady, const Point<T>& point, const Vector<T>& vector) const;
+
     template <typename T>
     bool MatchesRealPlacement(int i, const Point<T>& sp, bool useZ = true) const;
+
     template <typename T>
     int GetIndexOfMatch(const Point<T>& p) const;
 
-    // Miscellanea
+    template <typename T>
+    int AssignSPtoPad(const Vector<T>& vsp, const std::vector<int>& pads) const;
+
+    // Useful for simulation basically
     void UpdatePlacementsFromMatrix();
     void MoveZTo(double z, const std::set<int>& idxs);
     double MeanZ(const std::set<int>& idxs);
@@ -116,6 +137,8 @@ class SilSpecs
 {
 public:
     using LayerMap = std::unordered_map<std::string, SilLayer>;
+    using PartSet = std::set<std::string>;
+    using PartPair = std::pair<PartSet, PartSet>;
     using XYZPoint = ROOT::Math::XYZPoint;
     using XYZVector = ROOT::Math::XYZVector;
     using SearchTuple = std::tuple<std::string, int, XYZPoint>;
@@ -133,7 +156,10 @@ public:
     LayerMap& GetLayers() { return fLayers; }
     bool CheckLayersExists(const std::string& name) const { return fLayers.count(name); }
     void EraseLayer(const std::string& name);
-    // Search SP operations (useful for simulation)
+    // Classify given layer names by Light or Heavy particle
+    PartPair ClassifyLayers(const std::vector<std::string>& names);
+
+    // Simulation query functions
     SearchTuple FindLayerAndIdx(const XYZPoint& p, const XYZVector& v, bool verbose = false);
     SearchPair FindSPInLayer(const std::string& name, const XYZPoint& p, const XYZVector& v);
     // Drawing functions

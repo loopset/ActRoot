@@ -30,6 +30,7 @@
 #pragma link C++ class ActRoot::TPCData + ;
 #pragma link C++ class ActRoot::SilData + ;
 #pragma link C++ class ActRoot::ModularData + ;
+#pragma link C++ class ActRoot::BinaryData + ;
 #pragma link C++ class ActRoot::MergerData + ;
 
 // Schema evolution for ActPhysics::Line to ActRoot::Line

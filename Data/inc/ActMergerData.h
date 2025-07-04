@@ -18,6 +18,27 @@
 
 namespace ActRoot
 {
+//! A small class describing a Light or Heavy track in the Merger detector
+/*!
+    Does not inherit from VData bc is a small struct to organize data better
+*/
+class BinaryData
+{
+public:
+    using XYZPointF = ROOT::Math::XYZPointF;
+    using XYZVectorF = ROOT::Math::XYZVectorF;
+    XYZPointF fSP {-1, -1, -1};
+    std::vector<std::string> fLayers {};
+    std::vector<float> fEs {};
+    std::vector<int> fNs {};
+    float fTL {-1};
+    float fQtotal {-1};
+    float fQave {-1};
+
+    void Print() const;
+};
+
+//! Ouput of the MergerDetector
 class MergerData : public VData
 {
 public:
@@ -46,10 +67,16 @@ public:
     float fThetaLegacy {-1}; // this is just fThetaLight but will not be corrected in CorrDetector
     float fThetaHeavy {-1};
     float fPhiLight {-1};
+    float fPhiHeavy {-1};
     float fQave {-1};
+    // New as of July 2025: BinaryData classes to organize data
+    BinaryData fLight {};
+    BinaryData fHeavy {};
+    // Indexes of clusters in TPCData after filtering, so any information can be recovered
     int fBeamIdx {-1};
     int fLightIdx {-1};
     int fHeavyIdx {-1};
+    // Unique ID of the event
     int fEntry {-1};
     int fRun {-1};
 
@@ -57,7 +84,7 @@ public:
     void Print() const override;
     void Stream(std::ostream& streamer) const;
 
-    ClassDefOverride(MergerData, 1);
+    ClassDefOverride(MergerData, 2);
 };
 } // namespace ActRoot
 

@@ -195,7 +195,8 @@ private:
     void LightOrHeavy();
     void ComputeOtherPoints();
     bool ComputeSiliconPoint();
-    double TrackLengthFromLightIt(bool scale);
+    bool SolveSilMultiplicity(const std::string& layer, bool isLight, bool isFirstLayer);
+    double TrackLengthFromLightIt(bool scale, bool isLight);
     void CorrectZOffset();
     bool MatchSPtoRealPlacement();
     void ComputeAngles();
