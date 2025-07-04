@@ -871,10 +871,12 @@ void ActRoot::MergerDetector::ComputeQProfile()
         return;
     // 0-> Init histogram
     TH1F h {"hQProfile", "QProfile", 100, -5, 150};
-    h.SetTitle("QProfile;dist [mm];Q [au]");
+    TString units = fEnableConversion ? "mm" : "pad units";
+    h.SetTitle(Form("QProfile;dist [%s];Q [au]", units.Data()));
     // 1-> Ref point is either WP or beginning of projection on line
     XYZPoint ref {};
     XYZPoint ref3D {};
+    bool needsOffset {};
     if(fPars.fUseRP && fMergerData->fRP.X() != -1)
         ref = fMergerData->fRP;
     else if(!fPars.fUseRP && fMergerData->fWP.X() != -1)
@@ -883,24 +885,35 @@ void ActRoot::MergerDetector::ComputeQProfile()
     {
         std::sort(fLightPtr->GetRefToVoxels().begin(), fLightPtr->GetRefToVoxels().end());
         auto front {fLightPtr->GetVoxels().front().GetPosition()};
-        // Convert it to physical units
-        if(fEnableConversion)
-            ScalePoint(front, fTPCPars->GetPadSide(), fDriftFactor, true);
-        auto ref {fLightPtr->GetLine().ProjectionPointOnLine(front)};
+        ref = fLightPtr->GetLine().ProjectionPointOnLine(front);
+        needsOffset= true;
     }
-    // Safe check: align again using reference point
-    fLightPtr->GetRefToLine().AlignUsingPoint(ref, true);
+    // Sort voxels from ref to end of cluster
+    fLightPtr->SortAlongDir();
     // Declare line to use, bc it depends on 3D or 2D mode
     ActRoot::Line line {fLightPtr->GetLine()};
     // Save in 3D before setting 2D (if so)
     ref3D = ref;
     if(f2DProfile)
     {
-        // Set ref.Z component to be 0
+        // Set Z components to be 0
         ref.SetZ(0);
-        const auto& gp {fLightPtr->GetLine().GetPoint()};
-        line = {{gp.X(), gp.Y(), 0}, ref};
+        auto p {line.GetPoint()};
+        p.SetZ(0);
+        auto dir {line.GetDirection()};
+        dir.SetZ(0);
+        dir = dir.Unit();
+        line.SetDirection(dir);
+        line.SetPoint(p);
     }
+    // Convert it to physical units
+    if(fEnableConversion)
+    {
+        ScalePoint(ref, fTPCPars->GetPadSide(), fDriftFactor, needsOffset);
+        line.Scale(fTPCPars->GetPadSide(), fDriftFactor);
+    }
+    // Safe check: align again using reference point
+    line.AlignUsingPoint(ref, true);
     // Use 3 divisions to get better resolution
     float div {1.f / 3};
     for(const auto& v : fLightPtr->GetVoxels())
@@ -932,16 +945,19 @@ void ActRoot::MergerDetector::ComputeQProfile()
     }
     fMergerData->fQProf = h;
     // Compute range from profile
-    auto distMax {GetRangeFromProfile(&h)};
+    auto range {GetRangeFromProfile(&h)};
     // And move to point
-    fMergerData->fBraggP = ref + distMax * line.GetDirection().Unit();
+    fMergerData->fBraggP = ref + range * line.GetDirection().Unit();
     if(f2DProfile)
     {
         // Get the Z value manually
         // auto p3d {ref3D + distMax * fLightPtr->GetLine().GetDirection().Unit()};
         // Simpliest way of doing this!
-        auto p3d {fLightPtr->GetLine().MoveToX(fMergerData->fBraggP.X())};
-        fMergerData->fBraggP.SetZ(p3d.Z());
+        auto line3D {fLightPtr->GetLine()};
+        // Move to X position of the BP
+        auto BP {line.MoveToX(fMergerData->fBraggP.X())};
+        // St the Z value from the line to the BP
+        fMergerData->fBraggP.SetZ(BP.Z());
         // This method works! It can be checked that
         // manually computing the mean if Z values in the (X,Y) region
         // just calculated returns the ~ same Z value!!!
