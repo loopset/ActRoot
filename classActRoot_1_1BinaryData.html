@@ -97,8 +97,10 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ad1c8da37cfb9de54a4198992fdce60b6" id="r_ad1c8da37cfb9de54a4198992fdce60b6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActRoot_1_1BinaryData.html#ad1c8da37cfb9de54a4198992fdce60b6">Print</a> () const</td></tr>
-<tr class="separator:ad1c8da37cfb9de54a4198992fdce60b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a260f93d2f541f6867a639f4ec9b396df" id="r_a260f93d2f541f6867a639f4ec9b396df"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActRoot_1_1BinaryData.html#a260f93d2f541f6867a639f4ec9b396df">IsFilled</a> () const</td></tr>
+<tr class="separator:a260f93d2f541f6867a639f4ec9b396df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9cea60aab4286abdc2b5b72c4c7ca7dc" id="r_a9cea60aab4286abdc2b5b72c4c7ca7dc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActRoot_1_1BinaryData.html#a9cea60aab4286abdc2b5b72c4c7ca7dc">Print</a> (int n=3) const</td></tr>
+<tr class="separator:a9cea60aab4286abdc2b5b72c4c7ca7dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -150,14 +152,14 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ad1c8da37cfb9de54a4198992fdce60b6" name="ad1c8da37cfb9de54a4198992fdce60b6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad1c8da37cfb9de54a4198992fdce60b6">&#9670;&#160;</a></span>Print()</h2>
+<a id="a260f93d2f541f6867a639f4ec9b396df" name="a260f93d2f541f6867a639f4ec9b396df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a260f93d2f541f6867a639f4ec9b396df">&#9670;&#160;</a></span>IsFilled()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void ActRoot::BinaryData::Print </td>
+          <td class="memname">bool ActRoot::BinaryData::IsFilled </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -165,19 +167,44 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="lineno">    9</span>{</div>
-<div class="line"><span class="lineno">   10</span>    std::cout &lt;&lt; <a class="code hl_define" href="ActColors_8h.html#a8cec79108dfc3c61e8e32d390ec28b26">BOLDYELLOW</a> &lt;&lt; <span class="stringliteral">&quot;-- BinaryData --&quot;</span> &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
-<div class="line"><span class="lineno">   11</span>    std::cout &lt;&lt; <span class="stringliteral">&quot; SP     : &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActRoot_1_1BinaryData.html#a40c0b64db4566a6f79d17e66c3571381">fSP</a> &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
-<div class="line"><span class="lineno">   12</span>    std::cout &lt;&lt; <span class="stringliteral">&quot; TL     : &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActRoot_1_1BinaryData.html#aea9b20fc30d97e767f59d4656b79783c">fTL</a> &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
-<div class="line"><span class="lineno">   13</span>    std::cout &lt;&lt; <span class="stringliteral">&quot; Qtotal : &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActRoot_1_1BinaryData.html#a5d4e953541f6f179d9a6ab70636dbaed">fQtotal</a> &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
-<div class="line"><span class="lineno">   14</span>    std::cout &lt;&lt; <span class="stringliteral">&quot; Qave   : &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActRoot_1_1BinaryData.html#ab270d1aea68d2c1a1c80ea50f30c9b34">fQave</a> &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
-<div class="line"><span class="lineno">   15</span>    std::cout &lt;&lt; <span class="stringliteral">&quot; Sil    :&quot;</span> &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
-<div class="line"><span class="lineno">   16</span>    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> m = 0; m &lt; <a class="code hl_variable" href="classActRoot_1_1BinaryData.html#ae771bc4d06f89f290a30e993ce689087">fLayers</a>.size(); m++)</div>
-<div class="line"><span class="lineno">   17</span>        std::cout &lt;&lt; <span class="stringliteral">&quot;    &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActRoot_1_1BinaryData.html#ae771bc4d06f89f290a30e993ce689087">fLayers</a>[m] &lt;&lt; <span class="stringliteral">&quot; P : &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActRoot_1_1BinaryData.html#a2f54e3473bcc0710269b8e37f7b7a68d">fNs</a>[m] &lt;&lt; <span class="stringliteral">&quot; E : &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActRoot_1_1BinaryData.html#a17e0a33a22f5c53d1dc25792296cb1b7">fEs</a>[m] &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
-<div class="line"><span class="lineno">   18</span>    std::cout &lt;&lt; <span class="stringliteral">&quot;--------------------&quot;</span> &lt;&lt; <a class="code hl_define" href="ActColors_8h.html#ab702106cf3b3e96750b6845ded4e0299">RESET</a> &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
-<div class="line"><span class="lineno">   19</span>}</div>
-<div class="ttc" id="aActColors_8h_html_a8cec79108dfc3c61e8e32d390ec28b26"><div class="ttname"><a href="ActColors_8h.html#a8cec79108dfc3c61e8e32d390ec28b26">BOLDYELLOW</a></div><div class="ttdeci">#define BOLDYELLOW</div><div class="ttdef"><b>Definition</b> ActColors.h:18</div></div>
-<div class="ttc" id="aActColors_8h_html_ab702106cf3b3e96750b6845ded4e0299"><div class="ttname"><a href="ActColors_8h.html#ab702106cf3b3e96750b6845ded4e0299">RESET</a></div><div class="ttdeci">#define RESET</div><div class="ttdef"><b>Definition</b> ActColors.h:6</div></div>
+<div class="line"><span class="lineno">   10</span>    <span class="keywordflow">return</span> <a class="code hl_variable" href="classActRoot_1_1BinaryData.html#a17e0a33a22f5c53d1dc25792296cb1b7">fEs</a>.size() &gt; 0;</div>
+<div class="line"><span class="lineno">   11</span>}</div>
 <div class="ttc" id="aclassActRoot_1_1BinaryData_html_a17e0a33a22f5c53d1dc25792296cb1b7"><div class="ttname"><a href="classActRoot_1_1BinaryData.html#a17e0a33a22f5c53d1dc25792296cb1b7">ActRoot::BinaryData::fEs</a></div><div class="ttdeci">std::vector&lt; float &gt; fEs</div><div class="ttdef"><b>Definition</b> ActMergerData.h:32</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a9cea60aab4286abdc2b5b72c4c7ca7dc" name="a9cea60aab4286abdc2b5b72c4c7ca7dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9cea60aab4286abdc2b5b72c4c7ca7dc">&#9670;&#160;</a></span>Print()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ActRoot::BinaryData::Print </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em> = <code>3</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="fragment"><div class="line"><span class="lineno">   14</span>{</div>
+<div class="line"><span class="lineno">   15</span>    <span class="keywordflow">if</span>(<a class="code hl_function" href="classActRoot_1_1BinaryData.html#a260f93d2f541f6867a639f4ec9b396df">IsFilled</a>())</div>
+<div class="line"><span class="lineno">   16</span>    {</div>
+<div class="line"><span class="lineno">   17</span>        std::cout &lt;&lt; std::string(n, <span class="charliteral">&#39; &#39;</span>) &lt;&lt; <span class="stringliteral">&quot;SP     : &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActRoot_1_1BinaryData.html#a40c0b64db4566a6f79d17e66c3571381">fSP</a> &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><span class="lineno">   18</span>        std::cout &lt;&lt; std::string(n, <span class="charliteral">&#39; &#39;</span>) &lt;&lt; <span class="stringliteral">&quot;TL     : &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActRoot_1_1BinaryData.html#aea9b20fc30d97e767f59d4656b79783c">fTL</a> &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><span class="lineno">   19</span>        std::cout &lt;&lt; std::string(n, <span class="charliteral">&#39; &#39;</span>) &lt;&lt; <span class="stringliteral">&quot;Qtotal : &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActRoot_1_1BinaryData.html#a5d4e953541f6f179d9a6ab70636dbaed">fQtotal</a> &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><span class="lineno">   20</span>        std::cout &lt;&lt; std::string(n, <span class="charliteral">&#39; &#39;</span>) &lt;&lt; <span class="stringliteral">&quot;Qave   : &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActRoot_1_1BinaryData.html#ab270d1aea68d2c1a1c80ea50f30c9b34">fQave</a> &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><span class="lineno">   21</span>        std::cout &lt;&lt; std::string(n, <span class="charliteral">&#39; &#39;</span>) &lt;&lt; <span class="stringliteral">&quot;Sil    :&quot;</span> &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><span class="lineno">   22</span>        <span class="keywordflow">for</span>(<span class="keywordtype">int</span> m = 0; m &lt; <a class="code hl_variable" href="classActRoot_1_1BinaryData.html#ae771bc4d06f89f290a30e993ce689087">fLayers</a>.size(); m++)</div>
+<div class="line"><span class="lineno">   23</span>            std::cout &lt;&lt; std::string(n, <span class="charliteral">&#39; &#39;</span>) &lt;&lt; <a class="code hl_variable" href="classActRoot_1_1BinaryData.html#ae771bc4d06f89f290a30e993ce689087">fLayers</a>[m] &lt;&lt; <span class="stringliteral">&quot; P : &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActRoot_1_1BinaryData.html#a2f54e3473bcc0710269b8e37f7b7a68d">fNs</a>[m] &lt;&lt; <span class="stringliteral">&quot; E : &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActRoot_1_1BinaryData.html#a17e0a33a22f5c53d1dc25792296cb1b7">fEs</a>[m] &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><span class="lineno">   24</span>    }</div>
+<div class="line"><span class="lineno">   25</span>    <span class="keywordflow">else</span></div>
+<div class="line"><span class="lineno">   26</span>    {</div>
+<div class="line"><span class="lineno">   27</span>        std::cout &lt;&lt; std::string(n, <span class="charliteral">&#39; &#39;</span>) &lt;&lt; <span class="stringliteral">&quot;is empty!&quot;</span> &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><span class="lineno">   28</span>    }</div>
+<div class="line"><span class="lineno">   29</span>}</div>
+<div class="ttc" id="aclassActRoot_1_1BinaryData_html_a260f93d2f541f6867a639f4ec9b396df"><div class="ttname"><a href="classActRoot_1_1BinaryData.html#a260f93d2f541f6867a639f4ec9b396df">ActRoot::BinaryData::IsFilled</a></div><div class="ttdeci">bool IsFilled() const</div><div class="ttdef"><b>Definition</b> ActMergerData.cxx:8</div></div>
 <div class="ttc" id="aclassActRoot_1_1BinaryData_html_a2f54e3473bcc0710269b8e37f7b7a68d"><div class="ttname"><a href="classActRoot_1_1BinaryData.html#a2f54e3473bcc0710269b8e37f7b7a68d">ActRoot::BinaryData::fNs</a></div><div class="ttdeci">std::vector&lt; int &gt; fNs</div><div class="ttdef"><b>Definition</b> ActMergerData.h:33</div></div>
 <div class="ttc" id="aclassActRoot_1_1BinaryData_html_a40c0b64db4566a6f79d17e66c3571381"><div class="ttname"><a href="classActRoot_1_1BinaryData.html#a40c0b64db4566a6f79d17e66c3571381">ActRoot::BinaryData::fSP</a></div><div class="ttdeci">XYZPointF fSP</div><div class="ttdef"><b>Definition</b> ActMergerData.h:30</div></div>
 <div class="ttc" id="aclassActRoot_1_1BinaryData_html_a5d4e953541f6f179d9a6ab70636dbaed"><div class="ttname"><a href="classActRoot_1_1BinaryData.html#a5d4e953541f6f179d9a6ab70636dbaed">ActRoot::BinaryData::fQtotal</a></div><div class="ttdeci">float fQtotal</div><div class="ttdef"><b>Definition</b> ActMergerData.h:35</div></div>
