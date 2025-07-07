@@ -35,7 +35,8 @@ public:
     float fQtotal {-1};
     float fQave {-1};
 
-    void Print() const;
+    bool IsFilled() const;
+    void Print(int n = 3) const;
 };
 
 //! Ouput of the MergerDetector
@@ -46,19 +47,25 @@ public:
     using XYZVectorF = ROOT::Math::XYZVectorF;
 
 public:
+    // Profiles
     TH1F fQprojX {};
     TH1F fQProf {};
-    XYZPointF fWP {-1, -1, -1}; // window point aka entrance point
-    XYZPointF fRP {-1, -1, -1};
-    XYZPointF fSP {-1, -1, -1};
-    XYZPointF fBP {-1, -1, -1};
-    XYZPointF fBSP {-1, -1, -1};
-    XYZPointF fBraggP {-1, -1, -1};
-    std::vector<std::string> fSilLayers {};
-    std::vector<float> fSilEs {};
-    std::vector<float> fSilNs {};
+    // Points
+    XYZPointF fWP {-1, -1, -1};     //!< Beam entrance point
+    XYZPointF fRP {-1, -1, -1};     //!< Reaction point
+    XYZPointF fSP {-1, -1, -1};     //!< LEGACY: silicon point of Light
+    XYZPointF fBP {-1, -1, -1};     //!< Boundary point of Light
+    XYZPointF fBSP {-1, -1, -1};    //!< Beam stopping points: hint of RP from Qx profile
+    XYZPointF fBraggP {-1, -1, -1}; //!< Range of Light from its Q profile
+    // Silicons
+    std::vector<std::string> fSilLayers {}; //!< LEGACY
+    std::vector<float> fSilEs {};           //!< LEGACY
+    std::vector<float> fSilNs {};           //!< LEGACY
+    // Flag for debugging purpouses
     std::string fFlag {}; //!< Describes at which point the merger stopped
-    float fTrackLength {-1};
+    // Track length
+    float fTrackLength {-1}; //!< LEGACY
+    // Angles
     float fThetaBeam {-1};
     float fThetaBeamZ {-1}; // emittance angle along Z
     float fPhiBeamY {-1};   // emittance angle along Y
@@ -68,10 +75,11 @@ public:
     float fThetaHeavy {-1};
     float fPhiLight {-1};
     float fPhiHeavy {-1};
-    float fQave {-1};
+    // Q of light
+    float fQave {-1}; //!< LEGACY
     // New as of July 2025: BinaryData classes to organize data
-    BinaryData fLight {};
-    BinaryData fHeavy {};
+    BinaryData fLight {}; //!< Hit information of Light particle
+    BinaryData fHeavy {}; //!< Hit information of Heavy particle
     // Indexes of clusters in TPCData after filtering, so any information can be recovered
     int fBeamIdx {-1};
     int fLightIdx {-1};
