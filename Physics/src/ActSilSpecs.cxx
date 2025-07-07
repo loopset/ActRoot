@@ -381,6 +381,14 @@ void ActPhysics::SilSpecs::EraseLayer(const std::string& name)
 ActPhysics::SilSpecs::PartPair ActPhysics::SilSpecs::ClassifyLayers(const std::vector<std::string>& names)
 {
     PartPair ret;
+    auto hasLight {
+        std::any_of(names.begin(), names.end(), [&](const auto& name)
+                    { return CheckLayersExists(name) && fLayers[name].GetParticle() == SilParticle::ELight; })};
+
+    auto hasHeavy {
+        std::any_of(names.begin(), names.end(), [&](const auto& name)
+                    { return CheckLayersExists(name) && fLayers[name].GetParticle() == SilParticle::EHeavy; })};
+
     for(const auto& name : names)
     {
         if(!CheckLayersExists(name))
@@ -390,10 +398,17 @@ ActPhysics::SilSpecs::PartPair ActPhysics::SilSpecs::ClassifyLayers(const std::v
             ret.first.insert(name);
         else if(type == SilParticle::EHeavy)
             ret.second.insert(name);
-        else // is both
+        else // Both
         {
-            ret.first.insert(name);
-            ret.second.insert(name);
+            if(hasLight && !hasHeavy)
+                ret.second.insert(name);
+            else if(hasHeavy && !hasLight)
+                ret.first.insert(name);
+            else
+            {
+                ret.first.insert(name);
+                ret.second.insert(name);
+            }
         }
     }
     return ret;
