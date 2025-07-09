@@ -284,7 +284,7 @@ Private Attributes</h2></td></tr>
 <div class="fragment"><div class="line"><span class="lineno">   26</span>{</div>
 <div class="line"><span class="lineno">   27</span>    std::ifstream streamer {file};</div>
 <div class="line"><span class="lineno">   28</span>    <span class="keywordflow">if</span>(!streamer)</div>
-<div class="line"><span class="lineno">   29</span>        <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;No Action file for SilParameters&quot;</span>);</div>
+<div class="line"><span class="lineno">   29</span>        <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;SilPars::ReacActions(): cannot open ACTION file &quot;</span> + file);</div>
 <div class="line"><span class="lineno">   30</span>    std::string key {};</div>
 <div class="line"><span class="lineno">   31</span>    <span class="keywordtype">int</span> vxi {};</div>
 <div class="line"><span class="lineno">   32</span>    <span class="keywordtype">int</span> aux0 {};</div>
