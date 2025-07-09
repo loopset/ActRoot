@@ -1,5 +1,9 @@
 <map id="Algorithm/Actions/ActASplitRegion.h" name="Algorithm/Actions/ActASplitRegion.h">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,207,45"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="248,5,449,45"/>
 <area shape="rect" id="Node000002" href="$ActASplitRegion_8cxx.html" title=" " alt="" coords="5,93,207,133"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,59,109,93,103,93,103,59"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="284,52,160,96,158,91,282,47"/>
+<area shape="rect" id="Node000003" href="$ActMultiAction_8cxx.html" title=" " alt="" coords="231,101,466,126"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="351,59,351,100,346,100,346,59"/>
+<area shape="rect" id="Node000004" href="$ActHistogramPainter_8cxx.html" title=" " alt="" coords="490,93,669,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="413,48,530,91,528,96,411,53"/>
 </map>

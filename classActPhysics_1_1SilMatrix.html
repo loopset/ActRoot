@@ -448,8 +448,11 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="lineno">  324</span>    <a class="code hl_function" href="classActPhysics_1_1SilMatrix.html#abca8c5ec44bfbaef0fdc3a545ee6b529">SetSyle</a>();</div>
 <div class="line"><span class="lineno">  325</span>    <span class="comment">// Add to multigraph</span></div>
 <div class="line"><span class="lineno">  326</span>    <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [i, g] : <a class="code hl_variable" href="classActPhysics_1_1SilMatrix.html#a2ecf95931af39bf10260784373a0897b">fMatrix</a>)</div>
-<div class="line"><span class="lineno">  327</span>        <a class="code hl_variable" href="classActPhysics_1_1SilMatrix.html#a404b470e178acdc03ecb93ec3eeba165">fMulti</a>-&gt;Add(g, <span class="stringliteral">&quot;lf&quot;</span>);</div>
-<div class="line"><span class="lineno">  328</span>}</div>
+<div class="line"><span class="lineno">  327</span>    {</div>
+<div class="line"><span class="lineno">  328</span>        <a class="code hl_variable" href="classActPhysics_1_1SilMatrix.html#a404b470e178acdc03ecb93ec3eeba165">fMulti</a>-&gt;Add(g, <span class="stringliteral">&quot;lf&quot;</span>);</div>
+<div class="line"><span class="lineno">  329</span>        g-&gt;SetEditable(<span class="keyword">false</span>); <span class="comment">// do not allow moving with mouse</span></div>
+<div class="line"><span class="lineno">  330</span>    }</div>
+<div class="line"><span class="lineno">  331</span>}</div>
 <div class="ttc" id="aclassActPhysics_1_1SilMatrix_html_abca8c5ec44bfbaef0fdc3a545ee6b529"><div class="ttname"><a href="classActPhysics_1_1SilMatrix.html#abca8c5ec44bfbaef0fdc3a545ee6b529">ActPhysics::SilMatrix::SetSyle</a></div><div class="ttdeci">void SetSyle(bool enableLabel=true, Style_t ls=kSolid, Width_t lw=2, Style_t fs=0)</div><div class="ttdef"><b>Definition</b> ActSilMatrix.cxx:90</div></div>
 </div><!-- fragment -->
 </div>
@@ -551,9 +554,9 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">  331</span>{</div>
-<div class="line"><span class="lineno">  332</span>    <a class="code hl_variable" href="classActPhysics_1_1SilMatrix.html#a404b470e178acdc03ecb93ec3eeba165">fMulti</a>-&gt;Draw(<span class="stringliteral">&quot;al plc pfc&quot;</span>);</div>
-<div class="line"><span class="lineno">  333</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">  334</span>{</div>
+<div class="line"><span class="lineno">  335</span>    <a class="code hl_variable" href="classActPhysics_1_1SilMatrix.html#a404b470e178acdc03ecb93ec3eeba165">fMulti</a>-&gt;Draw(<span class="stringliteral">&quot;al plc pfc&quot;</span>);</div>
+<div class="line"><span class="lineno">  336</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>
