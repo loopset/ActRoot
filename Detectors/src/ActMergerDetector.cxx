@@ -700,8 +700,8 @@ bool ActRoot::MergerDetector::SolveSilMultiplicity(const std::string& layer, boo
     auto* ptr {(isLight) ? fLightPtr : fHeavyPtr};
     auto& data {(isLight) ? fMergerData->fLight : fMergerData->fHeavy};
     // Compute SP
-    auto [sp, isOk] {
-        fSilSpecs->GetLayer(layer).GetSiliconPointOfTrack(ptr->GetLine().GetPoint(), ptr->GetLine().GetDirection())};
+    auto [sp, isOk] {fSilSpecs->GetLayer(layer).GetSiliconPointOfTrack(ptr->GetLine().GetPoint(),
+                                                                       ptr->GetLine().GetDirection(), true)};
     // Declare parameters of hit
     float e {};
     int n {};

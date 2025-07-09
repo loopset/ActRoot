@@ -68,10 +68,10 @@ public:
     using XYZVectorF = Vector<float>;
 
 private:
-    std::map<int, std::pair<double, double>> fPlacements;
-    std::map<int, double> fThresholds;
-    SilUnit fUnit;                         //!< Specifications of unit silicon
-    XYZPointF fPoint;                      //!< Contains centre of layer, where beam is centered.
+    std::map<int, std::pair<double, double>> fPlacements; //!< Individual centres of each silicon. In mm
+    std::map<int, double> fThresholds;                    //!< Thresholds for all silicons. In MeV
+    SilUnit fUnit;                                        //!< Specifications of unit silicon. In mm
+    XYZPointF fPoint;                      //!< Contains centre of layer, where beam is centered in mm units
     XYZVectorF fNormal;                    //!< Normal vector of silicon plane, needed to compute the SP
     double fMargin {};                     //!< Margin in mm to validate or not SP in MatchesRealPlacement function
     std::shared_ptr<SilMatrix> fMatrix {}; //!< Pointer to SiliconMatrix
@@ -110,7 +110,7 @@ public:
     // Computation operations
     template <typename T>
     std::pair<Point<T>, bool>
-    GetSiliconPointOfTrack(const Point<T>& point, const Vector<T>& vector, bool scale = false) const;
+    GetSiliconPointOfTrack(const Point<T>& point, const Vector<T>& vector, bool isPadUnits) const;
 
     template <typename T>
     Point<T> GetBoundaryPointOfTrack(int padx, int pady, const Point<T>& point, const Vector<T>& vector) const;

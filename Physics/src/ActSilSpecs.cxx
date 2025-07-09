@@ -40,9 +40,9 @@ void ActPhysics::SilLayer::Print() const
     for(const auto& [idx, pair] : fPlacements)
         std::cout << "   " << idx << " : <" << pair.first << ", " << pair.second << "> ; " << fThresholds.at(idx)
                   << '\n';
-    std::cout << "-> Point  : " << fPoint << " [pads]" << '\n';
+    std::cout << "-> Point  : " << fPoint << " [mm]" << '\n';
     std::cout << "-> Normal : " << fNormal << '\n';
-    std::cout << "-> Margin : " << fMargin << " mm" << '\n';
+    std::cout << "-> Margin : " << fMargin << " [mm]" << '\n';
     std::cout << "-> PadIdx : " << fPadIdx << '\n';
     std::cout << "-> Unit   : " << '\n';
     fUnit.Print();
@@ -172,14 +172,15 @@ bool ActPhysics::SilLayer::CheckMult(int mult) const
 
 template <typename T>
 std::pair<ActPhysics::SilLayer::Point<T>, bool>
-ActPhysics::SilLayer::GetSiliconPointOfTrack(const Point<T>& otherPoint, const Vector<T>& otherVec, bool scale) const
+ActPhysics::SilLayer::GetSiliconPointOfTrack(const Point<T>& otherPoint, const Vector<T>& otherVec,
+                                             bool isPadUnits) const
 {
-    Point<T> ref {fPoint};
-    if(scale)
+    Point<T> ref {fPoint}; // in mm units, remember!
+    if(isPadUnits)
     {
-        // Convert XY to mm
-        ref.SetX(ref.X() * 2.);
-        ref.SetY(ref.Y() * 2.);
+        // Convert ref to pads bc otherPoiunt and otherVec are in those units
+        ref.SetX(ref.X() / 2.);
+        ref.SetY(ref.Y() / 2.);
     }
     auto unitVec {otherVec.Unit()};
     auto d {((ref - otherPoint).Dot(fNormal)) / (unitVec.Dot(fNormal))};
@@ -212,7 +213,7 @@ bool ActPhysics::SilLayer::MatchesRealPlacement(int i, const Point<T>& sp, bool 
     auto xyMax {xy + fUnit.GetWidth() / 2 + fMargin};
     auto zMin {z - fUnit.GetHeight() / 2 - fMargin};
     auto zMax {z + fUnit.GetHeight() / 2 + fMargin};
-    // Por XY plane we have to determine whether it is along X or Y!
+    // For X|Y plane we have to determine whether it is along X or Y!
     double plane {};
     if(fSide == SilSide::EBack || fSide == SilSide::EFront)
         plane = sp.Y();
@@ -331,7 +332,7 @@ ActPhysics::SilSpecs::FindLayerAndIdx(const XYZPoint& p, const XYZVector& v, boo
     for(const auto& [name, layer] : fLayers)
     {
         // Find silicon point for this layer
-        auto [sp, ok] {layer.GetSiliconPointOfTrack(p, v, true)};
+        auto [sp, ok] {layer.GetSiliconPointOfTrack(p, v, false)};
         if(!ok) // for simulation: force propagation along + sign
         {
             if(verbose)
@@ -360,7 +361,7 @@ ActPhysics::SilSpecs::FindSPInLayer(const std::string& name, const XYZPoint& p, 
 {
     if(fLayers.count(name))
     {
-        auto [sp, ok] {fLayers[name].GetSiliconPointOfTrack(p, v, true)};
+        auto [sp, ok] {fLayers[name].GetSiliconPointOfTrack(p, v, false)};
         if(!ok) // for simulation: force propagation along + sign
             return {-1, {}};
         auto idx {fLayers[name].GetIndexOfMatch(sp)};
@@ -431,8 +432,6 @@ TVirtualPad* ActPhysics::SilSpecs::DrawGeo(double zoffset, bool withActar)
     {
         const auto& unit {layer.GetUnit()};
         auto point {layer.GetPoint()};
-        // Convert to mm
-        point *= 2;
         const auto& side {layer.GetSilSide()};
         for(const auto& [idx, g] : layer.GetSilMatrix()->GetGraphs())
         {
