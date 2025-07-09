@@ -1,6 +1,5 @@
 #include "ActCalibrationManager.h"
 
-#include "ActInputParser.h"
 #include "ActUtils.h"
 
 #include <algorithm>
@@ -49,7 +48,7 @@ void ActRoot::CalibrationManager::ReadPadAlign(const std::string& file)
 {
     std::ifstream streamer {file.c_str()};
     if(!streamer)
-        throw std::runtime_error("Pad align coeff file does not exist in CalibrationManager");
+        throw std::runtime_error("CalMan::ReadPadAlign(): cannot open file " + file);
     std::string line {};
     while(std::getline(streamer, line))
     {
@@ -74,7 +73,7 @@ void ActRoot::CalibrationManager::ReadLookUpTable(const std::string& file)
     // number of cols = 6
     std::ifstream streamer {file.c_str()};
     if(!streamer)
-        throw std::runtime_error("Error loading LT table in CalibrationManager");
+        throw std::runtime_error("CalMan::ReadLookUpTable(): cannot open file " + file);
     // Run!
     std::string line {};
     while(std::getline(streamer, line))

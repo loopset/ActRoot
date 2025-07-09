@@ -93,7 +93,7 @@ void ActRoot::HistogramPainter::Init()
                                            fTPC->GetNPADSY(), fTPC->GetNPADSZ(), 0, fTPC->GetNPADSZUNREBIN());
     ///////////////////////////////////////////////////////////////////////////////////////////////
     // Silicons
-    fCanvas->at(1)->Divide(3, 2);
+    fCanvas->at(1)->Divide(3, 3);
 
     // Set stats options
     for(auto& [c, map] : fHist2D)
@@ -190,11 +190,11 @@ void ActRoot::HistogramPainter::FillSilMatrices()
     for(auto& [name, matrix] : fSilMatrices)
     {
         // Build energies
-        std::map<int, double> energies;
+        std::map<int, std::vector<double>> energies;
         if(data->fSiE.count(name))
         {
             for(int i = 0; i < data->fSiE[name].size(); i++)
-                energies[data->fSiN[name][i]] = data->fSiE[name][i];
+                energies[data->fSiN[name][i]].push_back(data->fSiE[name][i]);
         }
         // For each graph
         for(auto& [idx, f] : matrix->GetGraphs())
@@ -208,9 +208,12 @@ void ActRoot::HistogramPainter::FillSilMatrices()
             text->AddText(TString::Format("%d", idx));
             if(energies.count(idx))
             {
-                auto* entry = text->AddText(TString::Format("%.2f MeV", energies.at(idx)));
-                text->SetTextSize(0.05);
-                entry->SetTextColor(46);
+                for(const auto& e : energies[idx])
+                {
+                    auto* entry = text->AddText(TString::Format("%.2f MeV", e));
+                    text->SetTextSize(0.055);
+                    entry->SetTextColor(46);
+                }
             }
             text->SetBorderSize(0);
             text->SetFillStyle(0);
@@ -398,7 +401,7 @@ void ActRoot::HistogramPainter::DrawProjections()
         // Cd to correct pad
         fCanvas->at(1)->cd(2);
         data->fQProf.Draw("hist");
-        fCanvas->at(1)->cd(3);
+        fCanvas->at(1)->cd(8);
         data->fQprojX.Draw("hist");
         // Draw also pad plane in 2nd tab
         fCanvas->at(1)->cd(4);

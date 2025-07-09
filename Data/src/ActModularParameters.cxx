@@ -18,7 +18,7 @@ void ActRoot::ModularParameters::ReadActions(const std::vector<std::string>& nam
 {
     std::ifstream streamer {file};
     if(!streamer)
-        throw std::runtime_error("No Action file for ModularParameters");
+        throw std::runtime_error("ModPars::ReadActions(): cannot open ACTION file " + file);
     TString key {};
     int vxi {};
     int aux0 {};

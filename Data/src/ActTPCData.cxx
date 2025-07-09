@@ -18,7 +18,7 @@ void ActRoot::TPCData::ClearFilter()
     // UseExtVoxels and IsDefault Cluster members
     for(auto it = fClusters.begin(); it != fClusters.end(); it++)
     {
-        it->SetUseExtVoxels(false); // values must follow default ones in class def
+        it->SetUseExtVoxels(false, false); // values must follow default ones in class def
         it->SetIsDefault(false);
     }
 }

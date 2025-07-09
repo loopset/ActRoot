@@ -26,7 +26,7 @@ void ActRoot::SilParameters::ReadActions(const std::vector<std::string>& layers,
 {
     std::ifstream streamer {file};
     if(!streamer)
-        throw std::runtime_error("No Action file for SilParameters");
+        throw std::runtime_error("SilPars::ReacActions(): cannot open ACTION file " + file);
     std::string key {};
     int vxi {};
     int aux0 {};

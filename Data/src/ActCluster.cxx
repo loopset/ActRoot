@@ -126,11 +126,13 @@ ActRoot::Cluster::XYZPointF ActRoot::Cluster::GetGravityPointInXRange(double len
     return XYZPointF(xsum, ysum, zsum);
 }
 
-void ActRoot::Cluster::SetUseExtVoxels(bool use)
+void ActRoot::Cluster::SetUseExtVoxels(bool use, bool refit)
 {
     fUseExtVoxels = use;
     // Implicitly execute ReFit when this flag is changed
-    ReFit();
+    // Unless we are resetting in ClearFilter, then do not refit read TPCData from TTree
+    if(refit)
+        ReFit();
 }
 
 void ActRoot::Cluster::ReFit()
