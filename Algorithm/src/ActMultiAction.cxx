@@ -9,6 +9,7 @@
 #include "ActAFindRP.h"
 #include "ActAMerge.h"
 #include "ActASplit.h"
+#include "ActASplitRegion.h"
 #include "ActColors.h"
 #include "ActInputParser.h"
 #include "ActOptions.h"
@@ -16,7 +17,7 @@
 #include "ActTPCParameters.h"
 #include "ActVCluster.h"
 
-#include <dlfcn.h>
+#include <dlfcn.h> // to manually load .so files in UserAction
 
 #include <filesystem>
 #include <iostream>
@@ -37,6 +38,7 @@ ActAlgorithm::MultiAction::MultiAction()
     fMap["CleanBadFits"] = &RegisterAction<Actions::CleanBadFits>;
     fMap["FindRP"] = &RegisterAction<Actions::FindRP>;
     fMap["Split"] = &RegisterAction<Actions::Split>;
+    fMap["SplitRegion"] = &RegisterAction<Actions::SplitRegion>;
 }
 
 ActAlgorithm::MultiAction::Ptr ActAlgorithm::MultiAction::ConstructAction(const std::string& actionID)
@@ -158,4 +160,19 @@ void ActAlgorithm::MultiAction::LoadUserAction(std::shared_ptr<ActRoot::InputBlo
     }
     // If success, call constructor in extern "C" function
     fActions.push_back(std::shared_ptr<VAction>(creator()));
+}
+
+bool ActAlgorithm::MultiAction::HasAction(const std::string& action)
+{
+    auto it {std::find_if(fActions.begin(), fActions.end(), [&](Ptr a) { return a->GetActionID() == action; })};
+    return (it != fActions.end());
+}
+
+ActAlgorithm::MultiAction::Ptr ActAlgorithm::MultiAction::GetAction(const std::string& action)
+{
+    auto it {std::find_if(fActions.begin(), fActions.end(), [&](const Ptr& a) { return a->GetActionID() == action; })};
+    if(it != fActions.end())
+        return *it;
+    else
+        throw std::runtime_error("MultiAction::GetAction(): cannot retrieve action " + action);
 }

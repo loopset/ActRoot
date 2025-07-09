@@ -1,10 +1,12 @@
 #include "ActHistogramPainter.h"
 
+#include "ActASplitRegion.h"
 #include "ActColors.h"
 #include "ActDetectorManager.h"
 #include "ActInputIterator.h"
 #include "ActInputParser.h"
 #include "ActMergerDetector.h"
+#include "ActMultiAction.h"
 #include "ActMultiRegion.h"
 #include "ActOptions.h"
 #include "ActSilDetector.h"
@@ -407,9 +409,9 @@ void ActRoot::HistogramPainter::DrawProjections()
 void ActRoot::HistogramPainter::InitRegionGraphs()
 {
     auto filter {fDetMan->GetDetectorAs<TPCDetector>()->GetFilter()};
+    // 1-> Case of MultiRegion algorithm
     if(auto casted {std::dynamic_pointer_cast<ActAlgorithm::MultiRegion>(filter)}; casted)
     {
-        // 1-> Get regions
         const auto& regions {casted->GetRegions()};
         for(const auto& [name, region] : regions)
         {
@@ -430,6 +432,42 @@ void ActRoot::HistogramPainter::InitRegionGraphs()
             {
                 g->SetFillStyle(3003);
                 g->SetFillColor(kGray + 1);
+                g->SetEditable(false); // do not allow moving in canvas
+            }
+        }
+    }
+    // 2-> Case of MultiAction with SplitRegion
+    else if(auto casted {std::dynamic_pointer_cast<ActAlgorithm::MultiAction>(filter)}; casted)
+    {
+        if(casted->HasAction("SplitRegion"))
+        {
+            auto splitRegion {
+                std::dynamic_pointer_cast<ActAlgorithm::Actions::SplitRegion>(casted->GetAction("SplitRegion"))};
+            if(!splitRegion) // just in case casting fails
+                return;
+            // And do the same as before
+            const auto& regions {splitRegion->GetRegions()};
+            for(const auto& [name, region] : regions)
+            {
+                // XY
+                auto gxy {std::make_shared<TGraph>()};
+                region.FillGraph(gxy.get(), "xy", 0, fTPC->GetNPADSZUNREBIN());
+                fGraphs[0][4].push_back(gxy);
+                // XZ
+                auto gxz {std::make_shared<TGraph>()};
+                region.FillGraph(gxz.get(), "xz", 0, fTPC->GetNPADSZUNREBIN());
+                fGraphs[0][5].push_back(gxz);
+                // YZ
+                auto gyz {std::make_shared<TGraph>()};
+                region.FillGraph(gyz.get(), "yz", 0, fTPC->GetNPADSZUNREBIN());
+                fGraphs[0][6].push_back(gyz);
+                // Set style
+                for(auto& g : {gxy, gxz, gyz})
+                {
+                    g->SetFillStyle(3003);
+                    g->SetFillColor(kGray + 1);
+                    g->SetEditable(false); // do not allow moving in canvas
+                }
             }
         }
     }

@@ -2,9 +2,11 @@
 #define ActASplitRegion_h
 
 #include "ActInputParser.h"
+#include "ActRegion.h"
 #include "ActVAction.h"
 
 #include <memory>
+#include <unordered_map>
 
 namespace ActAlgorithm
 {
@@ -13,9 +15,10 @@ namespace Actions
 class SplitRegion : public VAction
 {
 public:
-    using BrokenVoxels = std::vector<std::vector<ActRoot::Voxel>>; //!< Voxels broken into regions
+    using RegionMap = std::unordered_map<ActRoot::RegionType, ActRoot::Region>; //!< A map holding all defined regions
+    using BrokenVoxels = std::vector<std::vector<ActRoot::Voxel>>;              //!< Voxels broken into regions
 private:
-    std::unordered_map<ActRoot::RegionType, ActRoot::Region> fRegions;
+    RegionMap fRegions;
     int fMinVoxelsAfterBreak {}; //!< Minimum number of voxels after breaking into regions
 
 public:
@@ -23,6 +26,9 @@ public:
     void ReadConfiguration(std::shared_ptr<ActRoot::InputBlock> block) override;
     void Run() override;
     void Print() const override;
+
+    // Functions intrinsic to this action
+    const RegionMap& GetRegions() const { return fRegions; }
 
 private:
     void AddRegion(unsigned int i, const std::vector<double>& vec);

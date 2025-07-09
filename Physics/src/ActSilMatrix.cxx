@@ -324,7 +324,10 @@ void ActPhysics::SilMatrix::CreateMultiGraphForPainter()
     SetSyle();
     // Add to multigraph
     for(auto& [i, g] : fMatrix)
+    {
         fMulti->Add(g, "lf");
+        g->SetEditable(false); // do not allow moving with mouse
+    }
 }
 
 void ActPhysics::SilMatrix::DrawForPainter()

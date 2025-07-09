@@ -49,6 +49,9 @@ public:
     MapActions& GetActionsMap() { return fMap; }
     Ptr ConstructAction(const std::string& actionID);
 
+    bool HasAction(const std::string& action);
+    Ptr GetAction(const std::string& action);
+
 private:
     void LoadUserAction(std::shared_ptr<ActRoot::InputBlock> block);
     void ResetClusterID();

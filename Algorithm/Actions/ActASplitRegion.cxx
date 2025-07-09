@@ -68,6 +68,12 @@ void ActAlgorithm::Actions::SplitRegion::Print() const
         return;
     }
     std::cout << "  MinVoxelsAfterBreak : " << fMinVoxelsAfterBreak << '\n';
+    for(const auto& [type, r] : fRegions)
+    {
+        std::cout << "  Region : " << ActRoot::RegionTypeAsStr(type) << '\n';
+        std::cout << "    ";
+        r.Print();
+    }
     std::cout << "······························" << RESET << '\n';
 }
 
