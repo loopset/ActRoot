@@ -698,6 +698,13 @@ bool ActRoot::MergerDetector::ComputeSiliconPoint()
 bool ActRoot::MergerDetector::SolveSilMultiplicity(const std::string& layer, bool isLight, bool isFirstLayer)
 {
     auto* ptr {(isLight) ? fLightPtr : fHeavyPtr};
+    if(!ptr)
+    {
+        if(fIsVerbose)
+            std::cout << BOLDRED << "MergerDetector::SolveSilMultiplicity(): " << (isLight ? "Light" : "Heavy")
+                      << " pointer is null, returning false " << layer << RESET << '\n';
+        return false;
+    }
     auto& data {(isLight) ? fMergerData->fLight : fMergerData->fHeavy};
     // Compute SP
     auto [sp, isOk] {fSilSpecs->GetLayer(layer).GetSiliconPointOfTrack(ptr->GetLine().GetPoint(),
@@ -972,9 +979,9 @@ void ActRoot::MergerDetector::ComputeQProfile()
     if(!fLightPtr)
         return;
     // 0-> Init histogram
-    TH1F h {"hQProfile", "Light Qprof", 100, -5, 150};
+    TH1F h {"hQProfile", "QProfile", 100, -5, 150};
     TString units {fEnableConversion ? "mm" : "pad units"};
-    h.SetTitle(Form("Light Qprof;dist [%s];Q [au]", units.Data()));
+    h.SetTitle(Form("QProfile;dist [%s];Q [au]", units.Data()));
     // 1-> Ref point is either WP or beginning of projection on line
     XYZPoint ref {};
     XYZPoint ref3D {};
@@ -1088,7 +1095,7 @@ void ActRoot::MergerDetector::ComputeXProfile()
     bool isOkOther {(fPars.fIsCal || fPars.fIsL1) && fLightPtr != nullptr};
     if(isOkReaction || isOkOther)
     {
-        TH1F hQprojX {"hQProjX", "X Qprof;X [pad];Q_{proj X}", 128, 0, 128};
+        TH1F hQprojX {"hQProjX", "All Q along X;X [pad];Q_{proj X}", 128, 0, 128};
         std::vector<ActRoot::Cluster*> ptrs {fBeamPtr, fLightPtr, fHeavyPtr};
         // Workaround: we analyze all the tracks in the event to find the BSP or compute the X profile
         // if(isOkReaction)
