@@ -653,6 +653,7 @@ bool ActRoot::MergerDetector::ComputeSiliconPoint()
     // Classify event layers into L or H
     auto [llayers, hlayers] {fSilSpecs->ClassifyLayers(fMergerData->fSilLayers, fPars.fIsL1)};
 
+    bool allLayersAreBOTH {llayers == hlayers}; // We have to assign light and/or heavy sp 
     // Light particle
     bool firstLight {true}; // only write SP for first
     for(const auto& layer : llayers)
@@ -668,7 +669,8 @@ bool ActRoot::MergerDetector::ComputeSiliconPoint()
     bool firstHeavy {true};
     for(const auto& layer : hlayers)
     {
-        SolveSilMultiplicity(layer, false, firstHeavy);
+        auto isHeavyOK {SolveSilMultiplicity(layer, false, firstHeavy)};
+        isOk = isOk && isHeavyOK;
         firstHeavy = false;
     }
 
@@ -687,7 +689,7 @@ bool ActRoot::MergerDetector::ComputeSiliconPoint()
     for(auto* bin : {&fMergerData->fLight, &fMergerData->fHeavy})
     {
         idx++;
-        if(fPars.fUseRP)
+        if(fPars.fUseRP && bin->HasSP())
             bin->fTL = (bin->fSP - fMergerData->fRP).R();
         else
             bin->fTL = TrackLengthFromLightIt(false, (idx == 0));
@@ -712,9 +714,15 @@ bool ActRoot::MergerDetector::SolveSilMultiplicity(const std::string& layer, boo
     // Declare parameters of hit
     float e {};
     int n {};
+    bool isHitOk {true};
     // If mult == 1, stop calculation: there is nothing to solve
     if(fSilData->GetMult(layer) == 1)
     {
+        int auxiliarN = fSilData->fSiN[layer].front();
+        auto silYCoordinateFromSpecs {fSilSpecs->GetLayer(layer).GetPlacements().at(auxiliarN).first};
+        auto silPointFromLine {ptr->GetLine().MoveToX(sp.X())};
+        isHitOk = std::abs(silYCoordinateFromSpecs - silPointFromLine.Y()) < 25.; // in mm DON'T KNOW IF I HAVE TO SCALE
+
         e = fSilData->fSiE[layer].front();
         n = fSilData->fSiN[layer].front();
     }
@@ -752,10 +760,13 @@ bool ActRoot::MergerDetector::SolveSilMultiplicity(const std::string& layer, boo
     // Write data
     if(isFirstLayer)
         data.fSP = sp; // store sp of first layer only for each particle
-    data.fLayers.push_back(layer);
-    data.fEs.push_back(e);
-    data.fNs.push_back(n);
-    return isOk;
+    if(isHitOk)
+    {
+        data.fLayers.push_back(layer);
+        data.fEs.push_back(e);
+        data.fNs.push_back(n);
+    }
+    return isOk && isHitOk;
 }
 
 void ActRoot::MergerDetector::MoveZ(XYZPoint& p)
