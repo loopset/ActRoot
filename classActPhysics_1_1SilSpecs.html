@@ -306,15 +306,15 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="lineno">  401</span>            ret.second.insert(name);</div>
 <div class="line"><span class="lineno">  402</span>        <span class="keywordflow">else</span> <span class="comment">// Both</span></div>
 <div class="line"><span class="lineno">  403</span>        {</div>
-<div class="line"><span class="lineno">  404</span>            <span class="keywordflow">if</span>(hasLight &amp;&amp; !hasHeavy)</div>
-<div class="line"><span class="lineno">  405</span>                ret.second.insert(name);</div>
-<div class="line"><span class="lineno">  406</span>            <span class="keywordflow">else</span> <span class="keywordflow">if</span>(hasHeavy &amp;&amp; !hasLight)</div>
-<div class="line"><span class="lineno">  407</span>                ret.first.insert(name);</div>
-<div class="line"><span class="lineno">  408</span>            <span class="keywordflow">else</span></div>
-<div class="line"><span class="lineno">  409</span>            {</div>
-<div class="line"><span class="lineno">  410</span>                <span class="comment">// If L1, decay Both to Heavy automatically</span></div>
-<div class="line"><span class="lineno">  411</span>                <span class="keywordflow">if</span>(isL1)</div>
-<div class="line"><span class="lineno">  412</span>                    ret.second.insert(name);</div>
+<div class="line"><span class="lineno">  404</span>            <span class="comment">// If L1, decay Both to Heavy automatically</span></div>
+<div class="line"><span class="lineno">  405</span>            <span class="keywordflow">if</span>(isL1)</div>
+<div class="line"><span class="lineno">  406</span>                ret.second.insert(name);</div>
+<div class="line"><span class="lineno">  407</span>            <span class="keywordflow">else</span></div>
+<div class="line"><span class="lineno">  408</span>            {</div>
+<div class="line"><span class="lineno">  409</span>                <span class="keywordflow">if</span>(hasLight &amp;&amp; !hasHeavy)</div>
+<div class="line"><span class="lineno">  410</span>                    ret.second.insert(name);</div>
+<div class="line"><span class="lineno">  411</span>                <span class="keywordflow">else</span> <span class="keywordflow">if</span>(hasHeavy &amp;&amp; !hasLight)</div>
+<div class="line"><span class="lineno">  412</span>                    ret.first.insert(name);</div>
 <div class="line"><span class="lineno">  413</span>                <span class="keywordflow">else</span></div>
 <div class="line"><span class="lineno">  414</span>                {</div>
 <div class="line"><span class="lineno">  415</span>                    ret.first.insert(name);</div>
