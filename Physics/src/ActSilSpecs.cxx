@@ -401,15 +401,15 @@ ActPhysics::SilSpecs::PartPair ActPhysics::SilSpecs::ClassifyLayers(const std::v
             ret.second.insert(name);
         else // Both
         {
-            if(hasLight && !hasHeavy)
+            // If L1, decay Both to Heavy automatically
+            if(isL1)
                 ret.second.insert(name);
-            else if(hasHeavy && !hasLight)
-                ret.first.insert(name);
             else
             {
-                // If L1, decay Both to Heavy automatically
-                if(isL1)
+                if(hasLight && !hasHeavy)
                     ret.second.insert(name);
+                else if(hasHeavy && !hasLight)
+                    ret.first.insert(name);
                 else
                 {
                     ret.first.insert(name);
