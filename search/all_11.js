@@ -124,7 +124,7 @@ var searchData=
   ['size_5ft_121',['size_t',['../namespaceBS.html#add93ee37fb219bcd3f78de80d002c249',1,'BS']]],
   ['slow_122',['Slow',['../classActPhysics_1_1SRIM.html#a836b0e58f2fa1e332f6f377b638739c0',1,'ActPhysics::SRIM']]],
   ['slowwithstraggling_123',['SlowWithStraggling',['../classActPhysics_1_1SRIM.html#a3f3ffeaab885070dcb5a9540a924da63',1,'ActPhysics::SRIM']]],
-  ['solvesilmultiplicity_124',['SolveSilMultiplicity',['../classActRoot_1_1MergerDetector.html#aa9afe725639cdb1445fb98a39aa7c2fa',1,'ActRoot::MergerDetector']]],
+  ['solvesilmultiplicity_124',['SolveSilMultiplicity',['../classActRoot_1_1MergerDetector.html#ae04eb6414aaf0a315feee875b968affd',1,'ActRoot::MergerDetector']]],
   ['sort_125',['Sort',['../classActAlgorithm_1_1MultiRegion.html#a781e44abbcdd00ea12cee5ba001a8d0d',1,'ActAlgorithm::MultiRegion']]],
   ['sortalongdir_126',['sortalongdir',['../classActRoot_1_1Cluster.html#acff6059482a5320bb8d1ef168af2af6d',1,'ActRoot::Cluster::SortAlongDir(const XYZVectorF &amp;dir)'],['../classActRoot_1_1Cluster.html#ac4b49994670abc8359865c2ae5811eac',1,'ActRoot::Cluster::SortAlongDir()']]],
   ['sortclustersinliersandoutliers_127',['SortClustersInliersAndOutliers',['../classActAlgorithm_1_1Actions_1_1Split.html#ac35c0f5bbb35dbd0b1b7bb8975038419',1,'ActAlgorithm::Actions::Split']]],
