@@ -379,7 +379,7 @@ void ActPhysics::SilSpecs::EraseLayer(const std::string& name)
 }
 
 
-ActPhysics::SilSpecs::PartPair ActPhysics::SilSpecs::ClassifyLayers(const std::vector<std::string>& names)
+ActPhysics::SilSpecs::PartPair ActPhysics::SilSpecs::ClassifyLayers(const std::vector<std::string>& names, bool isL1)
 {
     PartPair ret;
     auto hasLight {
@@ -407,8 +407,14 @@ ActPhysics::SilSpecs::PartPair ActPhysics::SilSpecs::ClassifyLayers(const std::v
                 ret.first.insert(name);
             else
             {
-                ret.first.insert(name);
-                ret.second.insert(name);
+                // If L1, decay Both to Heavy automatically
+                if(isL1)
+                    ret.second.insert(name);
+                else
+                {
+                    ret.first.insert(name);
+                    ret.second.insert(name);
+                }
             }
         }
     }

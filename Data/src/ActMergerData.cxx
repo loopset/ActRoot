@@ -10,6 +10,11 @@ bool ActRoot::BinaryData::IsFilled() const
     return fEs.size() > 0;
 }
 
+bool ActRoot::BinaryData::HasSP() const
+{
+    return fSP.X() != -1;
+}
+
 void ActRoot::BinaryData::Print(int n) const
 {
     if(IsFilled())

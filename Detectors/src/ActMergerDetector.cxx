@@ -651,7 +651,7 @@ bool ActRoot::MergerDetector::ComputeSiliconPoint()
 {
     bool isOk {}; // Validate SP for light particle. For heavy for the moment we dont care
     // Classify event layers into L or H
-    auto [llayers, hlayers] {fSilSpecs->ClassifyLayers(fMergerData->fSilLayers)};
+    auto [llayers, hlayers] {fSilSpecs->ClassifyLayers(fMergerData->fSilLayers, fPars.fIsL1)};
 
     // Light particle
     bool firstLight {true}; // only write SP for first

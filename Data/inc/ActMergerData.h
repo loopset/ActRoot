@@ -36,6 +36,7 @@ public:
     float fQave {-1};
 
     bool IsFilled() const;
+    bool HasSP() const;
     void Print(int n = 3) const;
 };
 

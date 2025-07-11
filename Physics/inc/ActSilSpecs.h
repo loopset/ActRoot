@@ -157,7 +157,7 @@ public:
     bool CheckLayersExists(const std::string& name) const { return fLayers.count(name); }
     void EraseLayer(const std::string& name);
     // Classify given layer names by Light or Heavy particle
-    PartPair ClassifyLayers(const std::vector<std::string>& names);
+    PartPair ClassifyLayers(const std::vector<std::string>& names, bool isL1);
 
     // Simulation query functions
     SearchTuple FindLayerAndIdx(const XYZPoint& p, const XYZVector& v, bool verbose = false);
