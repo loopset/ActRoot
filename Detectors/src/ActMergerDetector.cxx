@@ -659,7 +659,7 @@ bool ActRoot::MergerDetector::ComputeSiliconPoint()
     for(const auto& layer : llayers)
     {
         // this function automatically write data to BinData class
-        auto auxOk {SolveSilMultiplicity(layer, true, firstLight)};
+        auto auxOk {SolveSilMultiplicity(layer, true, firstLight, allLayersAreBOTH)};
         if(firstLight)
             isOk = auxOk;
         firstLight = false;
@@ -669,7 +669,7 @@ bool ActRoot::MergerDetector::ComputeSiliconPoint()
     bool firstHeavy {true};
     for(const auto& layer : hlayers)
     {
-        auto isHeavyOK {SolveSilMultiplicity(layer, false, firstHeavy)};
+        auto isHeavyOK {SolveSilMultiplicity(layer, false, firstHeavy, allLayersAreBOTH)};
         isOk = isOk && isHeavyOK;
         firstHeavy = false;
     }
@@ -697,7 +697,7 @@ bool ActRoot::MergerDetector::ComputeSiliconPoint()
     return isOk;
 }
 
-bool ActRoot::MergerDetector::SolveSilMultiplicity(const std::string& layer, bool isLight, bool isFirstLayer)
+bool ActRoot::MergerDetector::SolveSilMultiplicity(const std::string& layer, bool isLight, bool isFirstLayer, bool allLayersAreBOTH)
 {
     auto* ptr {(isLight) ? fLightPtr : fHeavyPtr};
     if(!ptr)
@@ -718,10 +718,13 @@ bool ActRoot::MergerDetector::SolveSilMultiplicity(const std::string& layer, boo
     // If mult == 1, stop calculation: there is nothing to solve
     if(fSilData->GetMult(layer) == 1)
     {
-        int auxiliarN = fSilData->fSiN[layer].front();
-        auto silYCoordinateFromSpecs {fSilSpecs->GetLayer(layer).GetPlacements().at(auxiliarN).first};
-        auto silPointFromLine {ptr->GetLine().MoveToX(sp.X())};
-        isHitOk = std::abs(silYCoordinateFromSpecs - silPointFromLine.Y()) < 25.; // in mm DON'T KNOW IF I HAVE TO SCALE
+        if(allLayersAreBOTH)
+        {
+            int auxiliarN = fSilData->fSiN[layer].front();
+            auto silYCoordinateFromSpecs {fSilSpecs->GetLayer(layer).GetPlacements().at(auxiliarN).first};
+            auto silPointFromLine {ptr->GetLine().MoveToX(sp.X())};
+            isHitOk = std::abs(silYCoordinateFromSpecs - silPointFromLine.Y()) < 25.; // in mm DON'T KNOW IF I HAVE TO SCALE
+        }
 
         e = fSilData->fSiE[layer].front();
         n = fSilData->fSiN[layer].front();
