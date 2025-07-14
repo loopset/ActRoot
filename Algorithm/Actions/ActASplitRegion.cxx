@@ -81,7 +81,7 @@ void ActAlgorithm::Actions::SplitRegion::AddRegion(unsigned int r, const std::ve
 {
     // Assert right dimension
     if(vec.size() != 4)
-        throw std::runtime_error("MultiRegion::AddRegion(): vec in config file for idx " + std::to_string(r) +
+        throw std::runtime_error("SplitRegion::AddRegion(): vec in config file for idx " + std::to_string(r) +
                                  " has size != 4 required for 2D");
     ActRoot::RegionType type;
     if(r == 0)
@@ -102,7 +102,7 @@ void ActAlgorithm::Actions::SplitRegion::CheckRegionsReadout()
         if(name == ActRoot::RegionType::EBeam)
             beam = true;
     if(!beam)
-        throw std::runtime_error("MultiRegion::CheckRegions(): algorithm does not work without a Beam region set. Add "
+        throw std::runtime_error("SplitRegion::CheckRegions(): algorithm does not work without a Beam region set. Add "
                                  "it with the r0 command");
 }
 
