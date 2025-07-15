@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <ostream>
+#include <string>
 
 bool ActRoot::BinaryData::IsFilled() const
 {
@@ -13,6 +14,19 @@ bool ActRoot::BinaryData::IsFilled() const
 bool ActRoot::BinaryData::HasSP() const
 {
     return fSP.X() != -1;
+}
+
+int ActRoot::BinaryData::GetNLayers() const
+{
+    return fLayers.size();
+}
+
+std::string ActRoot::BinaryData::GetLayer(int idx) const
+{
+    if(idx < fLayers.size())
+        return fLayers[idx];
+    else
+        return "";
 }
 
 void ActRoot::BinaryData::Print(int n) const

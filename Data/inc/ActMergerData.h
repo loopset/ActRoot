@@ -37,6 +37,8 @@ public:
 
     bool IsFilled() const;
     bool HasSP() const;
+    int GetNLayers() const;
+    std::string GetLayer(int idx) const;
     void Print(int n = 3) const;
 };
 
