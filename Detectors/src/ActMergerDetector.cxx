@@ -634,6 +634,8 @@ void ActRoot::MergerDetector::LightOrHeavy()
 double ActRoot::MergerDetector::TrackLengthFromLightIt(bool scale, bool isLight)
 {
     auto* ptr {isLight ? fLightPtr : fHeavyPtr};
+    if(!ptr->GetSizeOfVoxels())
+        return -1.;
     // Sort voxels
     ptr->SortAlongDir();
     // Distance
@@ -649,19 +651,19 @@ double ActRoot::MergerDetector::TrackLengthFromLightIt(bool scale, bool isLight)
 
 bool ActRoot::MergerDetector::ComputeSiliconPoint()
 {
-    bool isOk {}; // Validate SP for light particle. For heavy for the moment we dont care
+    bool isPropOk {}; // Validate SP for light particle. For heavy for the moment we dont care
     // Classify event layers into L or H
     auto [llayers, hlayers] {fSilSpecs->ClassifyLayers(fMergerData->fSilLayers, fPars.fIsL1)};
 
-    bool allLayersAreBOTH {llayers == hlayers}; // We have to assign light and/or heavy sp 
+    bool allLayersAreBOTH {llayers == hlayers}; // We have to assign light and/or heavy sp
     // Light particle
     bool firstLight {true}; // only write SP for first
     for(const auto& layer : llayers)
     {
         // this function automatically write data to BinData class
-        auto auxOk {SolveSilMultiplicity(layer, true, firstLight, allLayersAreBOTH)};
+        auto auxPropOk {SolveSilMultiplicity(layer, true, firstLight, allLayersAreBOTH)};
         if(firstLight)
-            isOk = auxOk;
+            isPropOk = auxPropOk;
         firstLight = false;
     }
 
@@ -669,8 +671,7 @@ bool ActRoot::MergerDetector::ComputeSiliconPoint()
     bool firstHeavy {true};
     for(const auto& layer : hlayers)
     {
-        auto isHeavyOK {SolveSilMultiplicity(layer, false, firstHeavy, allLayersAreBOTH)};
-        isOk = isOk && isHeavyOK;
+        SolveSilMultiplicity(layer, false, firstHeavy, allLayersAreBOTH);
         firstHeavy = false;
     }
 
@@ -694,10 +695,15 @@ bool ActRoot::MergerDetector::ComputeSiliconPoint()
         else
             bin->fTL = TrackLengthFromLightIt(false, (idx == 0));
     }
-    return isOk;
+    // Return boolen of light particle only IF NOT L1
+    if(fPars.fIsL1)
+        return true;
+    else
+        return isPropOk;
 }
 
-bool ActRoot::MergerDetector::SolveSilMultiplicity(const std::string& layer, bool isLight, bool isFirstLayer, bool allLayersAreBOTH)
+bool ActRoot::MergerDetector::SolveSilMultiplicity(const std::string& layer, bool isLight, bool isFirstLayer,
+                                                   bool allLayersAreBOTH)
 {
     auto* ptr {(isLight) ? fLightPtr : fHeavyPtr};
     if(!ptr)
@@ -709,25 +715,27 @@ bool ActRoot::MergerDetector::SolveSilMultiplicity(const std::string& layer, boo
     }
     auto& data {(isLight) ? fMergerData->fLight : fMergerData->fHeavy};
     // Compute SP
-    auto [sp, isOk] {fSilSpecs->GetLayer(layer).GetSiliconPointOfTrack(ptr->GetLine().GetPoint(),
-                                                                       ptr->GetLine().GetDirection(), true)};
+    // isPropOk determines whether propagation occured in the sense of motion
+    auto [sp, isPropOk] {fSilSpecs->GetLayer(layer).GetSiliconPointOfTrack(ptr->GetLine().GetPoint(),
+                                                                           ptr->GetLine().GetDirection(), true)};
     // Declare parameters of hit
     float e {};
     int n {};
-    bool isHitOk {true};
+    bool matchesY {true}; // determines if ptr has a SP whose Y coordinate agrees with Npad coordinates
     // If mult == 1, stop calculation: there is nothing to solve
     if(fSilData->GetMult(layer) == 1)
     {
-        if(allLayersAreBOTH)
-        {
-            int auxiliarN = fSilData->fSiN[layer].front();
-            auto silYCoordinateFromSpecs {fSilSpecs->GetLayer(layer).GetPlacements().at(auxiliarN).first};
-            auto silPointFromLine {ptr->GetLine().MoveToX(sp.X())};
-            isHitOk = std::abs(silYCoordinateFromSpecs - silPointFromLine.Y()) < 25.; // in mm DON'T KNOW IF I HAVE TO SCALE
-        }
-
         e = fSilData->fSiE[layer].front();
         n = fSilData->fSiN[layer].front();
+        if(allLayersAreBOTH)
+        {
+            auto silYCenter {fSilSpecs->GetLayer(layer).GetPlacements().at(n).first};
+            auto silWidth {fSilSpecs->GetLayer(layer).GetUnit().GetWidth() / 2}; // in mm from silspecs.conf
+            // Convert both to pad units
+            silWidth /= fTPCPars->GetPadSide();
+            silYCenter /= fTPCPars->GetPadSide();
+            matchesY = std::abs(silYCenter - sp.Y()) < silWidth;
+        }
     }
     else
     {
@@ -761,15 +769,15 @@ bool ActRoot::MergerDetector::SolveSilMultiplicity(const std::string& layer, boo
         e = es[idx];
     }
     // Write data
-    if(isFirstLayer)
-        data.fSP = sp; // store sp of first layer only for each particle
-    if(isHitOk)
+    if(matchesY)
     {
+        if(isFirstLayer)
+            data.fSP = sp; // store sp of first layer only for each particle
         data.fLayers.push_back(layer);
         data.fEs.push_back(e);
         data.fNs.push_back(n);
     }
-    return isOk && isHitOk;
+    return isPropOk;
 }
 
 void ActRoot::MergerDetector::MoveZ(XYZPoint& p)
