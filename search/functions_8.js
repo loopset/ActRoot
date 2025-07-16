@@ -42,9 +42,10 @@ var searchData=
   ['isinmatrix_39',['IsInMatrix',['../classActPhysics_1_1SilMatrix.html#a3e019cf721223550cf645b5513cba3ba',1,'ActPhysics::SilMatrix']]],
   ['isinrange_40',['IsInRange',['../classActRoot_1_1Line.html#a14c91c96827e0e14902012a7c6f5318f',1,'ActRoot::Line']]],
   ['isinside_41',['isinside',['../classActRoot_1_1Region.html#a1421812a314a2b6030dac516d55c0511',1,'ActRoot::Region::IsInside(const ROOT::Math::XYZPointF &amp;p) const'],['../classActRoot_1_1Region.html#a94631be34509980492b2ea1b32f94164',1,'ActRoot::Region::IsInside(const RangePair &amp;x, const RangePair &amp;y) const'],['../classActPhysics_1_1SilMatrix.html#a2433f0f2e7ffc9a47f5cedafab36ec41',1,'ActPhysics::SilMatrix::IsInside(int idx, double x, double y)'],['../classActPhysics_1_1SilMatrix.html#a1226afee56c5eceb3ca536323292e043',1,'ActPhysics::SilMatrix::IsInside(double x, double y)'],['../classActRoot_1_1CutsManager.html#ad6af23e4d80989490ce5f326505d61f7',1,'ActRoot::CutsManager::IsInside()']]],
-  ['isinvector_42',['isinvector',['../classActRoot_1_1MergerDetector.html#a21bcd5ae15954aa18f755115bc83992b',1,'ActRoot::MergerDetector::IsInVector()'],['../classActAlgorithm_1_1RANSAC.html#af49493f114be2d71f51bd0e42738e805',1,'ActAlgorithm::RANSAC::IsInVector()']]],
-  ['isrpvalid_43',['isrpvalid',['../classActAlgorithm_1_1Actions_1_1FindRP.html#a15633fe9cb4daae75a5581339d7613a1',1,'ActAlgorithm::Actions::FindRP::IsRPValid()'],['../namespaceActAlgorithm.html#a2ac6481a4ea05cee2b3c7b2c907beab2',1,'ActAlgorithm::IsRPValid()']]],
-  ['issplit_44',['IsSplit',['../classActAlgorithm_1_1IntervalMap.html#af7a7c7423ed2416587b57ac421208d88',1,'ActAlgorithm::IntervalMap']]],
-  ['isthreadempty_45',['IsThreadEmpty',['../classActRoot_1_1MTExecutor.html#a25c2fd311b141d6fca3d7f8c2df058c3',1,'ActRoot::MTExecutor']]],
-  ['isvector_46',['IsVector',['../classActRoot_1_1InputBlock.html#ad1706e1df2b3bc946489ddeb4a1078f7',1,'ActRoot::InputBlock']]]
+  ['isinvector_42',['isinvector',['../classActAlgorithm_1_1RANSAC.html#af49493f114be2d71f51bd0e42738e805',1,'ActAlgorithm::RANSAC::IsInVector()'],['../classActRoot_1_1MergerDetector.html#a21bcd5ae15954aa18f755115bc83992b',1,'ActRoot::MergerDetector::IsInVector()']]],
+  ['isl1_43',['IsL1',['../classActRoot_1_1BinaryData.html#ab1eef8666ef583d8f314dae0d86ecca1',1,'ActRoot::BinaryData']]],
+  ['isrpvalid_44',['isrpvalid',['../classActAlgorithm_1_1Actions_1_1FindRP.html#a15633fe9cb4daae75a5581339d7613a1',1,'ActAlgorithm::Actions::FindRP::IsRPValid()'],['../namespaceActAlgorithm.html#a2ac6481a4ea05cee2b3c7b2c907beab2',1,'ActAlgorithm::IsRPValid()']]],
+  ['issplit_45',['IsSplit',['../classActAlgorithm_1_1IntervalMap.html#af7a7c7423ed2416587b57ac421208d88',1,'ActAlgorithm::IntervalMap']]],
+  ['isthreadempty_46',['IsThreadEmpty',['../classActRoot_1_1MTExecutor.html#a25c2fd311b141d6fca3d7f8c2df058c3',1,'ActRoot::MTExecutor']]],
+  ['isvector_47',['IsVector',['../classActRoot_1_1InputBlock.html#ad1706e1df2b3bc946489ddeb4a1078f7',1,'ActRoot::InputBlock']]]
 ];
