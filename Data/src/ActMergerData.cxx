@@ -16,6 +16,11 @@ bool ActRoot::BinaryData::HasSP() const
     return fSP.X() != -1;
 }
 
+bool ActRoot::BinaryData::IsL1() const
+{
+    return (fTL > 0) && (fSP.X() == -1);
+}
+
 int ActRoot::BinaryData::GetNLayers() const
 {
     return fLayers.size();

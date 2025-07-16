@@ -20,7 +20,7 @@ namespace ActRoot
 {
 //! A small class describing a Light or Heavy track in the Merger detector
 /*!
-    Does not inherit from VData bc is a small struct to organize data better
+    Does not inherit from VData bc is a small struct to organize MergerData better
 */
 class BinaryData
 {
@@ -37,9 +37,12 @@ public:
 
     bool IsFilled() const;
     bool HasSP() const;
+    bool IsL1() const;
     int GetNLayers() const;
     std::string GetLayer(int idx) const;
     void Print(int n = 3) const;
+
+    ClassDef(BinaryData, 1);
 };
 
 //! Ouput of the MergerDetector

@@ -896,7 +896,8 @@ void ActRoot::MergerDetector::ConvertToPhysicalUnits()
     for(auto* data : {&fMergerData->fLight, &fMergerData->fHeavy})
     {
         idx++;
-        ScalePoint(data->fSP, xy, fDriftFactor);
+        if(data->HasSP())
+            ScalePoint(data->fSP, xy, fDriftFactor);
         // And track length
         if(fPars.fUseRP && data->HasSP())
             data->fTL = (data->fSP - fMergerData->fRP).R();
