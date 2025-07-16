@@ -12,7 +12,6 @@
 #include <optional>
 #include <stdexcept>
 #include <string>
-#include <string_view>
 #include <unordered_map>
 #include <vector>
 
@@ -25,7 +24,7 @@ private:
     std::unordered_map<T, TCutG*> fCuts {};
 
 public:
-    bool ReadCut(const T& key, std::string_view file, std::string_view name = "CUTG");
+    bool ReadCut(const T& key, const std::string& file, const std::string& name = "CUTG");
     void DrawCut(const T& key);
     void DrawAll();
     bool IsInside(const T& key, double x, double y);
@@ -53,7 +52,7 @@ inline std::pair<double, double> CutsManager<T>::GetRange(const T& key, const st
 }
 
 template <typename T>
-inline bool CutsManager<T>::ReadCut(const T& key, std::string_view file, std::string_view name)
+inline bool CutsManager<T>::ReadCut(const T& key, const std::string& file, const std::string& name)
 {
     auto* infile {new TFile(file.data())};
     if(infile->IsZombie())
@@ -64,8 +63,7 @@ inline bool CutsManager<T>::ReadCut(const T& key, std::string_view file, std::st
     }
     auto* cut {infile->Get<TCutG>(name.data())};
     if(!cut)
-        throw std::runtime_error("CutsManager::ReadCut(): file " + std::string(file) +
-                                 " doesn't contain a TCutG named " + std::string(name));
+        throw std::runtime_error("CutsManager::ReadCut(): file " + file + " doesn't contain a TCutG named " + name);
     fCuts[key] = cut;
     delete infile;
     return true;

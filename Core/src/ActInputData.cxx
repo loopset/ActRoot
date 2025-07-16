@@ -6,10 +6,10 @@
 #include "TChain.h"
 #include "TFile.h"
 #include "TString.h"
-#include "TSystem.h"
 #include "TTree.h"
 
 #include <algorithm>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <memory>
@@ -31,9 +31,10 @@ void ActRoot::InputData::ParseBlock(ActRoot::BlockPtr block)
     // 1
     fTreeNames.push_back(block->GetString("TreeName"));
     // 2
-    auto path {block->GetString("Path")};
-    // Expand it with ROOT
-    fPaths.push_back(gSystem->ExpandPathName(path.c_str()));
+    std::filesystem::path path {block->GetString("Path")};
+    if(path.is_relative()) // correct relative paths
+        path = SolveRelativePath(path);
+    fPaths.push_back(path);
     // 3
     fBegins.push_back(block->GetString("Begin"));
     // 4
@@ -45,7 +46,7 @@ void ActRoot::InputData::ParseBlock(ActRoot::BlockPtr block)
 
 void ActRoot::InputData::CheckFileExists(const std::string& file)
 {
-    if(gSystem->AccessPathName(file.c_str()))
+    if(!std::filesystem::exists(file))
         throw std::runtime_error("InputData: file " + file + " does not exist");
 }
 
@@ -143,9 +144,35 @@ void ActRoot::InputData::AddManualEntries(const std::string& file)
     for(auto& [run, vec] : fManualEntries)
         std::sort(vec.begin(), vec.end());
 }
+
 void ActRoot::InputData::Close(int run)
 {
     // Reset with use_count = 1 calls destructor, which for TFile calls Close()
     fTrees[run].reset();
     fFiles[run].reset();
+}
+
+std::string ActRoot::InputData::SolveRelativePath(const std::string& path)
+{
+    // If it is relative then search for a configs/ subdir where to locate the data.conf
+    auto cwd {std::filesystem::current_path()};
+    std::filesystem::path configs {};
+    // Up three dir levels
+    for(int i = 0; i < 3; i++)
+    {
+        auto base {cwd};
+        for(int j = 0; j < i; j++)
+        {
+            base = base.parent_path();
+        }
+        auto candidate {base / "configs"};
+        if(std::filesystem::exists(candidate) && std::filesystem::is_directory(candidate))
+            configs = candidate;
+    }
+    // Once located, go to project's home directory, where relative paths in data.conf are referred to
+    auto home {configs.parent_path()};
+    // Then combine with current path
+    auto sum {home / path};
+    sum = sum.lexically_normal();
+    return sum;
 }

@@ -452,6 +452,7 @@ bool ActRoot::MergerDetector::GateSilMult()
             if(int mult {fSilData->GetMult(layer)}; mult > 0)
             {
                 withHits++;
+                // Validate multiplicity with accepted mult per layer
                 if(fSilSpecs->GetLayer(layer).CheckMult(mult))
                 {
                     withMult++;
@@ -485,7 +486,7 @@ bool ActRoot::MergerDetector::GateSilMult()
     }
     else
     {
-        // If is calibration just get the maximum of all elements
+        // If it is calibration just get the maximum of all elements
         for(const auto& layer : fSilData->GetLayers())
         {
             auto itMax {std::max_element(fSilData->fSiE[layer].begin(), fSilData->fSiE[layer].end())};
@@ -636,8 +637,10 @@ double ActRoot::MergerDetector::TrackLengthFromLightIt(bool scale, bool isLight)
     auto* ptr {isLight ? fLightPtr : fHeavyPtr};
     if(!ptr->GetSizeOfVoxels())
         return -1.;
-    // Sort voxels
-    ptr->SortAlongDir();
+    // INFO: as of July 2025, sorting is done in LightOrHeavy mandatorily
+    // // Sort voxels
+    // ptr->SortAlongDir();
+
     // Distance
     auto begin {ptr->GetRefToVoxels().front().GetPosition()};
     auto end {ptr->GetRefToVoxels().back().GetPosition()};
@@ -657,10 +660,10 @@ bool ActRoot::MergerDetector::ComputeSiliconPoint()
 
     bool allLayersAreBOTH {llayers == hlayers}; // We have to assign light and/or heavy sp
     // Light particle
-    bool firstLight {true}; // only write SP for first
+    bool firstLight {true}; // only write SP for first impacting layer: (f0, f1) -> only from f0
     for(const auto& layer : llayers)
     {
-        // this function automatically write data to BinData class
+        // this function automatically writes data to BinData class
         auto auxPropOk {SolveSilMultiplicity(layer, true, firstLight, allLayersAreBOTH)};
         if(firstLight)
             isPropOk = auxPropOk;
@@ -709,20 +712,23 @@ bool ActRoot::MergerDetector::SolveSilMultiplicity(const std::string& layer, boo
     if(!ptr)
     {
         if(fIsVerbose)
-            std::cout << BOLDRED << "MergerDetector::SolveSilMultiplicity(): " << (isLight ? "Light" : "Heavy")
+        {
+            std::cout << BOLDCYAN << "MergerDetector::SolveSilMult(): " << (isLight ? "Light" : "Heavy")
                       << " pointer is null, returning false " << layer << RESET << '\n';
+        }
         return false;
     }
     auto& data {(isLight) ? fMergerData->fLight : fMergerData->fHeavy};
     // Compute SP
-    // isPropOk determines whether propagation occured in the sense of motion
+    // isPropOk determines whether propagation occured in the sense of motion.
+    // If not, we are not interested in track: might be noise
     auto [sp, isPropOk] {fSilSpecs->GetLayer(layer).GetSiliconPointOfTrack(ptr->GetLine().GetPoint(),
                                                                            ptr->GetLine().GetDirection(), true)};
     // Declare parameters of hit
     float e {};
     int n {};
-    bool matchesY {true}; // determines if ptr has a SP whose Y coordinate agrees with Npad coordinates
-    // If mult == 1, stop calculation: there is nothing to solve
+    bool matchesY {true}; // determines if ptr has a SP whose Y coordinate agrees with Y pad coordinates
+    // If mult == 1, there is nothing to solve apart from the case allLayersAreBOTH
     if(fSilData->GetMult(layer) == 1)
     {
         e = fSilData->fSiE[layer].front();
@@ -810,7 +816,7 @@ bool ActRoot::MergerDetector::MatchSPtoRealPlacement()
 {
     // UPDATED: as we usually employ only the Light particle in the missing mass technique
     // this constraint is only imposed to it. In the future could be extended to Heavy also
-    if(!fMergerData->fLight.IsFilled()) // only if SP is present
+    if(!fMergerData->fLight.HasSP()) // only if SP is present
         return true;
     // Use only first value in std::vector<int> of Ns
     auto n {fMergerData->fLight.fNs.front()};
@@ -892,7 +898,7 @@ void ActRoot::MergerDetector::ConvertToPhysicalUnits()
         idx++;
         ScalePoint(data->fSP, xy, fDriftFactor);
         // And track length
-        if(fPars.fUseRP)
+        if(fPars.fUseRP && data->HasSP())
             data->fTL = (data->fSP - fMergerData->fRP).R();
         else
             data->fTL = TrackLengthFromLightIt(true, idx == 0);
@@ -934,13 +940,13 @@ void ActRoot::MergerDetector::ComputeOtherPoints()
     // Boundary point: light track at ACTAR's flanges
     // Only if it reaches Sil, otherwise might be L1 and makes no point to compute a boundary point
     // Either case, this BP is not used at all so...
-    if(fMergerData->fLight.IsFilled())
+    if(fMergerData->fLight.HasSP())
         fMergerData->fBP =
             fSilSpecs->GetLayer(fMergerData->fSilLayers.front())
                 .GetBoundaryPointOfTrack(fTPCPars->GetNPADSX(), fTPCPars->GetNPADSY(), fLightPtr->GetLine().GetPoint(),
                                          fLightPtr->GetLine().GetDirection().Unit());
     // Window point: beam entrance point at X = 0 from fit parameters
-    if(fBeamPtr != nullptr)
+    if(fBeamPtr)
         fMergerData->fWP = fBeamPtr->GetLine().MoveToX(0);
     if((fPars.fIsCal || fTPCData->fClusters.size() == 1) && fLightPtr != nullptr)
         fMergerData->fWP = fLightPtr->GetLine().MoveToX(0);
@@ -961,7 +967,7 @@ void ActRoot::MergerDetector::ComputeQave()
         // Convert and sort along line
         if(fEnableConversion)
             cluster.ScaleVoxels(fTPCPars->GetPadSide(), fDriftFactor);
-        cluster.SortAlongDir();
+        // cluster.SortAlongDir(); // already done in Light or Heavy
         // Count distance bc there could be gaps
         double gapThresh {6.5};
         double newdist {};
@@ -1166,6 +1172,7 @@ double ActRoot::MergerDetector::GetRangeFromProfile(TH1F* h, bool smooth)
 void ActRoot::MergerDetector::ClearEventFilter()
 {
     // Not needed because we are reading directly from ttree
+    // For the sake of completeness, call this ClearFilter even though it does nothing
     fMergerData->ClearFilter();
 }
 

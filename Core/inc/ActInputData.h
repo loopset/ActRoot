@@ -5,7 +5,6 @@
 
 #include "TChain.h"
 #include "TFile.h"
-#include "TString.h"
 #include "TTree.h"
 #include "TUUID.h"
 
@@ -61,6 +60,7 @@ private:
     void ParseBlock(BlockPtr block);
     void CheckFileExists(const std::string& file);
     void CheckTreeExists(std::shared_ptr<TTree> tree, int i);
+    std::string SolveRelativePath(const std::string& path);
 };
 } // namespace ActRoot
 #endif
