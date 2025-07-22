@@ -2,6 +2,7 @@
 
 #include "ActCluster.h"
 #include "ActColors.h"
+#include "ActMultiAction.h"
 #include "ActTPCData.h"
 #include "ActTPCParameters.h"
 #include "ActUtils.h"
@@ -22,6 +23,7 @@
 #include <iterator>
 #include <map>
 #include <numeric>
+#include <stdexcept>
 #include <utility>
 #include <vector>
 
@@ -73,6 +75,8 @@ void ActAlgorithm::Actions::FindRP::ReadConfiguration(std::shared_ptr<ActRoot::I
         fMinXSepBreakBeam = block->GetDouble("MinXSepBreakBeam");
     if(block->CheckTokenExists("MinVoxelsBreakBeam"))
         fMinVoxelsBreakBeam = block->GetInt("MinVoxelsBreakBeam");
+    if(block->CheckTokenExists("OtherFineActions", true))
+        fOtherFineActions = block->GetStringVector("OtherFineActions");
 }
 
 void ActAlgorithm::Actions::FindRP::Run()
@@ -123,6 +127,9 @@ void ActAlgorithm::Actions::FindRP::Print() const
     std::cout << "  RPMaskXY           : " << fRPMaskXY << '\n';
     std::cout << "  RPMaskZ            : " << fRPMaskZ << '\n';
     std::cout << "  RPPivotDist        : " << fRPPivotDist << '\n';
+    std::cout << "  OtherFineActions   : " << '\n';
+    for(const auto& other : fOtherFineActions)
+        std::cout << "    " << other << '\n';
     std::cout << "······························" << RESET << '\n';
 }
 
@@ -615,6 +622,8 @@ void ActAlgorithm::Actions::FindRP::PerformFinerFits()
     //         }
     //     }
     // }
+    // 8-> Call other Actions defined in multiactions.conf
+    CallOtherFineActions();
 }
 
 bool ActAlgorithm::Actions::FindRP::BreakBeamToHeavy(const ActAlgorithm::VAction::XYZPointF& rp, bool keepSplit)
@@ -947,6 +956,21 @@ void ActAlgorithm::Actions::FindRP::MaskBeginEnd(const ActAlgorithm::VAction::XY
                 }
             }
         }
+    }
+}
+
+void ActAlgorithm::Actions::FindRP::CallOtherFineActions()
+{
+    if(!fMultiAction)
+        return;
+    for(const auto& other : fOtherFineActions)
+    {
+        if(fMultiAction->HasAction(other))
+        {
+            fMultiAction->GetAction(other)->Run();
+        }
+        else
+            throw std::runtime_error("FindRP::CallOtherFineActions(): cannot load other Action named " + other);
     }
 }
 

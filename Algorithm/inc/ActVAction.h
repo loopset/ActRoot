@@ -18,6 +18,8 @@ class TPCParameters;
 
 namespace ActAlgorithm
 {
+class MultiAction; // forward declaration
+
 class VAction
 {
 public:
@@ -32,6 +34,7 @@ protected:
     ActRoot::TPCData* fTPCData {};
     ActRoot::TPCParameters* fTPCPars {};
     std::shared_ptr<ActAlgorithm::VCluster> fAlgo {};
+    ActAlgorithm::MultiAction* fMultiAction {};
 
     bool fIsEnabled {true};
     bool fIsVerbose {};
@@ -39,6 +42,8 @@ protected:
 public:
     VAction(const std::string& actionID = "Base");
     virtual ~VAction() = default;
+
+    // Setters and getters
 
     virtual void SetTPCParameters(ActRoot::TPCParameters* pars) { fTPCPars = pars; }
     ActRoot::TPCParameters* GetTPCParameters() const { return fTPCPars; }
@@ -55,6 +60,9 @@ public:
 
     void SetIsVerbose(bool verbose) { fIsVerbose = verbose; }
     bool GetIsVerbose() const { return fIsVerbose; }
+
+    void SetMultiAction(ActAlgorithm::MultiAction* mac) { fMultiAction = mac; }
+    ActAlgorithm::MultiAction* GetMultiAction() const { return fMultiAction; }
 
     // Configuration
     virtual void ReadConfiguration(std::shared_ptr<ActRoot::InputBlock> block) = 0;

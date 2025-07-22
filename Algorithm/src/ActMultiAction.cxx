@@ -7,6 +7,7 @@
 #include "ActACleanPileUp.h"
 #include "ActACleanZs.h"
 #include "ActAFindRP.h"
+#include "ActAFixFindRP.h"
 #include "ActAMerge.h"
 #include "ActASplit.h"
 #include "ActASplitRegion.h"
@@ -39,6 +40,7 @@ ActAlgorithm::MultiAction::MultiAction()
     fMap["FindRP"] = &RegisterAction<Actions::FindRP>;
     fMap["Split"] = &RegisterAction<Actions::Split>;
     fMap["SplitRegion"] = &RegisterAction<Actions::SplitRegion>;
+    fMap["FixFindRP"] = &RegisterAction<Actions::FixFindRP>;
 }
 
 ActAlgorithm::MultiAction::Ptr ActAlgorithm::MultiAction::ConstructAction(const std::string& actionID)
@@ -103,6 +105,8 @@ void ActAlgorithm::MultiAction::ReadConfiguration()
         }
         // Set ClusterPtr for all. Data and Parameters are managed by TPCDetector
         fActions.back()->SetClusterPtr(fAlgo);
+        // And set pointer to THIS MultiAction manager class
+        fActions.back()->SetMultiAction(this);
     }
 }
 

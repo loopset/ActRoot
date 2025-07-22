@@ -45,4 +45,6 @@
 #pragma link C++ class ActAlgorithm::Actions::CleanZs;
 #pragma link C++ class ActAlgorithm::Actions::CleanBadFits;
 #pragma link C++ class ActAlgorithm::Actions::FindRP;
+#pragma link C++ class ActAlgorithm::Actions::FixFindRP;
+
 #endif

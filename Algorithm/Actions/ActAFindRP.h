@@ -3,6 +3,8 @@
 #include "ActVAction.h"
 
 #include <set>
+#include <string>
+#include <vector>
 
 namespace ActAlgorithm
 {
@@ -37,6 +39,7 @@ private:
     double fCylinderR {};          //!< Cylinder radious for CylinderCleaning function
     double fRPPivotDist {}; //!< Distance to erase Init and End of tracks (if voxels projection on line is too close of
                             // first/last voxel projection)
+    std::vector<std::string> fOtherFineActions {}; //!< Other Actions to be called in the PerformFinerFits func
 
 public:
     // Class to store RPOperations
@@ -71,6 +74,7 @@ private:
     void CylinderCleaning();
     void MaskAroundRP(const XYZPointF& rp, bool blHasBroken);
     void MaskBeginEnd(const ActAlgorithm::VAction::XYZPointF& rp);
+    void CallOtherFineActions();
     void FindPreciseRP();
 
     // Auxiliary functions
