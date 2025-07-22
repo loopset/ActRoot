@@ -1,23 +1,25 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$classActAlgorithm_1_1VAction.html" title=" " alt="" coords="5,301,169,326"/>
+<area shape="rect" id="Node000000" href="$classActAlgorithm_1_1VAction.html" title=" " alt="" coords="5,333,169,358"/>
 <area shape="rect" id="Node000001" href="$classActAlgorithm_1_1Actions_1_1BreakChi2.html" title=" " alt="" coords="217,5,380,45"/>
-<area shape="poly" id="edge1_Node000000_Node000001" title=" " alt="" coords="93,286,108,238,132,176,168,112,190,82,216,55,232,43,236,48,219,59,194,86,172,115,137,179,113,240,98,288"/>
+<area shape="poly" id="edge1_Node000000_Node000001" title=" " alt="" coords="91,318,104,265,128,194,164,121,188,86,216,55,232,43,235,48,219,59,192,90,169,123,133,197,109,266,96,320"/>
 <area shape="rect" id="Node000002" href="$classActAlgorithm_1_1Actions_1_1Clean.html" title=" " alt="" coords="217,69,380,109"/>
-<area shape="poly" id="edge2_Node000000_Node000002" title=" " alt="" coords="97,286,116,250,142,205,175,159,216,119,234,107,237,112,219,123,179,163,146,208,120,252,102,289"/>
+<area shape="poly" id="edge2_Node000000_Node000002" title=" " alt="" coords="95,318,111,276,137,223,172,168,216,119,233,107,236,112,219,123,176,171,142,225,116,278,100,320"/>
 <area shape="rect" id="Node000003" href="$classActAlgorithm_1_1Actions_1_1CleanBadFits.html" title=" " alt="" coords="217,133,380,173"/>
-<area shape="poly" id="edge3_Node000000_Node000003" title=" " alt="" coords="105,288,152,236,183,208,216,183,238,171,240,176,219,188,186,212,156,240,109,292"/>
+<area shape="poly" id="edge3_Node000000_Node000003" title=" " alt="" coords="101,319,147,252,179,216,216,183,236,171,238,176,219,187,183,219,151,256,105,322"/>
 <area shape="rect" id="Node000004" href="$classActAlgorithm_1_1Actions_1_1CleanDeltas.html" title=" " alt="" coords="217,197,380,237"/>
-<area shape="poly" id="edge4_Node000000_Node000004" title=" " alt="" coords="124,292,216,247,244,235,246,240,218,252,126,297"/>
+<area shape="poly" id="edge4_Node000000_Node000004" title=" " alt="" coords="112,322,159,285,216,247,241,235,243,240,219,252,162,289,115,326"/>
 <area shape="rect" id="Node000005" href="$classActAlgorithm_1_1Actions_1_1CleanPileUp.html" title=" " alt="" coords="217,261,380,301"/>
-<area shape="poly" id="edge5_Node000000_Node000005" title=" " alt="" coords="182,296,217,291,218,296,183,302"/>
+<area shape="poly" id="edge5_Node000000_Node000005" title=" " alt="" coords="142,326,231,299,233,304,144,331"/>
 <area shape="rect" id="Node000006" href="$classActAlgorithm_1_1Actions_1_1CleanZs.html" title=" " alt="" coords="217,325,380,365"/>
-<area shape="poly" id="edge6_Node000000_Node000006" title=" " alt="" coords="183,325,218,330,217,336,182,330"/>
+<area shape="poly" id="edge6_Node000000_Node000006" title=" " alt="" coords="183,343,217,343,217,348,183,348"/>
 <area shape="rect" id="Node000007" href="$classActAlgorithm_1_1Actions_1_1FindRP.html" title=" " alt="" coords="217,389,380,429"/>
-<area shape="poly" id="edge7_Node000000_Node000007" title=" " alt="" coords="126,330,218,375,246,387,244,392,216,380,124,335"/>
-<area shape="rect" id="Node000008" href="$classActAlgorithm_1_1Actions_1_1Merge.html" title=" " alt="" coords="217,453,380,493"/>
-<area shape="poly" id="edge8_Node000000_Node000008" title=" " alt="" coords="109,335,156,387,186,414,219,439,240,451,238,456,216,444,183,419,152,390,105,339"/>
-<area shape="rect" id="Node000009" href="$classActAlgorithm_1_1Actions_1_1Split.html" title=" " alt="" coords="217,517,380,557"/>
-<area shape="poly" id="edge9_Node000000_Node000009" title=" " alt="" coords="102,338,120,374,146,419,179,464,219,503,237,515,234,519,216,507,175,467,142,422,116,377,97,340"/>
-<area shape="rect" id="Node000010" href="$classActAlgorithm_1_1Actions_1_1SplitRegion.html" title=" " alt="" coords="217,581,380,621"/>
-<area shape="poly" id="edge10_Node000000_Node000010" title=" " alt="" coords="98,339,113,387,137,448,172,512,194,541,219,567,236,579,232,583,216,571,190,545,168,515,132,450,108,389,93,341"/>
+<area shape="poly" id="edge7_Node000000_Node000007" title=" " alt="" coords="144,360,233,387,231,392,142,365"/>
+<area shape="rect" id="Node000008" href="$classActAlgorithm_1_1Actions_1_1FixFindRP.html" title=" " alt="" coords="217,453,380,493"/>
+<area shape="poly" id="edge8_Node000000_Node000008" title=" " alt="" coords="115,365,162,402,219,439,243,451,241,456,216,444,159,406,112,369"/>
+<area shape="rect" id="Node000009" href="$classActAlgorithm_1_1Actions_1_1Merge.html" title=" " alt="" coords="217,517,380,557"/>
+<area shape="poly" id="edge9_Node000000_Node000009" title=" " alt="" coords="105,369,151,435,183,471,219,503,238,515,236,519,216,507,179,475,147,438,101,372"/>
+<area shape="rect" id="Node000010" href="$classActAlgorithm_1_1Actions_1_1Split.html" title=" " alt="" coords="217,581,380,621"/>
+<area shape="poly" id="edge10_Node000000_Node000010" title=" " alt="" coords="100,371,116,413,142,466,176,520,219,567,236,579,233,583,216,571,172,523,137,468,111,415,95,373"/>
+<area shape="rect" id="Node000011" href="$classActAlgorithm_1_1Actions_1_1SplitRegion.html" title=" " alt="" coords="217,645,380,685"/>
+<area shape="poly" id="edge11_Node000000_Node000011" title=" " alt="" coords="96,371,109,425,133,494,169,567,192,601,219,631,235,643,232,647,216,635,188,604,164,570,128,496,104,426,91,372"/>
 </map>

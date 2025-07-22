@@ -22,5 +22,6 @@ var searchData=
   ['fit2dfrom3d_19',['Fit2Dfrom3D',['../classActRoot_1_1Line.html#a1879078c7495a5ea940319b6b0248e98',1,'ActRoot::Line']]],
   ['fitprofiles_20',['FitProfiles',['../classActPhysics_1_1PIDCorrector.html#ac886747a4e99401f48bf970b228af86b',1,'ActPhysics::PIDCorrector']]],
   ['fitvoxels_21',['FitVoxels',['../classActRoot_1_1Line.html#aea85c9740051811e365afc37d511f1bc',1,'ActRoot::Line']]],
-  ['fixbreakheavy_22',['FixBreakHeavy',['../classActAlgorithm_1_1MultiRegion.html#ad7a6147f89c9cf5d81fda61afc077167',1,'ActAlgorithm::MultiRegion']]]
+  ['fixbreakheavy_22',['FixBreakHeavy',['../classActAlgorithm_1_1MultiRegion.html#ad7a6147f89c9cf5d81fda61afc077167',1,'ActAlgorithm::MultiRegion']]],
+  ['fixfindrp_23',['FixFindRP',['../classActAlgorithm_1_1Actions_1_1FixFindRP.html#a020872cd52d6813fba5580392098a2c9',1,'ActAlgorithm::Actions::FixFindRP']]]
 ];
