@@ -635,6 +635,8 @@ void ActRoot::MergerDetector::LightOrHeavy()
 double ActRoot::MergerDetector::TrackLengthFromLightIt(bool scale, bool isLight)
 {
     auto* ptr {isLight ? fLightPtr : fHeavyPtr};
+    if(!ptr)
+        return -1.;
     if(!ptr->GetSizeOfVoxels())
         return -1.;
     // INFO: as of July 2025, sorting is done in LightOrHeavy mandatorily
@@ -656,7 +658,8 @@ bool ActRoot::MergerDetector::ComputeSiliconPoint()
 {
     bool isPropOk {}; // Validate SP for light particle. For heavy for the moment we dont care
     // Classify event layers into L or H
-    auto [llayers, hlayers] {fSilSpecs->ClassifyLayers(fMergerData->fSilLayers, fPars.fIsL1)};
+    // INFO: 26/07/2025: disable Both decaying to Heavy in L1 trigger
+    auto [llayers, hlayers] {fSilSpecs->ClassifyLayers(fMergerData->fSilLayers, false)};
 
     bool allLayersAreBOTH {llayers == hlayers}; // We have to assign light and/or heavy sp
     // Light particle
