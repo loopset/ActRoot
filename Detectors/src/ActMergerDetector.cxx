@@ -688,11 +688,20 @@ double ActRoot::MergerDetector::TrackLengthFromLightIt(bool scale, bool isLight)
     // ptr->SortAlongDir();
 
     // Distance
-    auto begin {ptr->GetRefToVoxels().front().GetPosition()};
+    XYZPoint begin {};
+    bool scaleBegin {};
+    if(fPars.fUseRP)
+        begin = fMergerData->fRP;
+    else
+    {
+        begin = ptr->GetRefToVoxels().front().GetPosition();
+        scaleBegin = true;
+    }
     auto end {ptr->GetRefToVoxels().back().GetPosition()};
     if(scale)
     {
-        ScalePoint(begin, fTPCPars->GetPadSide(), fDriftFactor);
+        if(scaleBegin)
+            ScalePoint(begin, fTPCPars->GetPadSide(), fDriftFactor);
         ScalePoint(end, fTPCPars->GetPadSide(), fDriftFactor);
     }
     return (begin - end).R();
