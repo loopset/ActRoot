@@ -93,6 +93,9 @@ private:
     double fDefaultBeamXThresh {};
     // Invert angle picking
     bool fInvertAngle {};
+    // Validation of L1 trigger
+    bool fEnableL1Validation {};
+    double fL1ExclusionZone {}; //!< Validating L1 means fLightPtr does not reach boundaries of TPC
 
     // Store pointers to beam, light and heavy
     ActRoot::Cluster* fBeamPtr;
@@ -193,6 +196,7 @@ private:
     bool GateGATCONFandTrackMult();
     bool GateSilMult();
     void LightOrHeavy();
+    bool ValidateL1();
     void ComputeOtherPoints();
     bool ComputeSiliconPoint();
     bool SolveSilMultiplicity(const std::string& layer, bool isLight, bool isFirstLayer, bool allLayersAreBOTH);

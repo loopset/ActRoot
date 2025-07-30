@@ -36,7 +36,7 @@ std::string ActRoot::BinaryData::GetLayer(int idx) const
 
 void ActRoot::BinaryData::Print(int n) const
 {
-    if(IsFilled())
+    if(fQtotal != -1)
     {
         std::cout << std::string(n, ' ') << "SP     : " << fSP << '\n';
         std::cout << std::string(n, ' ') << "TL     : " << fTL << '\n';

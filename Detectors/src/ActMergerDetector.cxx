@@ -115,6 +115,10 @@ void ActRoot::MergerDetector::ReadConfiguration(std::shared_ptr<InputBlock> bloc
         fDefaultBeamXThresh = block->GetDouble("DefaultBeamXThresh");
     if(block->CheckTokenExists("InvertAngle", !fIsEnabled))
         fInvertAngle = block->GetBool("InvertAngle");
+    if(block->CheckTokenExists("EnableL1Validation"))
+        fEnableL1Validation = block->GetBool("EnableL1Validation");
+    if(block->CheckTokenExists("L1ExclusionZone"))
+        fL1ExclusionZone = block->GetDouble("L1ExclusionZone");
 
     // Build or not filter method
     if(ActRoot::Options::GetInstance()->GetMode() == ModeType::ECorrect)
@@ -269,7 +273,18 @@ void ActRoot::MergerDetector::DoMerge()
     LightOrHeavy();
     fClocks[1].Stop();
 
-    // 2.1-> Compute BSP from a X profile
+    // 2.1-> Validate L1 for Light
+    if(fEnableL1Validation)
+    {
+        auto isVal {ValidateL1()};
+        if(!isVal)
+        {
+            fMergerData->Clear();
+            fMergerData->fFlag = "L1 not val";
+            return;
+        }
+    }
+    // 2.2-> Compute BSP from a X profile
     if(fEnableQProfile)
         ComputeXProfile();
 
@@ -630,6 +645,27 @@ void ActRoot::MergerDetector::LightOrHeavy()
     for(auto* ptr : {fLightPtr, fHeavyPtr})
         if(ptr)
             ptr->SortAlongDir();
+}
+
+bool ActRoot::MergerDetector::ValidateL1()
+{
+    if(!fLightPtr || !fPars.fIsL1)
+        return true;
+    // Apply a cut on the last position of the Light particle so we ensure
+    // it stays within a safety region far from the TPC boundaries
+    auto back {fLightPtr->GetVoxels().back().GetPosition()};
+    auto x {(fL1ExclusionZone < back.X()) && (back.X() < fTPCPars->GetNPADSX() - fL1ExclusionZone)};
+    auto y {(fL1ExclusionZone < back.Y()) && (back.Y() < fTPCPars->GetNPADSY() - fL1ExclusionZone)};
+    auto z {(fL1ExclusionZone < back.Z()) && (back.Z() < fTPCPars->GetNPADSZ() - fL1ExclusionZone)};
+    // Return value
+    bool isVal {};
+    if(x && y && z)
+        isVal = true;
+    if(fIsVerbose)
+    {
+        std::cout << BOLDYELLOW << "MergerDet::ValidateL1(): " << std::boolalpha << isVal << RESET << '\n';
+    }
+    return isVal;
 }
 
 double ActRoot::MergerDetector::TrackLengthFromLightIt(bool scale, bool isLight)
@@ -1203,11 +1239,14 @@ void ActRoot::MergerDetector::Print() const
         }
         std::cout << "-> ForceRP       ? " << std::boolalpha << fForceRP << '\n';
         std::cout << "-> ForceBeamLike ? " << std::boolalpha << fForceBeamLike << '\n';
-        std::cout << "-> InvertAngle   ? " << std::boolalpha << fInvertAngle << '\n';
         std::cout << "-> NotBeamMults  : ";
         for(const auto& m : fNotBMults)
             std::cout << m << ", ";
         std::cout << '\n';
+        std::cout << "-> InvertAngle   ? " << std::boolalpha << fInvertAngle << '\n';
+        std::cout << "-> EnableL1Val   ? " << std::boolalpha << fEnableL1Validation << '\n';
+        if(fEnableL1Validation)
+            std::cout << "-> L1Exclusion     : " << fL1ExclusionZone << '\n';
         std::cout << "-> EnableConver  ? " << std::boolalpha << fEnableConversion << '\n';
         if(fEnableConversion)
         {
