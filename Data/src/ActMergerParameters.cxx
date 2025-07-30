@@ -10,5 +10,6 @@ void ActRoot::MergerParameters::Print() const
     std::cout << "  UseRP ? " << std::boolalpha << fUseRP << '\n';
     std::cout << "  IsCal ? " << std::boolalpha << fIsCal << '\n';
     std::cout << "  IsL1  ? " << std::boolalpha << fIsL1 << '\n';
+    std::cout << "  L1Val ? " << std::boolalpha << fL1Val << '\n';
     std::cout << "::::::::::::::::::::::::::::::" << RESET << '\n';
 }

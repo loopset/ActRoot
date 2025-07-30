@@ -31,7 +31,8 @@ public:
     std::vector<std::string> fLayers {};
     std::vector<float> fEs {};
     std::vector<int> fNs {};
-    float fTL {-1};
+    float fTL {-1};    //!< TL in mm units
+    float fRawTL {-1}; //!< TL in raw units (pad, pad, btb)
     float fQtotal {-1};
     float fQave {-1};
 
@@ -42,7 +43,7 @@ public:
     std::string GetLayer(int idx) const;
     void Print(int n = 3) const;
 
-    ClassDef(BinaryData, 1);
+    ClassDef(BinaryData, 2);
 };
 
 //! Ouput of the MergerDetector

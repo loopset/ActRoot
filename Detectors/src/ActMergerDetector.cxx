@@ -659,16 +659,19 @@ bool ActRoot::MergerDetector::ValidateL1()
     // Apply a cut on the last position of the Light particle so we ensure
     // it stays within a safety region far from the TPC boundaries
     auto back {fLightPtr->GetVoxels().back().GetPosition()};
-    auto x {(fL1ExclusionZone < back.X()) && (back.X() < fTPCPars->GetNPADSX() - fL1ExclusionZone)};
-    auto y {(fL1ExclusionZone < back.Y()) && (back.Y() < fTPCPars->GetNPADSY() - fL1ExclusionZone)};
-    auto z {(fL1ExclusionZone < back.Z()) && (back.Z() < fTPCPars->GetNPADSZ() - fL1ExclusionZone)};
+    auto x {(fL1ExclusionZone < back.X()) && (back.X() < (fTPCPars->GetNPADSX() - fL1ExclusionZone))};
+    auto y {(fL1ExclusionZone < back.Y()) && (back.Y() < (fTPCPars->GetNPADSY() - fL1ExclusionZone))};
+    auto z {(fL1ExclusionZone < back.Z()) && (back.Z() < (fTPCPars->GetNPADSZ() - fL1ExclusionZone))};
     // Return value
     bool isVal {};
     if(x && y && z)
+    {
         isVal = true;
+        fPars.fL1Val = true;
+    }
     if(fIsVerbose)
     {
-        std::cout << BOLDYELLOW << "MergerDet::ValidateL1(): " << std::boolalpha << isVal << RESET << '\n';
+        std::cout << BOLDGREEN << "MergerDetector::ValidateL1(): " << std::boolalpha << isVal << RESET << '\n';
     }
     return isVal;
 }
@@ -701,6 +704,10 @@ bool ActRoot::MergerDetector::ComputeSiliconPoint()
     // Classify event layers into L or H
     // INFO: 26/07/2025: disable Both decaying to Heavy in L1 trigger
     auto [llayers, hlayers] {fSilSpecs->ClassifyLayers(fMergerData->fSilLayers, false)};
+    // INFO: 30/07/2025: disable llayers in case L1 has been validated
+    if(fEnableL1Validation)
+        if(fPars.fIsL1 && fPars.fL1Val)
+            llayers = {};
 
     bool allLayersAreBOTH {llayers == hlayers}; // We have to assign light and/or heavy sp
     // Light particle
@@ -742,7 +749,7 @@ bool ActRoot::MergerDetector::ComputeSiliconPoint()
         else
             bin->fTL = TrackLengthFromLightIt(false, (idx == 0));
     }
-    // Return boolen of light particle only IF NOT L1
+    // Return boolean of light particle only IF NOT L1
     if(fPars.fIsL1)
         return true;
     else
@@ -943,6 +950,8 @@ void ActRoot::MergerDetector::ConvertToPhysicalUnits()
         if(data->HasSP())
             ScalePoint(data->fSP, xy, fDriftFactor);
         // And track length
+        // Copy fTL to fRawTL before conversion
+        data->fRawTL = data->fTL;
         if(fPars.fUseRP && data->HasSP())
             data->fTL = (data->fSP - fMergerData->fRP).R();
         else

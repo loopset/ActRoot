@@ -11,6 +11,7 @@ public:
     bool fUseRP {};
     bool fIsL1 {};
     bool fIsCal {};
+    bool fL1Val {};
 
     void Print() const override;
 };
