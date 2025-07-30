@@ -16,6 +16,7 @@
 #include "ActTypes.h"
 #include "ActVoxel.h"
 
+#include "TError.h"
 #include "TF1.h"
 #include "TH1.h"
 #include "TMath.h"
@@ -129,6 +130,10 @@ void ActRoot::MergerDetector::ReadConfiguration(std::shared_ptr<InputBlock> bloc
 
     // Init clocks
     InitClocks();
+
+    // Reduce error printout in case of fEnableRootFind
+    if(fEnableRootFind)
+        gErrorIgnoreLevel = kFatal;
 }
 
 void ActRoot::MergerDetector::InitCorrector()
@@ -1047,7 +1052,7 @@ void ActRoot::MergerDetector::ComputeQProfile()
     if(!fLightPtr)
         return;
     // 0-> Init histogram
-    TH1F h {"hQProfile", "QProfile", 100, -5, 150};
+    TH1F h {"hQProfile", "QProfile", 180, -5, 265};
     TString units {fEnableConversion ? "mm" : "pad units"};
     h.SetTitle(Form("QProfile;dist [%s];Q [au]", units.Data()));
     // 1-> Ref point is either WP or beginning of projection on line
@@ -1127,6 +1132,12 @@ void ActRoot::MergerDetector::ComputeQProfile()
     auto range {GetRangeFromProfile(&h)};
     // And move to point
     fMergerData->fBraggP = ref + range * line.GetDirection().Unit();
+    if(fIsVerbose)
+    {
+        std::cout << BOLDGREEN << "MergerDetector::ComputeQProfile()" << '\n';
+        std::cout << "  Range   : " << range << '\n';
+        std::cout << "  BraggP  : " << fMergerData->fBraggP << RESET << '\n';
+    }
     if(f2DProfile)
     {
         // Get the Z value manually
@@ -1201,7 +1212,9 @@ double ActRoot::MergerDetector::GetRangeFromProfile(TH1F* h, bool smooth)
     // Create TSpline
     auto spe {std::make_unique<TSpline3>(h)};
     // And now function
-    auto func {std::make_unique<TF1>("func", [&](double* x, double* p) { return spe->Eval(x[0]); }, 0, 128, 1)};
+    auto func {std::make_unique<TF1>(
+        "func", [&](double* x, double* p) { return spe->Eval(x[0]); }, h->GetXaxis()->GetXmin(),
+        h->GetXaxis()->GetXmax(), 1)};
     // Find maximum in the range [xMax, xRangeMax of histogram]
     double ret {};
     if(fEnableRootFind)
