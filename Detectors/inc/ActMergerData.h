@@ -34,6 +34,7 @@ public:
     std::vector<float> fSilEs {};
     std::vector<float> fSilNs {};
     float fTrackLength {-1};
+    float fTrackLengthHeavy {-1};
     float fThetaBeam {-1};
     float fThetaBeamZ {-1}; // emittance angle along Z
     float fPhiBeamY {-1};   // emittance angle along Y
@@ -43,6 +44,7 @@ public:
     float fThetaHeavy {-1};
     float fPhiLight {-1};
     float fQave {-1};
+    float fDE{-1};
     int fBeamIdx {-1};
     int fLightIdx {-1};
     int fHeavyIdx {-1};

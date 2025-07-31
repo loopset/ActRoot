@@ -202,10 +202,12 @@ private:
     void ComputeOtherPoints();
     bool ComputeSiliconPoint();
     double TrackLengthFromLightIt(bool scale);
+    double TrackLengthFromHeavyIt(bool scale);
     void CorrectZOffset();
     bool MatchSPtoRealPlacement();
     void ComputeAngles();
     void ComputeQave();
+    void ComputeDE();
     void ComputeQProfile();
     void ComputeXProfile();
     void Reset(const int& run, const int& entry);

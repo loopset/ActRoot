@@ -299,6 +299,7 @@ void ActRoot::MergerDetector::DoMerge()
     // 3.1-> Qave and charge profile computations
     fClocks[6].Start(false);
     ComputeQave();
+    ComputeDE();
     if(fEnableQProfile)
         ComputeQProfile();
     fClocks[6].Stop();
@@ -624,6 +625,35 @@ double ActRoot::MergerDetector::TrackLengthFromLightIt(bool scale)
     return (begin - end).R();
 }
 
+double ActRoot::MergerDetector::TrackLengthFromHeavyIt(bool scale)
+{
+    if (!fHeavyPtr) {
+        std::cerr << "Erreur: fHeavyPtr est nullptr!" << std::endl;
+        return 0.0;
+    }
+
+    auto& voxels = fHeavyPtr->GetRefToVoxels();
+    if (voxels.empty()) {
+        std::cerr << "Erreur: Aucun voxel dans fHeavyPtr!" << std::endl;
+        return 0.0;
+    }
+
+    // Trier les voxels
+    std::sort(voxels.begin(), voxels.end());
+
+    // Récupérer les points de début et fin
+    auto begin = voxels.front().GetPosition();
+    auto end = voxels.back().GetPosition();
+
+    // Appliquer le scale si demandé
+    if (scale) {
+        ScalePoint(begin, fTPCPars->GetPadSide(), fDriftFactor);
+        ScalePoint(end, fTPCPars->GetPadSide(), fDriftFactor);
+    }
+
+    return (begin - end).R();
+}
+
 bool ActRoot::MergerDetector::ComputeSiliconPoint()
 {
     if(fPars.fIsL1)
@@ -634,10 +664,14 @@ bool ActRoot::MergerDetector::ComputeSiliconPoint()
         fSilSpecs->GetLayer(fMergerData->fSilLayers.front())
             .GetSiliconPointOfTrack(fLightPtr->GetLine().GetPoint(), fLightPtr->GetLine().GetDirection());
     // And compute track length
-    if(fPars.fUseRP)
+    if(fPars.fUseRP) {
         fMergerData->fTrackLength = (fMergerData->fSP - fMergerData->fRP).R();
-    else
+        fMergerData->fTrackLengthHeavy = TrackLengthFromHeavyIt(false);
+    }    
+    else {
         fMergerData->fTrackLength = TrackLengthFromLightIt(false);
+        fMergerData->fTrackLengthHeavy = TrackLengthFromHeavyIt(false);
+    }
     return isOk;
 }
 
@@ -736,10 +770,14 @@ void ActRoot::MergerDetector::ConvertToPhysicalUnits()
     }
 
     // And recompute track length
-    if(fPars.fUseRP && !fPars.fIsL1)
+    if(fPars.fUseRP && !fPars.fIsL1) {
         fMergerData->fTrackLength = (fMergerData->fSP - fMergerData->fRP).R();
-    else
+        fMergerData->fTrackLengthHeavy = TrackLengthFromHeavyIt(true);
+    }    
+    else {
         fMergerData->fTrackLength = TrackLengthFromLightIt(true);
+        fMergerData->fTrackLengthHeavy = TrackLengthFromHeavyIt(true);
+    }
 }
 
 void ActRoot::MergerDetector::ComputeAngles()
@@ -801,48 +839,6 @@ void ActRoot::MergerDetector::ComputeQave()
             newdist += d;
     }
     auto dist {newdist};
-    // // Legacy version
-    // fLightPtr->SortAlongDir();
-    // // std::sort(fLightPtr->GetRefToVoxels().begin(), fLightPtr->GetRefToVoxels().end());
-    // // Get min
-    // auto front {fLightPtr->GetVoxels().front().GetPosition()};
-    // auto back {fLightPtr->GetVoxels().back().GetPosition()};
-    // // Scale them
-    // if(fEnableConversion)
-    // {
-    //     ScalePoint(front, fTPCPars->GetPadSide(), fDriftFactor, true);
-    //     ScalePoint(back, fTPCPars->GetPadSide(), fDriftFactor, true);
-    // }
-    // // Get projections
-    // auto min {fLightPtr->GetLine().ProjectionPointOnLine(front)};
-    // auto max {fLightPtr->GetLine().ProjectionPointOnLine(back)};
-    // // Convert them to physical points
-    // // ScalePoint(min, fTPCPars->GetPadSide(), fDriftFactor);
-    // // ScalePoint(max, fTPCPars->GetPadSide(), fDriftFactor);
-    // // Dist in mm
-    // auto dist {(max - min).R()};
-    // if(fIsVerbose)
-    // {
-    //     std::cout << "-> ComputeQave" << '\n';
-    //     std::cout << "   NewDist : " << newdist << '\n';
-    //     std::cout << "   NewMin  : " << newmin << '\n';
-    //     std::cout << "   NewMax  : " << newmax << '\n';
-    //     cluster.GetLine().Print();
-    //     std::cout << "   OldDist : " << dist << '\n';
-    //     std::cout << "   OldMin  : " << min << '\n';
-    //     std::cout << "   OldMax  : " << max << '\n';
-    //     fLightPtr->GetLine().Print();
-    // }
-    // auto dist {(fMergerData->fRP - fMergerData->fBP).R()};
-    // std::cout << "=========================" << '\n';
-    // std::cout << "front : " << front << '\n';
-    // std::cout << "back  : " << back << '\n';
-    // std::cout << "min : " << min << '\n';
-    // std::cout << "max : " << max << '\n';
-    // std::cout << "dist (max - min) : " << (max - min).R() << '\n';
-    // std::cout << "RP : " << fMergerData->fRP << '\n';
-    // std::cout << "BP : " << fMergerData->fBP << '\n';
-    // std::cout << "dist (RP - BP) : " << (fMergerData->fRP - fMergerData->fBP).R() << '\n';
     // Sum to obtain total Q
     auto qTotal {std::accumulate(fLightPtr->GetVoxels().begin(), fLightPtr->GetVoxels().end(), 0.f,
                                  [](float sum, const Voxel& v) { return sum + v.GetCharge(); })};
@@ -850,6 +846,68 @@ void ActRoot::MergerDetector::ComputeQave()
     // std::cout << "Qtotal / dist : " << qTotal / dist << '\n';
     fMergerData->fQave = qTotal / dist;
 }
+
+void ActRoot::MergerDetector::ComputeDE()
+{
+    if (!fLightPtr)
+        return;
+
+    // Copy cluster to avoid any modifications to other parts of the algorithm
+    auto cluster{*fLightPtr};
+
+    // Convert and sort along line
+    if (fEnableConversion)
+        cluster.ScaleVoxels(fTPCPars->GetPadSide(), fDriftFactor);
+    cluster.SortAlongDir();
+
+    // Compute the total distance along the trace
+    double totalDistance{};
+    std::vector<double> cumulativeDistances(cluster.GetSizeOfVoxels(), 0.0);
+
+    for (int v = 1; v < cluster.GetSizeOfVoxels(); v++)
+    {
+        auto p0{cluster.GetLine().ProjectionPointOnLine(cluster.GetVoxels()[v - 1].GetPosition())};
+        auto p1{cluster.GetLine().ProjectionPointOnLine(cluster.GetVoxels()[v].GetPosition())};
+        auto d{(p1 - p0).R()};
+        if (d < 6)
+            totalDistance += d;
+        cumulativeDistances[v] = totalDistance;
+    }
+
+    // Only consider voxels in the last 10 mm of the trace
+    double chargeSum = 0.0;
+    double selectedDistance = 0.0;
+    for (int v = cluster.GetSizeOfVoxels() - 1; v >= 0; --v)
+    {
+        if (totalDistance - cumulativeDistances[v] <= 10.0)
+        {
+            if (v > 0)
+            {
+                auto p0{cluster.GetLine().ProjectionPointOnLine(cluster.GetVoxels()[v - 1].GetPosition())};
+                auto p1{cluster.GetLine().ProjectionPointOnLine(cluster.GetVoxels()[v].GetPosition())};
+                auto d{(p1 - p0).R()};
+                if (d < 6)
+                    selectedDistance += d;
+            }
+            chargeSum += cluster.GetVoxels()[v].GetCharge();
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    // Compute DE
+    if (selectedDistance > 0)
+    {
+        fMergerData->fDE = chargeSum / selectedDistance;
+    }
+    else
+    {
+        fMergerData->fDE = 0; // Handle the case where no voxels are within the last 10 mm
+    }
+}
+
 
 void ActRoot::MergerDetector::ComputeQProfile()
 {
