@@ -265,7 +265,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="lineno">  142</span>    }</div>
 <div class="line"><span class="lineno">  143</span>}</div>
 <div class="ttc" id="aclassActRoot_1_1CalibrationManager_html_a8608ee2ee767a355ae126fb78279e286"><div class="ttname"><a href="classActRoot_1_1CalibrationManager.html#a8608ee2ee767a355ae126fb78279e286">ActRoot::CalibrationManager::fCalibs</a></div><div class="ttdeci">std::unordered_map&lt; std::string, std::vector&lt; double &gt; &gt; fCalibs</div><div class="ttdef"><b>Definition</b> ActCalibrationManager.h:25</div></div>
-<div class="ttc" id="aclassActRoot_1_1CalibrationManager_html_aff19986cf871b0d2552bd9c6d9d77706"><div class="ttname"><a href="classActRoot_1_1CalibrationManager.html#aff19986cf871b0d2552bd9c6d9d77706">ActRoot::CalibrationManager::fIsEnabled</a></div><div class="ttdeci">bool fIsEnabled</div><div class="ttdoc">Whether to enable or not when calling ApplyCalibration/Threshold.</div><div class="ttdef"><b>Definition</b> ActCalibrationManager.h:31</div></div>
+<div class="ttc" id="aclassActRoot_1_1CalibrationManager_html_aff19986cf871b0d2552bd9c6d9d77706"><div class="ttname"><a href="classActRoot_1_1CalibrationManager.html#aff19986cf871b0d2552bd9c6d9d77706">ActRoot::CalibrationManager::fIsEnabled</a></div><div class="ttdeci">bool fIsEnabled</div><div class="ttdoc">Whether to enable or not when calling ApplyCalibration/Threshold.</div><div class="ttdef"><b>Definition</b> ActCalibrationManager.h:33</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -372,7 +372,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="lineno">  192</span>    }</div>
 <div class="line"><span class="lineno">  193</span>    <span class="keywordflow">return</span> qAl;</div>
 <div class="line"><span class="lineno">  194</span>}</div>
-<div class="ttc" id="aclassActRoot_1_1CalibrationManager_html_a8e3622baa52ca22287581a064eb83e5e"><div class="ttname"><a href="classActRoot_1_1CalibrationManager.html#a8e3622baa52ca22287581a064eb83e5e">ActRoot::CalibrationManager::fPadAlign</a></div><div class="ttdeci">std::vector&lt; std::vector&lt; double &gt; &gt; fPadAlign</div><div class="ttdoc">Pad align coefficiens.</div><div class="ttdef"><b>Definition</b> ActCalibrationManager.h:29</div></div>
+<div class="ttc" id="aclassActRoot_1_1CalibrationManager_html_a8e3622baa52ca22287581a064eb83e5e"><div class="ttname"><a href="classActRoot_1_1CalibrationManager.html#a8e3622baa52ca22287581a064eb83e5e">ActRoot::CalibrationManager::fPadAlign</a></div><div class="ttdeci">std::vector&lt; std::vector&lt; double &gt; &gt; fPadAlign</div><div class="ttdoc">Pad align coefficiens.</div><div class="ttdef"><b>Definition</b> ActCalibrationManager.h:31</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -455,7 +455,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   55</span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classActRoot_1_1CalibrationManager.html#aff19986cf871b0d2552bd9c6d9d77706">fIsEnabled</a>; }</div>
+<div class="fragment"><div class="line"><span class="lineno">   57</span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classActRoot_1_1CalibrationManager.html#aff19986cf871b0d2552bd9c6d9d77706">fIsEnabled</a>; }</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -678,7 +678,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   52</span>{ <a class="code hl_variable" href="classActRoot_1_1CalibrationManager.html#aff19986cf871b0d2552bd9c6d9d77706">fIsEnabled</a> = enabled; }</div>
+<div class="fragment"><div class="line"><span class="lineno">   54</span>{ <a class="code hl_variable" href="classActRoot_1_1CalibrationManager.html#aff19986cf871b0d2552bd9c6d9d77706">fIsEnabled</a> = enabled; }</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -773,7 +773,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Whether to enable or not when calling ApplyCalibration/Threshold. </p>
-<div class="fragment"><div class="line"><span class="lineno">   31</span>{<span class="keyword">true</span>};                     </div>
+<div class="fragment"><div class="line"><span class="lineno">   33</span>{<span class="keyword">true</span>};                     </div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -796,6 +796,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Special for Look up table on pad plane LookUpTable format: [CoBo #: 0-15] [AsAd #: 0-3] [AGET #: 0-3] [Channel #: 64+4 FPN channels] [X coord: 0-127] [Y coord: 0-127] </p>
 
 </div>
 </div>
