@@ -25,7 +25,9 @@ private:
     std::unordered_map<std::string, std::vector<double>> fCalibs; //!< General map holding strings as keys for the
                                                                   //!< vector of doubles (coeffs) of calib
     std::map<std::pair<int, int>, std::tuple<int, int, int, int>> fInvertedLT; //<! Special: inverted pad plane LT table
-    std::vector<std::vector<int>> fLT;          //<! Special for Look up table on pad plane
+    std::vector<std::vector<int>> fLT;          //!< Special for Look up table on pad plane
+                                                //!< LookUpTable format: [CoBo #: 0-15] [AsAd #: 0-3] [AGET #: 0-3]
+                                                //!< [Channel #: 64+4 FPN channels] [X coord: 0-127] [Y coord: 0-127]
     std::vector<std::vector<double>> fPadAlign; //!< Pad align coefficiens
     std::vector<std::string> fFiles;            //!< List of files read in calibration
     bool fIsEnabled {true};                     //!< Whether to enable or not when calling ApplyCalibration/Threshold
