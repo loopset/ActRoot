@@ -121,7 +121,7 @@ void ActRoot::EventPainter::AddButtons()
                                       TGNumberFormat::kNEANonNegative,
                                       TGNumberFormat::kNELLimitMinMax,
                                       0,
-                                      99999};
+                                      999999};
     fButtonsFrame->AddFrame(fEntryButton, hints);
     // Connect ReturnPressed for both TGNumberEntries
     for(auto* b : {fRunButton, fEntryButton})

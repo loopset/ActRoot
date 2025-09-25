@@ -22,6 +22,8 @@ namespace ActPhysics
 /*!
   Allows to perform all type of computations with a SRIM table
   You can even **draw** the file with the corresponding function!
+  Input SRIM table, should have stopping power in MeV/mm
+  Units for all functions are MeV and mm
   Warning: internally uses automatic pointers
 */
 class SRIM
@@ -59,9 +61,9 @@ public:
     void ReadTable(const std::string& key, const std::string& file);
     [[deprecated("Favour use of new SRIM::ReadTable(...) which does not require manual edition of SRIM file")]] void
     ReadInterpolations(std::string key, std::string fileName);
-
-    // Read LISE tables
-    void SetStragglingLISE(const std::string& key, const std::string& fileName);
+    7,
+        // Read LISE tables
+        void SetStragglingLISE(const std::string& key, const std::string& fileName);
 
     // Set spline flag
     void SetUseSpline(bool use = true) { fUseSpline = use; }

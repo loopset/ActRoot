@@ -33,7 +33,9 @@ private:
     RangeType fYRange {1111, -1};
     RangeType fZRange {1111, -1};
     int fClusterID {};
-    bool fIsBeamLike {false};
+    bool fIsBeamLike {false}; //<! In ActFindRP.cxx this boolean is to be "beam-like" particle if a. xmin is bellow
+                              //<! threshold, and b. if track has small opening angle (parameters determined through
+                              //<! BeamLikeMaxAngle and BeamLikeXMinThresh of multiaction.conf)
     bool fIsRecoil {false};
     bool fToMerge {true};
     bool fToDelete {false};
