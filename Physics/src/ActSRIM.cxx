@@ -379,7 +379,7 @@ double ActPhysics::SRIM::TravelledDistance(const std::string& material, double T
     // Range at init point
     auto Rini {EvalRange(material, Tini)};
     // Range at end point
-    auto Rafter {EvalRange(material, Tini)};
+    auto Rafter {EvalRange(material, Tafter)};
     return (Rini - Rafter);
 }
 

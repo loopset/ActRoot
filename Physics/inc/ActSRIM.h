@@ -61,9 +61,9 @@ public:
     void ReadTable(const std::string& key, const std::string& file);
     [[deprecated("Favour use of new SRIM::ReadTable(...) which does not require manual edition of SRIM file")]] void
     ReadInterpolations(std::string key, std::string fileName);
-    7,
-        // Read LISE tables
-        void SetStragglingLISE(const std::string& key, const std::string& fileName);
+
+    // Read LISE tables
+    void SetStragglingLISE(const std::string& key, const std::string& fileName);
 
     // Set spline flag
     void SetUseSpline(bool use = true) { fUseSpline = use; }
