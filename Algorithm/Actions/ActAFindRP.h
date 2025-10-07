@@ -87,6 +87,8 @@ private:
     std::vector<RPOps> ClusterAndSortRPs(std::vector<RPOps>& rps);
 
     double GetClusterAngle(const ActRoot::Line::XYZVectorF& beam, const ActRoot::Line::XYZVectorF& recoil);
+
+    bool ReachesBoundaries(const XYZPointF& p);
 };
 } // namespace Actions
 } // namespace ActAlgorithm

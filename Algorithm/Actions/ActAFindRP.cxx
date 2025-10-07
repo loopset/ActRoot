@@ -904,6 +904,8 @@ void ActAlgorithm::Actions::FindRP::MaskBeginEnd(const ActAlgorithm::VAction::XY
         auto end {refVoxels.back()};
         auto projInit {line.ProjectionPointOnLine(init.GetPosition() + ROOT::Math::XYZVector {0.5, 0.5, 0.5})};
         auto projEnd {line.ProjectionPointOnLine(end.GetPosition() + ROOT::Math::XYZVector {0.5, 0.5, 0.5})};
+        // Determine whether track reaches chamber boundaries to apply or not the capping of its end part
+        auto reachesBound {ReachesBoundaries(projEnd)};
         // Partition: get iterator to last element to be kept
         auto itKeep {std::partition(refVoxels.begin(), refVoxels.end(),
                                     [&](const ActRoot::Voxel& voxel)
@@ -919,8 +921,12 @@ void ActAlgorithm::Actions::FindRP::MaskBeginEnd(const ActAlgorithm::VAction::XY
                                         // bool isInCapInit {(proj - projInit).R() <= fRPPivotDist || (proj.X() <
                                         // projInit.X())}; bool isInCapEnd {(proj - projEnd).R() <= fRPPivotDist ||
                                         // (proj.X() > projEnd.X())};
+                                        // UPDATE: this is solved by imposing th SortAlongDir ordering
                                         bool isInCapInit {(proj - projInit).R() <= fRPPivotDist};
-                                        bool isInCapEnd {(proj - projEnd).R() <= fRPPivotDist};
+                                        bool isInCapEnd {false};
+                                        // if reaches boundaries, impose the EndCap condition
+                                        if(reachesBound)
+                                            isInCapEnd = (proj - projEnd).R() <= fRPPivotDist;
                                         return !(isInCapInit || isInCapEnd);
                                     })};
         auto newSize {std::distance(refVoxels.begin(), itKeep)};
@@ -935,10 +941,11 @@ void ActAlgorithm::Actions::FindRP::MaskBeginEnd(const ActAlgorithm::VAction::XY
                 {
                     std::cout << BOLDYELLOW << "--- FineRP::MaskBeginEnd ----" << '\n';
                     std::cout << "-> Cluster #" << it->GetClusterID() << '\n';
-                    std::cout << "   Init : " << init.GetPosition() << '\n';
-                    std::cout << "   Proj Init : " << projInit << '\n';
-                    std::cout << "   End : " << end.GetPosition() << '\n';
-                    std::cout << "   Proj End : " << projEnd << '\n';
+                    std::cout << "   Init          : " << init.GetPosition() << '\n';
+                    std::cout << "   Proj Init     : " << projInit << '\n';
+                    std::cout << "   End           : " << end.GetPosition() << '\n';
+                    std::cout << "   Proj End      : " << projEnd << '\n';
+                    std::cout << "   ReachesBound  ? " << std::boolalpha << reachesBound << '\n';
                     std::cout << "   (Old - New) sizes : " << (oldSize - refVoxels.size()) << '\n';
                     std::cout << "   Gravity point : " << it->GetLine().GetPoint() << '\n';
                     std::cout << "------------------------------" << RESET << '\n';
@@ -1036,4 +1043,18 @@ double ActAlgorithm::Actions::FindRP::GetClusterAngle(const ActRoot::Line::XYZVe
 {
     auto dot {beam.Unit().Dot((recoil.Unit()))};
     return TMath::ACos(dot) * TMath::RadToDeg();
+}
+
+bool ActAlgorithm::Actions::FindRP::ReachesBoundaries(const XYZPointF& p)
+{
+    // Function that checks whether end projection of the light track is within a safe distance
+    // from the TPC boundaries; that is, the track effectively reaches the flanges.
+
+    // If so, must disable capping of end part of the track to avoid biasing the L1 event analysis
+
+    float dist {3}; // pads safe distance
+    bool x {p.X() <= dist || p.X() >= (fTPCPars->GetNPADSX() - dist)};
+    bool y {p.Y() <= dist || p.Y() >= (fTPCPars->GetNPADSY() - dist)};
+    bool z {p.Z() <= dist || p.Z() >= (fTPCPars->GetNPADSZ() - dist)};
+    return x && y && z;
 }
