@@ -893,11 +893,11 @@ void ActAlgorithm::Actions::FindRP::MaskBeginEnd(const ActAlgorithm::VAction::XY
         const auto& gp {line.GetPoint()};
         auto& refVoxels {it->GetRefToVoxels()};
         auto oldSize {refVoxels.size()};
+        // Align direction with RP, so direction vectors start always at RP
+        // and point towards (begin/end) of tracks
+        it->GetRefToLine().AlignUsingPoint(rp);
         // Sort them using direction given by line fit
         it->SortAlongDir();
-        // std::sort(refVoxels.begin(), refVoxels.end());
-        // Set same sign as rp
-        it->GetRefToLine().AlignUsingPoint(rp);
         // Get init point
         auto init {refVoxels.front()};
         // Get end point
@@ -945,7 +945,7 @@ void ActAlgorithm::Actions::FindRP::MaskBeginEnd(const ActAlgorithm::VAction::XY
                     std::cout << "   Proj Init     : " << projInit << '\n';
                     std::cout << "   End           : " << end.GetPosition() << '\n';
                     std::cout << "   Proj End      : " << projEnd << '\n';
-                    std::cout << "   ReachesBound  ? " << std::boolalpha << reachesBound << '\n';
+                    std::cout << "   MaskEnd       ? " << std::boolalpha << reachesBound << '\n';
                     std::cout << "   (Old - New) sizes : " << (oldSize - refVoxels.size()) << '\n';
                     std::cout << "   Gravity point : " << it->GetLine().GetPoint() << '\n';
                     std::cout << "------------------------------" << RESET << '\n';
@@ -1056,5 +1056,5 @@ bool ActAlgorithm::Actions::FindRP::ReachesBoundaries(const XYZPointF& p)
     bool x {p.X() <= dist || p.X() >= (fTPCPars->GetNPADSX() - dist)};
     bool y {p.Y() <= dist || p.Y() >= (fTPCPars->GetNPADSY() - dist)};
     bool z {p.Z() <= dist || p.Z() >= (fTPCPars->GetNPADSZ() - dist)};
-    return x && y && z;
+    return x || y || z;
 }
