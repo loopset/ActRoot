@@ -1497,11 +1497,11 @@ Additional Inherited Members</h2></td></tr>
 <div class="line"><span class="lineno">  893</span>        <span class="keyword">const</span> <span class="keyword">auto</span>&amp; gp {line.GetPoint()};</div>
 <div class="line"><span class="lineno">  894</span>        <span class="keyword">auto</span>&amp; refVoxels {it-&gt;GetRefToVoxels()};</div>
 <div class="line"><span class="lineno">  895</span>        <span class="keyword">auto</span> oldSize {refVoxels.size()};</div>
-<div class="line"><span class="lineno">  896</span>        <span class="comment">// Sort them using direction given by line fit</span></div>
-<div class="line"><span class="lineno">  897</span>        it-&gt;SortAlongDir();</div>
-<div class="line"><span class="lineno">  898</span>        <span class="comment">// std::sort(refVoxels.begin(), refVoxels.end());</span></div>
-<div class="line"><span class="lineno">  899</span>        <span class="comment">// Set same sign as rp</span></div>
-<div class="line"><span class="lineno">  900</span>        it-&gt;GetRefToLine().AlignUsingPoint(rp);</div>
+<div class="line"><span class="lineno">  896</span>        <span class="comment">// Align direction with RP, so direction vectors start always at RP</span></div>
+<div class="line"><span class="lineno">  897</span>        <span class="comment">// and point towards (begin/end) of tracks</span></div>
+<div class="line"><span class="lineno">  898</span>        it-&gt;GetRefToLine().AlignUsingPoint(rp);</div>
+<div class="line"><span class="lineno">  899</span>        <span class="comment">// Sort them using direction given by line fit</span></div>
+<div class="line"><span class="lineno">  900</span>        it-&gt;SortAlongDir();</div>
 <div class="line"><span class="lineno">  901</span>        <span class="comment">// Get init point</span></div>
 <div class="line"><span class="lineno">  902</span>        <span class="keyword">auto</span> init {refVoxels.front()};</div>
 <div class="line"><span class="lineno">  903</span>        <span class="comment">// Get end point</span></div>
@@ -1549,7 +1549,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="line"><span class="lineno">  945</span>                    std::cout &lt;&lt; <span class="stringliteral">&quot;   Proj Init     : &quot;</span> &lt;&lt; projInit &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
 <div class="line"><span class="lineno">  946</span>                    std::cout &lt;&lt; <span class="stringliteral">&quot;   End           : &quot;</span> &lt;&lt; end.GetPosition() &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
 <div class="line"><span class="lineno">  947</span>                    std::cout &lt;&lt; <span class="stringliteral">&quot;   Proj End      : &quot;</span> &lt;&lt; projEnd &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
-<div class="line"><span class="lineno">  948</span>                    std::cout &lt;&lt; <span class="stringliteral">&quot;   ReachesBound  ? &quot;</span> &lt;&lt; std::boolalpha &lt;&lt; reachesBound &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><span class="lineno">  948</span>                    std::cout &lt;&lt; <span class="stringliteral">&quot;   MaskEnd       ? &quot;</span> &lt;&lt; std::boolalpha &lt;&lt; reachesBound &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
 <div class="line"><span class="lineno">  949</span>                    std::cout &lt;&lt; <span class="stringliteral">&quot;   (Old - New) sizes : &quot;</span> &lt;&lt; (oldSize - refVoxels.size()) &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
 <div class="line"><span class="lineno">  950</span>                    std::cout &lt;&lt; <span class="stringliteral">&quot;   Gravity point : &quot;</span> &lt;&lt; it-&gt;GetLine().GetPoint() &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
 <div class="line"><span class="lineno">  951</span>                    std::cout &lt;&lt; <span class="stringliteral">&quot;------------------------------&quot;</span> &lt;&lt; <a class="code hl_define" href="ActColors_8h.html#ab702106cf3b3e96750b6845ded4e0299">RESET</a> &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
@@ -1777,7 +1777,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="line"><span class="lineno"> 1056</span>    <span class="keywordtype">bool</span> x {p.X() &lt;= dist || p.X() &gt;= (<a class="code hl_variable" href="classActAlgorithm_1_1VAction.html#a7352a4edfdef7053a5c5be2b7dea1723">fTPCPars</a>-&gt;<a class="code hl_function" href="classActRoot_1_1TPCParameters.html#a884d632cf9c9592ca0303b2a183e04e5">GetNPADSX</a>() - dist)};</div>
 <div class="line"><span class="lineno"> 1057</span>    <span class="keywordtype">bool</span> y {p.Y() &lt;= dist || p.Y() &gt;= (<a class="code hl_variable" href="classActAlgorithm_1_1VAction.html#a7352a4edfdef7053a5c5be2b7dea1723">fTPCPars</a>-&gt;<a class="code hl_function" href="classActRoot_1_1TPCParameters.html#ab05369c9e3a0b0b56a3f00c0e4a6cd7f">GetNPADSY</a>() - dist)};</div>
 <div class="line"><span class="lineno"> 1058</span>    <span class="keywordtype">bool</span> z {p.Z() &lt;= dist || p.Z() &gt;= (<a class="code hl_variable" href="classActAlgorithm_1_1VAction.html#a7352a4edfdef7053a5c5be2b7dea1723">fTPCPars</a>-&gt;<a class="code hl_function" href="classActRoot_1_1TPCParameters.html#a1c24e33928f47eadeb7830235f867510">GetNPADSZ</a>() - dist)};</div>
-<div class="line"><span class="lineno"> 1059</span>    <span class="keywordflow">return</span> x &amp;&amp; y &amp;&amp; z;</div>
+<div class="line"><span class="lineno"> 1059</span>    <span class="keywordflow">return</span> x || y || z;</div>
 <div class="line"><span class="lineno"> 1060</span>}</div>
 </div><!-- fragment -->
 </div>
