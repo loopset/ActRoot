@@ -649,17 +649,26 @@ TGraphErrors* ActPhysics::Kinematics::TransfromCMCrossSectionToLab(TGraphErrors*
     auto* gangles {GetThetaLabvsThetaCMLine()};
     // Set ranges for
     double labmax {180}; // deg
+    double cmmin {0};
     double cmmax {180};
     // But if we are in inverse kinematics, that graph is bivaluated in the lab frame
     // and therefore we must cut in the maximum to pick only one region. Default is [0, max]
     // But this could depend on the reaction. This is adapted for (p,d) or (d,t) reactions
-    if(fInverse)
+    // UPDATE October 2025: This only applies for pick-up reactions, where the gangles graphs is X bi-valuated
+    if(fp2.GetA() < fp3.GetA())
     {
         // Locate maximum
         auto it {TMath::LocMax(gangles->GetN(), gangles->GetY())};
         // And set values, with a safe radius to avoid divergencies in the xs (mainly due to the derivative)!
         labmax = gangles->GetPointY(it) - 1;
         cmmax = gangles->GetPointX(it) - 1;
+    }
+    else if(fp2.GetA() == fp3.GetA())
+    {
+        // Skip unphysical region in elastic scattering at cm = 0,
+        // with safer limits included also in lab
+        cmmin = 2;
+        labmax = 89.75;
     }
 
     // Compute jacobian of transformation CM / Lab
@@ -668,7 +677,7 @@ TGraphErrors* ActPhysics::Kinematics::TransfromCMCrossSectionToLab(TGraphErrors*
     {
         auto cm {gangles->GetPointX(p)};
         auto lab {gangles->GetPointY(p)};
-        if(cm < cmmax)
+        if(cmmin <= cm && cm < cmmax)
         {
             // X axis = cos(lab)
             // Y axis = cos(cm)
@@ -689,7 +698,7 @@ TGraphErrors* ActPhysics::Kinematics::TransfromCMCrossSectionToLab(TGraphErrors*
         auto coscm {gder->Eval(coslab)};
         auto cm {TMath::ACos(coscm) *
                  TMath::RadToDeg()}; // too complicated but done this way to avoid creating another graph
-        auto jacobian {fder->Derivative(coslab)};
+        auto jacobian {TMath::Abs(fder->Derivative(coslab))};
         auto xscm {gcm->Eval(cm, nullptr, "S")};
         glab->AddPoint(lab, xscm * jacobian);
     }
