@@ -45,6 +45,7 @@ private:
     double fMinQtoDelete {2000};
     std::unordered_map<unsigned int, std::pair<std::set<unsigned int, std::greater<>>, double>> fPadMatrix;
     std::unordered_map<unsigned int, unsigned int> fGlobalIndex {};
+    bool fEnableRawBranchInFilter {false}; //!< Enable Cluster::fRaw branch in InitInputFilter
 
     // Timer for cluster (only cluster) step
     TStopwatch fClusterClock;

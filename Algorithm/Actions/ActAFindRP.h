@@ -62,6 +62,9 @@ public:
     void Run() override;
     void Print() const override;
 
+    // Special method to call some of the private actions from public interface
+    void ExecInnerAction(const std::string& name);
+
 private:
     // Major functions of FindRP
     void SetExtVoxels();

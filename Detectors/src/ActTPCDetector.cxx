@@ -62,6 +62,9 @@ void ActRoot::TPCDetector::ReadConfiguration(std::shared_ptr<InputBlock> config)
     }
     if(config->CheckTokenExists("CleanDuplicatedVoxels", true))
         fCleanDuplicatedVoxels = config->GetBool("CleanDuplicatedVoxels");
+    if(config->CheckTokenExists("EnableRawBranchInFilter", true))
+        fEnableRawBranchInFilter = config->GetBool("EnableRawBranchInFilter");
+
     // Init of algorithms based on mode
     auto mode {ActRoot::Options::GetInstance()->GetMode()};
     // Cluster method
@@ -155,7 +158,7 @@ void ActRoot::TPCDetector::InitInputFilter(std::shared_ptr<TTree> tree)
     if(fData)
         delete fData;
     fData = new TPCData;
-    tree->SetBranchStatus("fRaw*", false); // do not save fRaw voxels in filter tree
+    tree->SetBranchStatus("fRaw*", fEnableRawBranchInFilter);
     tree->SetBranchAddress("TPCData", &fData);
     // Delete in destructor
     fDelData = true;
@@ -342,9 +345,10 @@ void ActRoot::TPCDetector::Print() const
     std::cout << BOLDCYAN << "···· TPCDetector ····" << RESET << '\n';
     if(ActRoot::Options::GetInstance()->GetMode() == ModeType::EReadTPC)
     {
-        std::cout << BOLDCYAN << "-> CleanSaturation       ? " << std::boolalpha << fCleanSaturatedMEvent << '\n';
-        std::cout << "-> CleanPadMatrix        ? " << std::boolalpha << fCleanPadMatrix << '\n';
-        std::cout << "-> CleanDuplicatedVoxels ? " << std::boolalpha << fCleanDuplicatedVoxels << RESET << '\n';
+        std::cout << BOLDCYAN << "-> CleanSaturation         ? " << std::boolalpha << fCleanSaturatedMEvent << '\n';
+        std::cout << "-> CleanPadMatrix          ? " << std::boolalpha << fCleanPadMatrix << '\n';
+        std::cout << "-> CleanDuplicatedVoxels   ? " << std::boolalpha << fCleanDuplicatedVoxels << RESET << '\n';
+        std::cout << "-> EnableRawBranchInFilter ? " << std::boolalpha << fEnableRawBranchInFilter << RESET << '\n';
     }
     if(fCluster)
         fCluster->Print();

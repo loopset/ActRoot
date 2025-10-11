@@ -9,6 +9,7 @@
 #include "ActVAction.h"
 #include "ActVoxel.h"
 
+#include "TString.h"
 #include <TMath.h>
 #include <TMatrixD.h>
 #include <TVectorD.h>
@@ -24,6 +25,7 @@
 #include <map>
 #include <numeric>
 #include <stdexcept>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -979,6 +981,14 @@ void ActAlgorithm::Actions::FindRP::CallOtherFineActions()
         else
             throw std::runtime_error("FindRP::CallOtherFineActions(): cannot load other Action named " + other);
     }
+}
+
+void ActAlgorithm::Actions::FindRP::ExecInnerAction(const std::string& name)
+{
+    if(name == "DetermineBeamLikes")
+        DetermineBeamLikes();
+    else
+        throw std::runtime_error("FindRP::ExecInnerAction(): not implemented if condition for inner action " + name);
 }
 
 void ActAlgorithm::Actions::FindRP::FindPreciseRP()

@@ -18,6 +18,8 @@
 #include "ActTPCParameters.h"
 #include "ActVCluster.h"
 
+#include "TSystem.h"
+
 #include <dlfcn.h> // to manually load .so files in UserAction
 
 #include <filesystem>
@@ -25,6 +27,7 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 ActAlgorithm::MultiAction::MultiAction()
 {
@@ -84,6 +87,9 @@ void ActAlgorithm::MultiAction::ReadConfiguration()
     ActRoot::InputParser parser {conf};
     // Get list of headers (orderes by first appearance)
     auto headers {parser.GetBlockHeaders()};
+    // Store user action names to skip reading their config in the for loop
+    // (they're read immediately after ction)
+    std::vector<std::string> userActionNames {};
     // And init!
     for(const auto& header : headers)
     {
@@ -91,12 +97,16 @@ void ActAlgorithm::MultiAction::ReadConfiguration()
         if(header == "User")
         {
             LoadUserAction(parser.GetBlock(header));
-            // If there use UserConfig header, pass it to the UserAction
-            if(std::find(headers.begin(), headers.end(), "UserConfig") != headers.end())
-                fActions.back()->ReadConfiguration(parser.GetBlock("UserConfig"));
+            auto& action {fActions.back()};
+            // If there use [NameOfUserAction] header, configure it!
+            if(std::find(headers.begin(), headers.end(), action->GetActionID()) != headers.end())
+            {
+                action->ReadConfiguration(parser.GetBlock(action->GetActionID()));
+                userActionNames.push_back(action->GetActionID());
+            }
         }
-        // UserConfig
-        else if(header == "UserConfig")
+        // UserConfigs
+        else if(std::find(userActionNames.begin(), userActionNames.end(), header) != userActionNames.end())
             continue; // UserConfig is passed to UserAction in previous if condition
         else
         {
@@ -147,10 +157,10 @@ void ActAlgorithm::MultiAction::LoadUserAction(std::shared_ptr<ActRoot::InputBlo
     // Get path from block
     auto path {block->GetString("Path")};
     // Build path + name
-    auto file {ActRoot::Options::GetInstance()->GetProjectDir() + path + name};
+    auto file {ActRoot::Options::GetInstance()->GetProjectDir() + path + "lib" + name + "." + gSystem->GetSoExt()};
     // If it doesnt exist, throw error
     if(!std::filesystem::exists(file))
-        throw std::runtime_error("MA::LoadUserAction(): cannot locate library");
+        throw std::runtime_error("MA::LoadUserAction(): cannot locate library " + name);
 
     // Load the .so
     auto library {dlopen(file.c_str(), RTLD_NOW | RTLD_GLOBAL)};
