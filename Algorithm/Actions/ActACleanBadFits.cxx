@@ -32,6 +32,6 @@ void ActAlgorithm::Actions::CleanBadFits::Print() const
         std::cout << "······························" << RESET << '\n';
         return;
     }
-    std::cout << "  InEnabled : " << fIsEnabled << '\n';
+    std::cout << "  IsEnabled : " << fIsEnabled << '\n';
     std::cout << "······························" << RESET << '\n';
 }

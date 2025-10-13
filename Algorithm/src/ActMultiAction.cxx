@@ -93,8 +93,8 @@ void ActAlgorithm::MultiAction::ReadConfiguration()
     // And init!
     for(const auto& header : headers)
     {
-        // User action
-        if(header == "User")
+        // User actions, containing [User] word in their header names
+        if(header.find("User") != std::string::npos)
         {
             LoadUserAction(parser.GetBlock(header));
             auto& action {fActions.back()};
