@@ -552,8 +552,8 @@ Additional Inherited Members</h2></td></tr>
 <div class="line"><span class="lineno">   93</span>    <span class="comment">// And init!</span></div>
 <div class="line"><span class="lineno">   94</span>    <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; header : headers)</div>
 <div class="line"><span class="lineno">   95</span>    {</div>
-<div class="line"><span class="lineno">   96</span>        <span class="comment">// User action</span></div>
-<div class="line"><span class="lineno">   97</span>        <span class="keywordflow">if</span>(header == <span class="stringliteral">&quot;User&quot;</span>)</div>
+<div class="line"><span class="lineno">   96</span>        <span class="comment">// User actions, containing [User] word in their header names</span></div>
+<div class="line"><span class="lineno">   97</span>        <span class="keywordflow">if</span>(header.find(<span class="stringliteral">&quot;User&quot;</span>) != std::string::npos)</div>
 <div class="line"><span class="lineno">   98</span>        {</div>
 <div class="line"><span class="lineno">   99</span>            <a class="code hl_function" href="classActAlgorithm_1_1MultiAction.html#a18b61a4bea65c6c8a6ac71918fbd11ba">LoadUserAction</a>(parser.GetBlock(header));</div>
 <div class="line"><span class="lineno">  100</span>            <span class="keyword">auto</span>&amp; action {<a class="code hl_variable" href="classActAlgorithm_1_1MultiAction.html#af4b58ab9c82c94a8d492e0204d87c957">fActions</a>.back()};</div>
