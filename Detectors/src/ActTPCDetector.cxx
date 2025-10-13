@@ -347,7 +347,7 @@ void ActRoot::TPCDetector::Print() const
     {
         std::cout << BOLDCYAN << "-> CleanSaturation         ? " << std::boolalpha << fCleanSaturatedMEvent << '\n';
         std::cout << "-> CleanPadMatrix          ? " << std::boolalpha << fCleanPadMatrix << '\n';
-        std::cout << "-> CleanDuplicatedVoxels   ? " << std::boolalpha << fCleanDuplicatedVoxels << RESET << '\n';
+        std::cout << "-> CleanDuplicatedVoxels   ? " << std::boolalpha << fCleanDuplicatedVoxels << '\n';
         std::cout << "-> EnableRawBranchInFilter ? " << std::boolalpha << fEnableRawBranchInFilter << RESET << '\n';
     }
     if(fCluster)
