@@ -888,6 +888,10 @@ void ActAlgorithm::Actions::FindRP::MaskAroundRP(const ActAlgorithm::VAction::XY
 
 void ActAlgorithm::Actions::FindRP::MaskBeginEnd(const ActAlgorithm::VAction::XYZPointF& rp)
 {
+    // If distance is <= 0, skip this part
+    if(fRPPivotDist <= 0)
+        return;
+    // Iterate for all clusters
     for(auto it = fTPCData->fClusters.begin(); it != fTPCData->fClusters.end(); it++)
     {
         // Declare variables

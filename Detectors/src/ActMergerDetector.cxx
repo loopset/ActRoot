@@ -698,13 +698,19 @@ double ActRoot::MergerDetector::TrackLengthFromLightIt(bool scale, bool isLight)
         scaleBegin = true;
     }
     auto end {ptr->GetRefToVoxels().back().GetPosition()};
+    // Copy line to avoid modifications
+    auto line {ptr->GetLine()};
     if(scale)
     {
         if(scaleBegin)
-            ScalePoint(begin, fTPCPars->GetPadSide(), fDriftFactor);
-        ScalePoint(end, fTPCPars->GetPadSide(), fDriftFactor);
+            ScalePoint(begin, fTPCPars->GetPadSide(), fDriftFactor, true);
+        ScalePoint(end, fTPCPars->GetPadSide(), fDriftFactor, true);
+        line.Scale(fTPCPars->GetPadSide(), fDriftFactor);
     }
-    return (begin - end).R();
+    // Get projections onto fit
+    auto projBegin {line.ProjectionPointOnLine(begin)};
+    auto projEnd {line.ProjectionPointOnLine(end)};
+    return (projBegin - projEnd).R();
 }
 
 bool ActRoot::MergerDetector::ComputeSiliconPoint()
