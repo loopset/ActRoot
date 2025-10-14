@@ -10,6 +10,8 @@
 #include "Math/Point3Dfwd.h"
 #include "Math/Vector3Dfwd.h"
 
+#include <string>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -33,6 +35,8 @@ private:
     RangeType fYRange {1111, -1};
     RangeType fZRange {1111, -1};
     int fClusterID {};
+    std::unordered_map<std::string, bool> fFlags {}; //!< Map storing any particular condition for the cluster
+                                                     //<! that can be employed layer for the analysis
     bool fIsBeamLike {false}; //<! In ActFindRP.cxx this boolean is to be "beam-like" particle if a. xmin is bellow
                               //<! threshold, and b. if track has small opening angle (parameters determined through
                               //<! BeamLikeMaxAngle and BeamLikeXMinThresh of multiaction.conf)
@@ -71,6 +75,7 @@ public:
     bool GetHasRP() const { return fHasRP; }
     bool GetUseExtVoxels() const { return fUseExtVoxels; }
     bool GetIsDefault() const { return fIsDefault; }
+    bool GetFlag(const std::string& flag) const { return fFlags.count(flag) ? fFlags.at(flag) : false; }
 
     // Setters
     void SetLine(const ActRoot::Line& line) { fLine = line; }
@@ -87,6 +92,7 @@ public:
     void SetHasRP(bool has) { fHasRP = has; }
     void SetUseExtVoxels(bool use, bool refit = true);
     void SetIsDefault(bool isDef) { fIsDefault = isDef; }
+    void SetFlag(const std::string& flag, bool val) { fFlags[flag] = val; }
 
     // Adders of voxels
     void AddVoxel(const ActRoot::Voxel& voxel); //! By copy in push_back
@@ -118,7 +124,7 @@ private:
     void FillSets(const ActRoot::Voxel& voxel);
     void FillSets();
 
-    ClassDef(Cluster, 1);
+    ClassDef(Cluster, 2);
 };
 
 } // namespace ActRoot

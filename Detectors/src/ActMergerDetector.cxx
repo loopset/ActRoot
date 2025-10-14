@@ -1283,7 +1283,7 @@ void ActRoot::MergerDetector::Print() const
         std::cout << "-> InvertAngle   ? " << std::boolalpha << fInvertAngle << '\n';
         std::cout << "-> EnableL1Val   ? " << std::boolalpha << fEnableL1Validation << '\n';
         if(fEnableL1Validation)
-            std::cout << "-> L1Exclusion     : " << fL1ExclusionZone << '\n';
+            std::cout << "-> L1Exclusion   : " << fL1ExclusionZone << '\n';
         std::cout << "-> EnableConver  ? " << std::boolalpha << fEnableConversion << '\n';
         if(fEnableConversion)
         {

@@ -218,19 +218,22 @@ void ActRoot::Cluster::Print() const
     auto [ymin, ymax] = GetYRange();
     auto [zmin, zmax] = GetZRange();
     std::cout << BOLDCYAN << ".... Cluster " << fClusterID << " ...." << '\n';
-    std::cout << "-> N of voxels : " << fVoxels.size() << '\n';
-    std::cout << "-> X range     : [" << xmin << " , " << xmax << "]" << '\n';
-    std::cout << "-> Y range     : [" << ymin << " , " << ymax << "]" << '\n';
-    std::cout << "-> Z range     : [" << zmin << " , " << zmax << "]" << '\n';
-    std::cout << "-> IsBeamLike  ? " << std::boolalpha << fIsBeamLike << '\n';
-    std::cout << "-> IsRecoil    ? " << std::boolalpha << fIsRecoil << '\n';
-    std::cout << "-> IsToMerge   ? " << std::boolalpha << fToMerge << '\n';
-    std::cout << "-> BreakBeam   ? " << std::boolalpha << fIsBreak << '\n';
-    std::cout << "-> SplitRP     ? " << std::boolalpha << fIsSplit << '\n';
-    std::cout << "-> IsToDelete  ? " << std::boolalpha << fToDelete << '\n';
-    std::cout << "-> RegionType  : " << ActRoot::RegionTypeAsStr(fRegion) << '\n';
-    std::cout << "-> HasRP       ? " << std::boolalpha << fHasRP << '\n';
-    std::cout << "-> UseExt      ? " << std::boolalpha << fUseExtVoxels << '\n';
-    std::cout << "-> IsDefault   ? " << std::boolalpha << fIsDefault << '\n';
+    std::cout << "   N of voxels : " << fVoxels.size() << '\n';
+    std::cout << "   X range     : [" << xmin << " , " << xmax << "]" << '\n';
+    std::cout << "   Y range     : [" << ymin << " , " << ymax << "]" << '\n';
+    std::cout << "   Z range     : [" << zmin << " , " << zmax << "]" << '\n';
+    std::cout << "   IsBeamLike  ? " << std::boolalpha << fIsBeamLike << '\n';
+    std::cout << "   IsRecoil    ? " << std::boolalpha << fIsRecoil << '\n';
+    std::cout << "   IsToMerge   ? " << std::boolalpha << fToMerge << '\n';
+    std::cout << "   BreakBeam   ? " << std::boolalpha << fIsBreak << '\n';
+    std::cout << "   SplitRP     ? " << std::boolalpha << fIsSplit << '\n';
+    std::cout << "   IsToDelete  ? " << std::boolalpha << fToDelete << '\n';
+    std::cout << "   RegionType  : " << ActRoot::RegionTypeAsStr(fRegion) << '\n';
+    std::cout << "   HasRP       ? " << std::boolalpha << fHasRP << '\n';
+    std::cout << "   UseExt      ? " << std::boolalpha << fUseExtVoxels << '\n';
+    std::cout << "   IsDefault   ? " << std::boolalpha << fIsDefault << '\n';
+    if(fFlags.size())
+        for(const auto& [flag, val] : fFlags)
+            std::cout << "   " << flag << " ? " << std::boolalpha << val << '\n';
     std::cout << "...................." << RESET << '\n';
 }
