@@ -2,7 +2,7 @@
 ActRoot provides the basic tools for analyzing and simulating ACTAR TPC experiments.
 
 ## Doxygen documentation
-Uncompleted `Doxygen` documentation is available at [here](https://loopset.github.io/ActRootV2/). 
+Uncompleted `Doxygen` documentation is available at [here](https://loopset.github.io/ActRoot/). 
 Major advances are still required to have all the code documented.
 
 ## Installation
@@ -11,7 +11,7 @@ Follow these steps to have ActRoot working on your computer
 1. Clone this repo into your local computer
 
 ```bash
-git clone https://github.com/loopset/ActRootV2.git
+git clone https://github.com/loopset/ActRoot.git
 ```
 2. Create a `build` directory and move into it
 ```bash
