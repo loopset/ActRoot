@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/657695982.svg)](https://doi.org/10.5281/zenodo.18507193)
+
 # ActRoot
 ActRoot provides the basic tools for analyzing and simulating ACTAR TPC experiments.
 

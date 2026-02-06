@@ -38,7 +38,7 @@ void ActSim::CrossSection::Init(int n, const double* x, const double* y)
     {
         for(int i = 0; i < fX.size(); i++)
             fY[i] = fY[i] * TMath::Sin(fX[i] * TMath::DegToRad());
-        fTotalXS = std::accumulate(fY.begin(), fY.end(), 0.0) * fStep * TMath::TwoPi();
+        fTotalXS = std::accumulate(fY.begin(), fY.end(), 0.0) * (fStep * TMath::DegToRad()) * TMath::TwoPi();
     }
     else // For xs in energy is just the sum
         fTotalXS = std::accumulate(fY.begin(), fY.end(), 0.0);
