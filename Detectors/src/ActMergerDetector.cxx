@@ -1075,11 +1075,7 @@ void ActRoot::MergerDetector::ComputeQProfile()
     // QProfile so far only for the Light particle
     if(!fLightPtr)
         return;
-    // 0-> Init histogram
-    TH1F h {"hQProfile", "QProfile", 180, -5, 265};
-    TString units {fEnableConversion ? "mm" : "pad units"};
-    h.SetTitle(Form("QProfile;dist [%s];Q [au]", units.Data()));
-    // 1-> Ref point is either WP or beginning of projection on line
+    // 0-> Ref point is either WP or beginning of projection on line
     XYZPoint ref {};
     XYZPoint ref3D {};
     bool needsOffset {};
@@ -1121,6 +1117,22 @@ void ActRoot::MergerDetector::ComputeQProfile()
     }
     // Safe check: align again using reference point
     line.AlignUsingPoint(ref, true);
+    // 1-> Create adaptative bin size (after scaling the direction) for the charge profile histogram.
+    // This only works for the profiles in mm, but doing it for bin units would not make much sense
+    auto u {fLightPtr->GetLine().GetDirection().Unit()};
+    double ds {fTPCPars->GetPadSide() *
+               std::max({std::abs(u.X()), std::abs(u.Y()),
+                         std::abs(u.Z())})}; // this is the step along the line direction, so we ensure that we dont
+                                             // skip any voxel in the profile avoiding a jumping profile
+    ds = std::max(ds, 0.5 * fTPCPars->GetPadSide()); // Step should not be smaller than half a pad side to avoid too
+    // much fluctuations in the profile
+    double rangeHisto {265.};
+    double safeDistanceHisto {10.};
+    int nBins {std::max(1, int(std::ceil((rangeHisto + safeDistanceHisto) / ds)))}; // nBins depend on the step and TL
+    // 1.1-> Init the histogram
+    TH1F h {"hQProfile", "QProfile", nBins, -safeDistanceHisto, 265 + 5};
+    TString units {fEnableConversion ? "mm" : "pad units"};
+    h.SetTitle(Form("QProfile;dist [%s];Q [au]", units.Data()));
     // Use 3 divisions to get better resolution
     float div {1.f / 3};
     for(const auto& v : fLightPtr->GetVoxels())
