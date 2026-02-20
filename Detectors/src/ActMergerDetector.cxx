@@ -139,7 +139,7 @@ void ActRoot::MergerDetector::ReadConfiguration(std::shared_ptr<InputBlock> bloc
     // Initialize task manager (even if we dont use it at all)
     fTaskMan = std::make_shared<ActAlgorithm::TaskManager>();
     // And add predefined tasks (older DoMerge function)
-    // fTaskMan->AddTask("IsDoable", [this](){return IsDoable(); });
+    AddPredefinedTasks();
 
     // Add user tasks if any
     auto tasks {block->GetTokensWith("Task")};
@@ -174,6 +174,23 @@ void ActRoot::MergerDetector::InitClocks()
 
     for(const auto& _ : fClockLabels)
         fClocks.push_back(TStopwatch {});
+}
+
+void ActRoot::MergerDetector::AddPredefinedTasks()
+{
+    fTaskMan->AddTask("IsDoable", [this]() { return IsDoable(); });
+    fTaskMan->AddTask("DefaultBeamDirection", [this]() { return DefaultBeamDirection(); });
+    fTaskMan->AddTask("LightOrHeavy", [this]() { return LightOrHeavy(); });
+    fTaskMan->AddTask("ValidateL1", [this]() { return ValidateL1(); });
+    fTaskMan->AddTask("ComputeXProfile", [this]() { return ComputeXProfile(); });
+    fTaskMan->AddTask("ComputeSiliconPoint", [this]() { return ComputeSiliconPoint(); });
+    fTaskMan->AddTask("ComputeOtherPoints", [this]() { return ComputeOtherPoints(); });
+    fTaskMan->AddTask("ComputeQave", [this]() { return ComputeQave(); });
+    fTaskMan->AddTask("ComputeQprofile", [this]() { return ComputeQProfile(); });
+    fTaskMan->AddTask("ConvertToPhysicalUnits", [this]() { return ConvertToPhysicalUnits(); });
+    fTaskMan->AddTask("CorrectZOffset", [this]() { return CorrectZOffset(); });
+    fTaskMan->AddTask("MatchSPtoRealPlacement", [this]() { return MatchSPtoRealPlacement(); });
+    fTaskMan->AddTask("ComputeAngles", [this]() { return ComputeAngles(); });
 }
 
 void ActRoot::MergerDetector::ReadCalibrations(std::shared_ptr<InputBlock> block) {}
@@ -275,100 +292,14 @@ void ActRoot::MergerDetector::DoMerge()
         return;
 
     for(auto& task : fTaskMan->GetTasks())
+    {
         auto ok {task()};
-
-    fClocks[0].Start(false);
-    auto isDoable {IsDoable()};
-    fClocks[0].Stop();
-    // Always print Merger configuration
-    if(fIsVerbose)
-        fPars.Print();
-    if(!isDoable)
-    {
-        if(fIsVerbose)
-            std::cout << BOLDRED << "  Event is not doable, skipping" << RESET << '\n';
-        fMergerData->Clear();
-        // INFO: fFlag is written within IsDoable function
-        return;
-    }
-
-    // 1-> Default beam?
-    DefaultBeamDirection();
-
-    // 2-> Identify light and heavy
-    fClocks[1].Start(false);
-    LightOrHeavy();
-    fClocks[1].Stop();
-
-    // 2.1-> Validate L1 for Light
-    if(fEnableL1Validation)
-    {
-        auto isVal {ValidateL1()};
-        if(!isVal)
+        if(!ok)
         {
-            fMergerData->Clear();
-            fMergerData->fFlag = "L1 not val";
             return;
         }
     }
-    // 2.2-> Compute BSP from a X profile
-    if(fEnableQProfile)
-        ComputeXProfile();
-
-    // 3-> Compute SP and BP
-    fClocks[2].Start(false);
-    auto isSPOk {ComputeSiliconPoint()};
-    fClocks[2].Stop();
-    if(!isSPOk)
-    {
-        // this checks whether the SP is fine or not
-        // probably bc the propagation does not occur in
-        // the same sense of motion as defined by Line::fDirection
-        if(fIsVerbose)
-            std::cout << BOLDRED << "MergerDetector::Run(): SP is not OK, skipping event" << RESET << '\n';
-        fMergerData->Clear();
-        fMergerData->fFlag = "SP not ok";
-        return;
-    }
-    ComputeOtherPoints();
-
-    fClocks[6].Start(false);
-    // 3.1-> Qave
-    ComputeQave();
-    // 3.2 -> QProfile that computes BraggPoint
-    if(fEnableQProfile)
-        ComputeQProfile();
-    fClocks[6].Stop();
-
-    // 4-> Scale points to physical dimensions
-    // if conversion is disabled, no further steps can be done!
-    if(!fEnableConversion)
-        return;
-    fClocks[3].Start(false);
-    ConvertToPhysicalUnits();
-    fClocks[3].Stop();
-
-    // 5-> Match or not to silicon real placement
-    if(fEnableMatch)
-    {
-        if(fMatchUseZ)
-            CorrectZOffset();
-        fClocks[4].Start(false);
-        auto isMatch {MatchSPtoRealPlacement()};
-        fClocks[4].Stop();
-        if(!isMatch)
-        {
-            fMergerData->Clear();
-            fMergerData->fFlag = "SP not matched";
-            return;
-        }
-    }
-
-    // 6-> Get angles
-    fClocks[5].Start(false);
-    ComputeAngles();
-    fClocks[5].Stop();
-    // 7-> Everything went fine!
+    // Everything went fine!
     fMergerData->fFlag = "ok";
 }
 
@@ -394,16 +325,32 @@ void ActRoot::MergerDetector::BuildEventData(int run, int entry)
 
 bool ActRoot::MergerDetector::IsDoable()
 {
+    fClocks[0].Start(false);
+    bool isDoable {};
+
     auto condA {GateGATCONFandTrackMult()};
     if(!condA)
-        return condA;
+        isDoable = condA;
     else
     {
         auto condB {GateSilMult()};
         if(!condB)
             fMergerData->fFlag = "not Sil mult";
-        return condB;
+        isDoable = condB;
     }
+    fClocks[0].Stop();
+    // Always print Merger configuration
+    if(fIsVerbose)
+        fPars.Print();
+    if(!isDoable)
+    {
+        if(fIsVerbose)
+            std::cout << BOLDRED << "  Event is not doable, skipping" << RESET << '\n';
+        fMergerData->Clear();
+        // INFO: fFlag is written within IsDoable function
+        return isDoable;
+    }
+    return isDoable;
 }
 
 bool ActRoot::MergerDetector::GateGATCONFandTrackMult()
@@ -567,7 +514,7 @@ void ActRoot::MergerDetector::Reset(const int& run, const int& entry)
     fMergerData->fEntry = entry;
 }
 
-void ActRoot::MergerDetector::DefaultBeamDirection()
+bool ActRoot::MergerDetector::DefaultBeamDirection()
 {
     if(fBeamPtr && fEnableDefaultBeam)
     {
@@ -583,6 +530,7 @@ void ActRoot::MergerDetector::DefaultBeamDirection()
             }
         }
     }
+    return true;
 }
 
 double ActRoot::MergerDetector::GetTheta3D(const XYZVector& beam, const XYZVector& other)
@@ -603,8 +551,10 @@ double ActRoot::MergerDetector::GetPhi3D(const XYZVector& beam, const XYZVector&
     return TMath::ATan2(trackUnitary.Y(), trackUnitary.Z()) * TMath::RadToDeg();
 }
 
-void ActRoot::MergerDetector::LightOrHeavy()
+bool ActRoot::MergerDetector::LightOrHeavy()
 {
+    fClocks[1].Start(false);
+
     // 0-> If calibration, go straigth to unique cluster
     if(fPars.fIsCal)
     {
@@ -613,7 +563,7 @@ void ActRoot::MergerDetector::LightOrHeavy()
         // Sort and align
         fLightPtr->SortAlongDir();
         fLightPtr->GetRefToLine().AlignUsingPoint(fLightPtr->GetRefToVoxels().front().GetPosition(), true);
-        return;
+        return true;
     }
     // If no beam like, just set light ptr
     if(!fBeamPtr)
@@ -629,7 +579,7 @@ void ActRoot::MergerDetector::LightOrHeavy()
             std::cout << "  Setting directly cluster #" << fLightPtr->GetClusterID() << " as light" << RESET << '\n';
             std::cout << "------------------------------" << RESET << '\n';
         }
-        return;
+        return true;
     }
     // Standard binary reaction
     // 1-> Set RP
@@ -684,30 +634,45 @@ void ActRoot::MergerDetector::LightOrHeavy()
     for(auto* ptr : {fLightPtr, fHeavyPtr})
         if(ptr)
             ptr->SortAlongDir();
+
+    fClocks[1].Stop();
+    return true;
 }
 
 bool ActRoot::MergerDetector::ValidateL1()
 {
-    if(!fLightPtr || !fPars.fIsL1)
+    if(fEnableL1Validation)
+    {
+        if(!fLightPtr || !fPars.fIsL1)
+            return true;
+        // Apply a cut on the last position of the Light particle so we ensure
+        // it stays within a safety region far from the TPC boundaries
+        auto back {fLightPtr->GetVoxels().back().GetPosition()};
+        auto x {(fL1ExclusionZone < back.X()) && (back.X() < (fTPCPars->GetNPADSX() - fL1ExclusionZone))};
+        auto y {(fL1ExclusionZone < back.Y()) && (back.Y() < (fTPCPars->GetNPADSY() - fL1ExclusionZone))};
+        auto z {(fL1ExclusionZone < back.Z()) && (back.Z() < (fTPCPars->GetNPADSZ() - fL1ExclusionZone))};
+        // Return value
+        bool isVal {};
+        if(x && y && z)
+        {
+            isVal = true;
+            fPars.fL1Val = true;
+        }
+        if(fIsVerbose)
+        {
+            std::cout << BOLDGREEN << "MergerDetector::ValidateL1(): " << std::boolalpha << isVal << RESET << '\n';
+        }
+        if(!isVal)
+        {
+            fMergerData->Clear();
+            fMergerData->fFlag = "L1 not val";
+            return false;
+        }
+        else
+            return true;
+    }
+    else
         return true;
-    // Apply a cut on the last position of the Light particle so we ensure
-    // it stays within a safety region far from the TPC boundaries
-    auto back {fLightPtr->GetVoxels().back().GetPosition()};
-    auto x {(fL1ExclusionZone < back.X()) && (back.X() < (fTPCPars->GetNPADSX() - fL1ExclusionZone))};
-    auto y {(fL1ExclusionZone < back.Y()) && (back.Y() < (fTPCPars->GetNPADSY() - fL1ExclusionZone))};
-    auto z {(fL1ExclusionZone < back.Z()) && (back.Z() < (fTPCPars->GetNPADSZ() - fL1ExclusionZone))};
-    // Return value
-    bool isVal {};
-    if(x && y && z)
-    {
-        isVal = true;
-        fPars.fL1Val = true;
-    }
-    if(fIsVerbose)
-    {
-        std::cout << BOLDGREEN << "MergerDetector::ValidateL1(): " << std::boolalpha << isVal << RESET << '\n';
-    }
-    return isVal;
 }
 
 double ActRoot::MergerDetector::TrackLengthFromLightIt(bool scale, bool isLight)
@@ -749,6 +714,8 @@ double ActRoot::MergerDetector::TrackLengthFromLightIt(bool scale, bool isLight)
 
 bool ActRoot::MergerDetector::ComputeSiliconPoint()
 {
+    fClocks[2].Start(false);
+
     bool isPropOk {}; // Validate SP for light particle. For heavy for the moment we dont care
     // Classify event layers into L or H
     // INFO: 26/07/2025: disable Both decaying to Heavy in L1 trigger
@@ -781,7 +748,6 @@ bool ActRoot::MergerDetector::ComputeSiliconPoint()
     // Legacy
     fMergerData->fSP = fMergerData->fLight.fSP;
 
-
     ///////////////////// Track length
     // Legacy:
     if(fPars.fUseRP)
@@ -798,11 +764,24 @@ bool ActRoot::MergerDetector::ComputeSiliconPoint()
         else
             bin->fTL = TrackLengthFromLightIt(false, (idx == 0));
     }
-    // Return boolean of light particle only IF NOT L1
+    // Return true if is L1 and boolean IF NOT L1
     if(fPars.fIsL1)
         return true;
+
+    fClocks[2].Stop();
+    if(!isPropOk)
+    {
+        // this checks whether the SP is fine or not
+        // probably bc the propagation does not occur in
+        // the same sense of motion as defined by Line::fDirection
+        if(fIsVerbose)
+            std::cout << BOLDRED << "MergerDetector::Run(): SP is not OK, skipping event" << RESET << '\n';
+        fMergerData->Clear();
+        fMergerData->fFlag = "SP not ok";
+        return false;
+    }
     else
-        return isPropOk;
+        return true;
 }
 
 bool ActRoot::MergerDetector::SolveSilMultiplicity(const std::string& layer, bool isLight, bool isFirstLayer,
@@ -891,51 +870,71 @@ void ActRoot::MergerDetector::MoveZ(XYZPoint& p)
     p.SetZ(p.Z() + fZOffset);
 }
 
-void ActRoot::MergerDetector::CorrectZOffset()
+bool ActRoot::MergerDetector::CorrectZOffset()
 {
-    // Basically for all points
-    // 1-> RP
-    MoveZ(fMergerData->fRP);
-    // 2-> LEGACY: SP
-    MoveZ(fMergerData->fSP);
-    // 3-> For all pointers
-    for(auto& ptr : {fBeamPtr, fLightPtr, fHeavyPtr})
+    if(fEnableMatch && fMatchUseZ)
     {
-        if(!ptr)
-            continue;
-        auto p {ptr->GetLine().GetPoint()};
-        MoveZ(p);
-        ptr->GetRefToLine().SetPoint(p);
+        // Basically for all points
+        // 1-> RP
+        MoveZ(fMergerData->fRP);
+        // 2-> LEGACY: SP
+        MoveZ(fMergerData->fSP);
+        // 3-> For all pointers
+        for(auto& ptr : {fBeamPtr, fLightPtr, fHeavyPtr})
+        {
+            if(!ptr)
+                continue;
+            auto p {ptr->GetLine().GetPoint()};
+            MoveZ(p);
+            ptr->GetRefToLine().SetPoint(p);
+        }
+        // UPDATED: for bin data
+        for(auto* data : {&fMergerData->fLight, &fMergerData->fHeavy})
+            MoveZ(data->fSP);
     }
-    // UPDATED: for bin data
-    for(auto* data : {&fMergerData->fLight, &fMergerData->fHeavy})
-        MoveZ(data->fSP);
+    return true;
 }
 
 bool ActRoot::MergerDetector::MatchSPtoRealPlacement()
 {
-    // UPDATED: as we usually employ only the Light particle in the missing mass technique
-    // this constraint is only imposed to it. In the future could be extended to Heavy also
-    if(!fMergerData->fLight.HasSP()) // only if SP is present
-        return true;
-    // Use only first value in std::vector<int> of Ns
-    auto n {fMergerData->fLight.fNs.front()};
-    auto layer {fMergerData->fLight.fLayers.front()};
-    // And check!
-    auto ret {fSilSpecs->GetLayer(layer).MatchesRealPlacement(n, fMergerData->fLight.fSP, fMatchUseZ)};
-    if(!ret && fIsVerbose)
+    fClocks[4].Start(false);
+    if(fEnableMatch)
     {
-        std::cout << BOLDCYAN << "---- Merger MatchSP ----" << '\n';
-        std::cout << "  Layer : " << layer << '\n';
-        std::cout << "  Pad   : " << n << '\n';
-        std::cout << "  SP    : " << fMergerData->fLight.fSP << '\n';
-        std::cout << "  does not match real placement at" << '\n';
-        auto xy {fSilSpecs->GetLayer(layer).GetPlacements().at(n).first};
-        auto w {fSilSpecs->GetLayer(layer).GetUnit().GetWidth()};
-        std::cout << "  XY    : [" << xy - w / 2 << ", " << xy + w / 2 << "]" << '\n';
-        std::cout << "------------------------------" << RESET << '\n';
+        // UPDATED: as we usually employ only the Light particle in the missing mass technique
+        // this constraint is only imposed to it. In the future could be extended to Heavy also
+        if(!fMergerData->fLight.HasSP()) // only if SP is present
+            return true;
+        // Use only first value in std::vector<int> of Ns
+        auto n {fMergerData->fLight.fNs.front()};
+        auto layer {fMergerData->fLight.fLayers.front()};
+        // And check!
+        auto isMatch {fSilSpecs->GetLayer(layer).MatchesRealPlacement(n, fMergerData->fLight.fSP, fMatchUseZ)};
+        if(!isMatch && fIsVerbose)
+        {
+            std::cout << BOLDCYAN << "---- Merger MatchSP ----" << '\n';
+            std::cout << "  Layer : " << layer << '\n';
+            std::cout << "  Pad   : " << n << '\n';
+            std::cout << "  SP    : " << fMergerData->fLight.fSP << '\n';
+            std::cout << "  does not match real placement at" << '\n';
+            auto xy {fSilSpecs->GetLayer(layer).GetPlacements().at(n).first};
+            auto w {fSilSpecs->GetLayer(layer).GetUnit().GetWidth()};
+            std::cout << "  XY    : [" << xy - w / 2 << ", " << xy + w / 2 << "]" << '\n';
+            std::cout << "------------------------------" << RESET << '\n';
+        }
+        fClocks[4].Stop();
+        if(!isMatch)
+        {
+            fMergerData->Clear();
+            fMergerData->fFlag = "SP not matched";
+            return false;
+        }
+        return isMatch;
     }
-    return ret;
+    else
+    {
+        fClocks[4].Stop();
+        return true;
+    }
 }
 
 ActRoot::MergerDetector::XYZVector ActRoot::MergerDetector::RotateTrack(XYZVector beam, XYZVector track)
@@ -961,8 +960,13 @@ void ActRoot::MergerDetector::ScalePoint(XYZPoint& point, float xy, float z, boo
     point.SetZ(point.Z() * z);
 }
 
-void ActRoot::MergerDetector::ConvertToPhysicalUnits()
+bool ActRoot::MergerDetector::ConvertToPhysicalUnits()
 {
+    if(!fEnableConversion)
+        return false;
+
+    fClocks[3].Start(false);
+
     // Convert points
     auto xy {fTPCPars->GetPadSide()};
     if(fPars.fUseRP)
@@ -1006,10 +1010,14 @@ void ActRoot::MergerDetector::ConvertToPhysicalUnits()
         else
             data->fTL = TrackLengthFromLightIt(true, idx == 0);
     }
+
+    fClocks[3].Stop();
+    return true;
 }
 
-void ActRoot::MergerDetector::ComputeAngles()
+bool ActRoot::MergerDetector::ComputeAngles()
 {
+    fClocks[5].Start(false);
     XYZVector beamDir {};
     if(fBeamPtr)
         beamDir = fBeamPtr->GetLine().GetDirection().Unit();
@@ -1036,9 +1044,11 @@ void ActRoot::MergerDetector::ComputeAngles()
         fMergerData->fThetaHeavy = GetTheta3D(beamDir, fHeavyPtr->GetLine().GetDirection());
         fMergerData->fPhiHeavy = GetPhi3D(beamDir, fHeavyPtr->GetLine().GetDirection());
     }
+    fClocks[5].Stop();
+    return true;
 }
 
-void ActRoot::MergerDetector::ComputeOtherPoints()
+bool ActRoot::MergerDetector::ComputeOtherPoints()
 {
     // Boundary point: light track at ACTAR's flanges
     // Only if it reaches Sil, otherwise might be L1 and makes no point to compute a boundary point
@@ -1053,10 +1063,14 @@ void ActRoot::MergerDetector::ComputeOtherPoints()
         fMergerData->fWP = fBeamPtr->GetLine().MoveToX(0);
     if((fPars.fIsCal || fTPCData->fClusters.size() == 1) && fLightPtr != nullptr)
         fMergerData->fWP = fLightPtr->GetLine().MoveToX(0);
+
+    return true;
 }
 
-void ActRoot::MergerDetector::ComputeQave()
+bool ActRoot::MergerDetector::ComputeQave()
 {
+    fClocks[6].Start(false); // Start now -> End in QProfile function
+
     // Do this for both particles
     int idx {-1};
     // idx = 0 -> Light; idx = 1 -> Heavy
@@ -1102,169 +1116,187 @@ void ActRoot::MergerDetector::ComputeQave()
             fMergerData->fHeavy.fQtotal = qTotal;
         }
     }
+    return true;
 }
 
-void ActRoot::MergerDetector::ComputeQProfile()
+bool ActRoot::MergerDetector::ComputeQProfile()
 {
-    // QProfile so far only for the Light particle
-    if(!fLightPtr)
-        return;
-    // 0-> Ref point is either WP or beginning of projection on line
-    XYZPoint ref {};
-    XYZPoint ref3D {};
-    bool needsOffset {};
-    if(fPars.fUseRP && fMergerData->fRP.X() != -1)
-        ref = fMergerData->fRP;
-    else if(!fPars.fUseRP && fMergerData->fWP.X() != -1)
-        ref = fMergerData->fWP;
-    else // default case: go to beginning of light track
+    if(fEnableQProfile)
     {
-        // std::sort(fLightPtr->GetRefToVoxels().begin(), fLightPtr->GetRefToVoxels().end());
-        auto front {fLightPtr->GetVoxels().front().GetPosition()};
-        ref = fLightPtr->GetLine().ProjectionPointOnLine(front);
-        needsOffset = true;
-    }
-    // All clusters should be already sorted in LightOrHeavy func
-    // // Sort voxels from ref to end of cluster
-    // fLightPtr->SortAlongDir();
-    // Declare line to use, bc it depends on 3D or 2D mode
-    ActRoot::Line line {fLightPtr->GetLine()};
-    // Save in 3D before setting 2D (if so)
-    ref3D = ref;
-    if(f2DProfile)
-    {
-        // Set Z components to be 0
-        ref.SetZ(0);
-        auto p {line.GetPoint()};
-        p.SetZ(0);
-        auto dir {line.GetDirection()};
-        dir.SetZ(0);
-        dir = dir.Unit();
-        line.SetDirection(dir);
-        line.SetPoint(p);
-    }
-    // Convert it to physical units
-    if(fEnableConversion)
-    {
-        ScalePoint(ref, fTPCPars->GetPadSide(), fDriftFactor, needsOffset);
-        line.Scale(fTPCPars->GetPadSide(), fDriftFactor);
-    }
-    // Safe check: align again using reference point
-    line.AlignUsingPoint(ref, true);
-    // 1-> Create adaptative bin size (after scaling the direction) for the charge profile histogram.
-    // This only works for the profiles in mm, but doing it for bin units would not make much sense
-    auto u {fLightPtr->GetLine().GetDirection().Unit()};
-    double ds {fTPCPars->GetPadSide() *
-               std::max({std::abs(u.X()), std::abs(u.Y()),
-                         std::abs(u.Z())})}; // this is the step along the line direction, so we ensure that we dont
-                                             // skip any voxel in the profile avoiding a jumping profile
-    ds = std::max(ds, 0.5 * fTPCPars->GetPadSide()); // Step should not be smaller than half a pad side to avoid too
-    // much fluctuations in the profile
-    double rangeHisto {265.};
-    double safeDistanceHisto {10.};
-    int nBins {std::max(1, int(std::ceil((rangeHisto + safeDistanceHisto) / ds)))}; // nBins depend on the step and TL
-    // 1.1-> Init the histogram
-    TH1F h {"hQProfile", "QProfile", nBins, -safeDistanceHisto, 265 + 5};
-    TString units {fEnableConversion ? "mm" : "pad units"};
-    h.SetTitle(Form("QProfile;dist [%s];Q [au]", units.Data()));
-    // Use 3 divisions to get better resolution
-    float div {1.f / 3};
-    for(const auto& v : fLightPtr->GetVoxels())
-    {
-        const auto& pos {v.GetPosition()};
-        auto q {v.GetCharge()};
-        // Run for 3 divisions
-        for(int ix = -1; ix < 2; ix++)
+        // QProfile so far only for the Light particle
+        if(!fLightPtr)
+            return true;
+        // 0-> Ref point is either WP or beginning of projection on line
+        XYZPoint ref {};
+        XYZPoint ref3D {};
+        bool needsOffset {};
+        if(fPars.fUseRP && fMergerData->fRP.X() != -1)
+            ref = fMergerData->fRP;
+        else if(!fPars.fUseRP && fMergerData->fWP.X() != -1)
+            ref = fMergerData->fWP;
+        else // default case: go to beginning of light track
         {
-            for(int iy = -1; iy < 2; iy++)
+            // std::sort(fLightPtr->GetRefToVoxels().begin(), fLightPtr->GetRefToVoxels().end());
+            auto front {fLightPtr->GetVoxels().front().GetPosition()};
+            ref = fLightPtr->GetLine().ProjectionPointOnLine(front);
+            needsOffset = true;
+        }
+        // All clusters should be already sorted in LightOrHeavy func
+        // // Sort voxels from ref to end of cluster
+        // fLightPtr->SortAlongDir();
+        // Declare line to use, bc it depends on 3D or 2D mode
+        ActRoot::Line line {fLightPtr->GetLine()};
+        // Save in 3D before setting 2D (if so)
+        ref3D = ref;
+        if(f2DProfile)
+        {
+            // Set Z components to be 0
+            ref.SetZ(0);
+            auto p {line.GetPoint()};
+            p.SetZ(0);
+            auto dir {line.GetDirection()};
+            dir.SetZ(0);
+            dir = dir.Unit();
+            line.SetDirection(dir);
+            line.SetPoint(p);
+        }
+        // Convert it to physical units
+        if(fEnableConversion)
+        {
+            ScalePoint(ref, fTPCPars->GetPadSide(), fDriftFactor, needsOffset);
+            line.Scale(fTPCPars->GetPadSide(), fDriftFactor);
+        }
+        // Safe check: align again using reference point
+        line.AlignUsingPoint(ref, true);
+        // 1-> Create adaptative bin size (after scaling the direction) for the charge profile histogram.
+        // This only works for the profiles in mm, but doing it for bin units would not make much sense
+        auto u {fLightPtr->GetLine().GetDirection().Unit()};
+        double ds {fTPCPars->GetPadSide() *
+                   std::max({std::abs(u.X()), std::abs(u.Y()),
+                             std::abs(u.Z())})}; // this is the step along the line direction, so we ensure that we dont
+                                                 // skip any voxel in the profile avoiding a jumping profile
+        ds = std::max(ds, 0.5 * fTPCPars->GetPadSide()); // Step should not be smaller than half a pad side to avoid too
+        // much fluctuations in the profile
+        double rangeHisto {265.};
+        double safeDistanceHisto {10.};
+        int nBins {
+            std::max(1, int(std::ceil((rangeHisto + safeDistanceHisto) / ds)))}; // nBins depend on the step and TL
+        // 1.1-> Init the histogram
+        TH1F h {"hQProfile", "QProfile", nBins, -safeDistanceHisto, 265 + 5};
+        TString units {fEnableConversion ? "mm" : "pad units"};
+        h.SetTitle(Form("QProfile;dist [%s];Q [au]", units.Data()));
+        // Use 3 divisions to get better resolution
+        float div {1.f / 3};
+        for(const auto& v : fLightPtr->GetVoxels())
+        {
+            const auto& pos {v.GetPosition()};
+            auto q {v.GetCharge()};
+            // Run for 3 divisions
+            for(int ix = -1; ix < 2; ix++)
             {
-                for(int iz = -1; iz < 2; iz++)
+                for(int iy = -1; iy < 2; iy++)
                 {
-                    XYZPoint bin {(pos.X() + 0.5f) + ix * div, (pos.Y() + 0.5f) + iy * div,
-                                  (f2DProfile) ? 0.f : (pos.Z() + 0.5f) + iz * div};
-                    // Convert to physical units
-                    if(fEnableConversion)
-                        ScalePoint(bin, fTPCPars->GetPadSide(), fDriftFactor,
-                                   false); // false bc +0.5 already considered
-                    // Project it on line
-                    auto proj {line.ProjectionPointOnLine(bin)};
-                    // Fill histograms
-                    auto dist {(proj - ref).R()};
-                    h.Fill(dist, q / ((f2DProfile) ? 9 : 27));
-                    if(f2DProfile)
-                        break;
+                    for(int iz = -1; iz < 2; iz++)
+                    {
+                        XYZPoint bin {(pos.X() + 0.5f) + ix * div, (pos.Y() + 0.5f) + iy * div,
+                                      (f2DProfile) ? 0.f : (pos.Z() + 0.5f) + iz * div};
+                        // Convert to physical units
+                        if(fEnableConversion)
+                            ScalePoint(bin, fTPCPars->GetPadSide(), fDriftFactor,
+                                       false); // false bc +0.5 already considered
+                        // Project it on line
+                        auto proj {line.ProjectionPointOnLine(bin)};
+                        // Fill histograms
+                        auto dist {(proj - ref).R()};
+                        h.Fill(dist, q / ((f2DProfile) ? 9 : 27));
+                        if(f2DProfile)
+                            break;
+                    }
                 }
             }
         }
-    }
-    fMergerData->fQProf = h;
-    // Compute range from profile
-    auto range {GetRangeFromProfile(&h)};
-    // And move to point
-    fMergerData->fBraggP = ref + range * line.GetDirection().Unit();
-    if(fIsVerbose)
-    {
-        std::cout << BOLDGREEN << "MergerDetector::ComputeQProfile()" << '\n';
-        std::cout << "  Range   : " << range << '\n';
-        std::cout << "  BraggP  : " << fMergerData->fBraggP << RESET << '\n';
-    }
-    if(f2DProfile)
-    {
-        // Get the Z value manually
-        // auto p3d {ref3D + distMax * fLightPtr->GetLine().GetDirection().Unit()};
-        // Simpliest way of doing this!
-        auto line3D {fLightPtr->GetLine()};
-        // Move to X position of the BP
-        auto BP {line.MoveToX(fMergerData->fBraggP.X())};
-        // St the Z value from the line to the BP
-        fMergerData->fBraggP.SetZ(BP.Z());
-        // This method works! It can be checked that
-        // manually computing the mean if Z values in the (X,Y) region
-        // just calculated returns the ~ same Z value!!!
+        fMergerData->fQProf = h;
+        // Compute range from profile
+        auto range {GetRangeFromProfile(&h)};
+        // And move to point
+        fMergerData->fBraggP = ref + range * line.GetDirection().Unit();
+        if(fIsVerbose)
+        {
+            std::cout << BOLDGREEN << "MergerDetector::ComputeQProfile()" << '\n';
+            std::cout << "  Range   : " << range << '\n';
+            std::cout << "  BraggP  : " << fMergerData->fBraggP << RESET << '\n';
+        }
+        if(f2DProfile)
+        {
+            // Get the Z value manually
+            // auto p3d {ref3D + distMax * fLightPtr->GetLine().GetDirection().Unit()};
+            // Simpliest way of doing this!
+            auto line3D {fLightPtr->GetLine()};
+            // Move to X position of the BP
+            auto BP {line.MoveToX(fMergerData->fBraggP.X())};
+            // St the Z value from the line to the BP
+            fMergerData->fBraggP.SetZ(BP.Z());
+            // This method works! It can be checked that
+            // manually computing the mean if Z values in the (X,Y) region
+            // just calculated returns the ~ same Z value!!!
 
-        // std::vector<double> zetas;
-        // auto x {fMergerData->fBraggP.X()};
-        // auto y {fMergerData->fBraggP.Y()};
-        // for(auto& v : fLightPtr->GetVoxels())
-        // {
-        //     const auto& pos {v.GetPosition()};
-        //     double shift {2};
-        //     if(std::abs(pos.X() - x) <= shift && std::abs(pos.Y() - y) <= shift)
-        //         zetas.push_back(pos.Z() + 0.5);
-        // }
-        // // Get Z mean
-        // fMergerData->fBraggP.SetZ(TMath::Mean(zetas.begin(), zetas.end()));
+            // std::vector<double> zetas;
+            // auto x {fMergerData->fBraggP.X()};
+            // auto y {fMergerData->fBraggP.Y()};
+            // for(auto& v : fLightPtr->GetVoxels())
+            // {
+            //     const auto& pos {v.GetPosition()};
+            //     double shift {2};
+            //     if(std::abs(pos.X() - x) <= shift && std::abs(pos.Y() - y) <= shift)
+            //         zetas.push_back(pos.Z() + 0.5);
+            // }
+            // // Get Z mean
+            // fMergerData->fBraggP.SetZ(TMath::Mean(zetas.begin(), zetas.end()));
+        }
+        fClocks[6].Stop();
+        return true;
+    }
+    else
+    {
+        fClocks[6].Stop();
+        return true;
     }
 }
 
-void ActRoot::MergerDetector::ComputeXProfile()
+bool ActRoot::MergerDetector::ComputeXProfile()
 {
-    // Set points to project according to mode
-    bool isOkReaction {fBeamPtr != nullptr && !fPars.fIsCal};
-    bool isOkOther {(fPars.fIsCal || fPars.fIsL1) && fLightPtr != nullptr};
-    if(isOkReaction || isOkOther)
+    if(fEnableQProfile)
     {
-        TH1F hQprojX {"hQProjX", "All Q along X;X [pad];Q_{proj X}", 128, 0, 128};
-        std::vector<ActRoot::Cluster*> ptrs {fBeamPtr, fLightPtr, fHeavyPtr};
-        // Workaround: we analyze all the tracks in the event to find the BSP or compute the X profile
-        // if(isOkReaction)
-        //     ptrs = {fBeamPtr, fLightPtr, fHeavyPtr};
-        // if(isOkOther)
-        //     ptrs = {fLightPtr};
-        // Run for the set points!
-        for(auto& ptr : ptrs)
+        // Set points to project according to mode
+        bool isOkReaction {fBeamPtr != nullptr && !fPars.fIsCal};
+        bool isOkOther {(fPars.fIsCal || fPars.fIsL1) && fLightPtr != nullptr};
+        if(isOkReaction || isOkOther)
         {
-            if(!ptr)
-                continue;
-            for(const auto& v : ptr->GetVoxels())
-                hQprojX.Fill(v.GetPosition().X(), v.GetCharge());
+            TH1F hQprojX {"hQProjX", "All Q along X;X [pad];Q_{proj X}", 128, 0, 128};
+            std::vector<ActRoot::Cluster*> ptrs {fBeamPtr, fLightPtr, fHeavyPtr};
+            // Workaround: we analyze all the tracks in the event to find the BSP or compute the X profile
+            // if(isOkReaction)
+            //     ptrs = {fBeamPtr, fLightPtr, fHeavyPtr};
+            // if(isOkOther)
+            //     ptrs = {fLightPtr};
+            // Run for the set points!
+            for(auto& ptr : ptrs)
+            {
+                if(!ptr)
+                    continue;
+                for(const auto& v : ptr->GetVoxels())
+                    hQprojX.Fill(v.GetPosition().X(), v.GetCharge());
+            }
+            // Compute x max from profile
+            auto xMax {GetRangeFromProfile(&hQprojX, false)}; // dont smooth
+            fMergerData->fBSP = {(float)xMax, 0, 0};
+            // Save in MergerData
+            fMergerData->fQprojX = hQprojX;
         }
-        // Compute x max from profile
-        auto xMax {GetRangeFromProfile(&hQprojX, false)}; // dont smooth
-        fMergerData->fBSP = {(float)xMax, 0, 0};
-        // Save in MergerData
-        fMergerData->fQprojX = hQprojX;
+        return true;
     }
+    else
+        return true;
 }
 
 double ActRoot::MergerDetector::GetRangeFromProfile(TH1F* h, bool smooth)

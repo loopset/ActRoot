@@ -194,23 +194,24 @@ private:
     void InitClocks();
     void ReadSilSpecs(const std::string& file);
     void DoMerge();
+    void AddPredefinedTasks();
     // Inner functions of Merger detector
     bool IsDoable();
-    void ConvertToPhysicalUnits();
+    bool ConvertToPhysicalUnits();
     bool GateGATCONFandTrackMult();
     bool GateSilMult();
-    void LightOrHeavy();
+    bool LightOrHeavy();
     bool ValidateL1();
-    void ComputeOtherPoints();
+    bool ComputeOtherPoints();
     bool ComputeSiliconPoint();
     bool SolveSilMultiplicity(const std::string& layer, bool isLight, bool isFirstLayer, bool allLayersAreBOTH);
     double TrackLengthFromLightIt(bool scale, bool isLight);
-    void CorrectZOffset();
+    bool CorrectZOffset();
     bool MatchSPtoRealPlacement();
-    void ComputeAngles();
-    void ComputeQave();
-    void ComputeQProfile();
-    void ComputeXProfile();
+    bool ComputeAngles();
+    bool ComputeQave();
+    bool ComputeQProfile();
+    bool ComputeXProfile();
     void Reset(const int& run, const int& entry);
     //// Even inner functions
     void MoveZ(XYZPoint& p);
@@ -224,7 +225,7 @@ private:
         return std::find(vec.begin(), vec.end(), val) != vec.end();
     }
     double GetRangeFromProfile(TH1F* h, bool smooth = true);
-    void DefaultBeamDirection();
+    bool DefaultBeamDirection();
 };
 } // namespace ActRoot
 
