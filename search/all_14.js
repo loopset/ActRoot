@@ -10,6 +10,7 @@ var searchData=
   ['vfilter_7',['vfilter',['../classActAlgorithm_1_1VFilter.html',1,'ActAlgorithm::VFilter'],['../classActAlgorithm_1_1VFilter.html#a41e5915ec5daa3dc74a2bfe0bc8d1f05',1,'ActAlgorithm::VFilter::VFilter()']]],
   ['voxel_8',['voxel',['../classActRoot_1_1Voxel.html',1,'ActRoot::Voxel'],['../classActRoot_1_1Voxel.html#a8d13a75dd95a1e43a933c4a43636fa75',1,'ActRoot::Voxel::Voxel()=default'],['../classActRoot_1_1Voxel.html#a2c98b3798619548117d1812682236fc0',1,'ActRoot::Voxel::Voxel(const XYZPointF &amp;pos, float charge, bool hasSaturation=false)']]],
   ['vparameters_9',['VParameters',['../classActRoot_1_1VParameters.html',1,'ActRoot']]],
-  ['vxscattering_10',['vXScattering',['../classActSim_1_1TheoCrossSection.html#ad382b3e5b1681936a859c5b3f4e8d566',1,'ActSim::TheoCrossSection']]],
-  ['vyscattering_11',['vYScattering',['../classActSim_1_1TheoCrossSection.html#ae6d118bdf17a7ef8592387b5358d74dc',1,'ActSim::TheoCrossSection']]]
+  ['vtask_10',['vtask',['../classActAlgorithm_1_1VTask.html',1,'ActAlgorithm::VTask'],['../classActAlgorithm_1_1VTask.html#aea784bb97f7fe931fa383ea8d5fdef52',1,'ActAlgorithm::VTask::VTask()']]],
+  ['vxscattering_11',['vXScattering',['../classActSim_1_1TheoCrossSection.html#ad382b3e5b1681936a859c5b3f4e8d566',1,'ActSim::TheoCrossSection']]],
+  ['vyscattering_12',['vYScattering',['../classActSim_1_1TheoCrossSection.html#ae6d118bdf17a7ef8592387b5358d74dc',1,'ActSim::TheoCrossSection']]]
 ];

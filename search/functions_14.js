@@ -7,5 +7,6 @@ var searchData=
   ['vdata_4',['VData',['../classActRoot_1_1VData.html#af9e86fb142efc859f402ef9a10ab8b30',1,'ActRoot::VData']]],
   ['vdetector_5',['VDetector',['../classActRoot_1_1VDetector.html#a7f90fa1f9c6769b51ae6ddfe4ec03e37',1,'ActRoot::VDetector']]],
   ['vfilter_6',['VFilter',['../classActAlgorithm_1_1VFilter.html#a41e5915ec5daa3dc74a2bfe0bc8d1f05',1,'ActAlgorithm::VFilter']]],
-  ['voxel_7',['voxel',['../classActRoot_1_1Voxel.html#a8d13a75dd95a1e43a933c4a43636fa75',1,'ActRoot::Voxel::Voxel()=default'],['../classActRoot_1_1Voxel.html#a2c98b3798619548117d1812682236fc0',1,'ActRoot::Voxel::Voxel(const XYZPointF &amp;pos, float charge, bool hasSaturation=false)']]]
+  ['voxel_7',['voxel',['../classActRoot_1_1Voxel.html#a8d13a75dd95a1e43a933c4a43636fa75',1,'ActRoot::Voxel::Voxel()=default'],['../classActRoot_1_1Voxel.html#a2c98b3798619548117d1812682236fc0',1,'ActRoot::Voxel::Voxel(const XYZPointF &amp;pos, float charge, bool hasSaturation=false)']]],
+  ['vtask_8',['VTask',['../classActAlgorithm_1_1VTask.html#aea784bb97f7fe931fa383ea8d5fdef52',1,'ActAlgorithm::VTask']]]
 ];

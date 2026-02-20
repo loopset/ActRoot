@@ -6,5 +6,6 @@ var searchData=
   ['vdetector_3',['VDetector',['../classActRoot_1_1VDetector.html',1,'ActRoot']]],
   ['vfilter_4',['VFilter',['../classActAlgorithm_1_1VFilter.html',1,'ActAlgorithm']]],
   ['voxel_5',['Voxel',['../classActRoot_1_1Voxel.html',1,'ActRoot']]],
-  ['vparameters_6',['VParameters',['../classActRoot_1_1VParameters.html',1,'ActRoot']]]
+  ['vparameters_6',['VParameters',['../classActRoot_1_1VParameters.html',1,'ActRoot']]],
+  ['vtask_7',['VTask',['../classActAlgorithm_1_1VTask.html',1,'ActAlgorithm']]]
 ];
