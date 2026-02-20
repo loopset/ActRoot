@@ -46,6 +46,7 @@ public:
     std::vector<double> GetDoubleVector(const std::string& token);
     std::unordered_map<std::string, std::vector<std::string>> GetAllReadValues() const { return fValues; }
     std::vector<std::string> GetTokens() const { return fTokens; }
+    std::vector<std::string> GetTokensWith(const std::string& str) const;
     template <typename T> // template funcs should only be defined in header files
     std::map<int, T> GetMappedValuesAs(const std::string& command)
     {

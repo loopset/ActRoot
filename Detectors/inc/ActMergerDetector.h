@@ -9,6 +9,7 @@
 #include "ActSilData.h"
 #include "ActSilSpecs.h"
 #include "ActTPCData.h"
+#include "ActTaskManager.h"
 #include "ActVData.h"
 #include "ActVDetector.h"
 #include "ActVFilter.h"
@@ -59,6 +60,9 @@ private:
     // Flags to delete news in destructor
     bool fDelTPCSilMod {};
     bool fDelMerger {};
+
+    // Task manager
+    std::shared_ptr<ActAlgorithm::TaskManager> fTaskMan {};
 
     // Filter = corrector
     std::shared_ptr<ActAlgorithm::VFilter> fFilter {};

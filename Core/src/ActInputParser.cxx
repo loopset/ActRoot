@@ -4,10 +4,12 @@
 
 #include "TString.h"
 
+#include <algorithm>
 #include <cstddef>
 #include <exception>
 #include <fstream>
 #include <iostream>
+#include <iterator>
 #include <memory>
 #include <sstream>
 #include <stdexcept>
@@ -218,6 +220,14 @@ std::vector<int> ActRoot::InputBlock::ExpandInt(int begin, int end)
     std::vector<int> ret;
     for(int i = begin + 1; i <= end; i++)
         ret.push_back(i);
+    return ret;
+}
+
+std::vector<std::string> ActRoot::InputBlock::GetTokensWith(const std::string& str) const
+{
+    std::vector<std::string> ret;
+    std::copy_if(fTokens.begin(), fTokens.end(), std::back_inserter(ret),
+                 [&](const std::string& s) { return s.find(str) != std::string::npos; });
     return ret;
 }
 

@@ -13,6 +13,7 @@
 #include "ActSilSpecs.h"
 #include "ActTPCData.h"
 #include "ActTPCDetector.h"
+#include "ActTaskManager.h"
 #include "ActTypes.h"
 #include "ActVoxel.h"
 
@@ -134,6 +135,23 @@ void ActRoot::MergerDetector::ReadConfiguration(std::shared_ptr<InputBlock> bloc
     // Reduce error printout in case of fEnableRootFind
     if(fEnableRootFind)
         gErrorIgnoreLevel = kFatal;
+
+    // Initialize task manager (even if we dont use it at all)
+    fTaskMan = std::make_shared<ActAlgorithm::TaskManager>();
+    // And add predefined tasks (older DoMerge function)
+    // fTaskMan->AddTask("IsDoable", [this](){return IsDoable(); });
+
+    // Add user tasks if any
+    auto tasks {block->GetTokensWith("Task")};
+    for(const auto& task : tasks)
+    {
+        auto settings {block->GetStringVector(task)};
+        auto path {settings.at(0)};
+        auto name {settings.at(1)};
+        auto at {settings.size() == 3 ? settings[2] : ""};
+        fTaskMan->AddTask(path, name, at);
+    }
+    fTaskMan->Print();
 }
 
 void ActRoot::MergerDetector::InitCorrector()
@@ -255,6 +273,10 @@ void ActRoot::MergerDetector::DoMerge()
     // Check if is enabled
     if(!fIsEnabled)
         return;
+
+    for(auto& task : fTaskMan->GetTasks())
+        auto ok {task()};
+
     fClocks[0].Start(false);
     auto isDoable {IsDoable()};
     fClocks[0].Stop();
@@ -352,6 +374,18 @@ void ActRoot::MergerDetector::DoMerge()
 
 void ActRoot::MergerDetector::BuildEventData(int run, int entry)
 {
+    if(fTaskMan)
+    {
+        // Send ptrs to user-loaded tasks (aka plugins) if any
+        for(auto& plugin : fTaskMan->GetPlugins())
+        {
+            plugin->SetMergerData(fMergerData);
+            plugin->SetMergerParameters(&fPars);
+            plugin->SetSilData(fSilData);
+            plugin->SetModularData(fModularData);
+        }
+    }
+
     // Reset clears iterators of MergerData and sets [run, entry]
     Reset(run, entry);
     // Merge

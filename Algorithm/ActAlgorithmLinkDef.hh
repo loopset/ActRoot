@@ -47,4 +47,8 @@
 #pragma link C++ class ActAlgorithm::Actions::FindRP;
 #pragma link C++ class ActAlgorithm::Actions::FixFindRP;
 
+// Task classes
+#pragma link C++ class ActAlgorithm::VTask;
+#pragma link C++ class ActAlgorithm::TaskManager;
+
 #endif
