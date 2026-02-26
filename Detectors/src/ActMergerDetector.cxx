@@ -150,8 +150,9 @@ void ActRoot::MergerDetector::ReadConfiguration(std::shared_ptr<InputBlock> bloc
         auto name {settings.at(1)};
         auto at {settings.size() == 3 ? settings[2] : ""};
         fTaskMan->AddTask(path, name, at);
+        // And send ptr to merger detector
+        fTaskMan->GetPlugins().back()->SetMergerDetector(this);
     }
-    fTaskMan->Print();
 }
 
 void ActRoot::MergerDetector::InitCorrector()
@@ -1382,6 +1383,9 @@ void ActRoot::MergerDetector::Print() const
     }
     // fSilSpecs->Print();
     std::cout << "::::::::::::::::::::::::" << RESET << '\n';
+
+    if(fTaskMan)
+        fTaskMan->Print();
 
     if(fFilter)
         fFilter->Print();

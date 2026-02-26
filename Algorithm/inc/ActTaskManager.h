@@ -18,11 +18,11 @@ public:
     using TaskPtr = std::shared_ptr<VTask>;
 
 private:
-    std::vector<std::string> fTaskIDs {};
-    std::vector<TaskFcn> fTasks {};
-    // Store plugin VTasks; other tasks may be owned by other classes (like MergerDet) so we are not responsible for
-    // them
-    std::vector<TaskPtr> fPlugins {};
+    std::vector<std::string> fTaskIDs {}; //!< Identifier of user task
+    std::vector<TaskFcn> fTasks {}; //!< Functions to be executed in MergerDetector::BuildEventData. This inlcudes both
+                                    //!< Merger built-in funcs as well as user-defined tasks (called plugins)
+    std::vector<TaskPtr> fPlugins {}; //!< Store the user-difined tasks, specified in the [MergerDetector] header of
+                                      //!< detector.conf and compiled in a local directory
 
 public:
     TaskManager() = default;
