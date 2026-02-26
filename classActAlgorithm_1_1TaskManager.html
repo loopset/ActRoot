@@ -443,7 +443,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="lineno">   48</span>    <span class="comment">// Load the .so</span></div>
 <div class="line"><span class="lineno">   49</span>    <span class="keyword">auto</span> library {dlopen(file.c_str(), RTLD_NOW | RTLD_GLOBAL)};</div>
 <div class="line"><span class="lineno">   50</span>    <span class="keywordflow">if</span>(!library)</div>
-<div class="line"><span class="lineno">   51</span>        <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;TaskManager: failed to execute dlopen()&quot;</span>);</div>
+<div class="line"><span class="lineno">   51</span>        <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;TaskManager: failed to execute dlopen() &quot;</span> + std::string(dlerror()));</div>
 <div class="line"><span class="lineno">   52</span>    <span class="keyword">auto</span> creator {<span class="keyword">reinterpret_cast&lt;</span>VTask* (*)()<span class="keyword">&gt;</span>(dlsym(library, <span class="stringliteral">&quot;Create&quot;</span>))};</div>
 <div class="line"><span class="lineno">   53</span>    <span class="keywordflow">if</span>(!creator)</div>
 <div class="line"><span class="lineno">   54</span>    {</div>
@@ -480,9 +480,13 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="lineno">  118</span>    <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; plugin : <a class="code hl_variable" href="classActAlgorithm_1_1TaskManager.html#a11b91a107ac27845da27c3d931ae9a9f">fPlugins</a>)</div>
 <div class="line"><span class="lineno">  119</span>        std::cout &lt;&lt; <span class="stringliteral">&quot;  &quot;</span> &lt;&lt; plugin-&gt;GetTaskID() &lt;&lt; <span class="stringliteral">&#39;\n&#39;</span>;</div>
 <div class="line"><span class="lineno">  120</span>    std::cout &lt;&lt; <span class="stringliteral">&quot;····················&quot;</span> &lt;&lt; <a class="code hl_define" href="ActColors_8h.html#ab702106cf3b3e96750b6845ded4e0299">RESET</a> &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
-<div class="line"><span class="lineno">  121</span>}</div>
+<div class="line"><span class="lineno">  121</span>    <span class="comment">// And call the prints of each plugin</span></div>
+<div class="line"><span class="lineno">  122</span>    <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; plugin : <a class="code hl_variable" href="classActAlgorithm_1_1TaskManager.html#a11b91a107ac27845da27c3d931ae9a9f">fPlugins</a>)</div>
+<div class="line"><span class="lineno">  123</span>        plugin-&gt;<a class="code hl_function" href="classActAlgorithm_1_1TaskManager.html#a0c812ec45fe732b9cb8439554557a2f2">Print</a>();</div>
+<div class="line"><span class="lineno">  124</span>}</div>
 <div class="ttc" id="aActColors_8h_html_a4a6c893a1703c33ede7d702fe5f97c91"><div class="ttname"><a href="ActColors_8h.html#a4a6c893a1703c33ede7d702fe5f97c91">BOLDGREEN</a></div><div class="ttdeci">#define BOLDGREEN</div><div class="ttdef"><b>Definition</b> ActColors.h:17</div></div>
 <div class="ttc" id="aActColors_8h_html_ab702106cf3b3e96750b6845ded4e0299"><div class="ttname"><a href="ActColors_8h.html#ab702106cf3b3e96750b6845ded4e0299">RESET</a></div><div class="ttdeci">#define RESET</div><div class="ttdef"><b>Definition</b> ActColors.h:6</div></div>
+<div class="ttc" id="aclassActAlgorithm_1_1TaskManager_html_a0c812ec45fe732b9cb8439554557a2f2"><div class="ttname"><a href="classActAlgorithm_1_1TaskManager.html#a0c812ec45fe732b9cb8439554557a2f2">ActAlgorithm::TaskManager::Print</a></div><div class="ttdeci">void Print() const</div><div class="ttdef"><b>Definition</b> ActTaskManager.cxx:111</div></div>
 </div><!-- fragment -->
 </div>
 </div>
