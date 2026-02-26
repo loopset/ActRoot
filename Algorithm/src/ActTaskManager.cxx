@@ -48,7 +48,7 @@ void ActAlgorithm::TaskManager::LoadPlugin(const std::string& path, const std::s
     // Load the .so
     auto library {dlopen(file.c_str(), RTLD_NOW | RTLD_GLOBAL)};
     if(!library)
-        throw std::runtime_error("TaskManager: failed to execute dlopen()");
+        throw std::runtime_error("TaskManager: failed to execute dlopen() " + std::string(dlerror()));
     auto creator {reinterpret_cast<VTask* (*)()>(dlsym(library, "Create"))};
     if(!creator)
     {
@@ -118,4 +118,7 @@ void ActAlgorithm::TaskManager::Print() const
     for(const auto& plugin : fPlugins)
         std::cout << "  " << plugin->GetTaskID() << '\n';
     std::cout << "····················" << RESET << '\n';
+    // And call the prints of each plugin
+    for(const auto& plugin : fPlugins)
+        plugin->Print();
 }

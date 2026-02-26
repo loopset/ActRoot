@@ -20,7 +20,6 @@
 
 #include "GuiTypes.h"
 
-#include <iostream>
 #include <vector>
 
 ActRoot::EventPainter::EventPainter(const TGWindow* window, unsigned int width, unsigned int height)
@@ -284,8 +283,9 @@ void ActRoot::EventPainter::DoVerbosePhysics()
     auto merger {fDetMan->GetDetectorAs<MergerDetector>()};
     if(merger->GetIsEnabled())
     {
+        auto [run, entry] {fWrap->GetCurrentStatus()};
         merger->ClearEventData();
-        merger->BuildEventData();
+        merger->BuildEventData(run, entry);
         fWrap->GetMergerData()->Print();
     }
 }
