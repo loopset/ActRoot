@@ -185,9 +185,12 @@ public:
     // Getter of status
     bool GetIsEnabled() const { return fIsEnabled; }
 
-
     // Getter of sil specs
     std::shared_ptr<ActPhysics::SilSpecs> GetSilSpecs() const { return fSilSpecs; }
+
+    // Methods particular to this detector
+    void SetDriftFactor(double factor) { fDriftFactor = factor; }
+    double GetDriftFactor() const { return fDriftFactor; }
 
 private:
     void InitCorrector();

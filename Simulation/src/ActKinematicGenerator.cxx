@@ -71,8 +71,7 @@ void ActSim::KinematicGenerator::ComputeHeavyMass()
 
 void ActSim::KinematicGenerator::Init()
 {
-    fKin = ActPhysics::Kinematics(fBinParts[0].GetMass(), fBinParts[1].GetMass(), fBinParts[2].GetMass(),
-                                  fBinParts[3].GetMass(), fEBeam, fEx);
+    fKin = ActPhysics::Kinematics(fBinParts[0], fBinParts[1], fBinParts[2], fBinParts[3], fEBeam, fEx);
     // Set TGenPhase Space
     fGen = TGenPhaseSpace();
     auto initial {GetInitialState()};

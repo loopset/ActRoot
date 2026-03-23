@@ -10,6 +10,7 @@ class MergerData;
 class MergerParameters;
 class SilData;
 class ModularData;
+class MergerDetector;
 } // namespace ActRoot
 
 namespace ActAlgorithm
@@ -22,6 +23,10 @@ protected:
     ActRoot::MergerParameters* fMergerPars {};
     ActRoot::SilData* fSilData {};
     ActRoot::ModularData* fModData {};
+
+    // Pointer to MergerDet.
+    // Use with caution. This allows changing the settings of MergerDet by external tasks!
+    ActRoot::MergerDetector* fMergerDet {};
 
     // Basic members of task
     std::string fTaskID {};
@@ -37,10 +42,12 @@ public:
     void SetMergerParameters(ActRoot::MergerParameters* pars) { fMergerPars = pars; }
     void SetSilData(ActRoot::SilData* data) { fSilData = data; }
     void SetModularData(ActRoot::ModularData* data) { fModData = data; }
+    void SetMergerDetector(ActRoot::MergerDetector* det) { fMergerDet = det; }
 
     // Getters
     ActRoot::MergerData* GetMergerData() const { return fMergerData; }
     ActRoot::MergerParameters* GetMergerParameters() const { return fMergerPars; }
+    ActRoot::MergerDetector* GetMergerDetector() const { return fMergerDet; }
     const std::string& GetTaskID() const { return fTaskID; }
     bool GetIsEnabled() const { return fIsEnabled; }
     bool GetIsVerbose() const { return fIsVerbose; }

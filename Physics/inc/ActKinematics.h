@@ -14,6 +14,7 @@
 #include <memory>
 #include <string>
 #include <tuple>
+#include <utility>
 
 // Forward declarations
 class TGraph;
@@ -70,6 +71,10 @@ private:
     double fPhi3Lab {};
     double fPhi4Lab {};
 
+    // Pointer to other Kinemetics. If main is in inverse, this is in direct.
+    // Only created when needed
+    std::shared_ptr<Kinematics> fOtherKin {};
+
 public:
     Kinematics() = default;
     Kinematics(const std::string& reaction);
@@ -111,11 +116,17 @@ public:
     void Reset(); //!< Resets class. Do not use in general
 
     TGraph* GetKinematicLine3(double step = 0.1, EColor color = kMagenta, ELineStyle style = kSolid);
+    TGraph* GetKinematicLine3CM(double step = 0.1, EColor color = kMagenta, ELineStyle style = kSolid);
     TGraph* GetKinematicLine4(double step = 0.1, EColor color = kBlue, ELineStyle style = kSolid);
     TGraph* GetTheta3vs4Line(double step = 0.1, EColor color = kBlue, ELineStyle style = kSolid);
     TGraph* GetThetaLabvsThetaCMLine(double step = 0.1, EColor color = kMagenta, ELineStyle style = kSolid);
     TGraphErrors* TransfromCMCrossSectionToLab(TGraphErrors* gcm); //!< Transforms a differential angular distribution
                                                                    //!< in CM frame to Lab
+
+    double ComputeEquivalentOtherT1(double T1); //!< Beam energy that yields the same ECM energy in the other
+                                                //!< kinematics: inverse->direct
+    std::pair<double, double>
+    ComputeOtherInLab(double thetaCM); //!< Kin of 3rd particle in other kinematics for fixed thetaCM
 
     // Setters
     void SetBeamEnergy(double T1);
@@ -147,6 +158,7 @@ public:
     double GetQValue() const { return fQvalue; }
     double GetT1Thresh() const;
     const Particle& GetParticle(unsigned int i) const;
+    std::shared_ptr<Kinematics> GetOtherKinematics() { return fOtherKin; }
 
 private:
     void ConstructFromStr(const std::string& reaction);
@@ -157,6 +169,7 @@ private:
     void Init(); //!< Main function initializing kinematics every time a change is produced
     double GetPhiFromVector(const FourVector& vect);
     double GetThetaFromVector(const FourVector& vect, bool reverse = false);
+    void InitOtherKinematics();
 };
 } // namespace ActPhysics
 

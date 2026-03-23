@@ -27,6 +27,7 @@
 #include <stdexcept>
 #include <string>
 #include <tuple>
+#include <utility>
 
 ActPhysics::Kinematics::Kinematics(const std::string& reaction)
 {
@@ -503,6 +504,26 @@ TGraph* ActPhysics::Kinematics::GetKinematicLine3(double step, EColor color, ELi
     return ret;
 }
 
+TGraph* ActPhysics::Kinematics::GetKinematicLine3CM(double step, EColor color, ELineStyle style)
+{
+    auto* ret {new TGraph};
+    auto name {fp3.GetName()};
+    ret->SetTitle(TString::Format("%s;%s #theta_{3, CM} [#circ];%s E_{3, Lab} [MeV]", fReactionStr.c_str(),
+                                  name.c_str(), name.c_str()));
+    ret->SetLineWidth(2);
+    ret->SetLineColor(color);
+    ret->SetLineStyle(style);
+    for(double thetaCM = 0; thetaCM < 180; thetaCM += step)
+    {
+        ComputeRecoilKinematics(thetaCM * TMath::DegToRad(), 0.);
+        double T3Lab {GetT3Lab()};
+        if(std::isfinite(T3Lab))
+            ret->SetPoint(ret->GetN(), thetaCM, T3Lab);
+    }
+
+    return ret;
+}
+
 TGraph* ActPhysics::Kinematics::GetKinematicLine4(double step, EColor color, ELineStyle style)
 {
     auto* ret {new TGraph};
@@ -705,4 +726,23 @@ TGraphErrors* ActPhysics::Kinematics::TransfromCMCrossSectionToLab(TGraphErrors*
     // Delete non self managed pointer
     delete gangles;
     return glab;
+}
+
+double ActPhysics::Kinematics::ComputeEquivalentOtherT1(double T1)
+{
+    return (fp2.GetMass() / fp1.GetMass()) * T1;
+}
+
+void ActPhysics::Kinematics::InitOtherKinematics()
+{
+    fOtherKin = std::make_shared<Kinematics>(fp2, fp1, fp3, fp4, ComputeEquivalentOtherT1(fT1Lab), fEx);
+}
+
+std::pair<double, double> ActPhysics::Kinematics::ComputeOtherInLab(double thetaCM)
+{
+    if(!fOtherKin)
+        InitOtherKinematics();
+    fOtherKin->SetBeamEnergyAndEx(ComputeEquivalentOtherT1(fT1Lab), fEx);
+    fOtherKin->ComputeRecoilKinematics(thetaCM, 0);
+    return {fOtherKin->GetTheta3Lab(), fOtherKin->GetT3Lab()};
 }
