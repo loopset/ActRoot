@@ -37,6 +37,17 @@ ActRoot::TPCParameters::TPCParameters(const std::string& type)
     fY = fNPADSY * fPadSide;
 }
 
+ActRoot::TPCParameters::TPCParameters(int npadsx, int npadsy, int npadsz, double z)
+    : fNPADSX(npadsx),
+      fNPADSY(npadsy),
+      fNPADSZ(npadsz),
+      fZ(z)
+{
+    // And init sizes
+    fX = fNPADSX * fPadSide;
+    fY = fNPADSY * fPadSide;
+}
+
 void ActRoot::TPCParameters::Print() const
 {
     std::cout << BOLDCYAN << "==== TPC parameters ====" << '\n';

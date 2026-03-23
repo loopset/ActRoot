@@ -27,6 +27,7 @@ private:
 public:
     TPCParameters() = default;
     TPCParameters(const std::string& type);
+    TPCParameters(int npadsx, int npadsy, int npadsz, double z = 235.);
     // Setters
     void SetREBINZ(int rebin);
     void SetNPADSZ(int npadsz) { fNPADSZ = npadsz; }
