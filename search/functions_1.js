@@ -17,7 +17,7 @@ var searchData=
   ['buildformaster_14',['BuildForMaster',['../classActActionInitialization.html#a97449750650ec513886eaef0f41cee50',1,'ActActionInitialization']]],
   ['buildfrommap_15',['BuildFromMap',['../classActAlgorithm_1_1IntervalMap.html#aefc65802bf8767af69fcf9bf2901a7ff',1,'ActAlgorithm::IntervalMap']]],
   ['buildfromset_16',['BuildFromSet',['../classActAlgorithm_1_1IntervalMap.html#a668a60701bfdb36f55942b96df4752ec',1,'ActAlgorithm::IntervalMap']]],
-  ['buildglobalindex_17',['BuildGlobalIndex',['../classActRoot_1_1TPCDetector.html#a25e78f789056670655056fdfca342cb0',1,'ActRoot::TPCDetector']]],
+  ['buildglobalindex_17',['buildglobalindex',['../structRebinedVoxel.html#a303fc21ab2cfa918e056f7bf01df1051',1,'RebinedVoxel::BuildGlobalIndex()'],['../classActRoot_1_1TPCDetector.html#a25e78f789056670655056fdfca342cb0',1,'ActRoot::TPCDetector::BuildGlobalIndex(const int &amp;x, const int &amp;y, const int &amp;z)']]],
   ['buildglobalpadindex_18',['BuildGlobalPadIndex',['../classActRoot_1_1TPCDetector.html#a83585beac0969e76bc621d1b36417187',1,'ActRoot::TPCDetector']]],
   ['buildsilmatrix_19',['BuildSilMatrix',['../classActPhysics_1_1SilLayer.html#a971b36e549807f74fe54508048f9f872',1,'ActPhysics::SilLayer']]]
 ];

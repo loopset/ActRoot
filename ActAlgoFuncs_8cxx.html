@@ -74,6 +74,9 @@ $(function() {
 </div>
 </div><!-- top -->
 <div class="header">
+  <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">ActAlgoFuncs.cxx File Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -90,6 +93,7 @@ $(function() {
 <code>#include &quot;Math/Vector3D.h&quot;</code><br />
 <code>#include &lt;ios&gt;</code><br />
 <code>#include &lt;iostream&gt;</code><br />
+<code>#include &lt;map&gt;</code><br />
 <code>#include &lt;tuple&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
@@ -97,101 +101,259 @@ Include dependency graph for ActAlgoFuncs.cxx:</div>
 <div class="dyncontent">
 <div class="center"><img src="ActAlgoFuncs_8cxx__incl.png" border="0" usemap="#aAlgorithm_2src_2ActAlgoFuncs_8cxx" alt=""/></div>
 <map name="aAlgorithm_2src_2ActAlgoFuncs_8cxx" id="aAlgorithm_2src_2ActAlgoFuncs_8cxx">
-<area shape="rect" title=" " alt="" coords="1219,5,1445,31"/>
-<area shape="rect" href="ActAlgoFuncs_8h.html" title=" " alt="" coords="765,79,886,104"/>
-<area shape="poly" title=" " alt="" coords="1251,33,900,82,899,77,1250,28"/>
-<area shape="rect" href="ActCluster_8h.html" title=" " alt="" coords="1047,159,1147,185"/>
-<area shape="poly" title=" " alt="" coords="1316,33,1128,154,1125,150,1313,28"/>
-<area shape="rect" href="ActVoxel_8h.html" title=" " alt="" coords="195,313,285,339"/>
-<area shape="poly" title=" " alt="" coords="1218,27,960,42,648,68,501,85,375,105,281,128,251,141,233,154,222,170,216,188,214,228,221,267,232,300,227,301,216,268,208,228,211,187,217,168,229,150,248,136,280,123,374,100,500,80,648,63,959,37,1218,22"/>
-<area shape="rect" title=" " alt="" coords="25,394,87,419"/>
-<area shape="poly" title=" " alt="" coords="1218,23,893,31,693,41,492,54,305,74,150,99,91,115,46,132,17,151,10,161,8,171,8,254,12,289,21,324,45,381,40,383,16,326,6,290,3,254,3,170,5,158,14,147,43,127,89,109,149,94,304,68,491,49,693,35,893,26,1218,18"/>
-<area shape="rect" title=" " alt="" coords="739,313,861,339"/>
-<area shape="poly" title=" " alt="" coords="1302,33,1184,81,1110,116,1037,154,975,193,916,235,826,307,822,302,913,231,973,189,1035,150,1107,111,1181,77,1300,28"/>
-<area shape="rect" title=" " alt="" coords="885,313,1016,339"/>
-<area shape="poly" title=" " alt="" coords="1324,32,1259,104,1212,150,1162,194,1068,260,985,309,983,304,1065,256,1158,190,1209,146,1255,100,1320,29"/>
-<area shape="rect" href="ActRegion_8h.html" title=" " alt="" coords="1319,240,1419,265"/>
-<area shape="poly" title=" " alt="" coords="1337,31,1368,226,1363,227,1331,32"/>
-<area shape="rect" title=" " alt="" coords="901,159,955,185"/>
-<area shape="poly" title=" " alt="" coords="1219,30,1078,48,1017,63,976,81,962,95,951,112,936,147,931,145,946,109,958,91,973,76,1015,57,1077,43,1218,24"/>
-<area shape="rect" href="ActColors_8h.html" title=" " alt="" coords="1369,79,1465,104"/>
-<area shape="poly" title=" " alt="" coords="1347,29,1395,68,1391,72,1344,33"/>
-<area shape="rect" href="ActTPCParameters_8h.html" title=" " alt="" coords="1489,79,1644,104"/>
-<area shape="poly" title=" " alt="" coords="1370,28,1516,72,1515,77,1369,33"/>
-<area shape="rect" href="ActUtils_8h.html" title=" " alt="" coords="1668,79,1753,104"/>
-<area shape="poly" title=" " alt="" coords="1397,28,1655,76,1654,81,1396,33"/>
-<area shape="rect" title=" " alt="" coords="1777,79,1852,104"/>
-<area shape="poly" title=" " alt="" coords="1434,28,1586,48,1764,76,1763,81,1585,53,1434,33"/>
-<area shape="rect" title=" " alt="" coords="1877,79,1971,104"/>
-<area shape="poly" title=" " alt="" coords="1446,27,1637,47,1863,76,1863,81,1636,52,1445,32"/>
-<area shape="rect" title=" " alt="" coords="1995,79,2037,104"/>
-<area shape="poly" title=" " alt="" coords="1446,18,1557,23,1690,33,1835,50,1982,76,1981,82,1834,56,1689,39,1556,29,1446,24"/>
-<area shape="rect" title=" " alt="" coords="2061,79,2141,104"/>
-<area shape="poly" title=" " alt="" coords="1446,21,1716,39,1880,55,2048,76,2047,81,1880,60,1716,44,1445,27"/>
-<area shape="poly" title=" " alt="" coords="866,101,1045,153,1044,158,864,107"/>
-<area shape="rect" title=" " alt="" coords="969,394,1114,419"/>
-<area shape="poly" title=" " alt="" coords="765,103,616,130,531,151,450,178,383,209,357,227,338,247,327,267,325,288,332,312,350,337,363,345,384,352,451,363,539,370,638,375,830,380,944,384,975,389,974,394,944,389,829,385,638,380,539,376,451,368,383,357,360,350,346,341,327,314,319,289,322,265,334,243,354,223,380,205,448,173,529,146,615,125,764,98"/>
-<area shape="poly" title=" " alt="" coords="765,96,638,99,482,108,334,125,275,138,232,154,199,176,169,203,144,234,121,267,87,331,66,382,61,380,82,329,117,264,139,231,166,200,196,172,229,150,274,133,334,120,482,102,638,93,765,90"/>
-<area shape="rect" title=" " alt="" coords="1091,313,1151,339"/>
-<area shape="poly" title=" " alt="" coords="833,103,854,144,871,168,890,190,936,228,987,260,1080,306,1078,310,985,265,933,232,886,194,866,172,850,147,828,106"/>
-<area shape="rect" title=" " alt="" coords="361,240,514,265"/>
-<area shape="poly" title=" " alt="" coords="798,107,479,237,477,232,796,102"/>
-<area shape="rect" title=" " alt="" coords="243,159,285,185"/>
-<area shape="poly" title=" " alt="" coords="764,96,674,100,558,109,431,127,305,155,298,157,297,152,303,149,430,121,558,104,673,94,764,91"/>
-<area shape="poly" title=" " alt="" coords="842,102,903,149,900,153,839,106"/>
-<area shape="rect" href="ActLine_8h.html" title=" " alt="" coords="651,240,733,265"/>
-<area shape="poly" title=" " alt="" coords="1048,186,747,243,746,238,1047,180"/>
-<area shape="poly" title=" " alt="" coords="1048,183,639,243,606,255,571,268,425,300,299,320,299,315,424,295,570,263,604,250,638,237,1047,178"/>
-<area shape="rect" title=" " alt="" coords="1143,394,1222,419"/>
-<area shape="poly" title=" " alt="" coords="1106,184,1135,238,1167,313,1182,380,1177,381,1161,314,1130,240,1102,186"/>
-<area shape="poly" title=" " alt="" coords="1097,186,1050,381,1045,380,1092,185"/>
-<area shape="poly" title=" " alt="" coords="1047,183,967,195,854,204,766,207,679,215,630,226,572,242,549,255,526,268,467,282,415,287,324,281,280,278,235,280,187,292,133,316,114,330,96,347,71,383,66,380,92,344,110,326,131,311,186,287,235,275,280,273,324,275,415,281,466,277,524,263,547,250,570,238,628,221,679,210,766,201,854,199,966,189,1047,178"/>
-<area shape="rect" title=" " alt="" coords="1584,313,1643,339"/>
-<area shape="poly" title=" " alt="" coords="1148,177,1278,198,1356,216,1433,237,1579,305,1577,310,1431,243,1355,221,1277,204,1147,182"/>
-<area shape="poly" title=" " alt="" coords="1138,182,1317,234,1316,239,1136,187"/>
-<area shape="rect" title=" " alt="" coords="1227,313,1351,339"/>
-<area shape="poly" title=" " alt="" coords="1118,182,1200,238,1270,301,1267,305,1197,242,1115,187"/>
-<area shape="poly" title=" " alt="" coords="1102,184,1120,299,1115,300,1097,185"/>
-<area shape="poly" title=" " alt="" coords="1047,184,967,195,750,220,534,243,528,243,528,238,533,237,750,214,966,189,1047,178"/>
-<area shape="poly" title=" " alt="" coords="651,264,627,268,300,319,299,313,626,263,650,259"/>
-<area shape="poly" title=" " alt="" coords="696,265,704,301,714,321,728,337,762,353,807,364,862,370,921,373,1037,376,1088,379,1127,384,1140,387,1138,392,1126,389,1087,384,1037,381,921,378,861,375,806,369,760,358,725,341,710,324,699,303,690,266"/>
-<area shape="poly" title=" " alt="" coords="651,261,381,290,249,306,183,316,153,330,125,349,79,386,76,382,122,345,151,326,182,311,248,300,380,285,650,256"/>
-<area shape="rect" title=" " alt="" coords="566,313,663,339"/>
-<area shape="poly" title=" " alt="" coords="681,267,639,306,636,302,678,263"/>
-<area shape="rect" title=" " alt="" coords="360,313,440,339"/>
-<area shape="poly" title=" " alt="" coords="651,267,454,314,453,309,650,262"/>
-<area shape="poly" title=" " alt="" coords="711,263,772,303,769,308,708,268"/>
-<area shape="poly" title=" " alt="" coords="734,263,896,307,895,312,733,268"/>
-<area shape="rect" title=" " alt="" coords="464,313,541,339"/>
-<area shape="poly" title=" " alt="" coords="663,268,547,311,546,306,661,263"/>
-<area shape="poly" title=" " alt="" coords="734,251,871,253,1076,261,1319,279,1445,293,1570,311,1570,316,1445,298,1318,284,1076,266,871,258,734,257"/>
-<area shape="poly" title=" " alt="" coords="286,330,348,336,467,344,568,346,739,346,822,347,910,353,1010,364,1127,384,1141,387,1140,393,1126,389,1009,369,910,358,822,353,739,351,568,352,467,349,348,341,285,335"/>
-<area shape="rect" title=" " alt="" coords="710,394,933,419"/>
-<area shape="poly" title=" " alt="" coords="286,333,304,336,501,361,698,384,735,389,734,395,697,389,500,366,304,341,285,338"/>
-<area shape="rect" title=" " alt="" coords="111,387,313,427"/>
-<area shape="poly" title=" " alt="" coords="238,340,226,375,221,373,233,338"/>
-<area shape="rect" title=" " alt="" coords="337,394,591,419"/>
-<area shape="poly" title=" " alt="" coords="273,336,420,387,418,392,272,341"/>
-<area shape="poly" title=" " alt="" coords="286,333,304,336,484,353,624,359,765,366,944,384,975,389,974,394,944,389,764,371,624,365,483,359,304,341,285,339"/>
-<area shape="rect" title=" " alt="" coords="615,394,686,419"/>
-<area shape="poly" title=" " alt="" coords="286,333,304,336,389,348,455,355,520,365,603,384,612,387,611,392,602,389,519,370,454,360,388,353,304,341,285,338"/>
-<area shape="poly" title=" " alt="" coords="213,341,100,389,96,391,94,386,98,384,211,336"/>
-<area shape="poly" title=" " alt="" coords="1384,264,1398,280,1410,299,1416,320,1410,340,1382,360,1337,377,1236,400,1235,394,1336,372,1380,356,1406,337,1411,320,1406,301,1394,283,1380,268"/>
-<area shape="poly" title=" " alt="" coords="1375,265,1379,301,1376,322,1366,341,1110,394,1109,389,1362,337,1371,320,1374,301,1370,266"/>
-<area shape="poly" title=" " alt="" coords="1409,263,1571,310,1570,315,1408,268"/>
-<area shape="rect" title=" " alt="" coords="1478,313,1559,339"/>
-<area shape="poly" title=" " alt="" coords="1394,263,1483,305,1481,310,1392,268"/>
-<area shape="poly" title=" " alt="" coords="1358,267,1314,306,1311,302,1355,263"/>
-<area shape="poly" title=" " alt="" coords="1330,268,1165,315,1164,310,1329,263"/>
-<area shape="poly" title=" " alt="" coords="1560,106,1547,127,1536,153,1533,172,1536,191,1548,223,1564,253,1597,301,1593,304,1559,256,1543,225,1531,193,1527,172,1531,151,1542,124,1556,103"/>
-<area shape="rect" href="ActVParameters_8h.html" title=" " alt="" coords="1545,159,1684,185"/>
-<area shape="poly" title=" " alt="" coords="1576,103,1603,146,1598,149,1571,106"/>
-<area shape="poly" title=" " alt="" coords="1713,104,1710,144,1699,193,1667,255,1633,304,1629,301,1663,252,1693,191,1705,143,1708,104"/>
-<area shape="rect" title=" " alt="" coords="1759,152,1979,192"/>
-<area shape="poly" title=" " alt="" coords="1735,102,1820,143,1817,148,1733,106"/>
+<area shape="rect" title=" " alt="" coords="1342,5,1569,31"/>
+<area shape="rect" href="ActAlgoFuncs_8h.html" title=" " alt="" coords="1190,79,1311,104"/>
+<area shape="poly" title=" " alt="" coords="1423,33,1297,77,1295,72,1422,28"/>
+<area shape="rect" href="ActCluster_8h.html" title=" " alt="" coords="1034,159,1134,185"/>
+<area shape="poly" title=" " alt="" coords="1342,32,1260,49,1219,63,1179,81,1156,96,1136,114,1102,150,1098,146,1132,110,1153,92,1177,76,1217,58,1259,44,1341,26"/>
+<area shape="rect" href="ActVoxel_8h.html" title=" " alt="" coords="825,313,916,339"/>
+<area shape="poly" title=" " alt="" coords="1343,33,1242,51,1190,64,1139,81,1068,112,1016,143,971,183,920,242,899,272,883,302,879,300,895,269,916,238,967,180,1013,139,1066,107,1137,76,1188,59,1241,45,1342,27"/>
+<area shape="rect" title=" " alt="" coords="299,394,362,419"/>
+<area shape="poly" title=" " alt="" coords="1342,22,989,27,769,35,546,48,339,67,167,93,101,110,51,128,19,149,11,160,9,171,9,254,11,300,18,318,33,337,51,348,77,359,145,377,220,390,286,398,285,403,219,395,144,382,75,364,49,353,30,341,13,321,5,302,4,254,4,170,7,157,16,145,48,123,99,104,166,88,338,62,546,43,769,30,989,22,1342,17"/>
+<area shape="rect" title=" " alt="" coords="44,313,166,339"/>
+<area shape="poly" title=" " alt="" coords="1342,32,1169,52,976,81,853,107,729,136,491,202,289,265,151,311,149,306,287,260,489,197,728,131,852,101,975,76,1168,46,1342,27"/>
+<area shape="rect" title=" " alt="" coords="241,313,372,339"/>
+<area shape="poly" title=" " alt="" coords="1355,33,1221,53,1075,81,859,139,650,205,472,266,350,311,348,306,470,261,648,200,857,134,1074,76,1220,47,1354,28"/>
+<area shape="rect" href="ActRegion_8h.html" title=" " alt="" coords="1390,240,1490,265"/>
+<area shape="poly" title=" " alt="" coords="1454,32,1441,79,1441,104,1447,127,1453,152,1453,192,1448,227,1442,226,1448,192,1448,152,1442,129,1436,104,1436,78,1448,30"/>
+<area shape="rect" title=" " alt="" coords="1383,159,1438,185"/>
+<area shape="poly" title=" " alt="" coords="1439,33,1415,53,1397,80,1393,96,1393,113,1401,146,1396,147,1388,114,1387,96,1392,78,1411,49,1435,29"/>
+<area shape="rect" href="ActColors_8h.html" title=" " alt="" coords="1450,79,1546,104"/>
+<area shape="poly" title=" " alt="" coords="1465,30,1487,66,1482,68,1460,32"/>
+<area shape="rect" href="ActTPCParameters_8h.html" title=" " alt="" coords="1570,79,1725,104"/>
+<area shape="poly" title=" " alt="" coords="1487,28,1604,71,1602,76,1485,33"/>
+<area shape="rect" href="ActUtils_8h.html" title=" " alt="" coords="1749,79,1834,104"/>
+<area shape="poly" title=" " alt="" coords="1510,28,1736,76,1735,81,1509,33"/>
+<area shape="rect" title=" " alt="" coords="1858,79,1933,104"/>
+<area shape="poly" title=" " alt="" coords="1543,28,1681,48,1845,76,1844,81,1680,53,1542,33"/>
+<area shape="rect" title=" " alt="" coords="1958,79,2052,104"/>
+<area shape="poly" title=" " alt="" coords="1567,28,1740,48,1944,76,1943,81,1739,53,1566,33"/>
+<area shape="rect" title=" " alt="" coords="2076,79,2118,104"/>
+<area shape="poly" title=" " alt="" coords="1569,19,1672,25,1795,35,1928,52,2063,76,2062,81,1927,57,1794,40,1672,30,1569,25"/>
+<area shape="rect" title=" " alt="" coords="2142,79,2222,104"/>
+<area shape="poly" title=" " alt="" coords="1570,22,1822,40,1974,56,2129,76,2128,81,1973,61,1822,46,1569,28"/>
+<area shape="rect" title=" " alt="" coords="2246,79,2297,104"/>
+<area shape="poly" title=" " alt="" coords="1569,18,1702,22,1867,31,2048,49,2233,76,2232,82,2048,54,1866,37,1702,27,1569,23"/>
+<area shape="poly" title=" " alt="" coords="1227,106,1121,156,1119,151,1225,102"/>
+<area shape="rect" title=" " alt="" coords="1378,394,1523,419"/>
+<area shape="poly" title=" " alt="" coords="1265,102,1373,190,1417,206,1454,212,1492,218,1535,238,1579,268,1593,286,1606,312,1609,328,1607,342,1590,364,1561,381,1527,393,1526,388,1559,376,1587,360,1602,339,1604,328,1601,314,1589,289,1575,272,1533,242,1490,223,1453,217,1415,211,1370,194,1262,106"/>
+<area shape="poly" title=" " alt="" coords="1190,105,1108,123,1064,137,1022,154,964,192,894,249,823,305,791,327,763,341,707,360,657,369,613,373,570,372,483,372,433,377,375,389,367,392,366,386,374,384,432,372,483,366,570,367,613,367,657,364,705,355,761,336,788,322,820,301,891,245,961,188,1020,150,1062,132,1107,118,1189,99"/>
+<area shape="rect" title=" " alt="" coords="1240,313,1300,339"/>
+<area shape="poly" title=" " alt="" coords="1261,103,1296,159,1315,198,1329,239,1331,253,1329,266,1316,288,1299,306,1295,302,1311,285,1324,264,1326,253,1324,241,1310,200,1291,162,1256,106"/>
+<area shape="rect" title=" " alt="" coords="1160,240,1314,265"/>
+<area shape="poly" title=" " alt="" coords="1252,104,1242,226,1236,226,1247,104"/>
+<area shape="rect" title=" " alt="" coords="1164,159,1206,185"/>
+<area shape="poly" title=" " alt="" coords="1243,106,1205,150,1201,147,1239,102"/>
+<area shape="poly" title=" " alt="" coords="1275,102,1376,151,1373,156,1272,106"/>
+<area shape="rect" href="ActLine_8h.html" title=" " alt="" coords="618,240,701,265"/>
+<area shape="poly" title=" " alt="" coords="1034,185,714,244,714,239,1033,180"/>
+<area shape="poly" title=" " alt="" coords="1055,187,1006,210,953,242,918,273,890,304,886,300,915,269,950,238,1003,205,1053,182"/>
+<area shape="rect" title=" " alt="" coords="1231,394,1310,419"/>
+<area shape="poly" title=" " alt="" coords="1062,187,1030,209,1016,224,1005,241,1001,254,1003,269,1014,300,1037,337,1060,353,1081,363,1122,371,1166,373,1220,384,1229,387,1227,392,1219,389,1166,379,1121,376,1079,368,1057,358,1034,341,1009,303,997,270,996,254,1000,239,1011,221,1027,205,1059,183"/>
+<area shape="poly" title=" " alt="" coords="1081,186,1072,216,1064,256,1066,299,1072,319,1082,337,1115,347,1187,361,1365,390,1364,395,1186,366,1113,352,1079,341,1067,321,1060,300,1059,256,1066,215,1076,184"/>
+<area shape="poly" title=" " alt="" coords="1033,176,852,181,733,188,607,200,485,217,375,242,328,257,287,274,255,293,231,315,225,325,225,334,237,353,260,371,288,386,286,391,257,376,233,357,220,336,220,324,227,312,251,289,285,269,326,252,374,236,484,212,607,194,732,183,851,176,1033,171"/>
+<area shape="rect" title=" " alt="" coords="1533,313,1592,339"/>
+<area shape="poly" title=" " alt="" coords="1122,182,1152,189,1206,197,1252,199,1334,195,1373,195,1413,200,1456,213,1504,238,1520,251,1534,267,1554,299,1550,302,1530,270,1517,255,1501,242,1454,218,1412,205,1373,200,1334,200,1252,204,1205,202,1151,195,1121,187"/>
+<area shape="poly" title=" " alt="" coords="1124,182,1152,189,1376,237,1375,242,1151,195,1123,187"/>
+<area shape="rect" title=" " alt="" coords="1092,313,1216,339"/>
+<area shape="poly" title=" " alt="" coords="1087,184,1092,221,1106,264,1119,284,1134,302,1130,305,1114,287,1101,266,1087,222,1082,185"/>
+<area shape="poly" title=" " alt="" coords="1092,184,1115,222,1131,244,1151,263,1189,289,1228,307,1226,312,1186,293,1147,267,1127,247,1110,225,1087,186"/>
+<area shape="poly" title=" " alt="" coords="1107,182,1203,231,1201,236,1105,187"/>
+<area shape="poly" title=" " alt="" coords="694,263,824,306,823,311,693,268"/>
+<area shape="poly" title=" " alt="" coords="702,258,805,278,928,311,957,324,986,336,1050,353,1102,361,1154,369,1220,384,1230,387,1228,392,1219,389,1153,374,1101,367,1049,358,984,341,955,329,927,316,804,283,701,263"/>
+<area shape="poly" title=" " alt="" coords="618,262,531,279,482,295,436,316,388,349,351,385,347,381,385,345,433,311,480,290,530,274,617,256"/>
+<area shape="rect" title=" " alt="" coords="447,313,544,339"/>
+<area shape="poly" title=" " alt="" coords="634,268,536,310,534,305,632,263"/>
+<area shape="rect" title=" " alt="" coords="569,313,649,339"/>
+<area shape="poly" title=" " alt="" coords="653,267,627,304,623,301,649,264"/>
+<area shape="poly" title=" " alt="" coords="618,262,180,318,180,312,617,257"/>
+<area shape="poly" title=" " alt="" coords="618,265,377,313,376,308,617,260"/>
+<area shape="rect" title=" " alt="" coords="673,313,750,339"/>
+<area shape="poly" title=" " alt="" coords="670,264,697,301,693,304,666,267"/>
+<area shape="poly" title=" " alt="" coords="701,254,1020,274,1470,311,1520,316,1519,322,1470,316,1020,279,701,259"/>
+<area shape="poly" title=" " alt="" coords="916,333,935,336,1078,356,1141,366,1220,384,1230,387,1229,392,1219,389,1140,371,1077,361,934,341,915,338"/>
+<area shape="rect" title=" " alt="" coords="759,394,982,419"/>
+<area shape="poly" title=" " alt="" coords="873,339,873,380,868,380,868,339"/>
+<area shape="rect" title=" " alt="" coords="1006,387,1207,427"/>
+<area shape="poly" title=" " alt="" coords="905,336,1037,380,1035,385,904,341"/>
+<area shape="rect" title=" " alt="" coords="386,394,640,419"/>
+<area shape="poly" title=" " alt="" coords="825,340,579,394,578,388,824,335"/>
+<area shape="poly" title=" " alt="" coords="916,330,1323,384,1365,390,1364,395,1322,389,915,336"/>
+<area shape="rect" title=" " alt="" coords="664,394,735,419"/>
+<area shape="poly" title=" " alt="" coords="846,341,738,391,736,386,844,336"/>
+<area shape="poly" title=" " alt="" coords="825,338,807,341,684,354,589,357,494,365,439,374,375,389,367,392,366,386,373,384,438,369,493,360,588,352,684,348,806,336,824,333"/>
+<area shape="poly" title=" " alt="" coords="1426,267,1367,315,1293,386,1289,382,1363,311,1423,263"/>
+<area shape="poly" title=" " alt="" coords="1450,264,1463,286,1473,313,1475,331,1473,350,1464,382,1459,381,1468,349,1470,331,1468,314,1458,288,1445,267"/>
+<area shape="poly" title=" " alt="" coords="1461,263,1532,304,1529,309,1458,268"/>
+<area shape="rect" title=" " alt="" coords="1376,313,1458,339"/>
+<area shape="poly" title=" " alt="" coords="1438,266,1427,301,1422,299,1433,265"/>
+<area shape="poly" title=" " alt="" coords="1394,268,1214,313,1213,307,1393,263"/>
+<area shape="poly" title=" " alt="" coords="1413,268,1312,310,1310,305,1411,263"/>
+<area shape="poly" title=" " alt="" coords="1639,106,1622,127,1606,153,1591,192,1580,232,1568,300,1562,299,1575,231,1586,190,1601,151,1617,124,1635,102"/>
+<area shape="rect" href="ActVParameters_8h.html" title=" " alt="" coords="1616,159,1754,185"/>
+<area shape="poly" title=" " alt="" coords="1655,103,1676,146,1671,148,1651,105"/>
+<area shape="poly" title=" " alt="" coords="1794,105,1788,146,1781,171,1768,194,1732,233,1689,266,1645,292,1605,311,1603,306,1642,287,1686,262,1728,230,1764,190,1776,169,1783,145,1789,104"/>
+<area shape="rect" title=" " alt="" coords="1830,152,2050,192"/>
+<area shape="poly" title=" " alt="" coords="1815,102,1893,143,1890,148,1812,107"/>
 </map>
 </div>
-</div></div><!-- contents -->
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRebinedVoxel.html">RebinedVoxel</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a1b2503367885556e4e8663937187f0ec" id="r_a1b2503367885556e4e8663937187f0ec"><td class="memItemLeft" align="right" valign="top">std::pair&lt; std::vector&lt; <a class="el" href="classActRoot_1_1Voxel.html">ActRoot::Voxel</a> &gt;, <a class="el" href="structRebinedVoxel.html">RebinedVoxel</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ActAlgoFuncs_8cxx.html#a1b2503367885556e4e8663937187f0ec">RebinTracks</a> (const std::vector&lt; <a class="el" href="classActRoot_1_1Voxel.html">ActRoot::Voxel</a> &gt; &amp;voxels, <a class="el" href="classActRoot_1_1TPCParameters.html">ActRoot::TPCParameters</a> *tpcPars, int rebinX, int rebinY=-1, int rebinZ=-1)</td></tr>
+<tr class="separator:a1b2503367885556e4e8663937187f0ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a849b8b728e189eaa7bcfca1f6d443c36" id="r_a849b8b728e189eaa7bcfca1f6d443c36"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classActRoot_1_1Voxel.html">ActRoot::Voxel</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ActAlgoFuncs_8cxx.html#a849b8b728e189eaa7bcfca1f6d443c36">UndoRebinning</a> (std::vector&lt; <a class="el" href="classActRoot_1_1Voxel.html">ActRoot::Voxel</a> &gt; &amp;rebinedVoxels, <a class="el" href="structRebinedVoxel.html">RebinedVoxel</a> &amp;rebinedData)</td></tr>
+<tr class="separator:a849b8b728e189eaa7bcfca1f6d443c36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="a1b2503367885556e4e8663937187f0ec" name="a1b2503367885556e4e8663937187f0ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b2503367885556e4e8663937187f0ec">&#9670;&#160;</a></span>RebinTracks()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::pair&lt; std::vector&lt; <a class="el" href="classActRoot_1_1Voxel.html">ActRoot::Voxel</a> &gt;, <a class="el" href="structRebinedVoxel.html">RebinedVoxel</a> &gt; RebinTracks </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classActRoot_1_1Voxel.html">ActRoot::Voxel</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>voxels</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classActRoot_1_1TPCParameters.html">ActRoot::TPCParameters</a> *&#160;</td>
+          <td class="paramname"><em>tpcPars</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rebinX</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rebinY</em> = <code>-1</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rebinZ</em> = <code>-1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="fragment"><div class="line"><span class="lineno">   41</span>{</div>
+<div class="line"><span class="lineno">   42</span>    <span class="comment">// Rebin all voxels by the rebin factor and store the rebined voxels (no repeat positions, if so sum the charges)</span></div>
+<div class="line"><span class="lineno">   43</span>    std::vector&lt;ActRoot::Voxel&gt; rebinnedVoxels {};</div>
+<div class="line"><span class="lineno">   44</span>    <span class="keywordtype">int</span> nPadsX = tpcPars-&gt;<a class="code hl_function" href="classActRoot_1_1TPCParameters.html#a884d632cf9c9592ca0303b2a183e04e5">GetNPADSX</a>() / rebinX;</div>
+<div class="line"><span class="lineno">   45</span>    <span class="keywordflow">if</span>(rebinY == -1)</div>
+<div class="line"><span class="lineno">   46</span>        rebinY = rebinX;</div>
+<div class="line"><span class="lineno">   47</span>    <span class="keywordflow">if</span>(rebinZ == -1)</div>
+<div class="line"><span class="lineno">   48</span>        rebinZ = rebinX;</div>
+<div class="line"><span class="lineno">   49</span>    <span class="keywordtype">int</span> nPadsY = tpcPars-&gt;<a class="code hl_function" href="classActRoot_1_1TPCParameters.html#ab05369c9e3a0b0b56a3f00c0e4a6cd7f">GetNPADSY</a>() / rebinY;</div>
+<div class="line"><span class="lineno">   50</span>    <span class="keywordtype">int</span> nPadsZ = tpcPars-&gt;<a class="code hl_function" href="classActRoot_1_1TPCParameters.html#a1c24e33928f47eadeb7830235f867510">GetNPADSZ</a>() / rebinZ;</div>
+<div class="line"><span class="lineno">   51</span>    <a class="code hl_struct" href="structRebinedVoxel.html">RebinedVoxel</a> rebinedData {nPadsX, nPadsY, nPadsZ};</div>
+<div class="line"><span class="lineno">   52</span>    <span class="comment">// position</span></div>
+<div class="line"><span class="lineno">   53</span>    std::map&lt;unsigned int, unsigned int&gt; rebinedIndexAndPosition; <span class="comment">// global rebined index -&gt; position in rebinnedVoxels</span></div>
+<div class="line"><span class="lineno">   54</span>                                                                  <span class="comment">// vector</span></div>
+<div class="line"><span class="lineno">   55</span>    <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; voxel : voxels)</div>
+<div class="line"><span class="lineno">   56</span>    {</div>
+<div class="line"><span class="lineno">   57</span>        <span class="keyword">auto</span> pos = voxel.GetPosition();</div>
+<div class="line"><span class="lineno">   58</span>        <span class="keywordtype">int</span> x = std::floor(pos.X() / rebinX);</div>
+<div class="line"><span class="lineno">   59</span>        <span class="keywordtype">int</span> y = std::floor(pos.Y() / rebinY);</div>
+<div class="line"><span class="lineno">   60</span>        <span class="keywordtype">int</span> z = std::floor(pos.Z() / rebinZ);</div>
+<div class="line"><span class="lineno">   61</span> </div>
+<div class="line"><span class="lineno">   62</span>        <span class="comment">// Get the global index of the rebinned voxel</span></div>
+<div class="line"><span class="lineno">   63</span>        <span class="keyword">auto</span> globalIndex = rebinedData.BuildGlobalIndex(x, y, z);</div>
+<div class="line"><span class="lineno">   64</span>        rebinedData.rebinnedIndexToVoxels[globalIndex].push_back(voxel);</div>
+<div class="line"><span class="lineno">   65</span> </div>
+<div class="line"><span class="lineno">   66</span>        <span class="keywordflow">if</span>(!rebinedIndexAndPosition.count(globalIndex))</div>
+<div class="line"><span class="lineno">   67</span>        {</div>
+<div class="line"><span class="lineno">   68</span>            <a class="code hl_class" href="classActRoot_1_1Voxel.html">ActRoot::Voxel</a> rebinnedVoxel {{<span class="keyword">static_cast&lt;</span><span class="keywordtype">float</span><span class="keyword">&gt;</span>(x), <span class="keyword">static_cast&lt;</span><span class="keywordtype">float</span><span class="keyword">&gt;</span>(y), <span class="keyword">static_cast&lt;</span><span class="keywordtype">float</span><span class="keyword">&gt;</span>(z)},</div>
+<div class="line"><span class="lineno">   69</span>                                          voxel.<a class="code hl_function" href="classActRoot_1_1Voxel.html#a9bcbc52f49aefd0c7aba38a83b7a333a">GetCharge</a>(),</div>
+<div class="line"><span class="lineno">   70</span>                                          voxel.GetIsSaturated()};</div>
+<div class="line"><span class="lineno">   71</span>            rebinnedVoxels.push_back(rebinnedVoxel);</div>
+<div class="line"><span class="lineno">   72</span>            rebinedIndexAndPosition[globalIndex] = rebinnedVoxels.size() - 1;</div>
+<div class="line"><span class="lineno">   73</span>        }</div>
+<div class="line"><span class="lineno">   74</span>        <span class="keywordflow">else</span></div>
+<div class="line"><span class="lineno">   75</span>        {</div>
+<div class="line"><span class="lineno">   76</span>            <span class="keyword">auto</span> idx {rebinedIndexAndPosition[globalIndex]};</div>
+<div class="line"><span class="lineno">   77</span>            rebinnedVoxels[idx].SetCharge(rebinnedVoxels[idx].GetCharge() + voxel.GetCharge());</div>
+<div class="line"><span class="lineno">   78</span>        }</div>
+<div class="line"><span class="lineno">   79</span>    }</div>
+<div class="line"><span class="lineno">   80</span>    <span class="keywordflow">return</span> {rebinnedVoxels, rebinedData};</div>
+<div class="line"><span class="lineno">   81</span>}</div>
+<div class="ttc" id="aclassActRoot_1_1TPCParameters_html_a1c24e33928f47eadeb7830235f867510"><div class="ttname"><a href="classActRoot_1_1TPCParameters.html#a1c24e33928f47eadeb7830235f867510">ActRoot::TPCParameters::GetNPADSZ</a></div><div class="ttdeci">int GetNPADSZ() const</div><div class="ttdef"><b>Definition</b> ActTPCParameters.h:39</div></div>
+<div class="ttc" id="aclassActRoot_1_1TPCParameters_html_a884d632cf9c9592ca0303b2a183e04e5"><div class="ttname"><a href="classActRoot_1_1TPCParameters.html#a884d632cf9c9592ca0303b2a183e04e5">ActRoot::TPCParameters::GetNPADSX</a></div><div class="ttdeci">int GetNPADSX() const</div><div class="ttdef"><b>Definition</b> ActTPCParameters.h:36</div></div>
+<div class="ttc" id="aclassActRoot_1_1TPCParameters_html_ab05369c9e3a0b0b56a3f00c0e4a6cd7f"><div class="ttname"><a href="classActRoot_1_1TPCParameters.html#ab05369c9e3a0b0b56a3f00c0e4a6cd7f">ActRoot::TPCParameters::GetNPADSY</a></div><div class="ttdeci">int GetNPADSY() const</div><div class="ttdef"><b>Definition</b> ActTPCParameters.h:37</div></div>
+<div class="ttc" id="aclassActRoot_1_1Voxel_html"><div class="ttname"><a href="classActRoot_1_1Voxel.html">ActRoot::Voxel</a></div><div class="ttdef"><b>Definition</b> ActVoxel.h:18</div></div>
+<div class="ttc" id="aclassActRoot_1_1Voxel_html_a9bcbc52f49aefd0c7aba38a83b7a333a"><div class="ttname"><a href="classActRoot_1_1Voxel.html#a9bcbc52f49aefd0c7aba38a83b7a333a">ActRoot::Voxel::GetCharge</a></div><div class="ttdeci">float GetCharge() const</div><div class="ttdef"><b>Definition</b> ActVoxel.h:74</div></div>
+<div class="ttc" id="astructRebinedVoxel_html"><div class="ttname"><a href="structRebinedVoxel.html">RebinedVoxel</a></div><div class="ttdef"><b>Definition</b> ActAlgoFuncs.cxx:23</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a849b8b728e189eaa7bcfca1f6d443c36" name="a849b8b728e189eaa7bcfca1f6d443c36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a849b8b728e189eaa7bcfca1f6d443c36">&#9670;&#160;</a></span>UndoRebinning()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="classActRoot_1_1Voxel.html">ActRoot::Voxel</a> &gt; UndoRebinning </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; <a class="el" href="classActRoot_1_1Voxel.html">ActRoot::Voxel</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rebinedVoxels</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structRebinedVoxel.html">RebinedVoxel</a> &amp;&#160;</td>
+          <td class="paramname"><em>rebinedData</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="fragment"><div class="line"><span class="lineno">   84</span>{</div>
+<div class="line"><span class="lineno">   85</span>    <span class="comment">// Compute the global index for the rebined voxel, and return the voxels in the map with that index</span></div>
+<div class="line"><span class="lineno">   86</span>    std::vector&lt;ActRoot::Voxel&gt; unrebinedVoxels;</div>
+<div class="line"><span class="lineno">   87</span>    <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; voxel : rebinedVoxels)</div>
+<div class="line"><span class="lineno">   88</span>    {</div>
+<div class="line"><span class="lineno">   89</span>        <span class="keyword">auto</span> pos = voxel.GetPosition();</div>
+<div class="line"><span class="lineno">   90</span>        <span class="keywordtype">int</span> x = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(pos.X());</div>
+<div class="line"><span class="lineno">   91</span>        <span class="keywordtype">int</span> y = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(pos.Y());</div>
+<div class="line"><span class="lineno">   92</span>        <span class="keywordtype">int</span> z = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(pos.Z());</div>
+<div class="line"><span class="lineno">   93</span> </div>
+<div class="line"><span class="lineno">   94</span>        <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> globalIndex = rebinedData.<a class="code hl_function" href="structRebinedVoxel.html#a303fc21ab2cfa918e056f7bf01df1051">BuildGlobalIndex</a>(x, y, z);</div>
+<div class="line"><span class="lineno">   95</span>        <span class="keywordflow">if</span>(rebinedData.<a class="code hl_variable" href="structRebinedVoxel.html#ab9fe1b4f179acb2c267773ddfc7ffc1f">rebinnedIndexToVoxels</a>.count(globalIndex))</div>
+<div class="line"><span class="lineno">   96</span>        {</div>
+<div class="line"><span class="lineno">   97</span>            unrebinedVoxels.insert(unrebinedVoxels.end(), rebinedData.<a class="code hl_variable" href="structRebinedVoxel.html#ab9fe1b4f179acb2c267773ddfc7ffc1f">rebinnedIndexToVoxels</a>.at(globalIndex).begin(),</div>
+<div class="line"><span class="lineno">   98</span>                                   rebinedData.<a class="code hl_variable" href="structRebinedVoxel.html#ab9fe1b4f179acb2c267773ddfc7ffc1f">rebinnedIndexToVoxels</a>.at(globalIndex).end());</div>
+<div class="line"><span class="lineno">   99</span>        }</div>
+<div class="line"><span class="lineno">  100</span>    }</div>
+<div class="line"><span class="lineno">  101</span>    <span class="keywordflow">return</span> unrebinedVoxels;</div>
+<div class="line"><span class="lineno">  102</span>}</div>
+<div class="ttc" id="astructRebinedVoxel_html_a303fc21ab2cfa918e056f7bf01df1051"><div class="ttname"><a href="structRebinedVoxel.html#a303fc21ab2cfa918e056f7bf01df1051">RebinedVoxel::BuildGlobalIndex</a></div><div class="ttdeci">unsigned int BuildGlobalIndex(const int &amp;x, const int &amp;y, const int &amp;z)</div><div class="ttdef"><b>Definition</b> ActAlgoFuncs.cxx:32</div></div>
+<div class="ttc" id="astructRebinedVoxel_html_ab9fe1b4f179acb2c267773ddfc7ffc1f"><div class="ttname"><a href="structRebinedVoxel.html#ab9fe1b4f179acb2c267773ddfc7ffc1f">RebinedVoxel::rebinnedIndexToVoxels</a></div><div class="ttdeci">std::map&lt; unsigned int, std::vector&lt; ActRoot::Voxel &gt; &gt; rebinnedIndexToVoxels</div><div class="ttdef"><b>Definition</b> ActAlgoFuncs.cxx:27</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
