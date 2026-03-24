@@ -560,6 +560,9 @@ void ActAlgorithm::Actions::FindRP::PerformFinerFits()
         return;
     const auto& rp {fTPCData->fRPs.front()};
 
+    // 1-> Call other Actions defined in multiactions.conf 
+    CallOtherFineActions();
+
     // 2-> Break BL starting on RP
     auto hasBroken {BreakBeamToHeavy(rp, fKeepBreakBeam)};
 
@@ -624,8 +627,6 @@ void ActAlgorithm::Actions::FindRP::PerformFinerFits()
     //         }
     //     }
     // }
-    // 8-> Call other Actions defined in multiactions.conf
-    CallOtherFineActions();
 }
 
 bool ActAlgorithm::Actions::FindRP::BreakBeamToHeavy(const ActAlgorithm::VAction::XYZPointF& rp, bool keepSplit)
