@@ -15,8 +15,91 @@
 
 #include <ios>
 #include <iostream>
+#include <map>
 #include <tuple>
 #include <vector>
+
+struct RebinedVoxel
+{
+    RebinedVoxel(int nPadsX, int nPadsY, int nPadsZ) : nPadsX(nPadsX), nPadsY(nPadsY), nPadsZ(nPadsZ) {}
+
+    std::map<unsigned int, std::vector<ActRoot::Voxel>>
+        rebinnedIndexToVoxels {}; // Coorelation of Global Index in rebinned space to voxels in original space
+    int nPadsX {};
+    int nPadsY {};
+    int nPadsZ {};
+
+    unsigned int BuildGlobalIndex(const int& x, const int& y, const int& z)
+    {
+        return x + y * nPadsX + z * nPadsX * nPadsY;
+    }
+};
+
+std::pair<std::vector<ActRoot::Voxel>, RebinedVoxel> RebinTracks(const std::vector<ActRoot::Voxel>& voxels,
+                                                                 ActRoot::TPCParameters* tpcPars, int rebinX,
+                                                                 int rebinY = -1, int rebinZ = -1)
+{
+    // Rebin all voxels by the rebin factor and store the rebined voxels (no repeat positions, if so sum the charges)
+    std::vector<ActRoot::Voxel> rebinnedVoxels {};
+    int nPadsX = tpcPars->GetNPADSX() / rebinX;
+    if(rebinY == -1)
+        rebinY = rebinX;
+    if(rebinZ == -1)
+        rebinZ = rebinX;
+    int nPadsY = tpcPars->GetNPADSY() / rebinY;
+    int nPadsZ = tpcPars->GetNPADSZ() / rebinZ;
+    RebinedVoxel rebinedData {nPadsX, nPadsY, nPadsZ};
+    // position
+    std::map<unsigned int, unsigned int> rebinedIndexAndPosition; // global rebined index -> position in rebinnedVoxels
+                                                                  // vector
+    for(auto& voxel : voxels)
+    {
+        auto pos = voxel.GetPosition();
+        int x = std::floor(pos.X() / rebinX);
+        int y = std::floor(pos.Y() / rebinY);
+        int z = std::floor(pos.Z() / rebinZ);
+
+        // Get the global index of the rebinned voxel
+        auto globalIndex = rebinedData.BuildGlobalIndex(x, y, z);
+        rebinedData.rebinnedIndexToVoxels[globalIndex].push_back(voxel);
+
+        if(!rebinedIndexAndPosition.count(globalIndex))
+        {
+            ActRoot::Voxel rebinnedVoxel {{static_cast<float>(x), static_cast<float>(y), static_cast<float>(z)},
+                                          voxel.GetCharge(),
+                                          voxel.GetIsSaturated()};
+            rebinnedVoxels.push_back(rebinnedVoxel);
+            rebinedIndexAndPosition[globalIndex] = rebinnedVoxels.size() - 1;
+        }
+        else
+        {
+            auto idx {rebinedIndexAndPosition[globalIndex]};
+            rebinnedVoxels[idx].SetCharge(rebinnedVoxels[idx].GetCharge() + voxel.GetCharge());
+        }
+    }
+    return {rebinnedVoxels, rebinedData};
+}
+
+std::vector<ActRoot::Voxel> UndoRebinning(std::vector<ActRoot::Voxel>& rebinedVoxels, RebinedVoxel& rebinedData)
+{
+    // Compute the global index for the rebined voxel, and return the voxels in the map with that index
+    std::vector<ActRoot::Voxel> unrebinedVoxels;
+    for(const auto& voxel : rebinedVoxels)
+    {
+        auto pos = voxel.GetPosition();
+        int x = static_cast<int>(pos.X());
+        int y = static_cast<int>(pos.Y());
+        int z = static_cast<int>(pos.Z());
+
+        unsigned int globalIndex = rebinedData.BuildGlobalIndex(x, y, z);
+        if(rebinedData.rebinnedIndexToVoxels.count(globalIndex))
+        {
+            unrebinedVoxels.insert(unrebinedVoxels.end(), rebinedData.rebinnedIndexToVoxels.at(globalIndex).begin(),
+                                   rebinedData.rebinnedIndexToVoxels.at(globalIndex).end());
+        }
+    }
+    return unrebinedVoxels;
+}
 
 std::tuple<ActAlgorithm::XYZPoint, ActAlgorithm::XYZPoint, double>
 ActAlgorithm::ComputeRPIn3D(XYZPoint pA, XYZVector vA, XYZPoint pB, XYZVector vB)
