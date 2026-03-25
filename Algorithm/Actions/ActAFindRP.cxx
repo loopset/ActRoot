@@ -560,7 +560,7 @@ void ActAlgorithm::Actions::FindRP::PerformFinerFits()
         return;
     const auto& rp {fTPCData->fRPs.front()};
 
-    // 1-> Call other Actions defined in multiactions.conf 
+    // 1-> Call other Actions defined in multiactions.conf
     CallOtherFineActions();
 
     // 2-> Break BL starting on RP
@@ -981,7 +981,13 @@ void ActAlgorithm::Actions::FindRP::CallOtherFineActions()
     {
         if(fMultiAction->HasAction(other))
         {
-            fMultiAction->GetAction(other)->Run();
+            auto action {fMultiAction->GetAction(other)};
+            auto status {action->GetIsEnabled()};
+            // Force execution of this action regardless of fIsEnabled state
+            // Makes sense bc you're explicitly demanding it here
+            action->SetIsEnabled(true);
+            action->Run();
+            action->SetIsEnabled(status);
         }
         else
             throw std::runtime_error("FindRP::CallOtherFineActions(): cannot load other Action named " + other);

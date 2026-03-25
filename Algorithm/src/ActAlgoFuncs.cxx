@@ -20,9 +20,9 @@
 #include <vector>
 
 
-std::pair<std::vector<ActRoot::Voxel>, ActAlgorithm::RebinedVoxel> ActAlgorithm::RebinTracks(const std::vector<ActRoot::Voxel>& voxels,
-                                                                 ActRoot::TPCParameters* tpcPars, int rebinX,
-                                                                 int rebinY, int rebinZ)
+std::pair<std::vector<ActRoot::Voxel>, ActAlgorithm::RebinedVoxel>
+ActAlgorithm::RebinTracks(const std::vector<ActRoot::Voxel>& voxels, ActRoot::TPCParameters* tpcPars, int rebinX,
+                          int rebinY, int rebinZ)
 {
     // Rebin all voxels by the rebin factor and store the rebined voxels (no repeat positions, if so sum the charges)
     std::vector<ActRoot::Voxel> rebinnedVoxels {};
@@ -40,9 +40,9 @@ std::pair<std::vector<ActRoot::Voxel>, ActAlgorithm::RebinedVoxel> ActAlgorithm:
     for(auto& voxel : voxels)
     {
         auto pos = voxel.GetPosition();
-        int x {std::floor(pos.X() / rebinX)};
-        int y {std::floor(pos.Y() / rebinY)};
-        int z {std::floor(pos.Z() / rebinZ)};
+        int x {static_cast<int>(pos.X() / rebinX)};
+        int y {static_cast<int>(pos.Y() / rebinY)};
+        int z {static_cast<int>(pos.Z() / rebinZ)};
 
         // Get the global index of the rebinned voxel
         auto globalIndex {rebinedData.BuildGlobalIndex(x, y, z)};
@@ -65,7 +65,8 @@ std::pair<std::vector<ActRoot::Voxel>, ActAlgorithm::RebinedVoxel> ActAlgorithm:
     return {rebinnedVoxels, rebinedData};
 }
 
-std::vector<ActRoot::Voxel> ActAlgorithm::UndoRebinning(std::vector<ActRoot::Voxel>& rebinedVoxels, ActAlgorithm::RebinedVoxel& rebinedData)
+std::vector<ActRoot::Voxel>
+ActAlgorithm::UndoRebinning(std::vector<ActRoot::Voxel>& rebinedVoxels, ActAlgorithm::RebinedVoxel& rebinedData)
 {
     // Compute the global index for the rebined voxel, and return the voxels in the map with that index
     std::vector<ActRoot::Voxel> unrebinedVoxels;

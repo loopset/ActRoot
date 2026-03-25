@@ -26,10 +26,11 @@ typedef std::pair<XYZPoint, std::pair<int, int>> RPElement;
 typedef std::vector<RPElement> RPVector;
 typedef std::pair<XYZPoint, std::set<int>> RPSet;
 
+// Class holding equivalence between Voxel and RebinnedVoxel
 struct RebinedVoxel
 {
     std::map<unsigned int, std::vector<ActRoot::Voxel>>
-        rebinnedIndexToVoxels {}; // Coorelation of Global Index in rebinned space to voxels in original space
+        rebinnedIndexToVoxels {}; // Correlation of Global Index in rebinned space to voxels in original space
     int nPadsX {};
     int nPadsY {};
     int nPadsZ {};
