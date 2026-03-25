@@ -26,13 +26,13 @@ std::pair<std::vector<ActRoot::Voxel>, ActAlgorithm::RebinedVoxel> ActAlgorithm:
 {
     // Rebin all voxels by the rebin factor and store the rebined voxels (no repeat positions, if so sum the charges)
     std::vector<ActRoot::Voxel> rebinnedVoxels {};
-    int nPadsX = tpcPars->GetNPADSX() / rebinX;
+    int nPadsX {tpcPars->GetNPADSX() / rebinX};
     if(rebinY == -1)
         rebinY = rebinX;
     if(rebinZ == -1)
         rebinZ = rebinX;
-    int nPadsY = tpcPars->GetNPADSY() / rebinY;
-    int nPadsZ = tpcPars->GetNPADSZ() / rebinZ;
+    int nPadsY {tpcPars->GetNPADSY() / rebinY};
+    int nPadsZ {tpcPars->GetNPADSZ() / rebinZ};
     ActAlgorithm::RebinedVoxel rebinedData {nPadsX, nPadsY, nPadsZ};
     // position
     std::map<unsigned int, unsigned int> rebinedIndexAndPosition; // global rebined index -> position in rebinnedVoxels
@@ -40,12 +40,12 @@ std::pair<std::vector<ActRoot::Voxel>, ActAlgorithm::RebinedVoxel> ActAlgorithm:
     for(auto& voxel : voxels)
     {
         auto pos = voxel.GetPosition();
-        int x = std::floor(pos.X() / rebinX);
-        int y = std::floor(pos.Y() / rebinY);
-        int z = std::floor(pos.Z() / rebinZ);
+        int x {std::floor(pos.X() / rebinX)};
+        int y {std::floor(pos.Y() / rebinY)};
+        int z {std::floor(pos.Z() / rebinZ)};
 
         // Get the global index of the rebinned voxel
-        auto globalIndex = rebinedData.BuildGlobalIndex(x, y, z);
+        auto globalIndex {rebinedData.BuildGlobalIndex(x, y, z)};
         rebinedData.rebinnedIndexToVoxels[globalIndex].push_back(voxel);
 
         if(!rebinedIndexAndPosition.count(globalIndex))
@@ -72,11 +72,11 @@ std::vector<ActRoot::Voxel> ActAlgorithm::UndoRebinning(std::vector<ActRoot::Vox
     for(const auto& voxel : rebinedVoxels)
     {
         auto pos = voxel.GetPosition();
-        int x = static_cast<int>(pos.X());
-        int y = static_cast<int>(pos.Y());
-        int z = static_cast<int>(pos.Z());
+        int x {static_cast<int>(pos.X())};
+        int y {static_cast<int>(pos.Y())};
+        int z {static_cast<int>(pos.Z())};
 
-        unsigned int globalIndex = rebinedData.BuildGlobalIndex(x, y, z);
+        unsigned int globalIndex {rebinedData.BuildGlobalIndex(x, y, z)};
         if(rebinedData.rebinnedIndexToVoxels.count(globalIndex))
         {
             unrebinedVoxels.insert(unrebinedVoxels.end(), rebinedData.rebinnedIndexToVoxels.at(globalIndex).begin(),

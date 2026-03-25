@@ -28,13 +28,13 @@ typedef std::pair<XYZPoint, std::set<int>> RPSet;
 
 struct RebinedVoxel
 {
-    RebinedVoxel(int nPadsX, int nPadsY, int nPadsZ) : nPadsX(nPadsX), nPadsY(nPadsY), nPadsZ(nPadsZ) {}
-
     std::map<unsigned int, std::vector<ActRoot::Voxel>>
         rebinnedIndexToVoxels {}; // Coorelation of Global Index in rebinned space to voxels in original space
     int nPadsX {};
     int nPadsY {};
     int nPadsZ {};
+
+    RebinedVoxel(int nPadsX, int nPadsY, int nPadsZ) : nPadsX(nPadsX), nPadsY(nPadsY), nPadsZ(nPadsZ) {}
 
     unsigned int BuildGlobalIndex(const int& x, const int& y, const int& z)
     {
