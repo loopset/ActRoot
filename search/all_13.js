@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['undorebinning_0',['UndoRebinning',['../ActAlgoFuncs_8cxx.html#a849b8b728e189eaa7bcfca1f6d443c36',1,'ActAlgoFuncs.cxx']]],
+  ['undorebinning_0',['UndoRebinning',['../namespaceActAlgorithm.html#a166ff0338b0726986833daa918861ca3',1,'ActAlgorithm']]],
   ['updategeometry_1',['UpdateGeometry',['../classActDriftDetector.html#afbdf1400fd9965b4aa045cb8b17e3b32',1,'ActDriftDetector']]],
   ['updateplacementsfrommatrix_2',['UpdatePlacementsFromMatrix',['../classActPhysics_1_1SilLayer.html#a5d2dc5ecf4f56e812dbb836aa02f5221',1,'ActPhysics::SilLayer']]],
   ['updaterange_3',['UpdateRange',['../classActRoot_1_1Cluster.html#a25065226877de2c432829bb658b9add3',1,'ActRoot::Cluster']]],
