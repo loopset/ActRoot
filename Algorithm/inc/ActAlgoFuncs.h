@@ -6,6 +6,7 @@
 #include "Math/Point3Dfwd.h"
 #include "Math/Vector3Dfwd.h"
 
+#include <map>
 #include <set>
 #include <tuple>
 #include <utility>
@@ -24,6 +25,30 @@ typedef ROOT::Math::XYZVectorF XYZVector;
 typedef std::pair<XYZPoint, std::pair<int, int>> RPElement;
 typedef std::vector<RPElement> RPVector;
 typedef std::pair<XYZPoint, std::set<int>> RPSet;
+
+struct RebinedVoxel
+{
+    RebinedVoxel(int nPadsX, int nPadsY, int nPadsZ) : nPadsX(nPadsX), nPadsY(nPadsY), nPadsZ(nPadsZ) {}
+
+    std::map<unsigned int, std::vector<ActRoot::Voxel>>
+        rebinnedIndexToVoxels {}; // Coorelation of Global Index in rebinned space to voxels in original space
+    int nPadsX {};
+    int nPadsY {};
+    int nPadsZ {};
+
+    unsigned int BuildGlobalIndex(const int& x, const int& y, const int& z)
+    {
+        return x + y * nPadsX + z * nPadsX * nPadsY;
+    }
+};
+
+// Rebin clusters
+std::pair<std::vector<ActRoot::Voxel>, RebinedVoxel> RebinTracks(const std::vector<ActRoot::Voxel>& voxels,
+                                                                 ActRoot::TPCParameters* tpcPars, int rebinX,
+                                                                 int rebinY = -1, int rebinZ = -1);
+
+// Undo rebinning
+std::vector<ActRoot::Voxel> UndoRebinning(std::vector<ActRoot::Voxel>& rebinedVoxels, RebinedVoxel& rebinedData);
 
 // RP computation in 3D
 std::tuple<XYZPoint, XYZPoint, double> ComputeRPIn3D(XYZPoint pA, XYZVector vA, XYZPoint pB, XYZVector vB);

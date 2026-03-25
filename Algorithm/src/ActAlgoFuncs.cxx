@@ -19,25 +19,10 @@
 #include <tuple>
 #include <vector>
 
-struct RebinedVoxel
-{
-    RebinedVoxel(int nPadsX, int nPadsY, int nPadsZ) : nPadsX(nPadsX), nPadsY(nPadsY), nPadsZ(nPadsZ) {}
 
-    std::map<unsigned int, std::vector<ActRoot::Voxel>>
-        rebinnedIndexToVoxels {}; // Coorelation of Global Index in rebinned space to voxels in original space
-    int nPadsX {};
-    int nPadsY {};
-    int nPadsZ {};
-
-    unsigned int BuildGlobalIndex(const int& x, const int& y, const int& z)
-    {
-        return x + y * nPadsX + z * nPadsX * nPadsY;
-    }
-};
-
-std::pair<std::vector<ActRoot::Voxel>, RebinedVoxel> RebinTracks(const std::vector<ActRoot::Voxel>& voxels,
+std::pair<std::vector<ActRoot::Voxel>, ActAlgorithm::RebinedVoxel> ActAlgorithm::RebinTracks(const std::vector<ActRoot::Voxel>& voxels,
                                                                  ActRoot::TPCParameters* tpcPars, int rebinX,
-                                                                 int rebinY = -1, int rebinZ = -1)
+                                                                 int rebinY, int rebinZ)
 {
     // Rebin all voxels by the rebin factor and store the rebined voxels (no repeat positions, if so sum the charges)
     std::vector<ActRoot::Voxel> rebinnedVoxels {};
@@ -48,7 +33,7 @@ std::pair<std::vector<ActRoot::Voxel>, RebinedVoxel> RebinTracks(const std::vect
         rebinZ = rebinX;
     int nPadsY = tpcPars->GetNPADSY() / rebinY;
     int nPadsZ = tpcPars->GetNPADSZ() / rebinZ;
-    RebinedVoxel rebinedData {nPadsX, nPadsY, nPadsZ};
+    ActAlgorithm::RebinedVoxel rebinedData {nPadsX, nPadsY, nPadsZ};
     // position
     std::map<unsigned int, unsigned int> rebinedIndexAndPosition; // global rebined index -> position in rebinnedVoxels
                                                                   // vector
@@ -80,7 +65,7 @@ std::pair<std::vector<ActRoot::Voxel>, RebinedVoxel> RebinTracks(const std::vect
     return {rebinnedVoxels, rebinedData};
 }
 
-std::vector<ActRoot::Voxel> UndoRebinning(std::vector<ActRoot::Voxel>& rebinedVoxels, RebinedVoxel& rebinedData)
+std::vector<ActRoot::Voxel> ActAlgorithm::UndoRebinning(std::vector<ActRoot::Voxel>& rebinedVoxels, ActAlgorithm::RebinedVoxel& rebinedData)
 {
     // Compute the global index for the rebined voxel, and return the voxels in the map with that index
     std::vector<ActRoot::Voxel> unrebinedVoxels;
