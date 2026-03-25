@@ -1177,11 +1177,15 @@ bool ActRoot::MergerDetector::ComputeQProfile()
                              std::abs(u.Z())})}; // this is the step along the line direction, so we ensure that we dont
                                                  // skip any voxel in the profile avoiding a jumping profile
         ds = std::max(ds, 0.5 * fTPCPars->GetPadSide()); // Step should not be smaller than half a pad side to avoid too
-        // much fluctuations in the profile
+        if(std::isnan(ds))
+            ds = 0.5 * fTPCPars->GetPadSide(); // In case of any issue with the direction, set it to a default value to
+                                               // avoid problems with the histogram binning and ensure that we dont have
+                                               // much fluctuations in the profile
         double rangeHisto {265.};
         double safeDistanceHisto {10.};
-        int nBins {
-            std::max(1, int(std::ceil((rangeHisto + safeDistanceHisto) / ds)))}; // nBins depend on the step and TL
+        int nBins {std::max(
+            2, int(std::ceil((rangeHisto + safeDistanceHisto) / ds)))}; // nBins depend on the step and TL - min of 2 to
+                                                                        // avoid probles with spline interpolation
         // 1.1-> Init the histogram
         TH1F h {"hQProfile", "QProfile", nBins, -safeDistanceHisto, 265 + 5};
         TString units {fEnableConversion ? "mm" : "pad units"};
@@ -1313,7 +1317,9 @@ double ActRoot::MergerDetector::GetRangeFromProfile(TH1F* h, bool smooth)
     auto range {yMax / 5};
     // 4-> Create interpolation functions
     // Create TSpline
-    auto spe {std::make_unique<TSpline3>(h)};
+    if(!h->GetEntries())
+        return 0;
+    auto spe {std::make_unique<TSpline3>(h, "b2,e2", 0, 0)};
     // And now function
     auto func {std::make_unique<TF1>(
         "func", [&](double* x, double* p) { return spe->Eval(x[0]); }, h->GetXaxis()->GetXmin(),
