@@ -1083,13 +1083,13 @@ Functions</h2></td></tr>
 <div class="fragment"><div class="line"><span class="lineno">   26</span>{</div>
 <div class="line"><span class="lineno">   27</span>    <span class="comment">// Rebin all voxels by the rebin factor and store the rebined voxels (no repeat positions, if so sum the charges)</span></div>
 <div class="line"><span class="lineno">   28</span>    std::vector&lt;ActRoot::Voxel&gt; rebinnedVoxels {};</div>
-<div class="line"><span class="lineno">   29</span>    <span class="keywordtype">int</span> nPadsX = tpcPars-&gt;<a class="code hl_function" href="classActRoot_1_1TPCParameters.html#a884d632cf9c9592ca0303b2a183e04e5">GetNPADSX</a>() / rebinX;</div>
+<div class="line"><span class="lineno">   29</span>    <span class="keywordtype">int</span> nPadsX {tpcPars-&gt;<a class="code hl_function" href="classActRoot_1_1TPCParameters.html#a884d632cf9c9592ca0303b2a183e04e5">GetNPADSX</a>() / rebinX};</div>
 <div class="line"><span class="lineno">   30</span>    <span class="keywordflow">if</span>(rebinY == -1)</div>
 <div class="line"><span class="lineno">   31</span>        rebinY = rebinX;</div>
 <div class="line"><span class="lineno">   32</span>    <span class="keywordflow">if</span>(rebinZ == -1)</div>
 <div class="line"><span class="lineno">   33</span>        rebinZ = rebinX;</div>
-<div class="line"><span class="lineno">   34</span>    <span class="keywordtype">int</span> nPadsY = tpcPars-&gt;<a class="code hl_function" href="classActRoot_1_1TPCParameters.html#ab05369c9e3a0b0b56a3f00c0e4a6cd7f">GetNPADSY</a>() / rebinY;</div>
-<div class="line"><span class="lineno">   35</span>    <span class="keywordtype">int</span> nPadsZ = tpcPars-&gt;<a class="code hl_function" href="classActRoot_1_1TPCParameters.html#a1c24e33928f47eadeb7830235f867510">GetNPADSZ</a>() / rebinZ;</div>
+<div class="line"><span class="lineno">   34</span>    <span class="keywordtype">int</span> nPadsY {tpcPars-&gt;<a class="code hl_function" href="classActRoot_1_1TPCParameters.html#ab05369c9e3a0b0b56a3f00c0e4a6cd7f">GetNPADSY</a>() / rebinY};</div>
+<div class="line"><span class="lineno">   35</span>    <span class="keywordtype">int</span> nPadsZ {tpcPars-&gt;<a class="code hl_function" href="classActRoot_1_1TPCParameters.html#a1c24e33928f47eadeb7830235f867510">GetNPADSZ</a>() / rebinZ};</div>
 <div class="line"><span class="lineno">   36</span>    <a class="code hl_struct" href="structActAlgorithm_1_1RebinedVoxel.html">ActAlgorithm::RebinedVoxel</a> rebinedData {nPadsX, nPadsY, nPadsZ};</div>
 <div class="line"><span class="lineno">   37</span>    <span class="comment">// position</span></div>
 <div class="line"><span class="lineno">   38</span>    std::map&lt;unsigned int, unsigned int&gt; rebinedIndexAndPosition; <span class="comment">// global rebined index -&gt; position in rebinnedVoxels</span></div>
@@ -1097,12 +1097,12 @@ Functions</h2></td></tr>
 <div class="line"><span class="lineno">   40</span>    <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; voxel : voxels)</div>
 <div class="line"><span class="lineno">   41</span>    {</div>
 <div class="line"><span class="lineno">   42</span>        <span class="keyword">auto</span> pos = voxel.GetPosition();</div>
-<div class="line"><span class="lineno">   43</span>        <span class="keywordtype">int</span> x = std::floor(pos.X() / rebinX);</div>
-<div class="line"><span class="lineno">   44</span>        <span class="keywordtype">int</span> y = std::floor(pos.Y() / rebinY);</div>
-<div class="line"><span class="lineno">   45</span>        <span class="keywordtype">int</span> z = std::floor(pos.Z() / rebinZ);</div>
+<div class="line"><span class="lineno">   43</span>        <span class="keywordtype">int</span> x {std::floor(pos.X() / rebinX)};</div>
+<div class="line"><span class="lineno">   44</span>        <span class="keywordtype">int</span> y {std::floor(pos.Y() / rebinY)};</div>
+<div class="line"><span class="lineno">   45</span>        <span class="keywordtype">int</span> z {std::floor(pos.Z() / rebinZ)};</div>
 <div class="line"><span class="lineno">   46</span> </div>
 <div class="line"><span class="lineno">   47</span>        <span class="comment">// Get the global index of the rebinned voxel</span></div>
-<div class="line"><span class="lineno">   48</span>        <span class="keyword">auto</span> globalIndex = rebinedData.BuildGlobalIndex(x, y, z);</div>
+<div class="line"><span class="lineno">   48</span>        <span class="keyword">auto</span> globalIndex {rebinedData.<a class="code hl_function" href="structActAlgorithm_1_1RebinedVoxel.html#a90473fdc3f0dc9e148c1bfb63bbd4a78">BuildGlobalIndex</a>(x, y, z)};</div>
 <div class="line"><span class="lineno">   49</span>        rebinedData.rebinnedIndexToVoxels[globalIndex].push_back(voxel);</div>
 <div class="line"><span class="lineno">   50</span> </div>
 <div class="line"><span class="lineno">   51</span>        <span class="keywordflow">if</span>(!rebinedIndexAndPosition.count(globalIndex))</div>
@@ -1123,6 +1123,7 @@ Functions</h2></td></tr>
 <div class="line"><span class="lineno">   66</span>}</div>
 <div class="ttc" id="aclassActRoot_1_1Voxel_html_a9bcbc52f49aefd0c7aba38a83b7a333a"><div class="ttname"><a href="classActRoot_1_1Voxel.html#a9bcbc52f49aefd0c7aba38a83b7a333a">ActRoot::Voxel::GetCharge</a></div><div class="ttdeci">float GetCharge() const</div><div class="ttdef"><b>Definition</b> ActVoxel.h:74</div></div>
 <div class="ttc" id="astructActAlgorithm_1_1RebinedVoxel_html"><div class="ttname"><a href="structActAlgorithm_1_1RebinedVoxel.html">ActAlgorithm::RebinedVoxel</a></div><div class="ttdef"><b>Definition</b> ActAlgoFuncs.h:30</div></div>
+<div class="ttc" id="astructActAlgorithm_1_1RebinedVoxel_html_a90473fdc3f0dc9e148c1bfb63bbd4a78"><div class="ttname"><a href="structActAlgorithm_1_1RebinedVoxel.html#a90473fdc3f0dc9e148c1bfb63bbd4a78">ActAlgorithm::RebinedVoxel::BuildGlobalIndex</a></div><div class="ttdeci">unsigned int BuildGlobalIndex(const int &amp;x, const int &amp;y, const int &amp;z)</div><div class="ttdef"><b>Definition</b> ActAlgoFuncs.h:39</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -1252,11 +1253,11 @@ template&lt;typename T &gt; </div>
 <div class="line"><span class="lineno">   72</span>    <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; voxel : rebinedVoxels)</div>
 <div class="line"><span class="lineno">   73</span>    {</div>
 <div class="line"><span class="lineno">   74</span>        <span class="keyword">auto</span> pos = voxel.GetPosition();</div>
-<div class="line"><span class="lineno">   75</span>        <span class="keywordtype">int</span> x = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(pos.X());</div>
-<div class="line"><span class="lineno">   76</span>        <span class="keywordtype">int</span> y = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(pos.Y());</div>
-<div class="line"><span class="lineno">   77</span>        <span class="keywordtype">int</span> z = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(pos.Z());</div>
+<div class="line"><span class="lineno">   75</span>        <span class="keywordtype">int</span> x {<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(pos.X())};</div>
+<div class="line"><span class="lineno">   76</span>        <span class="keywordtype">int</span> y {<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(pos.Y())};</div>
+<div class="line"><span class="lineno">   77</span>        <span class="keywordtype">int</span> z {<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(pos.Z())};</div>
 <div class="line"><span class="lineno">   78</span> </div>
-<div class="line"><span class="lineno">   79</span>        <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> globalIndex = rebinedData.<a class="code hl_function" href="structActAlgorithm_1_1RebinedVoxel.html#a90473fdc3f0dc9e148c1bfb63bbd4a78">BuildGlobalIndex</a>(x, y, z);</div>
+<div class="line"><span class="lineno">   79</span>        <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> globalIndex {rebinedData.<a class="code hl_function" href="structActAlgorithm_1_1RebinedVoxel.html#a90473fdc3f0dc9e148c1bfb63bbd4a78">BuildGlobalIndex</a>(x, y, z)};</div>
 <div class="line"><span class="lineno">   80</span>        <span class="keywordflow">if</span>(rebinedData.<a class="code hl_variable" href="structActAlgorithm_1_1RebinedVoxel.html#ab13e895ddd7d8f840044515bc2598f35">rebinnedIndexToVoxels</a>.count(globalIndex))</div>
 <div class="line"><span class="lineno">   81</span>        {</div>
 <div class="line"><span class="lineno">   82</span>            unrebinedVoxels.insert(unrebinedVoxels.end(), rebinedData.<a class="code hl_variable" href="structActAlgorithm_1_1RebinedVoxel.html#ab13e895ddd7d8f840044515bc2598f35">rebinnedIndexToVoxels</a>.at(globalIndex).begin(),</div>
@@ -1265,8 +1266,7 @@ template&lt;typename T &gt; </div>
 <div class="line"><span class="lineno">   85</span>    }</div>
 <div class="line"><span class="lineno">   86</span>    <span class="keywordflow">return</span> unrebinedVoxels;</div>
 <div class="line"><span class="lineno">   87</span>}</div>
-<div class="ttc" id="astructActAlgorithm_1_1RebinedVoxel_html_a90473fdc3f0dc9e148c1bfb63bbd4a78"><div class="ttname"><a href="structActAlgorithm_1_1RebinedVoxel.html#a90473fdc3f0dc9e148c1bfb63bbd4a78">ActAlgorithm::RebinedVoxel::BuildGlobalIndex</a></div><div class="ttdeci">unsigned int BuildGlobalIndex(const int &amp;x, const int &amp;y, const int &amp;z)</div><div class="ttdef"><b>Definition</b> ActAlgoFuncs.h:39</div></div>
-<div class="ttc" id="astructActAlgorithm_1_1RebinedVoxel_html_ab13e895ddd7d8f840044515bc2598f35"><div class="ttname"><a href="structActAlgorithm_1_1RebinedVoxel.html#ab13e895ddd7d8f840044515bc2598f35">ActAlgorithm::RebinedVoxel::rebinnedIndexToVoxels</a></div><div class="ttdeci">std::map&lt; unsigned int, std::vector&lt; ActRoot::Voxel &gt; &gt; rebinnedIndexToVoxels</div><div class="ttdef"><b>Definition</b> ActAlgoFuncs.h:34</div></div>
+<div class="ttc" id="astructActAlgorithm_1_1RebinedVoxel_html_ab13e895ddd7d8f840044515bc2598f35"><div class="ttname"><a href="structActAlgorithm_1_1RebinedVoxel.html#ab13e895ddd7d8f840044515bc2598f35">ActAlgorithm::RebinedVoxel::rebinnedIndexToVoxels</a></div><div class="ttdeci">std::map&lt; unsigned int, std::vector&lt; ActRoot::Voxel &gt; &gt; rebinnedIndexToVoxels</div><div class="ttdef"><b>Definition</b> ActAlgoFuncs.h:32</div></div>
 </div><!-- fragment -->
 </div>
 </div>
