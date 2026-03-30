@@ -265,7 +265,7 @@ bool ActRoot::InputParser::IsComment(const std::string& line)
     if(line.length() == 0)
         return true;
 
-    auto pos {line.find(ActRoot::kCommentSeparator)};
+    auto pos {line.find_first_of(ActRoot::kCommentSeparator)};
     if(pos != std::string::npos)
         return true;
     else

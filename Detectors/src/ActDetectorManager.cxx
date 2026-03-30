@@ -43,7 +43,12 @@ ActRoot::DetectorManager::DetectorManager(ActRoot::ModeType mode) : fMode(mode)
 void ActRoot::DetectorManager::InitDetectors()
 {
     if(fMode == ModeType::EReadTPC)
+    {
         fDetectors[DetectorType::EActar] = std::make_shared<ActRoot::TPCDetector>();
+        // if requested to parse GATCONF alongside TPCData
+        if(ActRoot::Options::GetInstance()->GetWithGATCONF())
+            fDetectors[DetectorType::EModular] = std::make_shared<ActRoot::ModularDetector>();
+    }
     else if(fMode == ModeType::EReadSilMod)
     {
         // Silicon
@@ -88,8 +93,6 @@ void ActRoot::DetectorManager::ReadDetectorFile(const std::string& file, bool pr
     {
         std::string str {GetDetectorTypeStr(key)};
         det->ReadConfiguration(parser.GetBlock(str));
-        if(print)
-            det->Print();
     }
     // Workaround for Merger: needs access to all the other parameters
     // but not for its filter (ModeType::ECorrect)
@@ -102,6 +105,28 @@ void ActRoot::DetectorManager::ReadDetectorFile(const std::string& file, bool pr
                 continue;
             merger->SetParameters(det->GetParameters());
         }
+    }
+
+    // Workaround for TPCDetector with ActRoot::Options::fWithGATCONF ON. Pass MergerPars to TPCDet and delete MergerDet
+    // from vector
+    if(fMode == ModeType::EReadTPC && ActRoot::Options::GetInstance()->GetWithGATCONF())
+    {
+        // Get ModPars from just parsed detector
+        auto pars {dynamic_cast<ModularParameters*>(fDetectors[DetectorType::EModular]->GetParameters())};
+        // Get and cast TPC detector
+        auto tpc {std::dynamic_pointer_cast<ActRoot::TPCDetector>(fDetectors[DetectorType::EActar])};
+        // And set modular parameters. The line below just calls the copy constructor
+        tpc->SetModularParameters(std::make_shared<ModularParameters>(*pars));
+        // Delete Modular detector
+        DeleteDetector(DetectorType::EModular);
+    }
+
+
+    // Move print to here
+    if(print)
+    {
+        for(const auto& [_, det] : fDetectors)
+            det->Print();
     }
 }
 

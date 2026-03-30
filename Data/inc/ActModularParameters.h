@@ -17,6 +17,7 @@ private:
 
 public:
     std::string GetName(int vxi); //!< Get name of ModularLeaf according to Action file
+    int GetVXIOf(const std::string& name);
     void ReadActions(const std::vector<std::string>& names,
                      const std::string& file); //!< Read Action file
     void Print() const override;

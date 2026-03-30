@@ -158,7 +158,7 @@ public:
     double GetQValue() const { return fQvalue; }
     double GetT1Thresh() const;
     const Particle& GetParticle(unsigned int i) const;
-    std::shared_ptr<Kinematics> GetOtherKinematics() { return fOtherKin; }
+    std::shared_ptr<Kinematics> GetOtherKinematics();
 
 private:
     void ConstructFromStr(const std::string& reaction);

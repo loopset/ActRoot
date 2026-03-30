@@ -746,3 +746,10 @@ std::pair<double, double> ActPhysics::Kinematics::ComputeOtherInLab(double theta
     fOtherKin->ComputeRecoilKinematics(thetaCM, 0);
     return {fOtherKin->GetTheta3Lab(), fOtherKin->GetT3Lab()};
 }
+
+std::shared_ptr<ActPhysics::Kinematics> ActPhysics::Kinematics::GetOtherKinematics()
+{
+    if(!fOtherKin)
+        InitOtherKinematics();
+    return fOtherKin;
+}

@@ -26,6 +26,8 @@ void ActRoot::TPCData::ClearFilter()
 void ActRoot::TPCData::Print() const
 {
     std::cout << "==== TPCData ====" << '\n';
+    if(fTrigger > 0)
+        std::cout << "Trigger : " << fTrigger << '\n';
     std::cout << "N of clusters = " << fClusters.size() << '\n';
     for(const auto& cluster : fClusters)
     {

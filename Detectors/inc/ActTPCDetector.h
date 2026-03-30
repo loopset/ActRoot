@@ -1,6 +1,7 @@
 #ifndef ActTPCDetector_h
 #define ActTPCDetector_h
 
+#include "ActModularParameters.h"
 #include "ActTPCData.h"
 #include "ActTPCLegacyData.h"
 #include "ActTPCParameters.h"
@@ -54,6 +55,12 @@ private:
     std::shared_ptr<ActAlgorithm::VCluster> fCluster {};
     // Filter method
     std::shared_ptr<ActAlgorithm::VFilter> fFilter {};
+
+    // Pointer to ModularParameters to append any labels if needed
+    std::shared_ptr<ModularParameters> fModularPars {};
+    // For the moment it is just GATCONF, but maybe in the future we need more
+    // That is why I passed a pointer to the whole ModPars and not just the int of GATCONF VXI
+    int fVXIofGATCONF {-11};
 
     // Ensure cleaning of news in this class
     bool fDelMEvent {};
@@ -118,8 +125,11 @@ public:
 
     void Recluster();
 
+    void SetModularParameters(std::shared_ptr<ModularParameters> modpars);
+
 private:
     void ReadHits(ReducedData& coas, const int& where);
+    void ReadGATCONF(ReducedData& coas);
     void CleanPadMatrix();
     void InitClusterMethod(const std::string& method);
     void InitFilterMethod(const std::string& method);

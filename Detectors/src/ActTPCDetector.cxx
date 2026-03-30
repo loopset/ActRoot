@@ -202,6 +202,9 @@ void ActRoot::TPCDetector::BuildEventData(int run, int entry)
         {
             ReadHits(coas, where);
         }
+        // If co == 31, optionally parse GATCONF
+        if((co == 31) && fModularPars)
+            ReadGATCONF(coas);
     }
     // Clean pad matrix from saturated tracks along Z
     if(fCleanPadMatrix)
@@ -316,6 +319,19 @@ void ActRoot::TPCDetector::ReadHits(ReducedData& coas, const int& where)
     }
 }
 
+void ActRoot::TPCDetector::ReadGATCONF(ReducedData& coas)
+{
+    for(int hit = 0, size = coas.peakheight.size(); hit < size; hit++)
+    {
+        auto vxi {coas.peaktime[hit]};
+        if(vxi == fVXIofGATCONF)
+        {
+            fData->fTrigger = coas.peakheight[hit];
+            break;
+        }
+    }
+}
+
 void ActRoot::TPCDetector::CleanPadMatrix()
 {
     for(const auto& [_, pair] : fPadMatrix)
@@ -348,7 +364,10 @@ void ActRoot::TPCDetector::Print() const
         std::cout << BOLDCYAN << "-> CleanSaturation         ? " << std::boolalpha << fCleanSaturatedMEvent << '\n';
         std::cout << "-> CleanPadMatrix          ? " << std::boolalpha << fCleanPadMatrix << '\n';
         std::cout << "-> CleanDuplicatedVoxels   ? " << std::boolalpha << fCleanDuplicatedVoxels << '\n';
-        std::cout << "-> EnableRawBranchInFilter ? " << std::boolalpha << fEnableRawBranchInFilter << RESET << '\n';
+        std::cout << "-> EnableRawBranchInFilter ? " << std::boolalpha << fEnableRawBranchInFilter << '\n';
+        if(fModularPars)
+            std::cout << "-> Append GATCONF at VXI   : " << fVXIofGATCONF << '\n';
+        std::cout << RESET;
     }
     if(fCluster)
         fCluster->Print();
@@ -375,4 +394,10 @@ void ActRoot::TPCDetector::Reconfigure()
         fFilter->SetTPCParameters(&fPars);
         fFilter->SetClusterPtr(fCluster);
     }
+}
+
+void ActRoot::TPCDetector::SetModularParameters(std::shared_ptr<ModularParameters> modpars)
+{
+    fModularPars = modpars;
+    fVXIofGATCONF = fModularPars->GetVXIOf("GATCONF");
 }

@@ -2,6 +2,7 @@
 
 #include "TString.h"
 
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 
@@ -12,6 +13,14 @@ std::string ActRoot::ModularParameters::GetName(int vxi)
         return fVXI[vxi];
     else
         return "";
+}
+
+int ActRoot::ModularParameters::GetVXIOf(const std::string& name)
+{
+    auto it {std::find_if(fVXI.begin(), fVXI.end(), [&](const auto& p) { return p.second == name; })};
+    if(it != fVXI.end())
+        return it->first;
+    return -11;
 }
 
 void ActRoot::ModularParameters::ReadActions(const std::vector<std::string>& names, const std::string& file)

@@ -15,7 +15,7 @@ namespace ActRoot
 {
 const std::string kTokenSeparator {":"};
 const std::string kValueSeparator {","};
-const std::string kCommentSeparator {"%"};
+const std::string kCommentSeparator {"%#"}; // either % or #
 const std::string kBlockOpening {"["};
 const std::string kBlockClosing {"]"};
 const std::string kExpandValue {"..."};

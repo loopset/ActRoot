@@ -21,13 +21,14 @@ public:
     std::vector<Cluster> fClusters {};
     std::vector<Voxel> fRaw {};
     std::vector<XYZPoint> fRPs {};
+    unsigned int fTrigger {}; //!< If requested through the terminal, store GATCONF value
 
 public:
     void Clear() override;
     void ClearFilter() override;
     void Print() const override;
 
-    ClassDefOverride(TPCData, 1);
+    ClassDefOverride(TPCData, 2);
 };
 } // namespace ActRoot
 

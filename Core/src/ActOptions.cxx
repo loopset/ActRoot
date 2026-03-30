@@ -110,6 +110,9 @@ void ActRoot::Options::Parse(int argc, char** argv)
         // Verbose mode
         else if(arg == "-v")
             fIsVerbose = true;
+        // Include GATCONF in TPCData
+        else if(arg == "--with-gatconf")
+            fWithGATCONF = true;
         else
             throw std::invalid_argument("Options::Parse(): invalid argument : " + arg);
     }
@@ -143,6 +146,8 @@ void ActRoot::Options::Print() const
     std::cout << "-> Detector     : " << fDetFile << '\n';
     std::cout << "-> Calibrations : " << fCalFile << '\n';
     std::cout << "-> Data         : " << fDataFile << '\n';
+    if(fWithGATCONF)
+        std::cout << "-> WithGATCONF  : " << fWithGATCONF << '\n';
     std::cout << "--------------------" << RESET << '\n';
 }
 
