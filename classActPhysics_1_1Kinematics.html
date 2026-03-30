@@ -232,8 +232,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae69e05699cc9be349a9aee78ddaaaf8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9699c585a0373bcdbee7c9e837f466c1" id="r_a9699c585a0373bcdbee7c9e837f466c1"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classActPhysics_1_1Particle.html">Particle</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActPhysics_1_1Kinematics.html#a9699c585a0373bcdbee7c9e837f466c1">GetParticle</a> (unsigned int i) const</td></tr>
 <tr class="separator:a9699c585a0373bcdbee7c9e837f466c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a214bdf1a7d32d13455b2951ca353d2c8" id="r_a214bdf1a7d32d13455b2951ca353d2c8"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classActPhysics_1_1Kinematics.html">Kinematics</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActPhysics_1_1Kinematics.html#a214bdf1a7d32d13455b2951ca353d2c8">GetOtherKinematics</a> ()</td></tr>
-<tr class="separator:a214bdf1a7d32d13455b2951ca353d2c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8070a38b4809f8e2c5ad439f98eb1d98" id="r_a8070a38b4809f8e2c5ad439f98eb1d98"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classActPhysics_1_1Kinematics.html">Kinematics</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActPhysics_1_1Kinematics.html#a8070a38b4809f8e2c5ad439f98eb1d98">GetOtherKinematics</a> ()</td></tr>
+<tr class="separator:a8070a38b4809f8e2c5ad439f98eb1d98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -1679,29 +1679,25 @@ Private Attributes</h2></td></tr>
 </div><!-- fragment -->
 </div>
 </div>
-<a id="a214bdf1a7d32d13455b2951ca353d2c8" name="a214bdf1a7d32d13455b2951ca353d2c8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a214bdf1a7d32d13455b2951ca353d2c8">&#9670;&#160;</a></span>GetOtherKinematics()</h2>
+<a id="a8070a38b4809f8e2c5ad439f98eb1d98" name="a8070a38b4809f8e2c5ad439f98eb1d98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8070a38b4809f8e2c5ad439f98eb1d98">&#9670;&#160;</a></span>GetOtherKinematics()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt; <a class="el" href="classActPhysics_1_1Kinematics.html">Kinematics</a> &gt; ActPhysics::Kinematics::GetOtherKinematics </td>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classActPhysics_1_1Kinematics.html">ActPhysics::Kinematics</a> &gt; ActPhysics::Kinematics::GetOtherKinematics </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">  161</span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classActPhysics_1_1Kinematics.html#a69dcc0de4d0a35343d1f045f65938455">fOtherKin</a>; }</div>
+<div class="fragment"><div class="line"><span class="lineno">  751</span>{</div>
+<div class="line"><span class="lineno">  752</span>    <span class="keywordflow">if</span>(!<a class="code hl_variable" href="classActPhysics_1_1Kinematics.html#a69dcc0de4d0a35343d1f045f65938455">fOtherKin</a>)</div>
+<div class="line"><span class="lineno">  753</span>        <a class="code hl_function" href="classActPhysics_1_1Kinematics.html#ac85c339c1269d42871b737a49bd7d1ab">InitOtherKinematics</a>();</div>
+<div class="line"><span class="lineno">  754</span>    <span class="keywordflow">return</span> <a class="code hl_variable" href="classActPhysics_1_1Kinematics.html#a69dcc0de4d0a35343d1f045f65938455">fOtherKin</a>;</div>
+<div class="line"><span class="lineno">  755</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>

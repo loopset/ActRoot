@@ -112,6 +112,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa45039a96d7bf97885ef9b5d7ff2c9e1" id="r_aa45039a96d7bf97885ef9b5d7ff2c9e1"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActRoot_1_1ModularParameters.html#aa45039a96d7bf97885ef9b5d7ff2c9e1">GetName</a> (int vxi)</td></tr>
 <tr class="memdesc:aa45039a96d7bf97885ef9b5d7ff2c9e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get name of ModularLeaf according to Action file.  <br /></td></tr>
 <tr class="separator:aa45039a96d7bf97885ef9b5d7ff2c9e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fe9af6c5a66c94edc8573b6d69f814d" id="r_a5fe9af6c5a66c94edc8573b6d69f814d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActRoot_1_1ModularParameters.html#a5fe9af6c5a66c94edc8573b6d69f814d">GetVXIOf</a> (const std::string &amp;name)</td></tr>
+<tr class="separator:a5fe9af6c5a66c94edc8573b6d69f814d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe499811e2311734308d3064fe66ed99" id="r_abe499811e2311734308d3064fe66ed99"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActRoot_1_1ModularParameters.html#abe499811e2311734308d3064fe66ed99">ReadActions</a> (const std::vector&lt; std::string &gt; &amp;names, const std::string &amp;file)</td></tr>
 <tr class="memdesc:abe499811e2311734308d3064fe66ed99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read Action file.  <br /></td></tr>
 <tr class="separator:abe499811e2311734308d3064fe66ed99"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -146,14 +148,38 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Get name of ModularLeaf according to Action file. </p>
-<div class="fragment"><div class="line"><span class="lineno">    9</span>{</div>
-<div class="line"><span class="lineno">   10</span>    <span class="keyword">auto</span> where {<a class="code hl_variable" href="classActRoot_1_1ModularParameters.html#ae157ecb802fb424bfbc6581b45f1ba61">fVXI</a>.find(vxi) != <a class="code hl_variable" href="classActRoot_1_1ModularParameters.html#ae157ecb802fb424bfbc6581b45f1ba61">fVXI</a>.end()};</div>
-<div class="line"><span class="lineno">   11</span>    <span class="keywordflow">if</span>(where)</div>
-<div class="line"><span class="lineno">   12</span>        <span class="keywordflow">return</span> <a class="code hl_variable" href="classActRoot_1_1ModularParameters.html#ae157ecb802fb424bfbc6581b45f1ba61">fVXI</a>[vxi];</div>
-<div class="line"><span class="lineno">   13</span>    <span class="keywordflow">else</span></div>
-<div class="line"><span class="lineno">   14</span>        <span class="keywordflow">return</span> <span class="stringliteral">&quot;&quot;</span>;</div>
-<div class="line"><span class="lineno">   15</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">   10</span>{</div>
+<div class="line"><span class="lineno">   11</span>    <span class="keyword">auto</span> where {<a class="code hl_variable" href="classActRoot_1_1ModularParameters.html#ae157ecb802fb424bfbc6581b45f1ba61">fVXI</a>.find(vxi) != <a class="code hl_variable" href="classActRoot_1_1ModularParameters.html#ae157ecb802fb424bfbc6581b45f1ba61">fVXI</a>.end()};</div>
+<div class="line"><span class="lineno">   12</span>    <span class="keywordflow">if</span>(where)</div>
+<div class="line"><span class="lineno">   13</span>        <span class="keywordflow">return</span> <a class="code hl_variable" href="classActRoot_1_1ModularParameters.html#ae157ecb802fb424bfbc6581b45f1ba61">fVXI</a>[vxi];</div>
+<div class="line"><span class="lineno">   14</span>    <span class="keywordflow">else</span></div>
+<div class="line"><span class="lineno">   15</span>        <span class="keywordflow">return</span> <span class="stringliteral">&quot;&quot;</span>;</div>
+<div class="line"><span class="lineno">   16</span>}</div>
 <div class="ttc" id="aclassActRoot_1_1ModularParameters_html_ae157ecb802fb424bfbc6581b45f1ba61"><div class="ttname"><a href="classActRoot_1_1ModularParameters.html#ae157ecb802fb424bfbc6581b45f1ba61">ActRoot::ModularParameters::fVXI</a></div><div class="ttdeci">std::map&lt; int, std::string &gt; fVXI</div><div class="ttdef"><b>Definition</b> ActModularParameters.h:16</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a5fe9af6c5a66c94edc8573b6d69f814d" name="a5fe9af6c5a66c94edc8573b6d69f814d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fe9af6c5a66c94edc8573b6d69f814d">&#9670;&#160;</a></span>GetVXIOf()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ActRoot::ModularParameters::GetVXIOf </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="fragment"><div class="line"><span class="lineno">   19</span>{</div>
+<div class="line"><span class="lineno">   20</span>    <span class="keyword">auto</span> it {std::find_if(<a class="code hl_variable" href="classActRoot_1_1ModularParameters.html#ae157ecb802fb424bfbc6581b45f1ba61">fVXI</a>.begin(), <a class="code hl_variable" href="classActRoot_1_1ModularParameters.html#ae157ecb802fb424bfbc6581b45f1ba61">fVXI</a>.end(), [&amp;](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; p) { return p.second == name; })};</div>
+<div class="line"><span class="lineno">   21</span>    <span class="keywordflow">if</span>(it != <a class="code hl_variable" href="classActRoot_1_1ModularParameters.html#ae157ecb802fb424bfbc6581b45f1ba61">fVXI</a>.end())</div>
+<div class="line"><span class="lineno">   22</span>        <span class="keywordflow">return</span> it-&gt;first;</div>
+<div class="line"><span class="lineno">   23</span>    <span class="keywordflow">return</span> -11;</div>
+<div class="line"><span class="lineno">   24</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -181,14 +207,14 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="classActRoot_1_1VParameters.html#ab4c43dea944f579bf7ad70bf30e20d4f">ActRoot::VParameters</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">   40</span>{</div>
-<div class="line"><span class="lineno">   41</span>    std::cout &lt;&lt; <span class="stringliteral">&quot;==== ModularParameters ====&quot;</span> &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
-<div class="line"><span class="lineno">   42</span>    <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [key, val] : <a class="code hl_variable" href="classActRoot_1_1ModularParameters.html#ae157ecb802fb424bfbc6581b45f1ba61">fVXI</a>)</div>
-<div class="line"><span class="lineno">   43</span>    {</div>
-<div class="line"><span class="lineno">   44</span>        std::cout &lt;&lt; <span class="stringliteral">&quot;-- VXI: &quot;</span> &lt;&lt; key &lt;&lt; <span class="stringliteral">&quot; contains Modular &quot;</span> &lt;&lt; val &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
-<div class="line"><span class="lineno">   45</span>    }</div>
-<div class="line"><span class="lineno">   46</span>    std::cout &lt;&lt; <span class="stringliteral">&quot;=======================&quot;</span> &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
-<div class="line"><span class="lineno">   47</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">   49</span>{</div>
+<div class="line"><span class="lineno">   50</span>    std::cout &lt;&lt; <span class="stringliteral">&quot;==== ModularParameters ====&quot;</span> &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><span class="lineno">   51</span>    <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [key, val] : <a class="code hl_variable" href="classActRoot_1_1ModularParameters.html#ae157ecb802fb424bfbc6581b45f1ba61">fVXI</a>)</div>
+<div class="line"><span class="lineno">   52</span>    {</div>
+<div class="line"><span class="lineno">   53</span>        std::cout &lt;&lt; <span class="stringliteral">&quot;-- VXI: &quot;</span> &lt;&lt; key &lt;&lt; <span class="stringliteral">&quot; contains Modular &quot;</span> &lt;&lt; val &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><span class="lineno">   54</span>    }</div>
+<div class="line"><span class="lineno">   55</span>    std::cout &lt;&lt; <span class="stringliteral">&quot;=======================&quot;</span> &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><span class="lineno">   56</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -219,26 +245,26 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Read Action file. </p>
-<div class="fragment"><div class="line"><span class="lineno">   18</span>{</div>
-<div class="line"><span class="lineno">   19</span>    std::ifstream streamer {file};</div>
-<div class="line"><span class="lineno">   20</span>    <span class="keywordflow">if</span>(!streamer)</div>
-<div class="line"><span class="lineno">   21</span>        <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;ModPars::ReadActions(): cannot open ACTION file &quot;</span> + file);</div>
-<div class="line"><span class="lineno">   22</span>    TString key {};</div>
-<div class="line"><span class="lineno">   23</span>    <span class="keywordtype">int</span> vxi {};</div>
-<div class="line"><span class="lineno">   24</span>    <span class="keywordtype">int</span> aux0 {};</div>
-<div class="line"><span class="lineno">   25</span>    <span class="keywordtype">int</span> aux1 {};</div>
-<div class="line"><span class="lineno">   26</span>    <span class="keywordflow">while</span>(streamer &gt;&gt; key &gt;&gt; vxi &gt;&gt; aux0 &gt;&gt; aux1)</div>
-<div class="line"><span class="lineno">   27</span>    {</div>
-<div class="line"><span class="lineno">   28</span>        <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; names.size(); i++)</div>
-<div class="line"><span class="lineno">   29</span>        {</div>
-<div class="line"><span class="lineno">   30</span>            <span class="keywordflow">if</span>(key == names[i])</div>
-<div class="line"><span class="lineno">   31</span>            {</div>
-<div class="line"><span class="lineno">   32</span>                <a class="code hl_variable" href="classActRoot_1_1ModularParameters.html#ae157ecb802fb424bfbc6581b45f1ba61">fVXI</a>[vxi] = names[i];</div>
-<div class="line"><span class="lineno">   33</span>                <span class="keywordflow">break</span>;</div>
-<div class="line"><span class="lineno">   34</span>            }</div>
-<div class="line"><span class="lineno">   35</span>        }</div>
-<div class="line"><span class="lineno">   36</span>    }</div>
-<div class="line"><span class="lineno">   37</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">   27</span>{</div>
+<div class="line"><span class="lineno">   28</span>    std::ifstream streamer {file};</div>
+<div class="line"><span class="lineno">   29</span>    <span class="keywordflow">if</span>(!streamer)</div>
+<div class="line"><span class="lineno">   30</span>        <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;ModPars::ReadActions(): cannot open ACTION file &quot;</span> + file);</div>
+<div class="line"><span class="lineno">   31</span>    TString key {};</div>
+<div class="line"><span class="lineno">   32</span>    <span class="keywordtype">int</span> vxi {};</div>
+<div class="line"><span class="lineno">   33</span>    <span class="keywordtype">int</span> aux0 {};</div>
+<div class="line"><span class="lineno">   34</span>    <span class="keywordtype">int</span> aux1 {};</div>
+<div class="line"><span class="lineno">   35</span>    <span class="keywordflow">while</span>(streamer &gt;&gt; key &gt;&gt; vxi &gt;&gt; aux0 &gt;&gt; aux1)</div>
+<div class="line"><span class="lineno">   36</span>    {</div>
+<div class="line"><span class="lineno">   37</span>        <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; names.size(); i++)</div>
+<div class="line"><span class="lineno">   38</span>        {</div>
+<div class="line"><span class="lineno">   39</span>            <span class="keywordflow">if</span>(key == names[i])</div>
+<div class="line"><span class="lineno">   40</span>            {</div>
+<div class="line"><span class="lineno">   41</span>                <a class="code hl_variable" href="classActRoot_1_1ModularParameters.html#ae157ecb802fb424bfbc6581b45f1ba61">fVXI</a>[vxi] = names[i];</div>
+<div class="line"><span class="lineno">   42</span>                <span class="keywordflow">break</span>;</div>
+<div class="line"><span class="lineno">   43</span>            }</div>
+<div class="line"><span class="lineno">   44</span>        }</div>
+<div class="line"><span class="lineno">   45</span>    }</div>
+<div class="line"><span class="lineno">   46</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>

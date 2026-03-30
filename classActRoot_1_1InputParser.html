@@ -309,7 +309,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="lineno">  265</span>    <span class="keywordflow">if</span>(line.length() == 0)</div>
 <div class="line"><span class="lineno">  266</span>        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><span class="lineno">  267</span> </div>
-<div class="line"><span class="lineno">  268</span>    <span class="keyword">auto</span> pos {line.find(<a class="code hl_variable" href="namespaceActRoot.html#ae6eef6a3005f0c49b95eaebd5667a79d">ActRoot::kCommentSeparator</a>)};</div>
+<div class="line"><span class="lineno">  268</span>    <span class="keyword">auto</span> pos {line.find_first_of(<a class="code hl_variable" href="namespaceActRoot.html#ae6eef6a3005f0c49b95eaebd5667a79d">ActRoot::kCommentSeparator</a>)};</div>
 <div class="line"><span class="lineno">  269</span>    <span class="keywordflow">if</span>(pos != std::string::npos)</div>
 <div class="line"><span class="lineno">  270</span>        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><span class="lineno">  271</span>    <span class="keywordflow">else</span></div>

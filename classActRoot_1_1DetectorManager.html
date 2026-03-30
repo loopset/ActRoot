@@ -216,7 +216,7 @@ Static Private Attributes</h2></td></tr>
 <div class="line"><span class="lineno">   40</span>    <a class="code hl_function" href="classActRoot_1_1DetectorManager.html#a1e1bd8f368303d13fa8e73971dacce82">InitCalibrationManager</a>();</div>
 <div class="line"><span class="lineno">   41</span>}</div>
 <div class="ttc" id="aclassActRoot_1_1DetectorManager_html_a07d7b7f59f35087df36becbe5b18da87"><div class="ttname"><a href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">ActRoot::DetectorManager::fMode</a></div><div class="ttdeci">ModeType fMode</div><div class="ttdef"><b>Definition</b> ActDetectorManager.h:39</div></div>
-<div class="ttc" id="aclassActRoot_1_1DetectorManager_html_a1e1bd8f368303d13fa8e73971dacce82"><div class="ttname"><a href="classActRoot_1_1DetectorManager.html#a1e1bd8f368303d13fa8e73971dacce82">ActRoot::DetectorManager::InitCalibrationManager</a></div><div class="ttdeci">void InitCalibrationManager()</div><div class="ttdef"><b>Definition</b> ActDetectorManager.cxx:77</div></div>
+<div class="ttc" id="aclassActRoot_1_1DetectorManager_html_a1e1bd8f368303d13fa8e73971dacce82"><div class="ttname"><a href="classActRoot_1_1DetectorManager.html#a1e1bd8f368303d13fa8e73971dacce82">ActRoot::DetectorManager::InitCalibrationManager</a></div><div class="ttdeci">void InitCalibrationManager()</div><div class="ttdef"><b>Definition</b> ActDetectorManager.cxx:82</div></div>
 <div class="ttc" id="aclassActRoot_1_1DetectorManager_html_ae5493dea9e13653fc36bdafc3fd43ced"><div class="ttname"><a href="classActRoot_1_1DetectorManager.html#ae5493dea9e13653fc36bdafc3fd43ced">ActRoot::DetectorManager::InitDetectors</a></div><div class="ttdeci">void InitDetectors()</div><div class="ttdef"><b>Definition</b> ActDetectorManager.cxx:43</div></div>
 </div><!-- fragment -->
 </div>
@@ -273,51 +273,51 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">  185</span>{</div>
-<div class="line"><span class="lineno">  186</span>    <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a1f5783fcb4694a627ad6cdac3dac953f">ModeType::EReadTPC</a> || <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93ae7c0caf2504271327a85879f45dcd78a">ModeType::EReadSilMod</a>)</div>
-<div class="line"><span class="lineno">  187</span>        <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
-<div class="line"><span class="lineno">  188</span>        {</div>
-<div class="line"><span class="lineno">  189</span>            det-&gt;ClearEventData();</div>
-<div class="line"><span class="lineno">  190</span>            det-&gt;BuildEventData();</div>
-<div class="line"><span class="lineno">  191</span>        }</div>
-<div class="line"><span class="lineno">  192</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a713957d24b124bb2d69d67e296fc8d10">ModeType::EFilter</a>)</div>
-<div class="line"><span class="lineno">  193</span>        <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
-<div class="line"><span class="lineno">  194</span>        {</div>
-<div class="line"><span class="lineno">  195</span>            det-&gt;ClearEventFilter();</div>
-<div class="line"><span class="lineno">  196</span>            det-&gt;BuildEventFilter();</div>
-<div class="line"><span class="lineno">  197</span>        }</div>
-<div class="line"><span class="lineno">  198</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a4ea2feb8f3050afefca4185a9206cc6e">ModeType::EMerge</a>)</div>
-<div class="line"><span class="lineno">  199</span>    {</div>
-<div class="line"><span class="lineno">  200</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a3e80ccae48fde6e2f22188846239d6aa">DetectorType::EMerger</a>]-&gt;ClearEventData();</div>
-<div class="line"><span class="lineno">  201</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a3e80ccae48fde6e2f22188846239d6aa">DetectorType::EMerger</a>]-&gt;BuildEventData(run, entry);</div>
-<div class="line"><span class="lineno">  202</span>    }</div>
-<div class="line"><span class="lineno">  203</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a3089909056072007c4be2a8da11cef4b">ModeType::EFilterMerge</a>)</div>
-<div class="line"><span class="lineno">  204</span>    {</div>
-<div class="line"><span class="lineno">  205</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a58f33cfe2eef58fba1a19a7ca321688b">DetectorType::EActar</a>]-&gt;ClearEventFilter();</div>
-<div class="line"><span class="lineno">  206</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a58f33cfe2eef58fba1a19a7ca321688b">DetectorType::EActar</a>]-&gt;BuildEventFilter();</div>
-<div class="line"><span class="lineno">  207</span> </div>
-<div class="line"><span class="lineno">  208</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a3e80ccae48fde6e2f22188846239d6aa">DetectorType::EMerger</a>]-&gt;ClearEventData();</div>
-<div class="line"><span class="lineno">  209</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a3e80ccae48fde6e2f22188846239d6aa">DetectorType::EMerger</a>]-&gt;BuildEventData(run, entry);</div>
-<div class="line"><span class="lineno">  210</span>    }</div>
-<div class="line"><span class="lineno">  211</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a0bd92a405a921016633cfc1a8f7a0eff">ModeType::EGui</a>)</div>
-<div class="line"><span class="lineno">  212</span>    {</div>
-<div class="line"><span class="lineno">  213</span>        <span class="keywordflow">throw</span> std::runtime_error(</div>
-<div class="line"><span class="lineno">  214</span>            <span class="stringliteral">&quot;DetectorManager::BuildEvent(): EGui mode not supported: Clone2 is explicited in EventPainter&quot;</span>);</div>
-<div class="line"><span class="lineno">  215</span>    }</div>
-<div class="line"><span class="lineno">  216</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93ad2012f1c78b6db7c336231c1d0083bf2">ModeType::ECorrect</a>)</div>
-<div class="line"><span class="lineno">  217</span>    {</div>
-<div class="line"><span class="lineno">  218</span>        <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>) <span class="comment">// fDetectors only contains MergerDetector</span></div>
+<div class="fragment"><div class="line"><span class="lineno">  210</span>{</div>
+<div class="line"><span class="lineno">  211</span>    <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a1f5783fcb4694a627ad6cdac3dac953f">ModeType::EReadTPC</a> || <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93ae7c0caf2504271327a85879f45dcd78a">ModeType::EReadSilMod</a>)</div>
+<div class="line"><span class="lineno">  212</span>        <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
+<div class="line"><span class="lineno">  213</span>        {</div>
+<div class="line"><span class="lineno">  214</span>            det-&gt;ClearEventData();</div>
+<div class="line"><span class="lineno">  215</span>            det-&gt;BuildEventData();</div>
+<div class="line"><span class="lineno">  216</span>        }</div>
+<div class="line"><span class="lineno">  217</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a713957d24b124bb2d69d67e296fc8d10">ModeType::EFilter</a>)</div>
+<div class="line"><span class="lineno">  218</span>        <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
 <div class="line"><span class="lineno">  219</span>        {</div>
 <div class="line"><span class="lineno">  220</span>            det-&gt;ClearEventFilter();</div>
 <div class="line"><span class="lineno">  221</span>            det-&gt;BuildEventFilter();</div>
 <div class="line"><span class="lineno">  222</span>        }</div>
-<div class="line"><span class="lineno">  223</span>    }</div>
-<div class="line"><span class="lineno">  224</span>    <span class="keywordflow">else</span></div>
-<div class="line"><span class="lineno">  225</span>        <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;DetectorManager::BuildEvent(): no known assigment for mode &quot;</span> +</div>
-<div class="line"><span class="lineno">  226</span>                                 <a class="code hl_function" href="classActRoot_1_1Options.html#a09183ba63f70a25c5cde539b1220e526">ActRoot::Options::GetModeStr</a>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a>));</div>
-<div class="line"><span class="lineno">  227</span>}</div>
+<div class="line"><span class="lineno">  223</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a4ea2feb8f3050afefca4185a9206cc6e">ModeType::EMerge</a>)</div>
+<div class="line"><span class="lineno">  224</span>    {</div>
+<div class="line"><span class="lineno">  225</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a3e80ccae48fde6e2f22188846239d6aa">DetectorType::EMerger</a>]-&gt;ClearEventData();</div>
+<div class="line"><span class="lineno">  226</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a3e80ccae48fde6e2f22188846239d6aa">DetectorType::EMerger</a>]-&gt;BuildEventData(run, entry);</div>
+<div class="line"><span class="lineno">  227</span>    }</div>
+<div class="line"><span class="lineno">  228</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a3089909056072007c4be2a8da11cef4b">ModeType::EFilterMerge</a>)</div>
+<div class="line"><span class="lineno">  229</span>    {</div>
+<div class="line"><span class="lineno">  230</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a58f33cfe2eef58fba1a19a7ca321688b">DetectorType::EActar</a>]-&gt;ClearEventFilter();</div>
+<div class="line"><span class="lineno">  231</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a58f33cfe2eef58fba1a19a7ca321688b">DetectorType::EActar</a>]-&gt;BuildEventFilter();</div>
+<div class="line"><span class="lineno">  232</span> </div>
+<div class="line"><span class="lineno">  233</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a3e80ccae48fde6e2f22188846239d6aa">DetectorType::EMerger</a>]-&gt;ClearEventData();</div>
+<div class="line"><span class="lineno">  234</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a3e80ccae48fde6e2f22188846239d6aa">DetectorType::EMerger</a>]-&gt;BuildEventData(run, entry);</div>
+<div class="line"><span class="lineno">  235</span>    }</div>
+<div class="line"><span class="lineno">  236</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a0bd92a405a921016633cfc1a8f7a0eff">ModeType::EGui</a>)</div>
+<div class="line"><span class="lineno">  237</span>    {</div>
+<div class="line"><span class="lineno">  238</span>        <span class="keywordflow">throw</span> std::runtime_error(</div>
+<div class="line"><span class="lineno">  239</span>            <span class="stringliteral">&quot;DetectorManager::BuildEvent(): EGui mode not supported: Clone2 is explicited in EventPainter&quot;</span>);</div>
+<div class="line"><span class="lineno">  240</span>    }</div>
+<div class="line"><span class="lineno">  241</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93ad2012f1c78b6db7c336231c1d0083bf2">ModeType::ECorrect</a>)</div>
+<div class="line"><span class="lineno">  242</span>    {</div>
+<div class="line"><span class="lineno">  243</span>        <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>) <span class="comment">// fDetectors only contains MergerDetector</span></div>
+<div class="line"><span class="lineno">  244</span>        {</div>
+<div class="line"><span class="lineno">  245</span>            det-&gt;ClearEventFilter();</div>
+<div class="line"><span class="lineno">  246</span>            det-&gt;BuildEventFilter();</div>
+<div class="line"><span class="lineno">  247</span>        }</div>
+<div class="line"><span class="lineno">  248</span>    }</div>
+<div class="line"><span class="lineno">  249</span>    <span class="keywordflow">else</span></div>
+<div class="line"><span class="lineno">  250</span>        <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;DetectorManager::BuildEvent(): no known assigment for mode &quot;</span> +</div>
+<div class="line"><span class="lineno">  251</span>                                 <a class="code hl_function" href="classActRoot_1_1Options.html#a09183ba63f70a25c5cde539b1220e526">ActRoot::Options::GetModeStr</a>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a>));</div>
+<div class="line"><span class="lineno">  252</span>}</div>
 <div class="ttc" id="aclassActRoot_1_1DetectorManager_html_a5fadc51b695397011933a8122b63eb28"><div class="ttname"><a href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">ActRoot::DetectorManager::fDetectors</a></div><div class="ttdeci">std::unordered_map&lt; DetectorType, std::shared_ptr&lt; VDetector &gt; &gt; fDetectors</div><div class="ttdoc">Pointer to detectors.</div><div class="ttdef"><b>Definition</b> ActDetectorManager.h:35</div></div>
-<div class="ttc" id="aclassActRoot_1_1Options_html_a09183ba63f70a25c5cde539b1220e526"><div class="ttname"><a href="classActRoot_1_1Options.html#a09183ba63f70a25c5cde539b1220e526">ActRoot::Options::GetModeStr</a></div><div class="ttdeci">std::string GetModeStr() const</div><div class="ttdef"><b>Definition</b> ActOptions.h:45</div></div>
+<div class="ttc" id="aclassActRoot_1_1Options_html_a09183ba63f70a25c5cde539b1220e526"><div class="ttname"><a href="classActRoot_1_1Options.html#a09183ba63f70a25c5cde539b1220e526">ActRoot::Options::GetModeStr</a></div><div class="ttdeci">std::string GetModeStr() const</div><div class="ttdef"><b>Definition</b> ActOptions.h:46</div></div>
 <div class="ttc" id="anamespaceActRoot_html_a73e55379eb4b32006ebd666053febf93a0bd92a405a921016633cfc1a8f7a0eff"><div class="ttname"><a href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a0bd92a405a921016633cfc1a8f7a0eff">ActRoot::ModeType::EGui</a></div><div class="ttdeci">@ EGui</div></div>
 <div class="ttc" id="anamespaceActRoot_html_a73e55379eb4b32006ebd666053febf93a1f5783fcb4694a627ad6cdac3dac953f"><div class="ttname"><a href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a1f5783fcb4694a627ad6cdac3dac953f">ActRoot::ModeType::EReadTPC</a></div><div class="ttdeci">@ EReadTPC</div></div>
 <div class="ttc" id="anamespaceActRoot_html_a73e55379eb4b32006ebd666053febf93a3089909056072007c4be2a8da11cef4b"><div class="ttname"><a href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a3089909056072007c4be2a8da11cef4b">ActRoot::ModeType::EFilterMerge</a></div><div class="ttdeci">@ EFilterMerge</div></div>
@@ -345,13 +345,13 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">  130</span>{</div>
-<div class="line"><span class="lineno">  131</span>    <span class="keyword">auto</span> it {<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>.find(type)};</div>
-<div class="line"><span class="lineno">  132</span>    <span class="keywordflow">if</span>(it != <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>.end())</div>
-<div class="line"><span class="lineno">  133</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>.erase(it);</div>
-<div class="line"><span class="lineno">  134</span>    <span class="keywordflow">else</span></div>
-<div class="line"><span class="lineno">  135</span>        std::cout &lt;&lt; <span class="stringliteral">&quot;DetectorManager::DeleteDetector(): could not delete detector &quot;</span> + <a class="code hl_function" href="classActRoot_1_1DetectorManager.html#a6a6ebbb4a2e8f57a34849b0963d123f7">GetDetectorTypeStr</a>(type) &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
-<div class="line"><span class="lineno">  136</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">  155</span>{</div>
+<div class="line"><span class="lineno">  156</span>    <span class="keyword">auto</span> it {<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>.find(type)};</div>
+<div class="line"><span class="lineno">  157</span>    <span class="keywordflow">if</span>(it != <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>.end())</div>
+<div class="line"><span class="lineno">  158</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>.erase(it);</div>
+<div class="line"><span class="lineno">  159</span>    <span class="keywordflow">else</span></div>
+<div class="line"><span class="lineno">  160</span>        std::cout &lt;&lt; <span class="stringliteral">&quot;DetectorManager::DeleteDetector(): could not delete detector &quot;</span> + <a class="code hl_function" href="classActRoot_1_1DetectorManager.html#a6a6ebbb4a2e8f57a34849b0963d123f7">GetDetectorTypeStr</a>(type) &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><span class="lineno">  161</span>}</div>
 <div class="ttc" id="aclassActRoot_1_1DetectorManager_html_a6a6ebbb4a2e8f57a34849b0963d123f7"><div class="ttname"><a href="classActRoot_1_1DetectorManager.html#a6a6ebbb4a2e8f57a34849b0963d123f7">ActRoot::DetectorManager::GetDetectorTypeStr</a></div><div class="ttdeci">static std::string GetDetectorTypeStr(DetectorType type)</div><div class="ttdef"><b>Definition</b> ActDetectorManager.cxx:29</div></div>
 </div><!-- fragment -->
 </div>
@@ -540,11 +540,11 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   78</span>{</div>
-<div class="line"><span class="lineno">   79</span>    <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a9b7e32a907b44f28e68c7a3d6d4a3059">fCalMan</a> = std::make_shared&lt;ActRoot::CalibrationManager&gt;();</div>
-<div class="line"><span class="lineno">   80</span>    <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
-<div class="line"><span class="lineno">   81</span>        det-&gt;SetCalMan(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a9b7e32a907b44f28e68c7a3d6d4a3059">fCalMan</a>);</div>
-<div class="line"><span class="lineno">   82</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">   83</span>{</div>
+<div class="line"><span class="lineno">   84</span>    <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a9b7e32a907b44f28e68c7a3d6d4a3059">fCalMan</a> = std::make_shared&lt;ActRoot::CalibrationManager&gt;();</div>
+<div class="line"><span class="lineno">   85</span>    <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
+<div class="line"><span class="lineno">   86</span>        det-&gt;SetCalMan(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a9b7e32a907b44f28e68c7a3d6d4a3059">fCalMan</a>);</div>
+<div class="line"><span class="lineno">   87</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -598,36 +598,42 @@ template&lt;typename T &gt; </div>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="lineno">   44</span>{</div>
 <div class="line"><span class="lineno">   45</span>    <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a1f5783fcb4694a627ad6cdac3dac953f">ModeType::EReadTPC</a>)</div>
-<div class="line"><span class="lineno">   46</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a58f33cfe2eef58fba1a19a7ca321688b">DetectorType::EActar</a>] = std::make_shared&lt;ActRoot::TPCDetector&gt;();</div>
-<div class="line"><span class="lineno">   47</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93ae7c0caf2504271327a85879f45dcd78a">ModeType::EReadSilMod</a>)</div>
-<div class="line"><span class="lineno">   48</span>    {</div>
-<div class="line"><span class="lineno">   49</span>        <span class="comment">// Silicon</span></div>
-<div class="line"><span class="lineno">   50</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6adc9348cf55c85acd2dbbf4ece381967e">DetectorType::ESilicons</a>] = std::make_shared&lt;ActRoot::SilDetector&gt;();</div>
-<div class="line"><span class="lineno">   51</span>        <span class="comment">// Modular</span></div>
-<div class="line"><span class="lineno">   52</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a6bb6729187fb8f8db85cb1203f59cfc7">DetectorType::EModular</a>] = std::make_shared&lt;ActRoot::ModularDetector&gt;();</div>
-<div class="line"><span class="lineno">   53</span>    }</div>
-<div class="line"><span class="lineno">   54</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a713957d24b124bb2d69d67e296fc8d10">ModeType::EFilter</a>)</div>
-<div class="line"><span class="lineno">   55</span>    {</div>
-<div class="line"><span class="lineno">   56</span>        <span class="comment">// Filter mode refers to filter at first stage: TPC -&gt; Merger</span></div>
-<div class="line"><span class="lineno">   57</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a58f33cfe2eef58fba1a19a7ca321688b">DetectorType::EActar</a>] = std::make_shared&lt;ActRoot::TPCDetector&gt;();</div>
+<div class="line"><span class="lineno">   46</span>    {</div>
+<div class="line"><span class="lineno">   47</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a58f33cfe2eef58fba1a19a7ca321688b">DetectorType::EActar</a>] = std::make_shared&lt;ActRoot::TPCDetector&gt;();</div>
+<div class="line"><span class="lineno">   48</span>        <span class="comment">// if requested to parse GATCONF alongside TPCData</span></div>
+<div class="line"><span class="lineno">   49</span>        <span class="keywordflow">if</span>(<a class="code hl_function" href="classActRoot_1_1Options.html#a7bd54eeb620ca48afccde8edcadb6bb6">ActRoot::Options::GetInstance</a>()-&gt;GetWithGATCONF())</div>
+<div class="line"><span class="lineno">   50</span>            <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a6bb6729187fb8f8db85cb1203f59cfc7">DetectorType::EModular</a>] = std::make_shared&lt;ActRoot::ModularDetector&gt;();</div>
+<div class="line"><span class="lineno">   51</span>    }</div>
+<div class="line"><span class="lineno">   52</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93ae7c0caf2504271327a85879f45dcd78a">ModeType::EReadSilMod</a>)</div>
+<div class="line"><span class="lineno">   53</span>    {</div>
+<div class="line"><span class="lineno">   54</span>        <span class="comment">// Silicon</span></div>
+<div class="line"><span class="lineno">   55</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6adc9348cf55c85acd2dbbf4ece381967e">DetectorType::ESilicons</a>] = std::make_shared&lt;ActRoot::SilDetector&gt;();</div>
+<div class="line"><span class="lineno">   56</span>        <span class="comment">// Modular</span></div>
+<div class="line"><span class="lineno">   57</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a6bb6729187fb8f8db85cb1203f59cfc7">DetectorType::EModular</a>] = std::make_shared&lt;ActRoot::ModularDetector&gt;();</div>
 <div class="line"><span class="lineno">   58</span>    }</div>
-<div class="line"><span class="lineno">   59</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a4ea2feb8f3050afefca4185a9206cc6e">ModeType::EMerge</a> || <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a3089909056072007c4be2a8da11cef4b">ModeType::EFilterMerge</a> || <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a0bd92a405a921016633cfc1a8f7a0eff">ModeType::EGui</a>)</div>
+<div class="line"><span class="lineno">   59</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a713957d24b124bb2d69d67e296fc8d10">ModeType::EFilter</a>)</div>
 <div class="line"><span class="lineno">   60</span>    {</div>
-<div class="line"><span class="lineno">   61</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a58f33cfe2eef58fba1a19a7ca321688b">DetectorType::EActar</a>] = std::make_shared&lt;ActRoot::TPCDetector&gt;();</div>
-<div class="line"><span class="lineno">   62</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6adc9348cf55c85acd2dbbf4ece381967e">DetectorType::ESilicons</a>] = std::make_shared&lt;ActRoot::SilDetector&gt;();</div>
-<div class="line"><span class="lineno">   63</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a6bb6729187fb8f8db85cb1203f59cfc7">DetectorType::EModular</a>] = std::make_shared&lt;ActRoot::ModularDetector&gt;();</div>
-<div class="line"><span class="lineno">   64</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a3e80ccae48fde6e2f22188846239d6aa">DetectorType::EMerger</a>] = std::make_shared&lt;ActRoot::MergerDetector&gt;();</div>
-<div class="line"><span class="lineno">   65</span>    }</div>
-<div class="line"><span class="lineno">   66</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93ad2012f1c78b6db7c336231c1d0083bf2">ModeType::ECorrect</a>)</div>
-<div class="line"><span class="lineno">   67</span>    {</div>
-<div class="line"><span class="lineno">   68</span>        <span class="comment">// Correct is a filter at second stage: Merger -&gt; Merger</span></div>
+<div class="line"><span class="lineno">   61</span>        <span class="comment">// Filter mode refers to filter at first stage: TPC -&gt; Merger</span></div>
+<div class="line"><span class="lineno">   62</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a58f33cfe2eef58fba1a19a7ca321688b">DetectorType::EActar</a>] = std::make_shared&lt;ActRoot::TPCDetector&gt;();</div>
+<div class="line"><span class="lineno">   63</span>    }</div>
+<div class="line"><span class="lineno">   64</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a4ea2feb8f3050afefca4185a9206cc6e">ModeType::EMerge</a> || <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a3089909056072007c4be2a8da11cef4b">ModeType::EFilterMerge</a> || <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a0bd92a405a921016633cfc1a8f7a0eff">ModeType::EGui</a>)</div>
+<div class="line"><span class="lineno">   65</span>    {</div>
+<div class="line"><span class="lineno">   66</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a58f33cfe2eef58fba1a19a7ca321688b">DetectorType::EActar</a>] = std::make_shared&lt;ActRoot::TPCDetector&gt;();</div>
+<div class="line"><span class="lineno">   67</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6adc9348cf55c85acd2dbbf4ece381967e">DetectorType::ESilicons</a>] = std::make_shared&lt;ActRoot::SilDetector&gt;();</div>
+<div class="line"><span class="lineno">   68</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a6bb6729187fb8f8db85cb1203f59cfc7">DetectorType::EModular</a>] = std::make_shared&lt;ActRoot::ModularDetector&gt;();</div>
 <div class="line"><span class="lineno">   69</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a3e80ccae48fde6e2f22188846239d6aa">DetectorType::EMerger</a>] = std::make_shared&lt;ActRoot::MergerDetector&gt;();</div>
 <div class="line"><span class="lineno">   70</span>    }</div>
-<div class="line"><span class="lineno">   71</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a1df5ae1c04081b4a4956f1422d54f01c">ModeType::ESimu</a>)</div>
-<div class="line"><span class="lineno">   72</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a58f33cfe2eef58fba1a19a7ca321688b">DetectorType::EActar</a>] = std::make_shared&lt;ActRoot::TPCDetector&gt;();</div>
-<div class="line"><span class="lineno">   73</span>    <span class="keywordflow">else</span></div>
-<div class="line"><span class="lineno">   74</span>        <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;DetectorManager::InitDetectors() : fMode is None, enter other mode!&quot;</span>);</div>
-<div class="line"><span class="lineno">   75</span>}</div>
+<div class="line"><span class="lineno">   71</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93ad2012f1c78b6db7c336231c1d0083bf2">ModeType::ECorrect</a>)</div>
+<div class="line"><span class="lineno">   72</span>    {</div>
+<div class="line"><span class="lineno">   73</span>        <span class="comment">// Correct is a filter at second stage: Merger -&gt; Merger</span></div>
+<div class="line"><span class="lineno">   74</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a3e80ccae48fde6e2f22188846239d6aa">DetectorType::EMerger</a>] = std::make_shared&lt;ActRoot::MergerDetector&gt;();</div>
+<div class="line"><span class="lineno">   75</span>    }</div>
+<div class="line"><span class="lineno">   76</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a1df5ae1c04081b4a4956f1422d54f01c">ModeType::ESimu</a>)</div>
+<div class="line"><span class="lineno">   77</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a58f33cfe2eef58fba1a19a7ca321688b">DetectorType::EActar</a>] = std::make_shared&lt;ActRoot::TPCDetector&gt;();</div>
+<div class="line"><span class="lineno">   78</span>    <span class="keywordflow">else</span></div>
+<div class="line"><span class="lineno">   79</span>        <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;DetectorManager::InitDetectors() : fMode is None, enter other mode!&quot;</span>);</div>
+<div class="line"><span class="lineno">   80</span>}</div>
+<div class="ttc" id="aclassActRoot_1_1Options_html_a7bd54eeb620ca48afccde8edcadb6bb6"><div class="ttname"><a href="classActRoot_1_1Options.html#a7bd54eeb620ca48afccde8edcadb6bb6">ActRoot::Options::GetInstance</a></div><div class="ttdeci">static std::shared_ptr&lt; Options &gt; GetInstance(int argc=0, char **=nullptr)</div><div class="ttdef"><b>Definition</b> ActOptions.cxx:29</div></div>
 <div class="ttc" id="anamespaceActRoot_html_a73e55379eb4b32006ebd666053febf93a1df5ae1c04081b4a4956f1422d54f01c"><div class="ttname"><a href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a1df5ae1c04081b4a4956f1422d54f01c">ActRoot::ModeType::ESimu</a></div><div class="ttdeci">@ ESimu</div></div>
 </div><!-- fragment -->
 </div>
@@ -647,32 +653,32 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">  139</span>{</div>
-<div class="line"><span class="lineno">  140</span>    <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a1f5783fcb4694a627ad6cdac3dac953f">ModeType::EReadTPC</a> || <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93ae7c0caf2504271327a85879f45dcd78a">ModeType::EReadSilMod</a>)</div>
-<div class="line"><span class="lineno">  141</span>        <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
-<div class="line"><span class="lineno">  142</span>            det-&gt;InitInputData(input);</div>
-<div class="line"><span class="lineno">  143</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a713957d24b124bb2d69d67e296fc8d10">ModeType::EFilter</a>)</div>
-<div class="line"><span class="lineno">  144</span>        <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
-<div class="line"><span class="lineno">  145</span>            det-&gt;InitInputFilter(input);</div>
-<div class="line"><span class="lineno">  146</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a4ea2feb8f3050afefca4185a9206cc6e">ModeType::EMerge</a>)</div>
-<div class="line"><span class="lineno">  147</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a3e80ccae48fde6e2f22188846239d6aa">DetectorType::EMerger</a>]-&gt;InitInputData(input);</div>
-<div class="line"><span class="lineno">  148</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a3089909056072007c4be2a8da11cef4b">ModeType::EFilterMerge</a>)</div>
-<div class="line"><span class="lineno">  149</span>    {</div>
-<div class="line"><span class="lineno">  150</span>        <span class="comment">// Merger holds all the pointers to data created with new</span></div>
-<div class="line"><span class="lineno">  151</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a3e80ccae48fde6e2f22188846239d6aa">DetectorType::EMerger</a>]-&gt;InitInputData(input);</div>
-<div class="line"><span class="lineno">  152</span>        <span class="comment">// And for filter in TPC we set them from it</span></div>
-<div class="line"><span class="lineno">  153</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a58f33cfe2eef58fba1a19a7ca321688b">DetectorType::EActar</a>]-&gt;SetInputFilter(GetDetectorAs&lt;MergerDetector&gt;()-&gt;GetInputData&lt;TPCData&gt;());</div>
-<div class="line"><span class="lineno">  154</span>    }</div>
-<div class="line"><span class="lineno">  155</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93ad2012f1c78b6db7c336231c1d0083bf2">ModeType::ECorrect</a>)</div>
-<div class="line"><span class="lineno">  156</span>        <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
-<div class="line"><span class="lineno">  157</span>            det-&gt;InitInputFilter(input);</div>
-<div class="line"><span class="lineno">  158</span>    <span class="keywordflow">else</span></div>
-<div class="line"><span class="lineno">  159</span>        <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;DetectorManager::InitInput(): no known assigment for mode &quot;</span> +</div>
-<div class="line"><span class="lineno">  160</span>                                 <a class="code hl_function" href="classActRoot_1_1Options.html#a09183ba63f70a25c5cde539b1220e526">ActRoot::Options::GetModeStr</a>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a>));</div>
-<div class="line"><span class="lineno">  161</span>    <span class="comment">// Workaround for EData mode</span></div>
-<div class="line"><span class="lineno">  162</span>    <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93ae7c0caf2504271327a85879f45dcd78a">ModeType::EReadSilMod</a>)</div>
-<div class="line"><span class="lineno">  163</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a6bb6729187fb8f8db85cb1203f59cfc7">DetectorType::EModular</a>]-&gt;SetMEvent(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6adc9348cf55c85acd2dbbf4ece381967e">DetectorType::ESilicons</a>]-&gt;GetMEvent());</div>
-<div class="line"><span class="lineno">  164</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">  164</span>{</div>
+<div class="line"><span class="lineno">  165</span>    <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a1f5783fcb4694a627ad6cdac3dac953f">ModeType::EReadTPC</a> || <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93ae7c0caf2504271327a85879f45dcd78a">ModeType::EReadSilMod</a>)</div>
+<div class="line"><span class="lineno">  166</span>        <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
+<div class="line"><span class="lineno">  167</span>            det-&gt;InitInputData(input);</div>
+<div class="line"><span class="lineno">  168</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a713957d24b124bb2d69d67e296fc8d10">ModeType::EFilter</a>)</div>
+<div class="line"><span class="lineno">  169</span>        <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
+<div class="line"><span class="lineno">  170</span>            det-&gt;InitInputFilter(input);</div>
+<div class="line"><span class="lineno">  171</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a4ea2feb8f3050afefca4185a9206cc6e">ModeType::EMerge</a>)</div>
+<div class="line"><span class="lineno">  172</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a3e80ccae48fde6e2f22188846239d6aa">DetectorType::EMerger</a>]-&gt;InitInputData(input);</div>
+<div class="line"><span class="lineno">  173</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a3089909056072007c4be2a8da11cef4b">ModeType::EFilterMerge</a>)</div>
+<div class="line"><span class="lineno">  174</span>    {</div>
+<div class="line"><span class="lineno">  175</span>        <span class="comment">// Merger holds all the pointers to data created with new</span></div>
+<div class="line"><span class="lineno">  176</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a3e80ccae48fde6e2f22188846239d6aa">DetectorType::EMerger</a>]-&gt;InitInputData(input);</div>
+<div class="line"><span class="lineno">  177</span>        <span class="comment">// And for filter in TPC we set them from it</span></div>
+<div class="line"><span class="lineno">  178</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a58f33cfe2eef58fba1a19a7ca321688b">DetectorType::EActar</a>]-&gt;SetInputFilter(GetDetectorAs&lt;MergerDetector&gt;()-&gt;GetInputData&lt;TPCData&gt;());</div>
+<div class="line"><span class="lineno">  179</span>    }</div>
+<div class="line"><span class="lineno">  180</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93ad2012f1c78b6db7c336231c1d0083bf2">ModeType::ECorrect</a>)</div>
+<div class="line"><span class="lineno">  181</span>        <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
+<div class="line"><span class="lineno">  182</span>            det-&gt;InitInputFilter(input);</div>
+<div class="line"><span class="lineno">  183</span>    <span class="keywordflow">else</span></div>
+<div class="line"><span class="lineno">  184</span>        <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;DetectorManager::InitInput(): no known assigment for mode &quot;</span> +</div>
+<div class="line"><span class="lineno">  185</span>                                 <a class="code hl_function" href="classActRoot_1_1Options.html#a09183ba63f70a25c5cde539b1220e526">ActRoot::Options::GetModeStr</a>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a>));</div>
+<div class="line"><span class="lineno">  186</span>    <span class="comment">// Workaround for EData mode</span></div>
+<div class="line"><span class="lineno">  187</span>    <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93ae7c0caf2504271327a85879f45dcd78a">ModeType::EReadSilMod</a>)</div>
+<div class="line"><span class="lineno">  188</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a6bb6729187fb8f8db85cb1203f59cfc7">DetectorType::EModular</a>]-&gt;SetMEvent(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6adc9348cf55c85acd2dbbf4ece381967e">DetectorType::ESilicons</a>]-&gt;GetMEvent());</div>
+<div class="line"><span class="lineno">  189</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -717,22 +723,22 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">  167</span>{</div>
-<div class="line"><span class="lineno">  168</span>    <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a1f5783fcb4694a627ad6cdac3dac953f">ModeType::EReadTPC</a> || <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93ae7c0caf2504271327a85879f45dcd78a">ModeType::EReadSilMod</a>)</div>
-<div class="line"><span class="lineno">  169</span>        <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
-<div class="line"><span class="lineno">  170</span>            det-&gt;InitOutputData(output);</div>
-<div class="line"><span class="lineno">  171</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a713957d24b124bb2d69d67e296fc8d10">ModeType::EFilter</a>)</div>
-<div class="line"><span class="lineno">  172</span>        <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
-<div class="line"><span class="lineno">  173</span>            det-&gt;InitOutputFilter(output);</div>
-<div class="line"><span class="lineno">  174</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a4ea2feb8f3050afefca4185a9206cc6e">ModeType::EMerge</a> || <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a3089909056072007c4be2a8da11cef4b">ModeType::EFilterMerge</a>)</div>
-<div class="line"><span class="lineno">  175</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a3e80ccae48fde6e2f22188846239d6aa">DetectorType::EMerger</a>]-&gt;InitOutputData(output);</div>
-<div class="line"><span class="lineno">  176</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93ad2012f1c78b6db7c336231c1d0083bf2">ModeType::ECorrect</a>)</div>
-<div class="line"><span class="lineno">  177</span>        <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
-<div class="line"><span class="lineno">  178</span>            det-&gt;InitOutputFilter(output);</div>
-<div class="line"><span class="lineno">  179</span>    <span class="keywordflow">else</span></div>
-<div class="line"><span class="lineno">  180</span>        <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;DetectorManager::InitOutput(): no known assigment for mode &quot;</span> +</div>
-<div class="line"><span class="lineno">  181</span>                                 <a class="code hl_function" href="classActRoot_1_1Options.html#a09183ba63f70a25c5cde539b1220e526">ActRoot::Options::GetModeStr</a>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a>));</div>
-<div class="line"><span class="lineno">  182</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">  192</span>{</div>
+<div class="line"><span class="lineno">  193</span>    <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a1f5783fcb4694a627ad6cdac3dac953f">ModeType::EReadTPC</a> || <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93ae7c0caf2504271327a85879f45dcd78a">ModeType::EReadSilMod</a>)</div>
+<div class="line"><span class="lineno">  194</span>        <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
+<div class="line"><span class="lineno">  195</span>            det-&gt;InitOutputData(output);</div>
+<div class="line"><span class="lineno">  196</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a713957d24b124bb2d69d67e296fc8d10">ModeType::EFilter</a>)</div>
+<div class="line"><span class="lineno">  197</span>        <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
+<div class="line"><span class="lineno">  198</span>            det-&gt;InitOutputFilter(output);</div>
+<div class="line"><span class="lineno">  199</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a4ea2feb8f3050afefca4185a9206cc6e">ModeType::EMerge</a> || <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a3089909056072007c4be2a8da11cef4b">ModeType::EFilterMerge</a>)</div>
+<div class="line"><span class="lineno">  200</span>        <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a3e80ccae48fde6e2f22188846239d6aa">DetectorType::EMerger</a>]-&gt;InitOutputData(output);</div>
+<div class="line"><span class="lineno">  201</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93ad2012f1c78b6db7c336231c1d0083bf2">ModeType::ECorrect</a>)</div>
+<div class="line"><span class="lineno">  202</span>        <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
+<div class="line"><span class="lineno">  203</span>            det-&gt;InitOutputFilter(output);</div>
+<div class="line"><span class="lineno">  204</span>    <span class="keywordflow">else</span></div>
+<div class="line"><span class="lineno">  205</span>        <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;DetectorManager::InitOutput(): no known assigment for mode &quot;</span> +</div>
+<div class="line"><span class="lineno">  206</span>                                 <a class="code hl_function" href="classActRoot_1_1Options.html#a09183ba63f70a25c5cde539b1220e526">ActRoot::Options::GetModeStr</a>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a>));</div>
+<div class="line"><span class="lineno">  207</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -750,11 +756,11 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">  230</span>{</div>
-<div class="line"><span class="lineno">  231</span>    <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [_, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
-<div class="line"><span class="lineno">  232</span>        det-&gt;<a class="code hl_function" href="classActRoot_1_1DetectorManager.html#a4f0c86e739d8fbfff7b0db26d7eb9d0c">Print</a>();</div>
-<div class="line"><span class="lineno">  233</span>}</div>
-<div class="ttc" id="aclassActRoot_1_1DetectorManager_html_a4f0c86e739d8fbfff7b0db26d7eb9d0c"><div class="ttname"><a href="classActRoot_1_1DetectorManager.html#a4f0c86e739d8fbfff7b0db26d7eb9d0c">ActRoot::DetectorManager::Print</a></div><div class="ttdeci">void Print() const</div><div class="ttdef"><b>Definition</b> ActDetectorManager.cxx:229</div></div>
+<div class="fragment"><div class="line"><span class="lineno">  255</span>{</div>
+<div class="line"><span class="lineno">  256</span>    <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [_, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
+<div class="line"><span class="lineno">  257</span>        det-&gt;<a class="code hl_function" href="classActRoot_1_1DetectorManager.html#a4f0c86e739d8fbfff7b0db26d7eb9d0c">Print</a>();</div>
+<div class="line"><span class="lineno">  258</span>}</div>
+<div class="ttc" id="aclassActRoot_1_1DetectorManager_html_a4f0c86e739d8fbfff7b0db26d7eb9d0c"><div class="ttname"><a href="classActRoot_1_1DetectorManager.html#a4f0c86e739d8fbfff7b0db26d7eb9d0c">ActRoot::DetectorManager::Print</a></div><div class="ttdeci">void Print() const</div><div class="ttdef"><b>Definition</b> ActDetectorManager.cxx:254</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -772,11 +778,11 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">  236</span>{</div>
-<div class="line"><span class="lineno">  237</span>    <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [_, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
-<div class="line"><span class="lineno">  238</span>        det-&gt;<a class="code hl_function" href="classActRoot_1_1DetectorManager.html#a03cb73a76a1fe2ddfaf2709d5ab344b1">PrintReports</a>();</div>
-<div class="line"><span class="lineno">  239</span>}</div>
-<div class="ttc" id="aclassActRoot_1_1DetectorManager_html_a03cb73a76a1fe2ddfaf2709d5ab344b1"><div class="ttname"><a href="classActRoot_1_1DetectorManager.html#a03cb73a76a1fe2ddfaf2709d5ab344b1">ActRoot::DetectorManager::PrintReports</a></div><div class="ttdeci">void PrintReports() const</div><div class="ttdef"><b>Definition</b> ActDetectorManager.cxx:235</div></div>
+<div class="fragment"><div class="line"><span class="lineno">  261</span>{</div>
+<div class="line"><span class="lineno">  262</span>    <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [_, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
+<div class="line"><span class="lineno">  263</span>        det-&gt;<a class="code hl_function" href="classActRoot_1_1DetectorManager.html#a03cb73a76a1fe2ddfaf2709d5ab344b1">PrintReports</a>();</div>
+<div class="line"><span class="lineno">  264</span>}</div>
+<div class="ttc" id="aclassActRoot_1_1DetectorManager_html_a03cb73a76a1fe2ddfaf2709d5ab344b1"><div class="ttname"><a href="classActRoot_1_1DetectorManager.html#a03cb73a76a1fe2ddfaf2709d5ab344b1">ActRoot::DetectorManager::PrintReports</a></div><div class="ttdeci">void PrintReports() const</div><div class="ttdef"><b>Definition</b> ActDetectorManager.cxx:260</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -795,16 +801,16 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">  109</span>{</div>
-<div class="line"><span class="lineno">  110</span>    <a class="code hl_class" href="classActRoot_1_1InputParser.html">ActRoot::InputParser</a> parser {file};</div>
-<div class="line"><span class="lineno">  111</span>    <span class="keyword">auto</span> headers {parser.<a class="code hl_function" href="classActRoot_1_1InputParser.html#a67d08ebce56f6d35c5c62921a8a0520e">GetBlockHeaders</a>()};</div>
-<div class="line"><span class="lineno">  112</span>    <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
-<div class="line"><span class="lineno">  113</span>    {</div>
-<div class="line"><span class="lineno">  114</span>        std::string str {<a class="code hl_function" href="classActRoot_1_1DetectorManager.html#a6a6ebbb4a2e8f57a34849b0963d123f7">GetDetectorTypeStr</a>(key)};</div>
-<div class="line"><span class="lineno">  115</span>        <span class="keywordflow">if</span>(std::find(headers.begin(), headers.end(), str) != headers.end())</div>
-<div class="line"><span class="lineno">  116</span>            det-&gt;ReadCalibrations(parser.GetBlock(str));</div>
-<div class="line"><span class="lineno">  117</span>    }</div>
-<div class="line"><span class="lineno">  118</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">  134</span>{</div>
+<div class="line"><span class="lineno">  135</span>    <a class="code hl_class" href="classActRoot_1_1InputParser.html">ActRoot::InputParser</a> parser {file};</div>
+<div class="line"><span class="lineno">  136</span>    <span class="keyword">auto</span> headers {parser.<a class="code hl_function" href="classActRoot_1_1InputParser.html#a67d08ebce56f6d35c5c62921a8a0520e">GetBlockHeaders</a>()};</div>
+<div class="line"><span class="lineno">  137</span>    <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
+<div class="line"><span class="lineno">  138</span>    {</div>
+<div class="line"><span class="lineno">  139</span>        std::string str {<a class="code hl_function" href="classActRoot_1_1DetectorManager.html#a6a6ebbb4a2e8f57a34849b0963d123f7">GetDetectorTypeStr</a>(key)};</div>
+<div class="line"><span class="lineno">  140</span>        <span class="keywordflow">if</span>(std::find(headers.begin(), headers.end(), str) != headers.end())</div>
+<div class="line"><span class="lineno">  141</span>            det-&gt;ReadCalibrations(parser.GetBlock(str));</div>
+<div class="line"><span class="lineno">  142</span>    }</div>
+<div class="line"><span class="lineno">  143</span>}</div>
 <div class="ttc" id="aclassActRoot_1_1InputParser_html"><div class="ttname"><a href="classActRoot_1_1InputParser.html">ActRoot::InputParser</a></div><div class="ttdef"><b>Definition</b> ActInputParser.h:111</div></div>
 <div class="ttc" id="aclassActRoot_1_1InputParser_html_a67d08ebce56f6d35c5c62921a8a0520e"><div class="ttname"><a href="classActRoot_1_1InputParser.html#a67d08ebce56f6d35c5c62921a8a0520e">ActRoot::InputParser::GetBlockHeaders</a></div><div class="ttdeci">std::vector&lt; std::string &gt; GetBlockHeaders() const</div><div class="ttdef"><b>Definition</b> ActInputParser.cxx:319</div></div>
 </div><!-- fragment -->
@@ -835,29 +841,49 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   85</span>{</div>
-<div class="line"><span class="lineno">   86</span>    <a class="code hl_class" href="classActRoot_1_1InputParser.html">ActRoot::InputParser</a> parser {file};</div>
-<div class="line"><span class="lineno">   87</span>    <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
-<div class="line"><span class="lineno">   88</span>    {</div>
-<div class="line"><span class="lineno">   89</span>        std::string str {<a class="code hl_function" href="classActRoot_1_1DetectorManager.html#a6a6ebbb4a2e8f57a34849b0963d123f7">GetDetectorTypeStr</a>(key)};</div>
-<div class="line"><span class="lineno">   90</span>        det-&gt;ReadConfiguration(parser.GetBlock(str));</div>
-<div class="line"><span class="lineno">   91</span>        <span class="keywordflow">if</span>(print)</div>
-<div class="line"><span class="lineno">   92</span>            det-&gt;<a class="code hl_function" href="classActRoot_1_1InputParser.html#a073a08c8ac0a9b17225fc8e6e27ecbc6">Print</a>();</div>
-<div class="line"><span class="lineno">   93</span>    }</div>
-<div class="line"><span class="lineno">   94</span>    <span class="comment">// Workaround for Merger: needs access to all the other parameters</span></div>
-<div class="line"><span class="lineno">   95</span>    <span class="comment">// but not for its filter (ModeType::ECorrect)</span></div>
-<div class="line"><span class="lineno">   96</span>    <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a4ea2feb8f3050afefca4185a9206cc6e">ModeType::EMerge</a> || <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a3089909056072007c4be2a8da11cef4b">ModeType::EFilterMerge</a> || <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a0bd92a405a921016633cfc1a8f7a0eff">ModeType::EGui</a>)</div>
-<div class="line"><span class="lineno">   97</span>    {</div>
-<div class="line"><span class="lineno">   98</span>        <span class="keyword">auto</span> merger {std::dynamic_pointer_cast&lt;ActRoot::MergerDetector&gt;(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a3e80ccae48fde6e2f22188846239d6aa">DetectorType::EMerger</a>])};</div>
-<div class="line"><span class="lineno">   99</span>        <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
-<div class="line"><span class="lineno">  100</span>        {</div>
-<div class="line"><span class="lineno">  101</span>            <span class="keywordflow">if</span>(key == <a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a3e80ccae48fde6e2f22188846239d6aa">DetectorType::EMerger</a>)</div>
-<div class="line"><span class="lineno">  102</span>                <span class="keywordflow">continue</span>;</div>
-<div class="line"><span class="lineno">  103</span>            merger-&gt;SetParameters(det-&gt;GetParameters());</div>
-<div class="line"><span class="lineno">  104</span>        }</div>
-<div class="line"><span class="lineno">  105</span>    }</div>
-<div class="line"><span class="lineno">  106</span>}</div>
-<div class="ttc" id="aclassActRoot_1_1InputParser_html_a073a08c8ac0a9b17225fc8e6e27ecbc6"><div class="ttname"><a href="classActRoot_1_1InputParser.html#a073a08c8ac0a9b17225fc8e6e27ecbc6">ActRoot::InputParser::Print</a></div><div class="ttdeci">void Print() const</div><div class="ttdef"><b>Definition</b> ActInputParser.cxx:287</div></div>
+<div class="fragment"><div class="line"><span class="lineno">   90</span>{</div>
+<div class="line"><span class="lineno">   91</span>    <a class="code hl_class" href="classActRoot_1_1InputParser.html">ActRoot::InputParser</a> parser {file};</div>
+<div class="line"><span class="lineno">   92</span>    <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
+<div class="line"><span class="lineno">   93</span>    {</div>
+<div class="line"><span class="lineno">   94</span>        std::string str {<a class="code hl_function" href="classActRoot_1_1DetectorManager.html#a6a6ebbb4a2e8f57a34849b0963d123f7">GetDetectorTypeStr</a>(key)};</div>
+<div class="line"><span class="lineno">   95</span>        det-&gt;ReadConfiguration(parser.GetBlock(str));</div>
+<div class="line"><span class="lineno">   96</span>    }</div>
+<div class="line"><span class="lineno">   97</span>    <span class="comment">// Workaround for Merger: needs access to all the other parameters</span></div>
+<div class="line"><span class="lineno">   98</span>    <span class="comment">// but not for its filter (ModeType::ECorrect)</span></div>
+<div class="line"><span class="lineno">   99</span>    <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a4ea2feb8f3050afefca4185a9206cc6e">ModeType::EMerge</a> || <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a3089909056072007c4be2a8da11cef4b">ModeType::EFilterMerge</a> || <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a0bd92a405a921016633cfc1a8f7a0eff">ModeType::EGui</a>)</div>
+<div class="line"><span class="lineno">  100</span>    {</div>
+<div class="line"><span class="lineno">  101</span>        <span class="keyword">auto</span> merger {std::dynamic_pointer_cast&lt;ActRoot::MergerDetector&gt;(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a3e80ccae48fde6e2f22188846239d6aa">DetectorType::EMerger</a>])};</div>
+<div class="line"><span class="lineno">  102</span>        <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
+<div class="line"><span class="lineno">  103</span>        {</div>
+<div class="line"><span class="lineno">  104</span>            <span class="keywordflow">if</span>(key == <a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a3e80ccae48fde6e2f22188846239d6aa">DetectorType::EMerger</a>)</div>
+<div class="line"><span class="lineno">  105</span>                <span class="keywordflow">continue</span>;</div>
+<div class="line"><span class="lineno">  106</span>            merger-&gt;SetParameters(det-&gt;GetParameters());</div>
+<div class="line"><span class="lineno">  107</span>        }</div>
+<div class="line"><span class="lineno">  108</span>    }</div>
+<div class="line"><span class="lineno">  109</span> </div>
+<div class="line"><span class="lineno">  110</span>    <span class="comment">// Workaround for TPCDetector with ActRoot::Options::fWithGATCONF ON. Pass MergerPars to TPCDet and delete MergerDet</span></div>
+<div class="line"><span class="lineno">  111</span>    <span class="comment">// from vector</span></div>
+<div class="line"><span class="lineno">  112</span>    <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a07d7b7f59f35087df36becbe5b18da87">fMode</a> == <a class="code hl_enumvalue" href="namespaceActRoot.html#a73e55379eb4b32006ebd666053febf93a1f5783fcb4694a627ad6cdac3dac953f">ModeType::EReadTPC</a> &amp;&amp; <a class="code hl_function" href="classActRoot_1_1Options.html#a7bd54eeb620ca48afccde8edcadb6bb6">ActRoot::Options::GetInstance</a>()-&gt;GetWithGATCONF())</div>
+<div class="line"><span class="lineno">  113</span>    {</div>
+<div class="line"><span class="lineno">  114</span>        <span class="comment">// Get ModPars from just parsed detector</span></div>
+<div class="line"><span class="lineno">  115</span>        <span class="keyword">auto</span> pars {<span class="keyword">dynamic_cast&lt;</span>ModularParameters*<span class="keyword">&gt;</span>(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a6bb6729187fb8f8db85cb1203f59cfc7">DetectorType::EModular</a>]-&gt;GetParameters())};</div>
+<div class="line"><span class="lineno">  116</span>        <span class="comment">// Get and cast TPC detector</span></div>
+<div class="line"><span class="lineno">  117</span>        <span class="keyword">auto</span> tpc {std::dynamic_pointer_cast&lt;ActRoot::TPCDetector&gt;(<a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>[<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a58f33cfe2eef58fba1a19a7ca321688b">DetectorType::EActar</a>])};</div>
+<div class="line"><span class="lineno">  118</span>        <span class="comment">// And set modular parameters. The line below just calls the copy constructor</span></div>
+<div class="line"><span class="lineno">  119</span>        tpc-&gt;SetModularParameters(std::make_shared&lt;ModularParameters&gt;(*pars));</div>
+<div class="line"><span class="lineno">  120</span>        <span class="comment">// Delete Modular detector</span></div>
+<div class="line"><span class="lineno">  121</span>        <a class="code hl_function" href="classActRoot_1_1DetectorManager.html#a84cbcf3b1c6e0034a2ce95577b17247c">DeleteDetector</a>(<a class="code hl_enumvalue" href="namespaceActRoot.html#af4fc5584270a087d7c0483fe83951ce6a6bb6729187fb8f8db85cb1203f59cfc7">DetectorType::EModular</a>);</div>
+<div class="line"><span class="lineno">  122</span>    }</div>
+<div class="line"><span class="lineno">  123</span> </div>
+<div class="line"><span class="lineno">  124</span> </div>
+<div class="line"><span class="lineno">  125</span>    <span class="comment">// Move print to here</span></div>
+<div class="line"><span class="lineno">  126</span>    <span class="keywordflow">if</span>(print)</div>
+<div class="line"><span class="lineno">  127</span>    {</div>
+<div class="line"><span class="lineno">  128</span>        <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [_, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
+<div class="line"><span class="lineno">  129</span>            det-&gt;<a class="code hl_function" href="classActRoot_1_1DetectorManager.html#a4f0c86e739d8fbfff7b0db26d7eb9d0c">Print</a>();</div>
+<div class="line"><span class="lineno">  130</span>    }</div>
+<div class="line"><span class="lineno">  131</span>}</div>
+<div class="ttc" id="aclassActRoot_1_1DetectorManager_html_a84cbcf3b1c6e0034a2ce95577b17247c"><div class="ttname"><a href="classActRoot_1_1DetectorManager.html#a84cbcf3b1c6e0034a2ce95577b17247c">ActRoot::DetectorManager::DeleteDetector</a></div><div class="ttdeci">void DeleteDetector(DetectorType type)</div><div class="ttdef"><b>Definition</b> ActDetectorManager.cxx:154</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -875,13 +901,13 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">  121</span>{</div>
-<div class="line"><span class="lineno">  122</span>    <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
-<div class="line"><span class="lineno">  123</span>    {</div>
-<div class="line"><span class="lineno">  124</span>        det-&gt;Reconfigure();</div>
-<div class="line"><span class="lineno">  125</span>        det-&gt;Print();</div>
-<div class="line"><span class="lineno">  126</span>    }</div>
-<div class="line"><span class="lineno">  127</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">  146</span>{</div>
+<div class="line"><span class="lineno">  147</span>    <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; [key, det] : <a class="code hl_variable" href="classActRoot_1_1DetectorManager.html#a5fadc51b695397011933a8122b63eb28">fDetectors</a>)</div>
+<div class="line"><span class="lineno">  148</span>    {</div>
+<div class="line"><span class="lineno">  149</span>        det-&gt;Reconfigure();</div>
+<div class="line"><span class="lineno">  150</span>        det-&gt;Print();</div>
+<div class="line"><span class="lineno">  151</span>    }</div>
+<div class="line"><span class="lineno">  152</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -925,20 +951,20 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">  242</span>{</div>
-<div class="line"><span class="lineno">  243</span>    <span class="comment">// 1-&gt; TPC</span></div>
-<div class="line"><span class="lineno">  244</span>    GetDetectorAs&lt;TPCDetector&gt;()-&gt;SetInputFilter(wrap-&gt;<a class="code hl_function" href="classActRoot_1_1InputWrapper.html#ade5cee60eed075f0d977098f342d6370">GetTPCData</a>());</div>
-<div class="line"><span class="lineno">  245</span>    <span class="comment">// 2-&gt; Sil</span></div>
-<div class="line"><span class="lineno">  246</span>    GetDetectorAs&lt;SilDetector&gt;()-&gt;SetInputFilter(wrap-&gt;<a class="code hl_function" href="classActRoot_1_1InputWrapper.html#a97cbcb2c1091e7db4fb0cf12bdd57b0b">GetSilData</a>());</div>
-<div class="line"><span class="lineno">  247</span>    <span class="comment">// 3-&gt; Modular</span></div>
-<div class="line"><span class="lineno">  248</span>    GetDetectorAs&lt;ModularDetector&gt;()-&gt;SetInputFilter(wrap-&gt;<a class="code hl_function" href="classActRoot_1_1InputWrapper.html#a5a8697c37f23020e7b7f28fb2e836d38">GetModularData</a>());</div>
-<div class="line"><span class="lineno">  249</span>    <span class="comment">// 4-&gt; Merger</span></div>
-<div class="line"><span class="lineno">  250</span>    <span class="keyword">auto</span> merger {GetDetectorAs&lt;MergerDetector&gt;()};</div>
-<div class="line"><span class="lineno">  251</span>    merger-&gt;SetInputData(wrap-&gt;<a class="code hl_function" href="classActRoot_1_1InputWrapper.html#ade5cee60eed075f0d977098f342d6370">GetTPCData</a>());</div>
-<div class="line"><span class="lineno">  252</span>    merger-&gt;SetInputData(wrap-&gt;<a class="code hl_function" href="classActRoot_1_1InputWrapper.html#a97cbcb2c1091e7db4fb0cf12bdd57b0b">GetSilData</a>());</div>
-<div class="line"><span class="lineno">  253</span>    merger-&gt;SetInputData(wrap-&gt;<a class="code hl_function" href="classActRoot_1_1InputWrapper.html#a5a8697c37f23020e7b7f28fb2e836d38">GetModularData</a>());</div>
-<div class="line"><span class="lineno">  254</span>    merger-&gt;SetOutputData(wrap-&gt;<a class="code hl_function" href="classActRoot_1_1InputWrapper.html#a1856d427a431d9c06be59b90fa262d35">GetMergerData</a>());</div>
-<div class="line"><span class="lineno">  255</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">  267</span>{</div>
+<div class="line"><span class="lineno">  268</span>    <span class="comment">// 1-&gt; TPC</span></div>
+<div class="line"><span class="lineno">  269</span>    GetDetectorAs&lt;TPCDetector&gt;()-&gt;SetInputFilter(wrap-&gt;<a class="code hl_function" href="classActRoot_1_1InputWrapper.html#ade5cee60eed075f0d977098f342d6370">GetTPCData</a>());</div>
+<div class="line"><span class="lineno">  270</span>    <span class="comment">// 2-&gt; Sil</span></div>
+<div class="line"><span class="lineno">  271</span>    GetDetectorAs&lt;SilDetector&gt;()-&gt;SetInputFilter(wrap-&gt;<a class="code hl_function" href="classActRoot_1_1InputWrapper.html#a97cbcb2c1091e7db4fb0cf12bdd57b0b">GetSilData</a>());</div>
+<div class="line"><span class="lineno">  272</span>    <span class="comment">// 3-&gt; Modular</span></div>
+<div class="line"><span class="lineno">  273</span>    GetDetectorAs&lt;ModularDetector&gt;()-&gt;SetInputFilter(wrap-&gt;<a class="code hl_function" href="classActRoot_1_1InputWrapper.html#a5a8697c37f23020e7b7f28fb2e836d38">GetModularData</a>());</div>
+<div class="line"><span class="lineno">  274</span>    <span class="comment">// 4-&gt; Merger</span></div>
+<div class="line"><span class="lineno">  275</span>    <span class="keyword">auto</span> merger {GetDetectorAs&lt;MergerDetector&gt;()};</div>
+<div class="line"><span class="lineno">  276</span>    merger-&gt;SetInputData(wrap-&gt;<a class="code hl_function" href="classActRoot_1_1InputWrapper.html#ade5cee60eed075f0d977098f342d6370">GetTPCData</a>());</div>
+<div class="line"><span class="lineno">  277</span>    merger-&gt;SetInputData(wrap-&gt;<a class="code hl_function" href="classActRoot_1_1InputWrapper.html#a97cbcb2c1091e7db4fb0cf12bdd57b0b">GetSilData</a>());</div>
+<div class="line"><span class="lineno">  278</span>    merger-&gt;SetInputData(wrap-&gt;<a class="code hl_function" href="classActRoot_1_1InputWrapper.html#a5a8697c37f23020e7b7f28fb2e836d38">GetModularData</a>());</div>
+<div class="line"><span class="lineno">  279</span>    merger-&gt;SetOutputData(wrap-&gt;<a class="code hl_function" href="classActRoot_1_1InputWrapper.html#a1856d427a431d9c06be59b90fa262d35">GetMergerData</a>());</div>
+<div class="line"><span class="lineno">  280</span>}</div>
 <div class="ttc" id="aclassActRoot_1_1InputWrapper_html_a1856d427a431d9c06be59b90fa262d35"><div class="ttname"><a href="classActRoot_1_1InputWrapper.html#a1856d427a431d9c06be59b90fa262d35">ActRoot::InputWrapper::GetMergerData</a></div><div class="ttdeci">MergerData * GetMergerData() const</div><div class="ttdef"><b>Definition</b> ActInputIterator.h:78</div></div>
 <div class="ttc" id="aclassActRoot_1_1InputWrapper_html_a5a8697c37f23020e7b7f28fb2e836d38"><div class="ttname"><a href="classActRoot_1_1InputWrapper.html#a5a8697c37f23020e7b7f28fb2e836d38">ActRoot::InputWrapper::GetModularData</a></div><div class="ttdeci">ModularData * GetModularData() const</div><div class="ttdef"><b>Definition</b> ActInputIterator.h:77</div></div>
 <div class="ttc" id="aclassActRoot_1_1InputWrapper_html_a97cbcb2c1091e7db4fb0cf12bdd57b0b"><div class="ttname"><a href="classActRoot_1_1InputWrapper.html#a97cbcb2c1091e7db4fb0cf12bdd57b0b">ActRoot::InputWrapper::GetSilData</a></div><div class="ttdeci">SilData * GetSilData() const</div><div class="ttdef"><b>Definition</b> ActInputIterator.h:76</div></div>
