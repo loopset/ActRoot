@@ -110,7 +110,7 @@ var searchData=
   ['setuseextvoxels_107',['SetUseExtVoxels',['../classActRoot_1_1Cluster.html#a6c5e020cc04cef5a2c7efc5a76b62fd1',1,'ActRoot::Cluster']]],
   ['setusespline_108',['SetUseSpline',['../classActPhysics_1_1SRIM.html#ae814217f54b65348f1535f69e99f4006',1,'ActPhysics::SRIM']]],
   ['setvoxels_109',['setvoxels',['../classActRoot_1_1Cluster.html#a0efa6961e0e4e69e20a13f3fb798ca84',1,'ActRoot::Cluster::SetVoxels(const std::vector&lt; ActRoot::Voxel &gt; &amp;voxels)'],['../classActRoot_1_1Cluster.html#ad3a7f414bd7c465eab907320f51c4a59',1,'ActRoot::Cluster::SetVoxels(std::vector&lt; ActRoot::Voxel &gt; &amp;&amp;voxels)']]],
-  ['setwithgatconf_110',['SetWithGATCONF',['../classActRoot_1_1Options.html#a4626b197617d414413db1518ec2040bb',1,'ActRoot::Options']]],
+  ['setwithtrigger_110',['SetWithTrigger',['../classActRoot_1_1Options.html#a10ffa3721e7a3ef36e4338365e662ad1',1,'ActRoot::Options']]],
   ['signaller_111',['signaller',['../classBS_1_1signaller.html#a26dac33f2a1f8e0d552a61f281d189e0',1,'BS::signaller::signaller()'],['../classBS_1_1signaller.html#a031dfa6d12385c44e94072f4c90cfb6e',1,'BS::signaller::signaller(const signaller &amp;)=delete'],['../classBS_1_1signaller.html#a8866a033ae266c3e052ade3d9e1e5c82',1,'BS::signaller::signaller(signaller &amp;&amp;)=default']]],
   ['silassembly_112',['silassembly',['../structActSim_1_1SilAssembly.html#ada77484b21b47a3daefe2d3c7b3afe6d',1,'ActSim::SilAssembly::SilAssembly()=default'],['../structActSim_1_1SilAssembly.html#ac18d59258b5086f31051565978b966a3',1,'ActSim::SilAssembly::SilAssembly(unsigned int index, const SilUnit &amp;uniy, bool alongx=false, bool alongy=false)']]],
   ['sildata_113',['SilData',['../classActRoot_1_1SilData.html#a0ab53a31b355a29ea2707cb5a205117e',1,'ActRoot::SilData']]],

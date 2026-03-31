@@ -280,7 +280,7 @@ var searchData=
   ['getvoxels_277',['GetVoxels',['../classActRoot_1_1Cluster.html#ac89a8e2813c0bdd35e90d6e5e579ec04',1,'ActRoot::Cluster']]],
   ['getvxiof_278',['GetVXIOf',['../classActRoot_1_1ModularParameters.html#a5fe9af6c5a66c94edc8573b6d69f814d',1,'ActRoot::ModularParameters']]],
   ['getwidth_279',['getwidth',['../classActPhysics_1_1SilUnit.html#a531667696ce892fac6478b7168a6a9f8',1,'ActPhysics::SilUnit::GetWidth()'],['../classActPhysics_1_1SilMatrix.html#a8aadca1f585c77ed615e8efffe3c67c2',1,'ActPhysics::SilMatrix::GetWidth()']]],
-  ['getwithgatconf_280',['GetWithGATCONF',['../classActRoot_1_1Options.html#ad932764ba927adbd339bd2765d7a1a95',1,'ActRoot::Options']]],
+  ['getwithtrigger_280',['GetWithTrigger',['../classActRoot_1_1Options.html#a1bda6b65057cd4c0b25410a163db5b4a',1,'ActRoot::Options']]],
   ['getwork_281',['GetWork',['../classActPhysics_1_1Gas.html#a229f65502fe7f0909a0134e4bd6aefcc',1,'ActPhysics::Gas']]],
   ['getx_282',['getx',['../classActRoot_1_1TPCParameters.html#aa52083f8654f2cdbdf46a4c11739b25a',1,'ActRoot::TPCParameters::GetX()'],['../classActRoot_1_1Region.html#a0cb1511735bf1c34bf92affd4114a2b9',1,'ActRoot::Region::GetX()']]],
   ['getxrange_283',['getxrange',['../classActRoot_1_1Cluster.html#acaff1bf3b5a5fb6f8ce0ee3e953a8e7f',1,'ActRoot::Cluster::GetXRange()'],['../classActRoot_1_1CutsManager.html#a4024edb6aa840457b873aca309175fbb',1,'ActRoot::CutsManager::GetXRange()']]],
