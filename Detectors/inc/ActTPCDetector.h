@@ -60,7 +60,8 @@ private:
     std::shared_ptr<ModularParameters> fModularPars {};
     // For the moment it is just GATCONF, but maybe in the future we need more
     // That is why I passed a pointer to the whole ModPars and not just the int of GATCONF VXI
-    int fVXIofGATCONF {-11};
+    // Call it trigger to be consistent with TPCData member
+    int fVXIofTrigger {-11};
 
     // Ensure cleaning of news in this class
     bool fDelMEvent {};
@@ -129,7 +130,7 @@ public:
 
 private:
     void ReadHits(ReducedData& coas, const int& where);
-    void ReadGATCONF(ReducedData& coas);
+    void ReadTrigger(ReducedData& coas);
     void CleanPadMatrix();
     void InitClusterMethod(const std::string& method);
     void InitFilterMethod(const std::string& method);

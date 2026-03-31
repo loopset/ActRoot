@@ -110,9 +110,9 @@ void ActRoot::Options::Parse(int argc, char** argv)
         // Verbose mode
         else if(arg == "-v")
             fIsVerbose = true;
-        // Include GATCONF in TPCData
-        else if(arg == "--with-gatconf")
-            fWithGATCONF = true;
+        // Include trigger in TPCData
+        else if(arg == "--with-trigger")
+            fWithTrigger = true;
         else
             throw std::invalid_argument("Options::Parse(): invalid argument : " + arg);
     }
@@ -133,6 +133,7 @@ void ActRoot::Options::Help() const
     std::cout << "-runs output.runs : Sets data flow configuration" << '\n';
     std::cout << "-mt or -st : Enables MT or ST mode" << '\n';
     std::cout << "-v : Enables verbose mode for algorithms" << '\n';
+    std::cout << "--with-trigger in combination with -r tpc appends triggerID to TPCData" << '\n';
     std::cout << "--------------------" << RESET << '\n';
 }
 
@@ -146,8 +147,8 @@ void ActRoot::Options::Print() const
     std::cout << "-> Detector     : " << fDetFile << '\n';
     std::cout << "-> Calibrations : " << fCalFile << '\n';
     std::cout << "-> Data         : " << fDataFile << '\n';
-    if(fWithGATCONF)
-        std::cout << "-> WithGATCONF  : " << fWithGATCONF << '\n';
+    if(fWithTrigger)
+        std::cout << "-> WithTrigger  : " << fWithTrigger << '\n';
     std::cout << "--------------------" << RESET << '\n';
 }
 

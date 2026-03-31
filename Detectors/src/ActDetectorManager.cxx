@@ -46,7 +46,7 @@ void ActRoot::DetectorManager::InitDetectors()
     {
         fDetectors[DetectorType::EActar] = std::make_shared<ActRoot::TPCDetector>();
         // if requested to parse GATCONF alongside TPCData
-        if(ActRoot::Options::GetInstance()->GetWithGATCONF())
+        if(ActRoot::Options::GetInstance()->GetWithTrigger())
             fDetectors[DetectorType::EModular] = std::make_shared<ActRoot::ModularDetector>();
     }
     else if(fMode == ModeType::EReadSilMod)
@@ -109,7 +109,7 @@ void ActRoot::DetectorManager::ReadDetectorFile(const std::string& file, bool pr
 
     // Workaround for TPCDetector with ActRoot::Options::fWithGATCONF ON. Pass MergerPars to TPCDet and delete MergerDet
     // from vector
-    if(fMode == ModeType::EReadTPC && ActRoot::Options::GetInstance()->GetWithGATCONF())
+    if(fMode == ModeType::EReadTPC && ActRoot::Options::GetInstance()->GetWithTrigger())
     {
         // Get ModPars from just parsed detector
         auto pars {dynamic_cast<ModularParameters*>(fDetectors[DetectorType::EModular]->GetParameters())};

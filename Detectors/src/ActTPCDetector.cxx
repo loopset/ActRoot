@@ -204,7 +204,7 @@ void ActRoot::TPCDetector::BuildEventData(int run, int entry)
         }
         // If co == 31, optionally parse GATCONF
         if((co == 31) && fModularPars)
-            ReadGATCONF(coas);
+            ReadTrigger(coas);
     }
     // Clean pad matrix from saturated tracks along Z
     if(fCleanPadMatrix)
@@ -319,12 +319,12 @@ void ActRoot::TPCDetector::ReadHits(ReducedData& coas, const int& where)
     }
 }
 
-void ActRoot::TPCDetector::ReadGATCONF(ReducedData& coas)
+void ActRoot::TPCDetector::ReadTrigger(ReducedData& coas)
 {
     for(int hit = 0, size = coas.peakheight.size(); hit < size; hit++)
     {
         auto vxi {coas.peaktime[hit]};
-        if(vxi == fVXIofGATCONF)
+        if(vxi == fVXIofTrigger)
         {
             fData->fTrigger = coas.peakheight[hit];
             break;
@@ -366,7 +366,7 @@ void ActRoot::TPCDetector::Print() const
         std::cout << "-> CleanDuplicatedVoxels   ? " << std::boolalpha << fCleanDuplicatedVoxels << '\n';
         std::cout << "-> EnableRawBranchInFilter ? " << std::boolalpha << fEnableRawBranchInFilter << '\n';
         if(fModularPars)
-            std::cout << "-> Append GATCONF at VXI   : " << fVXIofGATCONF << '\n';
+            std::cout << "-> Append trigger at VXI   : " << fVXIofTrigger << '\n';
         std::cout << RESET;
     }
     if(fCluster)
@@ -399,5 +399,5 @@ void ActRoot::TPCDetector::Reconfigure()
 void ActRoot::TPCDetector::SetModularParameters(std::shared_ptr<ModularParameters> modpars)
 {
     fModularPars = modpars;
-    fVXIofGATCONF = fModularPars->GetVXIOf("GATCONF");
+    fVXIofTrigger = fModularPars->GetVXIOf("GATCONF");
 }

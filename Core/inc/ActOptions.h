@@ -28,7 +28,7 @@ private:
     std::string fDataFile {"data.conf"};
     ModeType fMode {ModeType::ENone};
     bool fIsVerbose {};
-    bool fWithGATCONF {false}; //!< Add GATCONF to TPCData as a flag
+    bool fWithTrigger {false}; //!< Add GATCONF to TPCData as a flag
 
     // make constructors and copy/move operators private
     Options() = default;
@@ -53,7 +53,7 @@ public:
     std::string GetConfigDir() const { return GetProjectDir() + "/configs/"; }
     bool GetIsMT() const { return fIsMT; }
     bool GetIsVerbose() const { return fIsVerbose; }
-    bool GetWithGATCONF() const { return fWithGATCONF; }
+    bool GetWithTrigger() const { return fWithTrigger; }
 
     // Setters
     void SetMode(ModeType mode) { fMode = mode; }
@@ -62,7 +62,7 @@ public:
     void SetDataFile(const std::string& file) { fDataFile = file; }
     void SetIsMT(bool mt) { fIsMT = mt; }
     void SetIsVerbose(bool verb = true) { fIsVerbose = verb; }
-    void SetWithGATCONF(bool with) { fWithGATCONF = with; }
+    void SetWithTrigger(bool with) { fWithTrigger = with; }
 
     // Others
     void Help() const;
