@@ -18,8 +18,6 @@ void ActAlgorithm::Actions::BreakChi2::ReadConfiguration(std::shared_ptr<ActRoot
 {
     // Always read first the IsEnabled parameter (inherited from VAction)
     fIsEnabled = block->GetBool("IsEnabled");
-    if(!fIsEnabled)
-        return;
     // And then proceed reading the rest of parameters
     if(block->CheckTokenExists("Chi2Thresh"))
         fChi2Thresh = block->GetDouble("Chi2Thresh");
@@ -47,6 +45,12 @@ void ActAlgorithm::Actions::BreakChi2::ReadConfiguration(std::shared_ptr<ActRoot
         fFixMinXRange = block->GetDouble("FixMinXRange");
     if(block->CheckTokenExists("FixChi2Diff"))
         fFixChi2Diff = block->GetDouble("FixChi2Diff");
+
+    // Since this action can be called from other actions, it is interesting
+    // to DISABLE it in the multiaction.conf but still load its settings
+    // When calling this action from another (enabling it), it can run without any issues
+    if(!fIsEnabled) // in fact this line is pointless, just leave it here for the comment
+        return;
 }
 
 bool ActAlgorithm::Actions::BreakChi2::IsFixable(ActRoot::Cluster* cluster)
