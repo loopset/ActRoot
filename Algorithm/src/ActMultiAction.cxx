@@ -157,7 +157,8 @@ void ActAlgorithm::MultiAction::LoadUserAction(std::shared_ptr<ActRoot::InputBlo
     // Get path from block
     auto path {block->GetString("Path")};
     // Build path + name
-    auto file {ActRoot::Options::GetInstance()->GetProjectDir() + path + "lib" + name + "." + gSystem->GetSoExt()};
+    auto ext {(name.find('.') != std::string::npos) ? "" : std::string(".") + gSystem->GetSoExt()};
+    auto file {ActRoot::Options::GetInstance()->GetProjectDir() + path + "lib" + name + ext};
     // If it doesnt exist, throw error
     if(!std::filesystem::exists(file))
         throw std::runtime_error("MA::LoadUserAction(): cannot locate library " + name);
