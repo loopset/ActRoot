@@ -70,13 +70,16 @@ void ActRoot::Cluster::AddVoxel(ActRoot::Voxel&& voxel)
 ActRoot::Cluster::XYZPointF
 ActRoot::Cluster::GetGravityPointInRegion(double xmin, double xmax, double ymin, double ymax, double zmin, double zmax)
 {
+    // Note: Need to put the position in the center of the voxel to ensure same behaviour respect to phi angle
+    // (left-right from beam position in Y coordinate)
     float xsum {};
     float ysum {};
     float zsum {};
     int count {};
     for(const auto& voxel : fVoxels)
     {
-        const auto& pos {voxel.GetPosition()};
+        auto pos {voxel.GetPosition()};
+        pos += XYZVectorF {0.5, 0.5, 0.5};
         bool condX {(xmin <= pos.X()) && (pos.X() <= xmax)};
         bool condY {true};
         if(ymin != -1 && ymax != -1)
@@ -102,6 +105,8 @@ ActRoot::Cluster::GetGravityPointInRegion(double xmin, double xmax, double ymin,
 
 ActRoot::Cluster::XYZPointF ActRoot::Cluster::GetGravityPointInXRange(double length)
 {
+    // Note: Need to put the position in the center of the voxel to ensure same behaviour respect to phi angle
+    // (left-right from beam position in Y coordinate)
     auto [xmin, xmax] = GetXRange();
     float xbreak {static_cast<float>(xmin + length)};
     float xsum {};
@@ -111,6 +116,7 @@ ActRoot::Cluster::XYZPointF ActRoot::Cluster::GetGravityPointInXRange(double len
     for(const auto& voxel : fVoxels)
     {
         auto pos {voxel.GetPosition()};
+        pos += XYZVectorF {0.5, 0.5, 0.5};
         bool condX {(xmin <= pos.X()) && (pos.X() <= xbreak)};
         if(condX)
         {
@@ -181,8 +187,6 @@ void ActRoot::Cluster::SortAlongDir()
 
 void ActRoot::Cluster::SortAlongDir(const XYZVectorF& dir)
 {
-    // Not necessary to correct for {0.5, 0.5, 0.5} offset since
-    // this we are comparing all points and it would be a common factor
     XYZPointF ref {fLine.GetPoint() - 1000 * dir.Unit()};
     // Auxiliary line since we can use an arbitrary direction
     // But gravity point remains the same!!
@@ -191,8 +195,12 @@ void ActRoot::Cluster::SortAlongDir(const XYZVectorF& dir)
               [&](const Voxel& l, const Voxel& r)
               {
                   // Sort using distance to the reference point
-                  auto ld {(line.ProjectionPointOnLine(l.GetPosition()) - ref).R()};
-                  auto rd {(line.ProjectionPointOnLine(r.GetPosition()) - ref).R()};
+                  auto pl {l.GetPosition()};
+                  pl += XYZVectorF {0.5, 0.5, 0.5};
+                  auto pr {r.GetPosition()};
+                  pr += XYZVectorF {0.5, 0.5, 0.5};
+                  auto ld {(line.ProjectionPointOnLine(pl) - ref).R()};
+                  auto rd {(line.ProjectionPointOnLine(pr) - ref).R()};
                   return ld < rd;
               });
 }

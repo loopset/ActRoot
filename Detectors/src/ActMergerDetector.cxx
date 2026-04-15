@@ -690,9 +690,9 @@ double ActRoot::MergerDetector::TrackLengthFromLightIt(bool scale, bool isLight)
     // Distance
     XYZPoint begin {};
     bool scaleBegin {};
-    if(fPars.fUseRP)
+    if(fPars.fUseRP && scale) // if scaled data, we want real range, so begin -> rp
         begin = fMergerData->fRP;
-    else
+    else // if not scaled, we want to identify particles, so begin -> first voxel of cluster
     {
         begin = ptr->GetRefToVoxels().front().GetPosition();
         scaleBegin = true;
@@ -706,6 +706,12 @@ double ActRoot::MergerDetector::TrackLengthFromLightIt(bool scale, bool isLight)
             ScalePoint(begin, fTPCPars->GetPadSide(), fDriftFactor, true);
         ScalePoint(end, fTPCPars->GetPadSide(), fDriftFactor, true);
         line.Scale(fTPCPars->GetPadSide(), fDriftFactor);
+    }
+    else // offset correction
+    {
+        if(scaleBegin)
+            ScalePoint(begin, 1, 1, true);
+        ScalePoint(end, 1, 1, true);
     }
     // Get projections onto fit
     auto projBegin {line.ProjectionPointOnLine(begin)};
