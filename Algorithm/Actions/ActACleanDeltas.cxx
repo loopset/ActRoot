@@ -160,7 +160,7 @@ std::pair<double, double> ActAlgorithm::Actions::CleanDeltas::ComputeLongTransSi
     double trans {-1111};
     for(const auto& v : cluster->GetVoxels())
     {
-        auto dist {cluster->GetLine().DistanceLineToPoint(v.GetPosition())};
+        auto dist {cluster->GetLine().DistanceLineToPoint(v.GetPosition() + XYZVectorF {0.5, 0.5, 0.5})};
         if(dist > trans)
             trans = dist;
     }

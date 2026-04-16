@@ -638,7 +638,7 @@ bool ActAlgorithm::Actions::FindRP::BreakBeamToHeavy(const ActAlgorithm::VAction
         auto [xmin, xmax] {it->GetXRange()};
         // In order to be breakable, besides being BeamLike,
         // there must be a certain distance between the RP.X() and the last voxel of the cluster
-        auto dist {std::abs(xmax - fTPCData->fRPs.front().X())};
+        auto dist {std::abs((xmax + 0.5) - fTPCData->fRPs.front().X())}; // 0.5 for voxel center
         bool isBreakable {dist >= fMinXSepBreakBeam};
         if(it->GetIsBeamLike() && isBreakable)
         {
@@ -768,9 +768,12 @@ bool ActAlgorithm::Actions::FindRP::BreakBeamToHeavy(const ActAlgorithm::VAction
                     continue;
                 // Count number of voxels within cylinder radius
                 // WARNING: using same cylinder radius as for the other function!
-                auto count {
-                    std::count_if(iit->GetVoxels().begin(), iit->GetVoxels().end(), [&](const ActRoot::Voxel& v)
-                                  { return jit->GetLine().DistanceLineToPoint(v.GetPosition()) < fCylinderR; })};
+                auto count {std::count_if(iit->GetVoxels().begin(), iit->GetVoxels().end(),
+                                          [&](const ActRoot::Voxel& v)
+                                          {
+                                              return jit->GetLine().DistanceLineToPoint(
+                                                         v.GetPosition() + XYZVectorF {0.5, 0.5, 0.5}) < fCylinderR;
+                                          })};
                 double aux {(double)count / iit->GetSizeOfVoxels()};
                 if(fIsVerbose)
                 {
