@@ -140,6 +140,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a95808c4d5941707bfe10aea60321f1fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5371d4762898a0ba123bd7da2714070f" id="r_a5371d4762898a0ba123bd7da2714070f"><td class="memItemLeft" align="right" valign="top">const std::set&lt; int &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActPhysics_1_1SilLayer.html#a5371d4762898a0ba123bd7da2714070f">GetMults</a> () const</td></tr>
 <tr class="separator:a5371d4762898a0ba123bd7da2714070f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2df1eb460f32d686304b31cc6f1d04e5" id="r_a2df1eb460f32d686304b31cc6f1d04e5"><td class="memItemLeft" align="right" valign="top">std::set&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActPhysics_1_1SilLayer.html#a2df1eb460f32d686304b31cc6f1d04e5">GetIdxs</a> () const</td></tr>
+<tr class="separator:a2df1eb460f32d686304b31cc6f1d04e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a263bc3df47a3b0b734fe39bc52fe4fd5" id="r_a263bc3df47a3b0b734fe39bc52fe4fd5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActPhysics_1_1SilLayer.html#a263bc3df47a3b0b734fe39bc52fe4fd5">CheckMult</a> (int mult) const</td></tr>
 <tr class="separator:a263bc3df47a3b0b734fe39bc52fe4fd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae634a78b881c239a0f322ba4af1e88f2" id="r_ae634a78b881c239a0f322ba4af1e88f2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActPhysics_1_1SilLayer.html#ae634a78b881c239a0f322ba4af1e88f2">GetPadIdx</a> () const</td></tr>
@@ -560,6 +562,29 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a id="a2df1eb460f32d686304b31cc6f1d04e5" name="a2df1eb460f32d686304b31cc6f1d04e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2df1eb460f32d686304b31cc6f1d04e5">&#9670;&#160;</a></span>GetIdxs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::set&lt; int &gt; ActPhysics::SilLayer::GetIdxs </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="fragment"><div class="line"><span class="lineno">  317</span>{</div>
+<div class="line"><span class="lineno">  318</span>    std::set&lt;int&gt; ret;</div>
+<div class="line"><span class="lineno">  319</span>    <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [idx, _] : <a class="code hl_variable" href="classActPhysics_1_1SilLayer.html#a4d3d09c815f7f4aead60be1eb005c26a">fPlacements</a>)</div>
+<div class="line"><span class="lineno">  320</span>        ret.insert(idx);</div>
+<div class="line"><span class="lineno">  321</span>    <span class="keywordflow">return</span> ret;</div>
+<div class="line"><span class="lineno">  322</span>}</div>
+</div><!-- fragment -->
+</div>
+</div>
 <a id="a69bf76df747456b71c5b23d7c02727b7" name="a69bf76df747456b71c5b23d7c02727b7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a69bf76df747456b71c5b23d7c02727b7">&#9670;&#160;</a></span>GetIndexOfMatch()</h2>
 
@@ -674,7 +699,7 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">  105</span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classActPhysics_1_1SilLayer.html#a00f946e6889ae9c93681ad6d3f70a498">fPadIdx</a>; }</div>
+<div class="fragment"><div class="line"><span class="lineno">  106</span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classActPhysics_1_1SilLayer.html#a00f946e6889ae9c93681ad6d3f70a498">fPadIdx</a>; }</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -1260,7 +1285,7 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">  108</span>{ <a class="code hl_variable" href="classActPhysics_1_1SilLayer.html#ac563c8c8780a3145431b361c108c267a">fPoint</a> = pInPads; }</div>
+<div class="fragment"><div class="line"><span class="lineno">  109</span>{ <a class="code hl_variable" href="classActPhysics_1_1SilLayer.html#ac563c8c8780a3145431b361c108c267a">fPoint</a> = pInPads; }</div>
 </div><!-- fragment -->
 </div>
 </div>
