@@ -46,11 +46,12 @@ public:
     std::string GetModeStr() const { return fModeTable[fMode]; }
     static std::string GetModeStr(ModeType mode) { return fModeTable[mode]; }
     ModeType ConvertToMode(const std::string& mode);
-    std::string GetDetFile() const { return GetConfigDir() + fDetFile; }
-    std::string GetCalFile() const { return GetConfigDir() + fCalFile; }
-    std::string GetDataFile() const { return GetConfigDir() + fDataFile; }
-    std::string GetProjectDir() const;
-    std::string GetConfigDir() const { return GetProjectDir() + "/configs/"; }
+    std::string FindConfigDir();
+    std::string GetDetFile() { return GetConfigDir() + fDetFile; }
+    std::string GetCalFile() { return GetConfigDir() + fCalFile; }
+    std::string GetDataFile() { return GetConfigDir() + fDataFile; }
+    std::string GetProjectDir();
+    std::string GetConfigDir() { return GetProjectDir() + "/configs/"; }
     bool GetIsMT() const { return fIsMT; }
     bool GetIsVerbose() const { return fIsVerbose; }
     bool GetWithTrigger() const { return fWithTrigger; }

@@ -101,6 +101,7 @@ public:
     std::shared_ptr<SilMatrix> GetSilMatrix() const { return fMatrix; }
     SilParticle GetParticle() const { return fPart; }
     const std::set<int>& GetMults() const { return fMults; }
+    std::set<int> GetIdxs() const;
     bool CheckMult(int mult) const;
     int GetPadIdx() const { return fPadIdx; }
 

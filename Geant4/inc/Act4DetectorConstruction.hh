@@ -6,38 +6,36 @@
 
 class G4LogicalVolume;
 class G4VPhysicalVolume;
-//forward declaration of classes for detectors!
-//class ActDriftDetector;
 
 class ActDetectorConstruction : public G4VUserDetectorConstruction
 {
 private:
-	//logical volumes
-	G4LogicalVolume* fWorldLV {};
-	G4LogicalVolume* fChamberLV {};
-	G4LogicalVolume* fDriftLV {};
-	//pointers to physical volumes
-	G4VPhysicalVolume* fWorldPV {};
-	G4VPhysicalVolume* fChamberPV {};
-	G4VPhysicalVolume* fDriftPV {};
-	G4VPhysicalVolume* fPadPlanePV {};
-	G4VPhysicalVolume* fSilPV {};
+    // Logical volumes for ACTAR
+    G4LogicalVolume* fWorldLV {};
+    G4LogicalVolume* fChamberLV {};
+    G4LogicalVolume* fDriftLV {};
+    // Physical volumes for ACTAR
+    G4VPhysicalVolume* fWorldPV {};
+    G4VPhysicalVolume* fChamberPV {};
+    G4VPhysicalVolume* fDriftPV {};
+    G4VPhysicalVolume* fPadPlanePV {};
+    G4VPhysicalVolume* fSilPV {};
 
 public:
-	ActDetectorConstruction() = default;
-	~ActDetectorConstruction() override = default;
+    ActDetectorConstruction() = default;
+    ~ActDetectorConstruction() override = default;
 
-	G4VPhysicalVolume* Construct() override;
+    G4VPhysicalVolume* Construct() override;
 
-	G4LogicalVolume* GetChamberLV() const { return fChamberLV; }
+    // Getters
+    G4LogicalVolume* GetChamberLV() const { return fChamberLV; }
+    G4VPhysicalVolume* GetDriftPV() const { return fDriftPV; }
+    G4LogicalVolume* GetDriftLV() const { return fDriftLV; }
 
-	G4VPhysicalVolume* GetDriftPV() const { return fDriftPV; }
-	G4LogicalVolume* GetDriftLV() const { return fDriftLV; }
-	
 private:
-	void DefineMaterials();
-	G4VPhysicalVolume* DefineVolumes();
-	G4VPhysicalVolume* DefineACTARTPC();
+    void DefineMaterials();
+    G4VPhysicalVolume* DefineVolumes();
+    void ParseGas();
 };
 
-#endif //ACTDETECTORCONSTRUCTION_H
+#endif // ACTDETECTORCONSTRUCTION_H

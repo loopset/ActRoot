@@ -6,6 +6,7 @@
 #include "TString.h"
 #include "TSystem.h"
 
+#include <filesystem>
 #include <ios>
 #include <iostream>
 #include <memory>
@@ -152,10 +153,33 @@ void ActRoot::Options::Print() const
     std::cout << "--------------------" << RESET << '\n';
 }
 
-std::string ActRoot::Options::GetProjectDir() const
+std::string ActRoot::Options::GetProjectDir()
 {
-    std::string pwd {gSystem->pwd()};
-    if(gSystem->AccessPathName((pwd + "/configs").c_str()))
-        throw std::runtime_error("ActRoot::Options::GetProjectDir() : " + pwd + " does not contain a configs/ dir");
-    return pwd;
+    if(fProjDir.empty())
+    {
+        std::filesystem::path configs {FindConfigDir()};
+        fProjDir = configs.parent_path().string();
+    }
+    return fProjDir;
+}
+
+std::string ActRoot::Options::FindConfigDir()
+{
+    auto dir {std::filesystem::current_path()};
+    auto pwd {dir.string()}; // copy to print error message
+    // Find up to two levels for a configs dir
+    for(int i = 0; i < 2; i++)
+    {
+        // Locate configs
+        std::filesystem::path search {dir / "configs"};
+        if(std::filesystem::exists(search) && std::filesystem::is_directory(search))
+            return search.string();
+
+        if(!dir.has_parent_path() || dir == dir.parent_path())
+            break;
+
+        dir = dir.parent_path();
+    }
+    throw std::runtime_error("ActRoot::Options::FindConfigsDir() : from " + pwd +
+                             " cannot find /configs up to two levels");
 }

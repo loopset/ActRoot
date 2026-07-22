@@ -62,6 +62,9 @@ public:
     TVector3* GetBeta() { return &fBeta; }
     int GetNt() const { return fGen.GetNt(); }
     void Print() const;
+    double GetEBeam() const { return fEBeam; }
+    double GetEx() const { return fEx; }
+    const ActPhysics::Particle& GetHeavyPart() const { return fHeavyPart; }
 
 private:
     void Init();

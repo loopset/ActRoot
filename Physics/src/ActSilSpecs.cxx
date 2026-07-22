@@ -313,6 +313,14 @@ double ActPhysics::SilLayer::MeanZ(const std::set<int>& idxs)
     return fMatrix->GetMeanZ(idxs);
 }
 
+std::set<int> ActPhysics::SilLayer::GetIdxs() const
+{
+    std::set<int> ret;
+    for(const auto& [idx, _] : fPlacements)
+        ret.insert(idx);
+    return ret;
+}
+
 void ActPhysics::SilSpecs::ReadFile(const std::string& file)
 {
     ActRoot::InputParser parser {file};
