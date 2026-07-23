@@ -1,13 +1,16 @@
-#ifndef ACT4DETECTORCONSTRUCTION_H
-#define ACT4DETECTORCONSTRUCTION_H
+#ifndef ACTGEANTDETECTORCONSTRUCTION_H
+#define ACTGEANTDETECTORCONSTRUCTION_H
 
 #include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
+
+#include <vector>
 
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 
-class ActDetectorConstruction : public G4VUserDetectorConstruction
+namespace ActGeant
+{
+class DetectorConstruction : public G4VUserDetectorConstruction
 {
 private:
     // Logical volumes for ACTAR
@@ -19,13 +22,16 @@ private:
     G4VPhysicalVolume* fChamberPV {};
     G4VPhysicalVolume* fDriftPV {};
     G4VPhysicalVolume* fPadPlanePV {};
-    G4VPhysicalVolume* fSilPV {};
+
+    // Logical volumes per Si side
+    std::vector<G4LogicalVolume*> fSilLVs {};
 
 public:
-    ActDetectorConstruction() = default;
-    ~ActDetectorConstruction() override = default;
+    DetectorConstruction() = default;
+    ~DetectorConstruction() override = default;
 
     G4VPhysicalVolume* Construct() override;
+    void ConstructSDandField() override;
 
     // Getters
     G4LogicalVolume* GetChamberLV() const { return fChamberLV; }
@@ -37,5 +43,5 @@ private:
     G4VPhysicalVolume* DefineVolumes();
     void ParseGas();
 };
-
-#endif // ACTDETECTORCONSTRUCTION_H
+} // namespace ActGeant
+#endif // ACTGEANTDETECTORCONSTRUCTION_H

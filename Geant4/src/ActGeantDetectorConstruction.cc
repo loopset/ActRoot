@@ -1,6 +1,6 @@
-#include "Act4DetectorConstruction.hh"
+#include "ActGeantDetectorConstruction.hh"
 
-#include "Act4DriftDetector.hh"
+#include "ActGeantSimpleSD.hh"
 #include "ActInputParser.h"
 #include "ActOptions.h"
 #include "ActSilSpecs.h"
@@ -12,6 +12,7 @@
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4SDManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ThreeVector.hh"
 #include "G4Types.hh"
@@ -21,6 +22,7 @@
 
 #include <G4Color.hh>
 #include <G4Element.hh>
+#include <G4EventManager.hh>
 #include <G4Isotope.hh>
 #include <G4MaterialTable.hh>
 #include <G4Transform3D.hh>
@@ -30,12 +32,11 @@
 #include <cstdlib>
 #include <iostream>
 #include <iterator>
-#include <numeric>
 #include <string>
 #include <vector>
 
 // Construct method for geometry
-G4VPhysicalVolume* ActDetectorConstruction::Construct()
+G4VPhysicalVolume* ActGeant::DetectorConstruction::Construct()
 {
     // Define materials
     DefineMaterials();
@@ -44,7 +45,7 @@ G4VPhysicalVolume* ActDetectorConstruction::Construct()
     return DefineVolumes();
 }
 
-G4VPhysicalVolume* ActDetectorConstruction::DefineVolumes()
+G4VPhysicalVolume* ActGeant::DetectorConstruction::DefineVolumes()
 {
     /////////////// WORLD
     auto worldSizeX {1. * m};
@@ -159,15 +160,16 @@ G4VPhysicalVolume* ActDetectorConstruction::DefineVolumes()
             silBox = new G4Box {"Si_" + name, 0.5 * unit.GetWidth() * mm, 0.5 * unit.GetThickness() * mm,
                                 0.5 * unit.GetHeight() * mm};
             silLV = new G4LogicalVolume {
-                silBox, G4NistManager::Instance()->FindOrBuildMaterial("G4_Si"), "logicSi_" + name, 0, 0, 0};
+                silBox, G4NistManager::Instance()->FindOrBuildMaterial("G4_Si"), "logicSil_" + name, 0, 0, 0};
         }
         else
         {
             silBox = new G4Box {"Si_" + name, 0.5 * unit.GetThickness() * mm, 0.5 * unit.GetWidth() * mm,
                                 0.5 * unit.GetHeight() * mm};
             silLV = new G4LogicalVolume {
-                silBox, G4NistManager::Instance()->FindOrBuildMaterial("G4_Si"), "logicSi_" + name, 0, 0, 0};
+                silBox, G4NistManager::Instance()->FindOrBuildMaterial("G4_Si"), "logicSil_" + name, 0, 0, 0};
         }
+        fSilLVs.push_back(silLV);
         // Visualisation attributes
         auto* silVisAtt {new G4VisAttributes {G4Color {1.0, 0.6471, 0.0}}};
         silVisAtt->SetVisibility(true);
@@ -215,15 +217,24 @@ G4VPhysicalVolume* ActDetectorConstruction::DefineVolumes()
             auto pos {G4ThreeVector {x, y, z}};
             // std::cout << "Layer: " << name << " idx: " << idx << " pos: " << pos << '\n';
             // And placement (no need to store ptr)
-            new G4PVPlacement {nullptr, pos, silLV, "Si_" + name + "_" + std::to_string(idx), fWorldLV, false, idx};
+            new G4PVPlacement {nullptr, pos, silLV, name, fChamberLV, false, idx};
         }
     }
     // std::exit(1);
+
+    // // Testing Si detector
+    // auto* silBox = new G4Box {"SiPad", 100 * mm, 5 * mm, 100 * mm};
+    // auto* silLV =
+    //     new G4LogicalVolume {silBox, G4NistManager::Instance()->FindOrBuildMaterial("G4_Si"), "logicSi", 0, 0, 0};
+    // fSilLVs.push_back(silLV);
+    // auto pos {G4ThreeVector {0, +50 * cm, 0}};
+    // new G4PVPlacement {nullptr, pos, silLV, "SiPV", fWorldLV, false, 0};
+
     // always return the physical world
     return fWorldPV;
 }
 
-void ActDetectorConstruction::DefineMaterials()
+void ActGeant::DetectorConstruction::DefineMaterials()
 {
     // NIST database
     G4NistManager* nist = G4NistManager::Instance();
@@ -259,7 +270,7 @@ void ActDetectorConstruction::DefineMaterials()
     // G4cout << *(G4Material::GetMaterialTable()) << '\n';
 }
 
-void ActDetectorConstruction::ParseGas()
+void ActGeant::DetectorConstruction::ParseGas()
 {
     // Retrieve file path. So far name is hardcoded
     auto file {ActRoot::Options::GetInstance()->GetConfigDir() + "/geant.conf"};
@@ -330,4 +341,19 @@ void ActDetectorConstruction::ParseGas()
         const auto& mat {mats[i]};
         mixture->AddMaterial(mat, massFracs[i]);
     }
+}
+
+void ActGeant::DetectorConstruction::ConstructSDandField()
+{
+    // Here define the SDs
+    // Both TPC and Si share the same SD altough in different pointers (different instances)
+
+    auto* tpcSD {new SimpleSD {"tpcSD"}};
+    G4SDManager::GetSDMpointer()->AddNewDetector(tpcSD);
+    SetSensitiveDetector(fDriftLV, tpcSD);
+
+    auto* silSD {new SimpleSD {"silSD"}};
+    G4SDManager::GetSDMpointer()->AddNewDetector(silSD);
+    for(auto& silLV : fSilLVs)
+        SetSensitiveDetector(silLV, silSD);
 }

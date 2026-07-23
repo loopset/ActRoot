@@ -13,7 +13,7 @@ file(GLOB headers ${CMAKE_CURRENT_SOURCE_DIR}/inc/*.hh)
 # ROOT_GENERATE_DICTIONARY(${DICTIONARY_NAME} ${headers} LINKDEF  ${LINKDEF_LOCATION})
 
 # build executable
-add_executable(${EXEC_NAME} ${FULL_NAME}.cc ${sources} ${headers})
+add_executable(${EXEC_NAME} ${EXEC_NAME}.cc ${sources} ${headers})
 target_link_libraries(${EXEC_NAME} ${Geant4_LIBRARIES} ActCore ActPhysics ActSimulation)
 # install it in bin
 install(TARGETS ${EXEC_NAME} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)

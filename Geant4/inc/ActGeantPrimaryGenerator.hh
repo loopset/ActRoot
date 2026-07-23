@@ -5,7 +5,6 @@
 
 #include "G4ParticleDefinition.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
-#include "globals.hh"
 
 #include <G4Material.hh>
 
@@ -14,7 +13,9 @@
 class G4ParticleGun;
 class G4Event;
 
-class ActPrimaryGenerator : public G4VUserPrimaryGeneratorAction
+namespace ActGeant
+{
+class PrimaryGenerator : public G4VUserPrimaryGeneratorAction
 {
 private:
     G4ParticleGun* fParticleGun {};
@@ -28,13 +29,14 @@ private:
 
 
 public:
-    ActPrimaryGenerator();
-    ~ActPrimaryGenerator() override;
+    PrimaryGenerator();
+    ~PrimaryGenerator() override;
 
     void GeneratePrimaries(G4Event* event) override;
 
 private:
     double SlowDownBeam(G4ParticleDefinition* part, double E, double d, G4Material* mat);
+    void InitialiseParticles();
 };
-
+} // namespace ActGeant
 #endif
