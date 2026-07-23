@@ -1,7 +1,7 @@
 var searchData=
 [
   ['magenta_0',['MAGENTA',['../ActColors_8h.html#a6f699060902f800f12aaae150f3a708e',1,'ActColors.h']]],
-  ['main_1',['main',['../actroot_8cxx.html#a0ddf1224851353fc92bfbff6f499fa97',1,'main(int argc, char *argv[]):&#160;actroot.cxx'],['../actplot_8cxx.html#a0ddf1224851353fc92bfbff6f499fa97',1,'main(int argc, char *argv[]):&#160;actplot.cxx'],['../ActGeant4_8cc.html#a3c04138a5bfe5d72780bb7e82a18e627',1,'main(int argc, char **argv):&#160;ActGeant4.cc']]],
+  ['main_1',['main',['../actroot_8cxx.html#a0ddf1224851353fc92bfbff6f499fa97',1,'main(int argc, char *argv[]):&#160;actroot.cxx'],['../actplot_8cxx.html#a0ddf1224851353fc92bfbff6f499fa97',1,'main(int argc, char *argv[]):&#160;actplot.cxx'],['../actgeant_8cc.html#a3c04138a5bfe5d72780bb7e82a18e627',1,'main(int argc, char **argv):&#160;actgeant.cc']]],
   ['mangular_2',['mAngular',['../classActSim_1_1TheoCrossSection.html#acda1fba76677e4cb6ce6c0161ae8415d',1,'ActSim::TheoCrossSection']]],
   ['manualisinbeam_3',['manualisinbeam',['../classActAlgorithm_1_1Actions_1_1BreakChi2.html#ae673ba56e458072b16f0f916a7a7d91c',1,'ActAlgorithm::Actions::BreakChi2::ManualIsInBeam()'],['../classActAlgorithm_1_1MultiStep.html#affa307c7b1bfa991c482b23bff36d444',1,'ActAlgorithm::MultiStep::ManualIsInBeam()']]],
   ['mapactions_4',['MapActions',['../classActAlgorithm_1_1MultiAction.html#a1577b8645d89bfeb2cfab1c95712e477',1,'ActAlgorithm::MultiAction']]],

@@ -11,5 +11,6 @@ var searchData=
   ['tpcdata_8',['TPCData',['../classActRoot_1_1TPCData.html',1,'ActRoot']]],
   ['tpcdetector_9',['TPCDetector',['../classActRoot_1_1TPCDetector.html',1,'ActRoot']]],
   ['tpcparameters_10',['TPCParameters',['../classActRoot_1_1TPCParameters.html',1,'ActRoot']]],
-  ['trackgenerator_11',['TrackGenerator',['../classActSim_1_1TrackGenerator.html',1,'ActSim']]]
+  ['trackgenerator_11',['TrackGenerator',['../classActSim_1_1TrackGenerator.html',1,'ActSim']]],
+  ['trackinfo_12',['TrackInfo',['../classActGeant_1_1TrackInfo.html',1,'ActGeant']]]
 ];

@@ -1,0 +1,8 @@
+<map id="ActGeant::DataHolder" name="ActGeant::DataHolder">
+<area shape="rect" id="Node000001" title=" " alt="" coords="90,108,254,133"/>
+<area shape="poly" id="edge3_Node000001_Node000001" title=" " alt="" coords="269,112,281,120,273,129,255,132,254,127,270,124,275,121,266,116"/>
+<area shape="rect" id="Node000002" href="$classActGeant_1_1VertexInfo.html" title=" " alt="" coords="5,5,163,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,39,164,106,160,110,101,43"/>
+<area shape="rect" id="Node000003" href="$classActGeant_1_1TrackInfo.html" title=" " alt="" coords="187,5,336,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="252,44,223,86,193,110,190,106,219,82,247,41"/>
+</map>

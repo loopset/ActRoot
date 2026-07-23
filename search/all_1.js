@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['beginofeventaction_0',['BeginOfEventAction',['../classActEventAction.html#aabe80d1b734221346ff4fcd83b35c32f',1,'ActEventAction']]],
-  ['beginofrunaction_1',['BeginOfRunAction',['../classActRunAction.html#a54cec9c965d24cf2969a1df284298b59',1,'ActRunAction']]],
+  ['beginofeventaction_0',['BeginOfEventAction',['../classActGeant_1_1EventAction.html#a4f6c281592d9f0195c4f1d1b67d4205b',1,'ActGeant::EventAction']]],
+  ['beginofrunaction_1',['BeginOfRunAction',['../classActGeant_1_1RunAction.html#a65a5f29558e1cd42fd9e31794dff6a2b',1,'ActGeant::RunAction']]],
   ['binarydata_2',['BinaryData',['../classActRoot_1_1BinaryData.html',1,'ActRoot']]],
   ['black_3',['BLACK',['../ActColors_8h.html#a7b3b25cba33b07c303f3060fe41887f6',1,'ActColors.h']]],
   ['block_5fsize_4',['block_size',['../classBS_1_1thread__pool_1_1blocks.html#a44dc54a2c4bb4bea66192758beca62e2',1,'BS::thread_pool::blocks']]],
@@ -38,11 +38,11 @@ var searchData=
   ['bs_5fthread_5fpool_5fversion_5fmajor_35',['BS_THREAD_POOL_VERSION_MAJOR',['../BS__thread__pool_8h.html#a71f551b45d6f70b9ae24c5d57c0f084a',1,'BS_thread_pool.h']]],
   ['bs_5fthread_5fpool_5fversion_5fminor_36',['BS_THREAD_POOL_VERSION_MINOR',['../BS__thread__pool_8h.html#ab530810285fc698266eab81c71d5338d',1,'BS_thread_pool.h']]],
   ['bs_5fthread_5fpool_5fversion_5fpatch_37',['BS_THREAD_POOL_VERSION_PATCH',['../BS__thread__pool_8h.html#af0569d5e5d061b35095681b547ed06fd',1,'BS_thread_pool.h']]],
-  ['build_38',['Build',['../classActActionInitialization.html#a897d5ac2e19414ab94f600426676dcf2',1,'ActActionInitialization']]],
+  ['build_38',['Build',['../classActGeant_1_1ActionInitialization.html#a1cdb476b01609031de96322b150b5357',1,'ActGeant::ActionInitialization']]],
   ['buildevent_39',['buildevent',['../classActRoot_1_1DetectorManager.html#a034d3d8ab83eb354d6dddb24ddad1d1f',1,'ActRoot::DetectorManager::BuildEvent()'],['../classActRoot_1_1MTExecutor.html#ae0b6aade8c0e04449029df4abc5145e2',1,'ActRoot::MTExecutor::BuildEvent()']]],
   ['buildeventdata_40',['buildeventdata',['../classActRoot_1_1MergerDetector.html#a68ed25860fd0da9b4f210ee3b48b7a6a',1,'ActRoot::MergerDetector::BuildEventData()'],['../classActRoot_1_1ModularDetector.html#aadbed0d14f971ec635cd59a015968424',1,'ActRoot::ModularDetector::BuildEventData()'],['../classActRoot_1_1SilDetector.html#a0daff1b2330c63a1ec6fc27373935b7f',1,'ActRoot::SilDetector::BuildEventData()'],['../classActRoot_1_1TPCDetector.html#ac6db41e966c88d329a1189750ea6476e',1,'ActRoot::TPCDetector::BuildEventData()'],['../classActRoot_1_1VDetector.html#adb2c3cca90a913451ba629cad3e2e0fb',1,'ActRoot::VDetector::BuildEventData()']]],
   ['buildeventfilter_41',['buildeventfilter',['../classActRoot_1_1ModularDetector.html#a1ebd71a12482d3ba1d8c5f657c39e6a6',1,'ActRoot::ModularDetector::BuildEventFilter()'],['../classActRoot_1_1MergerDetector.html#a3c70040987d0cb0033d3ebae0a303c88',1,'ActRoot::MergerDetector::BuildEventFilter()'],['../classActRoot_1_1SilDetector.html#a7287d01edfba089cdef883b931c9c511',1,'ActRoot::SilDetector::BuildEventFilter()'],['../classActRoot_1_1TPCDetector.html#ab680d4508316cf31c97e0c479156feb1',1,'ActRoot::TPCDetector::BuildEventFilter()'],['../classActRoot_1_1VDetector.html#acc13d04bd79b6c957bce79cdcea169cc',1,'ActRoot::VDetector::BuildEventFilter()']]],
-  ['buildformaster_42',['BuildForMaster',['../classActActionInitialization.html#a97449750650ec513886eaef0f41cee50',1,'ActActionInitialization']]],
+  ['buildformaster_42',['BuildForMaster',['../classActGeant_1_1ActionInitialization.html#a4f9bf0b6d411388320d8a37373af933d',1,'ActGeant::ActionInitialization']]],
   ['buildfrommap_43',['BuildFromMap',['../classActAlgorithm_1_1IntervalMap.html#aefc65802bf8767af69fcf9bf2901a7ff',1,'ActAlgorithm::IntervalMap']]],
   ['buildfromset_44',['BuildFromSet',['../classActAlgorithm_1_1IntervalMap.html#a668a60701bfdb36f55942b96df4752ec',1,'ActAlgorithm::IntervalMap']]],
   ['buildglobalindex_45',['buildglobalindex',['../structActAlgorithm_1_1RebinedVoxel.html#a90473fdc3f0dc9e148c1bfb63bbd4a78',1,'ActAlgorithm::RebinedVoxel::BuildGlobalIndex()'],['../classActRoot_1_1TPCDetector.html#a25e78f789056670655056fdfca342cb0',1,'ActRoot::TPCDetector::BuildGlobalIndex(const int &amp;x, const int &amp;y, const int &amp;z)']]],

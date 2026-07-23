@@ -9,8 +9,10 @@ var searchData=
   ['silparameters_6',['SilParameters',['../classActRoot_1_1SilParameters.html',1,'ActRoot']]],
   ['silspecs_7',['SilSpecs',['../classActPhysics_1_1SilSpecs.html',1,'ActPhysics']]],
   ['silunit_8',['silunit',['../classActPhysics_1_1SilUnit.html',1,'ActPhysics::SilUnit'],['../structActSim_1_1SilUnit.html',1,'ActSim::SilUnit']]],
-  ['split_9',['Split',['../classActAlgorithm_1_1Actions_1_1Split.html',1,'ActAlgorithm::Actions']]],
-  ['splitregion_10',['SplitRegion',['../classActAlgorithm_1_1Actions_1_1SplitRegion.html',1,'ActAlgorithm::Actions']]],
-  ['srim_11',['SRIM',['../classActPhysics_1_1SRIM.html',1,'ActPhysics']]],
-  ['synced_5fstream_12',['synced_stream',['../classBS_1_1synced__stream.html',1,'BS']]]
+  ['simplesd_9',['SimpleSD',['../classActGeant_1_1SimpleSD.html',1,'ActGeant']]],
+  ['split_10',['Split',['../classActAlgorithm_1_1Actions_1_1Split.html',1,'ActAlgorithm::Actions']]],
+  ['splitregion_11',['SplitRegion',['../classActAlgorithm_1_1Actions_1_1SplitRegion.html',1,'ActAlgorithm::Actions']]],
+  ['srim_12',['SRIM',['../classActPhysics_1_1SRIM.html',1,'ActPhysics']]],
+  ['steppingaction_13',['SteppingAction',['../classActGeant_1_1SteppingAction.html',1,'ActGeant']]],
+  ['synced_5fstream_14',['synced_stream',['../classBS_1_1synced__stream.html',1,'BS']]]
 ];

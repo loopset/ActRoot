@@ -1,0 +1,12 @@
+<map id="ActGeant::PrimaryGenerator" name="ActGeant::PrimaryGenerator">
+<area shape="rect" id="Node000001" title=" " alt="" coords="92,313,299,339"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,225,241,251"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="144,259,187,311,183,315,140,263"/>
+<area shape="rect" id="Node000003" href="$classActSim_1_1KinematicGenerator.html" title="A class that wraps together ActPhysics::Kinematics and a TGenPhaseSpace." alt="" coords="265,225,472,251"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="334,259,220,315,218,311,332,254"/>
+<area shape="rect" id="Node000004" href="$classActPhysics_1_1Kinematics.html" title=" " alt="" coords="411,137,585,163"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="471,172,388,227,385,223,468,168"/>
+<area shape="rect" id="Node000005" href="$classActPhysics_1_1Particle.html" title="A class reading NUBASE particle info." alt="" coords="257,5,405,31"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="327,44,319,99,319,131,325,162,341,197,361,224,356,227,336,199,319,163,314,131,314,99,322,44"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="359,37,485,135,481,139,355,41"/>
+</map>

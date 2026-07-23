@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['main_0',['main',['../ActGeant4_8cc.html#a3c04138a5bfe5d72780bb7e82a18e627',1,'main(int argc, char **argv):&#160;ActGeant4.cc'],['../actplot_8cxx.html#a0ddf1224851353fc92bfbff6f499fa97',1,'main(int argc, char *argv[]):&#160;actplot.cxx'],['../actroot_8cxx.html#a0ddf1224851353fc92bfbff6f499fa97',1,'main(int argc, char *argv[]):&#160;actroot.cxx']]],
+  ['main_0',['main',['../actgeant_8cc.html#a3c04138a5bfe5d72780bb7e82a18e627',1,'main(int argc, char **argv):&#160;actgeant.cc'],['../actplot_8cxx.html#a0ddf1224851353fc92bfbff6f499fa97',1,'main(int argc, char *argv[]):&#160;actplot.cxx'],['../actroot_8cxx.html#a0ddf1224851353fc92bfbff6f499fa97',1,'main(int argc, char *argv[]):&#160;actroot.cxx']]],
   ['manualisinbeam_1',['manualisinbeam',['../classActAlgorithm_1_1MultiStep.html#affa307c7b1bfa991c482b23bff36d444',1,'ActAlgorithm::MultiStep::ManualIsInBeam()'],['../classActAlgorithm_1_1Actions_1_1BreakChi2.html#ae673ba56e458072b16f0f916a7a7d91c',1,'ActAlgorithm::Actions::BreakChi2::ManualIsInBeam()']]],
   ['markbeamlikes_2',['MarkBeamLikes',['../classActAlgorithm_1_1MultiRegion.html#a8a22859ff1d4e9f5542fa9bde8c147cc',1,'ActAlgorithm::MultiRegion']]],
   ['maskaroundrp_3',['MaskAroundRP',['../classActAlgorithm_1_1Actions_1_1FindRP.html#ae08b84b472374c2e4c88c3ca6066f26a',1,'ActAlgorithm::Actions::FindRP']]],

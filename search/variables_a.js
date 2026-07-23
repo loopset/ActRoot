@@ -1,4 +1,10 @@
 var searchData=
 [
-  ['mangular_0',['mAngular',['../classActSim_1_1TheoCrossSection.html#acda1fba76677e4cb6ce6c0161ae8415d',1,'ActSim::TheoCrossSection']]]
+  ['nignoredlinesangular_0',['nIgnoredLinesAngular',['../classActSim_1_1TheoCrossSection.html#a092c36ea8a86a98d155542611eff2a78',1,'ActSim::TheoCrossSection']]],
+  ['nignoredlinesscattering_1',['nIgnoredLinesScattering',['../classActSim_1_1TheoCrossSection.html#a2a90a9428032b95dfb0d7b8e63c71b78',1,'ActSim::TheoCrossSection']]],
+  ['nlegendrecoeffs_2',['nLegendreCoeffs',['../classActSim_1_1TheoCrossSection.html#a21dfe2c83dcf75a3e21b7139da08d088',1,'ActSim::TheoCrossSection']]],
+  ['npadsx_3',['nPadsX',['../structActAlgorithm_1_1RebinedVoxel.html#ac0434d6d76c7b027228f64224be92bbe',1,'ActAlgorithm::RebinedVoxel']]],
+  ['npadsy_4',['nPadsY',['../structActAlgorithm_1_1RebinedVoxel.html#a6b953706d121029a375172dc2988d4ae',1,'ActAlgorithm::RebinedVoxel']]],
+  ['npadsz_5',['nPadsZ',['../structActAlgorithm_1_1RebinedVoxel.html#a9a85bce924e5a78cbd98b13f5beb08fe',1,'ActAlgorithm::RebinedVoxel']]],
+  ['num_5fblocks_6',['num_blocks',['../classBS_1_1thread__pool_1_1blocks.html#a76cc826ed3697758e3e5e92f90f23258',1,'BS::thread_pool::blocks']]]
 ];
