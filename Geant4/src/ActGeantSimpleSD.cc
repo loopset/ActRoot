@@ -56,6 +56,7 @@ G4bool ActGeant::SimpleSD::ProcessHits(G4Step* step, G4TouchableHistory*)
             auto* phys {step->GetPreStepPoint()->GetTouchableHandle()->GetVolume()};
             data.fSilLayer = phys->GetName();
             data.fSilIdx = phys->GetCopyNo();
+            data.fName = partDef->GetParticleName();
             data.fIsIniSil = false;
         }
         data.fSilDeltaE += step->GetTotalEnergyDeposit();

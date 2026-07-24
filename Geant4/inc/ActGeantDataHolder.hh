@@ -3,6 +3,7 @@
 
 #include "ActGeantData.hh"
 
+#include <G4String.hh>
 #include <G4ThreeVector.hh>
 #include <G4Types.hh>
 
@@ -12,6 +13,7 @@ namespace ActGeant
 class DataHolder
 {
 public:
+    ReactionInfo fReacInfo {};
     VertexInfo fVertexInfo {};
     TrackInfo fLight {};
     TrackInfo fHeavy {};

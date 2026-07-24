@@ -1,8 +1,6 @@
 #ifndef ACT4PRIMARYGENERATOR_HH
 #define ACT4PRIMARYGENERATOR_HH
 
-#include "ActKinematicGenerator.h"
-
 #include "G4ParticleDefinition.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 
@@ -10,8 +8,19 @@
 
 #include <vector>
 
+// forward declarations
 class G4ParticleGun;
 class G4Event;
+
+namespace ActPhysics
+{
+class Kinematics;
+}
+namespace ActSim
+{
+class KinematicGenerator;
+class CrossSection;
+}
 
 namespace ActGeant
 {
@@ -19,9 +28,12 @@ class PrimaryGenerator : public G4VUserPrimaryGeneratorAction
 {
 private:
     G4ParticleGun* fParticleGun {};
+    ActPhysics::Kinematics* fKin {};
     ActSim::KinematicGenerator* fKinGen {};
+    ActSim::CrossSection* fCrossSection {};
     // Beam parameters parsed in constructor
     double fEBeam {};
+    double fEx {};
     double fBeamCentreZ {}; // Beam centre wrt to pad plane in mm
     double fBeamSigmaXY {}; // Preliminary emittances (just gaussians)
     double fBeamSigmaZ {};

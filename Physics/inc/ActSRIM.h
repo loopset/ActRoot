@@ -55,12 +55,16 @@ private:
 
 public:
     SRIM() = default;
-    SRIM(const std::string& material, const std::string& file);
+    SRIM(const std::string& material, const std::string& file, bool isSRIM = true);
+
+    // General interface
+    void ReadTable(const std::string& key, const std::string& file, bool isSRIM = true);
 
     // Read SRIM tables
-    void ReadTable(const std::string& key, const std::string& file);
-    [[deprecated("Favour use of new SRIM::ReadTable(...) which does not require manual edition of SRIM file")]] void
-    ReadInterpolations(std::string key, std::string fileName);
+    void ReadSRIM(const std::string& key, const std::string& file);
+
+    // Read Geant4 tables
+    void ReadGeant4(const std::string& key, const std::string& file);
 
     // Read LISE tables
     void SetStragglingLISE(const std::string& key, const std::string& fileName);

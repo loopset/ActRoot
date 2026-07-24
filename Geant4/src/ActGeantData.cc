@@ -4,9 +4,20 @@
 
 #include <G4ios.hh>
 
+void ActGeant::ReactionInfo::Print() const
+{
+    G4cout << BOLDCYAN << " ---- ReactionInfo ----" << G4endl;
+    G4cout << "  Beam : " << fBeam << G4endl;
+    G4cout << "  Target : " << fTarget << G4endl;
+    G4cout << "  Light : " << fLight << G4endl;
+    G4cout << "  Heavy : " << fHeavy << G4endl;
+    G4cout << "  EBeam : " << fEBeam << G4endl;
+    G4cout << "  Ex : " << fEx << RESET << G4endl;
+}
+
 void ActGeant::VertexInfo::Print() const
 {
-    G4cout << BOLDYELLOW << "···· Vertex Info ····" << G4endl;
+    G4cout << BOLDYELLOW << "···· VertexInfo ····" << G4endl;
     G4cout << "  RP     : (" << fRP[0] << "," << fRP[1] << "," << fRP[2] << ")" << G4endl;
     G4cout << "  EBeam  : " << fEBeam << G4endl;
     G4cout << "  T3     : " << fT3 << G4endl;
@@ -22,6 +33,7 @@ void ActGeant::VertexInfo::Print() const
 void ActGeant::TrackInfo::Print() const
 {
     G4cout << BOLDGREEN << "···· TrackInfo ····" << G4endl;
+    G4cout << "  Name  : " << fName << G4endl;
     G4cout << "  (Z,A) : (" << fZ << ", " << fA << ")" << G4endl;
     G4cout << "  TPC" << G4endl;
     G4cout << "    dE  : " << fTPCDeltaE << G4endl;

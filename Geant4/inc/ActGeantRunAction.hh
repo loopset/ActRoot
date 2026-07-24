@@ -2,6 +2,7 @@
 #define ACT4RUNACTION_HH
 
 #include "G4UserRunAction.hh"
+#include <G4String.hh>
 
 class G4Run;
 

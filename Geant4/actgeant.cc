@@ -1,7 +1,9 @@
 #include "ActGeantActionInitialization.hh"
 #include "ActGeantDetectorConstruction.hh"
+#include "ActGeantPhysicsList.hh"
+#include "ActGeantUtility.hh"
 
-#include "FTFP_BERT.hh"
+// #include "FTFP_BERT.hh"
 #include "G4RunManagerFactory.hh"
 #include "G4SteppingVerbose.hh"
 #include "G4UIExecutive.hh"
@@ -22,7 +24,7 @@ void PrintUsage()
 int main(int argc, char** argv)
 {
     // Evaluate arguments
-    //echo 'kitty.desktop' > ~/.config/xdg-terminals.lisecho 'kitty.desktop' > ~/.config/xdg-terminals.listt
+    // echo 'kitty.desktop' > ~/.config/xdg-terminals.lisecho 'kitty.desktop' > ~/.config/xdg-terminals.listt
     if(argc > 7)
     {
         PrintUsage();
@@ -92,7 +94,8 @@ int main(int argc, char** argv)
     auto detConstruction = new ActGeant::DetectorConstruction();
     runManager->SetUserInitialization(detConstruction);
 
-    auto physicsList = new FTFP_BERT;
+    // auto physicsList = new FTFP_BERT;
+    auto physicsList = new ActGeant::PhysicsList();
     runManager->SetUserInitialization(physicsList);
 
     auto actionInitialization = new ActGeant::ActionInitialization(detConstruction);
@@ -126,6 +129,9 @@ int main(int argc, char** argv)
         ui->SessionStart();
         delete ui;
     }
+
+    // Write DEDX tables
+    ActGeant::WriteDEDXTables("./Outputs/dedx/");
 
     // Job termination
     // Free the store: user actions, physics_list and detector_description are

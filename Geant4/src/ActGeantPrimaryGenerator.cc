@@ -1,8 +1,10 @@
 #include "ActGeantPrimaryGenerator.hh"
 
+#include "ActCrossSection.h"
 #include "ActGeantDataHolder.hh"
 #include "ActInputParser.h"
 #include "ActKinematicGenerator.h"
+#include "ActKinematics.h"
 #include "ActOptions.h"
 #include "ActParticle.h"
 
@@ -19,7 +21,9 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4RunManager.hh"
+#include "G4SystemOfUnits.hh"
 
 #include <G4AnalysisManager.hh>
 #include <G4Exception.hh>
@@ -28,6 +32,7 @@
 #include <G4ThreeVector.hh>
 #include <G4ios.hh>
 
+#include <cmath>
 #include <string>
 
 
@@ -36,17 +41,46 @@ ActGeant::PrimaryGenerator::PrimaryGenerator()
     // Particle gun with only one particle at each vertex
     fParticleGun = new G4ParticleGun {1};
 
-    // Kinematics generator, initialised from config file
+    // Parse configuration file
     auto config {ActRoot::Options::GetInstance()->GetConfigDir() + "/geant.conf"};
     ActRoot::InputParser parser {config};
     // Kinematics
     auto kin {parser.GetBlock("Kinematics")};
     auto reac {kin->GetStringVector("Reaction")};
-    if(reac.size() != 4)
-        G4Exception("ActPrimaryGenerator::ActPrimaryGenerator()", "ActPrimaryGenerator001", FatalErrorInArgument,
-                    "Parsed Reaction from geant.conf does not contain 4 particles");
+    auto aux {reac[0] + "," + reac[1]};
+    // Init kinematics
+    fKin = new ActPhysics::Kinematics {aux};
+    // And get information from it
+    fEBeam = fKin->GetT1Lab();
+    fEx = fKin->GetEx();
+    // Send information to holder
+    auto* holder {DataHolder::Instance()};
+    holder->fReacInfo.fBeam = fKin->GetParticle(1).GetName();
+    holder->fReacInfo.fTarget = fKin->GetParticle(2).GetName();
+    holder->fReacInfo.fLight = fKin->GetParticle(3).GetName();
+    holder->fReacInfo.fHeavy = fKin->GetParticle(4).GetName();
+    holder->fReacInfo.fEBeam = fEBeam;
+    holder->fReacInfo.fEx = fEx;
+
+    // Phase spaces
     auto ps {kin->GetDoubleVector("PS")};
-    auto ex {kin->GetDouble("Ex")};
+    // If any PS, create fKinGen
+    if(std::any_of(ps.begin(), ps.end(), [](const auto& v) { return v != 0; }))
+    {
+        fKinGen = new ActSim::KinematicGenerator {fKin->GetParticle(1), fKin->GetParticle(2), fKin->GetParticle(3),
+                                                  fKin->GetParticle(4), (int)ps[0],           (int)ps[1]};
+        fKinGen->SetBeamAndExEnergies(fEBeam, fEx);
+    }
+
+    // Cross section
+    auto file {kin->GetString("CrossSection")};
+    if(file.size())
+    {
+        G4cout << "Reading cross section from file: " << file << G4endl;
+        fCrossSection = new ActSim::CrossSection;
+        fCrossSection->ReadUsingTGraph(file);
+    }
+
     // Beam parameters
     auto beam {parser.GetBlock("Beam")};
     fBeamCentreZ = beam->GetDouble("CentreZ");
@@ -54,17 +88,18 @@ ActGeant::PrimaryGenerator::PrimaryGenerator()
     fBeamSigmaZ = beam->GetDouble("SigmaZ");
     fEBeam = beam->GetDouble("Energy");
 
-    // Initialise generator
-    fKinGen = new ActSim::KinematicGenerator {reac[0], reac[1], reac[2], reac[3], (int)ps[0], (int)ps[1]};
-    fKinGen->SetBeamAndExEnergies(fEBeam, ex);
     // Particles are lazily defined in InitialiseParticles, since
     // G4IonTable is not initialised by Geant4 at the moment of calling this constructor
 }
 
 ActGeant::PrimaryGenerator::~PrimaryGenerator()
 {
+    delete fKin;
+    if(fKinGen)
+        delete fKinGen;
+    if(fCrossSection)
+        delete fCrossSection;
     delete fParticleGun;
-    delete fKinGen;
 }
 
 void ActGeant::PrimaryGenerator::GeneratePrimaries(G4Event* event)
@@ -98,7 +133,8 @@ void ActGeant::PrimaryGenerator::GeneratePrimaries(G4Event* event)
     auto beamDir {vertex - entrance};
 
     // Shoot beam
-    // WARNING: need to define particles before, create a separate method for this
+    // WARNING: disabled as tracking the beam and then two recoild requires a more complex implementation
+    // As in NPTOOL, we simple slow down the beam energy from the entrance to the vertex
 
     // fParticleGun->SetParticleDefinition(fPartDefs[0]);
     // fParticleGun->SetParticlePosition(entrance);
@@ -106,26 +142,59 @@ void ActGeant::PrimaryGenerator::GeneratePrimaries(G4Event* event)
     // fParticleGun->SetParticleEnergy(fEBeam);
     // fParticleGun->GeneratePrimaryVertex(event);
 
-    // Shoot recoils
+    // Slow down beam
     auto d {(vertex - entrance).r()};
     auto EBeamAtVertex {SlowDownBeam(fPartDefs[0], fEBeam, d, driftLog->GetMaterial())};
-    // G4cout << "Ev : " << event->GetEventID() << " EBeamAtVertex: " << EBeamAtVertex << '\n';
-    fKinGen->SetBeamEnergy(EBeamAtVertex);
-    auto weight = fKinGen->Generate();
 
-    // Light
-    auto plight {fKinGen->GetLorentzVector(0)};
-    fKinGen->Print();
-    auto T3 {plight->E() - fKinGen->GetBinaryKinematics()->GetParticle(3).GetMass()};
-    G4cout << "PLightE : " << plight->E() << " Mass : " << fKinGen->GetBinaryKinematics()->GetParticle(3).GetMass()
-           << G4endl;
-    auto theta3 {plight->Theta()};
-    auto phi3 {plight->Phi()};
-    // Kin generator uses ACTAR TPC reference frame from legacy ROOT simulations, so
-    // here we have to switch X <-> Z coordinates
+    // Generate kinematics
+    double weight {};
+    double T3 {};
+    double theta3 {};
+    double phi3 {};
+    double T4 {};
+    double theta4 {};
+    double phi4 {};
+    double thetaCM {};
+    double phiCM {};
+    // NO PS
+    if(!fKinGen)
+    {
+        fKin->SetBeamEnergy(EBeamAtVertex);
+        // Sample
+        phiCM = G4RandFlat::shoot(0., 2. * pi);
+        if(fCrossSection)
+            thetaCM = fCrossSection->SampleCDF() * deg;
+        else
+            thetaCM = std::acos(G4RandFlat::shoot(-1, 1));
+        // Compute
+        fKin->ComputeRecoilKinematics(thetaCM, phiCM);
+        T3 = fKin->GetT3Lab();
+        theta3 = fKin->GetTheta3Lab();
+        phi3 = fKin->GetPhi3Lab();
+        T4 = fKin->GetT4Lab();
+        theta4 = fKin->GetTheta4Lab();
+        phi4 = fKin->GetPhi4Lab();
+    }
+    else
+    {
+        fKinGen->SetBeamEnergy(EBeamAtVertex);
+        weight = fKinGen->Generate();
+        // Light
+        auto plight {fKinGen->GetLorentzVector(0)};
+        T3 = plight->E() - fKin->GetParticle(3).GetMass();
+        theta3 = plight->Theta();
+        phi3 = plight->Phi();
+        // Heavy
+        auto pheavy {fKinGen->GetLorentzVector(1)};
+        T4 = pheavy->E() - fKin->GetParticle(4).GetMass();
+        theta4 = pheavy->Theta();
+        phi4 = pheavy->Phi();
+        // Reconstruct CM
+        thetaCM = fKinGen->GetBinaryKinematics()->ReconstructTheta3CMFromLab(T3, theta3);
+        phiCM = phi3;
+    }
+
     G4ThreeVector dir3 {std::cos(theta3), std::sin(theta3) * std::sin(phi3), std::sin(theta3) * std::cos(phi3)};
-    // Reconstruct thetaCM
-    auto thetaCM {fKinGen->GetBinaryKinematics()->ReconstructTheta3CMFromLab(T3, theta3)};
     // Shoot
     fParticleGun->SetParticleDefinition(fPartDefs[2]);
     fParticleGun->SetParticlePosition(vertex);
@@ -134,10 +203,6 @@ void ActGeant::PrimaryGenerator::GeneratePrimaries(G4Event* event)
     fParticleGun->GeneratePrimaryVertex(event);
 
     // Heavy
-    auto pheavy {fKinGen->GetLorentzVector(1)};
-    auto T4 {pheavy->E() - fKinGen->GetBinaryKinematics()->GetParticle(4).GetMass()};
-    auto theta4 {pheavy->Theta()};
-    auto phi4 {pheavy->Phi()};
     G4ThreeVector dir4 {std::cos(theta4), std::sin(theta4) * std::sin(phi4), std::sin(theta4) * std::cos(phi4)};
     fParticleGun->SetParticleDefinition(fPartDefs[3]);
     fParticleGun->SetParticlePosition(vertex);
@@ -191,11 +256,10 @@ void ActGeant::PrimaryGenerator::InitialiseParticles()
 
     for(int i = 1; i <= 4; i++)
     {
-        auto& part {fKinGen->GetBinaryKinematics()->GetParticle(i)};
+        auto& part {fKin->GetParticle(i)};
         auto Z {part.GetZ()};
         auto A {part.GetA()};
-        auto ex {(i == 4) ? fKinGen->GetEx() : 0}; // explicitily add Ex for heavy fragment
-        // std::cout << "Z: " << Z << " A: " << A << " Ex: " << ex << '\n';
+        auto ex {(i == 4) ? fEx : 0}; // explicitily add Ex for heavy fragment
         auto* def {G4IonTable::GetIonTable()->GetIon(Z, A, ex)};
         if(!def)
         {

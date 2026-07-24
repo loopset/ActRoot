@@ -10,6 +10,19 @@ namespace ActGeant
 {
 using Vector3DPoint = std::vector<G4double>;
 
+class ReactionInfo
+{
+public:
+    G4String fBeam {};
+    G4String fTarget {};
+    G4String fLight {};
+    G4String fHeavy {};
+    G4double fEBeam {};
+    G4double fEx {};
+
+    void Print() const;
+};
+
 class VertexInfo
 {
 public:
@@ -37,6 +50,7 @@ public:
     G4double fSilDeltaE {0};
     G4String fSilLayer {};
     G4int fSilIdx {-1};
+    G4String fName {};
     G4int fZ {-1};
     G4int fA {-1};
     G4int fTrackID {-1};

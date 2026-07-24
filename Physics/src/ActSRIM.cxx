@@ -22,9 +22,9 @@
 #include <utility>
 #include <vector>
 
-ActPhysics::SRIM::SRIM(const std::string& key, const std::string& file)
+ActPhysics::SRIM::SRIM(const std::string& key, const std::string& file, bool isSRIM)
 {
-    ReadTable(key, file);
+    ReadTable(key, file, isSRIM);
 }
 
 bool ActPhysics::SRIM::IsBreakLine(const std::string& line)
@@ -101,7 +101,7 @@ ActPhysics::SRIM::GetGraph(std::vector<double>& x, std::vector<double>& y, const
     return std::move(g);
 }
 
-void ActPhysics::SRIM::ReadTable(const std::string& key, const std::string& file)
+void ActPhysics::SRIM::ReadSRIM(const std::string& key, const std::string& file)
 {
     std::ifstream streamer(file);
     if(!streamer)
@@ -150,7 +150,7 @@ void ActPhysics::SRIM::ReadTable(const std::string& key, const std::string& file
     // Init splines and funcs
     // 1-> Energy -> Range
     fSplinesDirect[key] = GetSpline(vE, vR, "EtoR");
-    fGraphsDirect[key] = GetGraph(vE, vR, "EtoT");
+    fGraphsDirect[key] = GetGraph(vE, vR, "EtoR");
     fGraphsDirect[key]->SetTitle(";Energy [MeV];Range [mm]");
     // 2-> Range -> Energy
     fSplinesInverse[key] = GetSpline(vR, vE, "RtoE");
@@ -176,27 +176,32 @@ void ActPhysics::SRIM::ReadTable(const std::string& key, const std::string& file
     fKeys.push_back(key);
 }
 
-void ActPhysics::SRIM::ReadInterpolations(std::string key, std::string fileName)
+void ActPhysics::SRIM::ReadGeant4(const std::string& key, const std::string& file)
 {
-    std::ifstream streamer(fileName.c_str());
+    std::ifstream streamer(file);
     if(!streamer)
-        throw std::runtime_error("SRIM::ReadInterpolations(): could not open file " + fileName);
-    double auxE, auxSe, auxSn, auxR, auxLongStrag, auxLatStrag;
-    std::vector<double> vE, vStop, vR, vLongStrag, vLatStrag;
-    while(streamer >> auxE >> auxSe >> auxSn >> auxR >> auxLongStrag >> auxLatStrag)
+        throw std::runtime_error("SRIM::ReadGeant4(): could not open file " + file);
+
+    std::vector<double> vE, vStop, vR;
+
+    std::string line {};
+    while(std::getline(streamer, line))
     {
-        vE.push_back(auxE);
-        vStop.push_back(auxSe + auxSn);
-        vR.push_back(auxR);
-        vLongStrag.push_back(auxLongStrag);
-        vLatStrag.push_back(auxLatStrag);
+        if(line.empty())
+            continue;
+        std::istringstream ss(line);
+        double e, r, s;
+        ss >> e >> s >> r;
+        vE.push_back(e);
+        vR.push_back(r);
+        vStop.push_back(s);
     }
     streamer.close();
 
     // Init splines and funcs
     // 1-> Energy -> Range
     fSplinesDirect[key] = GetSpline(vE, vR, "EtoR");
-    fGraphsDirect[key] = GetGraph(vE, vR, "EtoT");
+    fGraphsDirect[key] = GetGraph(vE, vR, "EtoR");
     fGraphsDirect[key]->SetTitle(";Energy [MeV];Range [mm]");
     // 2-> Range -> Energy
     fSplinesInverse[key] = GetSpline(vR, vE, "RtoE");
@@ -208,18 +213,29 @@ void ActPhysics::SRIM::ReadInterpolations(std::string key, std::string fileName)
     fGraphsStoppings[key] = GetGraph(vE, vStop, "EtodE");
     fGraphsStoppings[key]->SetTitle(";Energy [MeV];#frac{dE}{dx} [MeV/mm]");
 
+    // WARNING: GEANT4 does not return straggling, so we must fake it -> return 0
+    std::vector<double> vLongStrag(vR.size(), 0);
     // 4-> R to LS
     fSplinesLongStrag[key] = GetSpline(vR, vLongStrag, "RtoLongS");
     fGraphsLongStrag[key] = GetGraph(vR, vLongStrag, "RtoLongS");
     fGraphsLongStrag[key]->SetTitle(";Range [mm];Longitudinal straggling [mm]");
 
     // 5-> R to LatS
+    std::vector<double> vLatStrag(vR.size(), 0);
     fSplinesLatStrag[key] = GetSpline(vR, vLatStrag, "RtoLatS");
     fGraphsLatStrag[key] = GetGraph(vR, vLatStrag, "RtoLatS");
     fGraphsLatStrag[key]->SetTitle(";Range [mm];Lateral stragging [mm]");
 
     // and finally store keys
     fKeys.push_back(key);
+}
+
+void ActPhysics::SRIM::ReadTable(const std::string& key, const std::string& file, bool isSRIM)
+{
+    if(isSRIM)
+        ReadSRIM(key, file);
+    else
+        ReadGeant4(key, file);
 }
 
 void ActPhysics::SRIM::SetStragglingLISE(const std::string& key, const std::string& fileName)
@@ -429,7 +445,7 @@ void ActPhysics::SRIM::ReadConfiguration(std::shared_ptr<ActRoot::InputBlock> bl
 {
     // Parse block: read all tokens as keys and values as paths to files
     for(const auto& token : block->GetTokens())
-        ReadTable(token, block->GetString(token));
+        ReadSRIM(token, block->GetString(token));
 }
 
 void ActPhysics::SRIM::ReadConfiguration(const std::string& file)

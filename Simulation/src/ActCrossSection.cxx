@@ -7,6 +7,7 @@
 #include "TCanvas.h"
 #include "TF1.h"
 #include "TGraph.h"
+#include "TGraphErrors.h"
 #include "TH1.h"
 #include "TMath.h"
 #include "TRandom.h"
@@ -64,6 +65,7 @@ void ActSim::CrossSection::Init(int n, const double* x, const double* y)
 
     // Compute the histogram
     TGraph ghist {static_cast<Int_t>(fX.size()), fX.data(), fY.data()};
+    TH1::AddDirectory(false); // must disable storing histograms in ROOT obj directory for geant4
     TF1 fhist {"fhist", [&](double* x, double* p) { return ghist.Eval(x[0], nullptr, "S"); }, fX.front(), fX.back(), 0};
     // Get bin info
     auto min {fX.front() - fStep / 2};
@@ -112,6 +114,25 @@ void ActSim::CrossSection::ReadFile(const std::string& file)
 
     // Call init method!
     Init(x.size(), x.data(), y.data());
+}
+
+void ActSim::CrossSection::ReadUsingTGraph(const std::string& file)
+{
+    std::ifstream streamer {file};
+    if(!streamer)
+        throw std::runtime_error("CrossSection::ReadFile(): could not open input file named " + file);
+    streamer.close();
+
+    TGraphErrors graph {file.c_str(), "%lg %lg"};
+    if(fIsAngle)
+    {
+        auto n {graph.GetN()};
+        auto x {graph.GetX()};
+        graph.SetPointX(n - 1, x[n - 1] - 0.001);
+    }
+
+    // Call init method
+    Init(graph.GetN(), graph.GetX(), graph.GetY());
 }
 
 void ActSim::CrossSection::ReadGraph(TGraph* g)

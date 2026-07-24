@@ -27,6 +27,7 @@ public:
     // Main methods to read
     void ReadGraph(TGraph* g);
     void ReadFile(const std::string& file);
+    void ReadUsingTGraph(const std::string& file);
 
 
     // Sampling methods

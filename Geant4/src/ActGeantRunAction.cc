@@ -2,9 +2,19 @@
 
 #include "ActGeantDataHolder.hh"
 
+#include "TString.h"
+
 #include "G4AnalysisManager.hh"
 #include "G4Run.hh"
 #include "G4RunManager.hh"
+
+#include <G4Material.hh>
+#include <G4MaterialTable.hh>
+#include <G4String.hh>
+#include <G4Threading.hh>
+#include <G4ios.hh>
+
+#include <vector>
 
 ActGeant::RunAction::RunAction()
 {
@@ -31,14 +41,28 @@ ActGeant::RunAction::RunAction()
     // // Track info (only light id = 1)
     ana->CreateNtupleDColumn("TPCIni", holder->fLight.fTPCIni); // 9
     ana->CreateNtupleDColumn("TPCEnd", holder->fLight.fTPCEnd);
-    ana->CreateNtupleDColumn("TPCDeltaE");
+    ana->CreateNtupleDColumn("TPCDeltaE"); // 11
+
+    // Silicon
+    ana->CreateNtupleDColumn("SilIni", holder->fLight.fSilIni); // 12
+    ana->CreateNtupleDColumn("SilEnd", holder->fLight.fSilEnd); // 13
+    ana->CreateNtupleDColumn("SilDeltaE");                      // 14
+    ana->CreateNtupleSColumn("SilLayer");                       // 15
+    ana->CreateNtupleIColumn("SilIdx");                         // 16
+
+    // Particle name
+    ana->CreateNtupleSColumn("PartName"); // 17
+
     ana->FinishNtuple();
 }
 
 void ActGeant::RunAction::BeginOfRunAction(const G4Run* run)
 {
     auto* ana = G4AnalysisManager::Instance();
-    G4String file {"actgeant_test.root"};
+    G4String file {"./Outputs/simu.root"};
+    // auto* holder {DataHolder::Instance()};
+    // file += "simu_" + holder->fReacInfo.fBeam + "_ " + holder->fReacInfo.fTarget + "_" + holder->fReacInfo.fLight +
+    //         "_ex_" + TString::Format("%.2f", holder->fReacInfo.fEx).Data() + ".root";
     ana->OpenFile(file);
 }
 

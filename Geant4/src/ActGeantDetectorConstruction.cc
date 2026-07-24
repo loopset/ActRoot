@@ -107,7 +107,7 @@ G4VPhysicalVolume* ActGeant::DetectorConstruction::DefineVolumes()
 
     auto* padPlaneS {new G4Box("PadPlane", padPlaneX, padPlaneY, padPlaneZ)};
     auto* padPlaneLV =
-        new G4LogicalVolume(padPlaneS, G4Material::GetMaterial("G4_Al"), "PadPlane"); // not the right material but ...
+        new G4LogicalVolume(padPlaneS, G4Material::GetMaterial("Galactic"), "PadPlane"); // not the right material but ...
     //--place it above chamber
     auto padPlanePosX {0. * cm};
     auto padPlanePosY {0. * cm};

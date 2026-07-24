@@ -14,8 +14,8 @@ void ActGeant::ActionInitialization::BuildForMaster() const
 
 void ActGeant::ActionInitialization::Build() const
 {
-    SetUserAction(new RunAction);
     SetUserAction(new PrimaryGenerator);
     SetUserAction(new EventAction);
     SetUserAction(new SteppingAction());
+    SetUserAction(new RunAction);
 }
