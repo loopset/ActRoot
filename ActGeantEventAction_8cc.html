@@ -79,44 +79,55 @@ $(function() {
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="ActGeantEventAction_8hh_source.html">ActGeantEventAction.hh</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="ActGeantDataHolder_8hh_source.html">ActGeantDataHolder.hh</a>&quot;</code><br />
+<code>#include &lt;Randomize.hh&gt;</code><br />
 <code>#include &quot;G4AnalysisManager.hh&quot;</code><br />
 <code>#include &quot;G4Event.hh&quot;</code><br />
+<code>#include &quot;G4SystemOfUnits.hh&quot;</code><br />
 <code>#include &lt;G4SDManager.hh&gt;</code><br />
 <code>#include &lt;G4UserEventAction.hh&gt;</code><br />
 <code>#include &lt;G4ios.hh&gt;</code><br />
+<code>#include &lt;cmath&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for ActGeantEventAction.cc:</div>
 <div class="dyncontent">
 <div class="center"><img src="ActGeantEventAction_8cc__incl.png" border="0" usemap="#aGeant4_2src_2ActGeantEventAction_8cc" alt=""/></div>
 <map name="aGeant4_2src_2ActGeantEventAction_8cc" id="aGeant4_2src_2ActGeantEventAction_8cc">
-<area shape="rect" title=" " alt="" coords="449,5,643,45"/>
-<area shape="rect" href="ActGeantEventAction_8hh.html" title=" " alt="" coords="5,93,185,119"/>
-<area shape="poly" title=" " alt="" coords="450,46,175,94,174,88,449,41"/>
-<area shape="rect" title=" " alt="" coords="86,167,254,192"/>
-<area shape="poly" title=" " alt="" coords="450,36,401,44,350,56,298,73,250,96,214,125,187,157,183,153,210,121,247,91,296,68,348,51,400,39,449,31"/>
-<area shape="rect" href="ActGeantDataHolder_8hh.html" title=" " alt="" coords="261,93,436,119"/>
-<area shape="poly" title=" " alt="" coords="500,48,392,91,390,86,498,43"/>
-<area shape="rect" title=" " alt="" coords="461,93,631,119"/>
-<area shape="poly" title=" " alt="" coords="549,46,549,79,543,79,543,46"/>
-<area shape="rect" title=" " alt="" coords="656,93,753,119"/>
-<area shape="poly" title=" " alt="" coords="585,43,670,85,668,90,583,48"/>
-<area shape="rect" title=" " alt="" coords="777,93,912,119"/>
-<area shape="poly" title=" " alt="" coords="618,43,789,87,787,92,617,48"/>
-<area shape="rect" title=" " alt="" coords="936,93,1015,119"/>
-<area shape="poly" title=" " alt="" coords="643,40,923,90,922,96,642,45"/>
-<area shape="rect" title=" " alt="" coords="224,240,321,265"/>
-<area shape="poly" title=" " alt="" coords="89,120,72,154,70,173,76,191,103,216,138,233,174,244,211,248,210,254,173,249,136,238,100,220,72,193,65,174,67,153,84,118"/>
-<area shape="poly" title=" " alt="" coords="109,117,150,155,146,159,105,121"/>
-<area shape="poly" title=" " alt="" coords="345,120,319,168,287,229,282,226,314,165,340,117"/>
-<area shape="rect" href="ActGeantData_8hh.html" title=" " alt="" coords="329,167,462,192"/>
-<area shape="poly" title=" " alt="" coords="359,118,382,154,378,157,354,120"/>
-<area shape="rect" title=" " alt="" coords="487,167,624,192"/>
-<area shape="poly" title=" " alt="" coords="383,116,510,160,508,165,381,121"/>
-<area shape="poly" title=" " alt="" coords="377,194,306,235,303,231,374,190"/>
-<area shape="rect" title=" " alt="" coords="346,240,445,265"/>
-<area shape="poly" title=" " alt="" coords="398,192,398,226,393,226,393,192"/>
-<area shape="rect" title=" " alt="" coords="469,240,532,265"/>
-<area shape="poly" title=" " alt="" coords="414,190,474,230,471,235,411,194"/>
+<area shape="rect" title=" " alt="" coords="621,5,815,45"/>
+<area shape="rect" href="ActGeantEventAction_8hh.html" title=" " alt="" coords="123,93,303,119"/>
+<area shape="poly" title=" " alt="" coords="622,44,300,94,299,89,621,39"/>
+<area shape="rect" title=" " alt="" coords="5,167,164,192"/>
+<area shape="poly" title=" " alt="" coords="621,34,478,43,319,56,184,74,137,84,112,95,101,107,94,122,88,153,83,152,89,120,97,105,108,91,136,79,183,69,319,51,478,38,621,29"/>
+<area shape="rect" title=" " alt="" coords="239,167,407,192"/>
+<area shape="poly" title=" " alt="" coords="622,38,475,59,411,76,368,96,355,108,345,123,332,154,327,152,340,120,351,104,364,91,409,71,474,54,621,33"/>
+<area shape="rect" href="ActGeantDataHolder_8hh.html" title=" " alt="" coords="379,93,553,119"/>
+<area shape="poly" title=" " alt="" coords="658,48,517,92,515,87,657,43"/>
+<area shape="rect" title=" " alt="" coords="578,93,693,119"/>
+<area shape="poly" title=" " alt="" coords="700,47,659,86,656,82,696,44"/>
+<area shape="rect" title=" " alt="" coords="717,93,887,119"/>
+<area shape="poly" title=" " alt="" coords="740,44,781,82,778,86,737,48"/>
+<area shape="rect" title=" " alt="" coords="912,93,1009,119"/>
+<area shape="poly" title=" " alt="" coords="777,43,913,86,911,92,775,48"/>
+<area shape="rect" title=" " alt="" coords="1033,93,1168,119"/>
+<area shape="poly" title=" " alt="" coords="810,43,1032,88,1031,93,809,48"/>
+<area shape="rect" title=" " alt="" coords="1192,93,1271,119"/>
+<area shape="poly" title=" " alt="" coords="815,36,981,58,1179,90,1178,96,981,64,815,41"/>
+<area shape="rect" title=" " alt="" coords="1295,93,1357,119"/>
+<area shape="poly" title=" " alt="" coords="815,31,1026,52,1152,69,1282,91,1281,96,1152,74,1025,58,815,37"/>
+<area shape="poly" title=" " alt="" coords="193,121,119,162,117,157,191,116"/>
+<area shape="rect" title=" " alt="" coords="395,240,492,265"/>
+<area shape="poly" title=" " alt="" coords="214,119,214,154,219,173,229,190,262,216,301,234,342,244,381,249,380,254,341,249,299,239,259,221,225,194,214,176,209,155,208,119"/>
+<area shape="poly" title=" " alt="" coords="232,116,295,157,292,161,229,121"/>
+<area shape="poly" title=" " alt="" coords="467,120,450,227,445,226,462,119"/>
+<area shape="rect" href="ActGeantData_8hh.html" title=" " alt="" coords="482,167,615,192"/>
+<area shape="poly" title=" " alt="" coords="481,117,526,155,523,160,478,121"/>
+<area shape="rect" title=" " alt="" coords="603,240,702,265"/>
+<area shape="poly" title=" " alt="" coords="538,116,587,134,609,148,629,165,647,195,654,226,649,227,642,197,625,168,606,152,584,139,537,121"/>
+<area shape="rect" title=" " alt="" coords="691,167,828,192"/>
+<area shape="poly" title=" " alt="" coords="514,116,699,161,698,166,513,121"/>
+<area shape="poly" title=" " alt="" coords="533,194,473,235,470,230,530,190"/>
+<area shape="poly" title=" " alt="" coords="567,190,626,230,623,234,564,194"/>
+<area shape="rect" title=" " alt="" coords="516,240,579,265"/>
+<area shape="poly" title=" " alt="" coords="551,192,550,227,545,226,546,192"/>
 </map>
 </div>
 </div></div><!-- contents -->

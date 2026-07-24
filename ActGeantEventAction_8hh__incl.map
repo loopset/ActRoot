@@ -1,7 +1,9 @@
 <map id="Geant4/inc/ActGeantEventAction.hh" name="Geant4/inc/ActGeantEventAction.hh">
-<area shape="rect" id="Node000001" title=" " alt="" coords="36,5,229,45"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,103,119"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="116,47,77,85,74,82,112,44"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="127,93,295,119"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="154,44,192,82,188,85,150,47"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="140,5,333,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,164,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="201,48,121,89,118,84,199,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="188,93,285,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="239,46,239,79,234,79,234,46"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="310,93,478,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="276,43,360,85,357,89,273,48"/>
 </map>

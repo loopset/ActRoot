@@ -80,8 +80,7 @@ $(function() {
   <div class="headertitle"><div class="title">ActGeantPrimaryGenerator.hh File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="ActKinematicGenerator_8h_source.html">ActKinematicGenerator.h</a>&quot;</code><br />
-<code>#include &quot;G4ParticleDefinition.hh&quot;</code><br />
+<div class="textblock"><code>#include &quot;G4ParticleDefinition.hh&quot;</code><br />
 <code>#include &quot;G4VUserPrimaryGeneratorAction.hh&quot;</code><br />
 <code>#include &lt;G4Material.hh&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
@@ -90,64 +89,15 @@ Include dependency graph for ActGeantPrimaryGenerator.hh:</div>
 <div class="dyncontent">
 <div class="center"><img src="ActGeantPrimaryGenerator_8hh__incl.png" border="0" usemap="#aGeant4_2inc_2ActGeantPrimaryGenerator_8hh" alt=""/></div>
 <map name="aGeant4_2inc_2ActGeantPrimaryGenerator_8hh" id="aGeant4_2inc_2ActGeantPrimaryGenerator_8hh">
-<area shape="rect" title=" " alt="" coords="1668,5,1875,45"/>
-<area shape="rect" href="ActKinematicGenerator_8h.html" title=" " alt="" coords="348,93,534,119"/>
-<area shape="poly" title=" " alt="" coords="1668,35,548,101,547,96,1668,30"/>
-<area shape="rect" title=" " alt="" coords="1567,313,1630,339"/>
-<area shape="poly" title=" " alt="" coords="1734,48,1704,68,1677,95,1646,148,1625,204,1611,258,1604,300,1599,299,1606,257,1620,203,1641,145,1672,92,1700,64,1732,43"/>
-<area shape="rect" title=" " alt="" coords="1686,93,1857,119"/>
-<area shape="poly" title=" " alt="" coords="1774,46,1774,79,1769,79,1769,46"/>
-<area shape="rect" title=" " alt="" coords="1881,93,2137,119"/>
-<area shape="poly" title=" " alt="" coords="1829,43,1962,87,1961,92,1828,48"/>
-<area shape="rect" title=" " alt="" coords="2161,93,2276,119"/>
-<area shape="poly" title=" " alt="" coords="1876,42,2148,90,2147,95,1875,47"/>
-<area shape="rect" href="ActKinematics_8h.html" title=" " alt="" coords="704,167,832,192"/>
-<area shape="poly" title=" " alt="" coords="494,116,702,161,701,166,493,121"/>
-<area shape="rect" title=" " alt="" coords="322,313,381,339"/>
-<area shape="poly" title=" " alt="" coords="450,118,463,152,465,173,460,193,445,211,428,220,411,228,394,242,375,271,362,302,357,299,370,269,390,238,408,223,426,215,442,207,455,191,459,173,458,153,445,120"/>
-<area shape="poly" title=" " alt="" coords="534,106,767,114,1064,134,1213,151,1349,173,1463,202,1508,219,1545,238,1561,251,1574,266,1592,299,1587,301,1570,269,1557,254,1542,242,1506,224,1461,207,1348,178,1212,156,1064,139,767,119,534,111"/>
-<area shape="rect" href="ActParticle_8h.html" title=" " alt="" coords="199,240,302,265"/>
-<area shape="poly" title=" " alt="" coords="348,109,255,113,157,122,72,140,40,153,19,168,9,187,12,202,27,214,51,225,116,239,185,246,184,251,115,244,49,230,24,219,8,204,4,186,15,165,38,148,70,135,156,116,255,107,348,104"/>
-<area shape="rect" title=" " alt="" coords="29,167,176,192"/>
-<area shape="poly" title=" " alt="" coords="387,121,171,166,170,161,386,116"/>
-<area shape="rect" title=" " alt="" coords="200,167,330,192"/>
-<area shape="poly" title=" " alt="" coords="414,121,308,164,306,159,412,116"/>
-<area shape="rect" title=" " alt="" coords="354,167,445,192"/>
-<area shape="poly" title=" " alt="" coords="437,120,416,156,411,153,432,118"/>
-<area shape="rect" href="ActInputParser_8h.html" title=" " alt="" coords="440,240,567,265"/>
-<area shape="poly" title=" " alt="" coords="726,195,561,239,559,234,725,189"/>
-<area shape="rect" title=" " alt="" coords="1161,313,1238,339"/>
-<area shape="poly" title=" " alt="" coords="832,178,1006,181,1224,189,1329,197,1419,207,1486,221,1509,229,1523,238,1529,253,1523,267,1505,282,1477,293,1405,310,1324,320,1252,325,1252,320,1324,315,1404,305,1476,288,1502,277,1519,264,1524,253,1519,242,1506,233,1485,226,1418,212,1328,202,1224,195,1006,186,832,184"/>
-<area shape="poly" title=" " alt="" coords="704,182,643,186,572,195,498,213,429,242,394,271,368,303,364,300,390,267,426,238,497,208,571,190,642,180,703,177"/>
-<area shape="poly" title=" " alt="" coords="704,192,316,245,315,240,703,187"/>
-<area shape="rect" title=" " alt="" coords="675,240,754,265"/>
-<area shape="poly" title=" " alt="" coords="761,194,733,231,729,228,757,191"/>
-<area shape="rect" title=" " alt="" coords="778,240,864,265"/>
-<area shape="poly" title=" " alt="" coords="779,191,807,228,802,231,774,194"/>
-<area shape="rect" title=" " alt="" coords="888,240,1076,265"/>
-<area shape="poly" title=" " alt="" coords="803,189,936,233,934,238,801,195"/>
-<area shape="rect" title=" " alt="" coords="1100,240,1254,265"/>
-<area shape="poly" title=" " alt="" coords="833,189,1098,235,1097,240,832,194"/>
-<area shape="rect" title=" " alt="" coords="1278,240,1431,265"/>
-<area shape="poly" title=" " alt="" coords="832,186,1264,237,1264,243,831,191"/>
-<area shape="rect" title=" " alt="" coords="1455,240,1510,265"/>
-<area shape="poly" title=" " alt="" coords="832,180,945,184,1095,195,1266,212,1442,238,1441,243,1265,217,1094,200,945,190,832,185"/>
-<area shape="rect" title=" " alt="" coords="591,240,651,265"/>
-<area shape="poly" title=" " alt="" coords="745,194,658,236,656,232,743,190"/>
-<area shape="rect" title=" " alt="" coords="554,313,605,339"/>
-<area shape="poly" title=" " alt="" coords="518,263,559,302,556,306,514,267"/>
-<area shape="poly" title=" " alt="" coords="568,261,579,263,902,297,1147,318,1147,323,901,302,578,268,567,267"/>
-<area shape="rect" title=" " alt="" coords="630,313,716,339"/>
-<area shape="poly" title=" " alt="" coords="532,263,634,305,632,310,530,268"/>
-<area shape="poly" title=" " alt="" coords="480,268,390,310,388,305,478,263"/>
-<area shape="rect" title=" " alt="" coords="740,313,832,339"/>
-<area shape="poly" title=" " alt="" coords="550,263,728,307,727,313,549,268"/>
-<area shape="rect" title=" " alt="" coords="406,313,530,339"/>
-<area shape="poly" title=" " alt="" coords="500,267,482,302,477,300,495,264"/>
-<area shape="poly" title=" " alt="" coords="568,261,579,263,869,288,1153,305,1554,321,1553,326,1153,310,869,293,578,268,567,267"/>
-<area shape="poly" title=" " alt="" coords="268,263,326,303,322,307,265,268"/>
-<area shape="rect" href="ActConstants_8h.html" title=" " alt="" coords="178,313,298,339"/>
-<area shape="poly" title=" " alt="" coords="251,266,245,300,240,299,246,265"/>
+<area shape="rect" title=" " alt="" coords="329,5,535,45"/>
+<area shape="rect" title=" " alt="" coords="5,93,176,119"/>
+<area shape="poly" title=" " alt="" coords="351,48,154,93,153,88,350,43"/>
+<area shape="rect" title=" " alt="" coords="200,93,456,119"/>
+<area shape="poly" title=" " alt="" coords="408,48,356,87,353,83,405,43"/>
+<area shape="rect" title=" " alt="" coords="480,93,595,119"/>
+<area shape="poly" title=" " alt="" coords="459,43,512,83,509,87,456,48"/>
+<area shape="rect" title=" " alt="" coords="619,93,682,119"/>
+<area shape="poly" title=" " alt="" coords="485,43,607,86,605,91,483,48"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -172,6 +122,10 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
+<tr class="memitem:namespaceActPhysics" id="r_namespaceActPhysics"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceActPhysics.html">ActPhysics</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespaceActSim" id="r_namespaceActSim"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceActSim.html">ActSim</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespaceActGeant" id="r_namespaceActGeant"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceActGeant.html">ActGeant</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>

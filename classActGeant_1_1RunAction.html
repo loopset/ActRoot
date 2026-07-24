@@ -129,33 +129,44 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   10</span>{</div>
-<div class="line"><span class="lineno">   11</span>    G4RunManager::GetRunManager()-&gt;SetPrintProgress(<span class="keyword">true</span>);</div>
-<div class="line"><span class="lineno">   12</span>    <span class="keyword">auto</span>* ana = G4AnalysisManager::Instance();</div>
-<div class="line"><span class="lineno">   13</span>    ana-&gt;SetVerboseLevel(1);</div>
-<div class="line"><span class="lineno">   14</span>    ana-&gt;SetNtupleMerging(<span class="keyword">true</span>);</div>
-<div class="line"><span class="lineno">   15</span> </div>
-<div class="line"><span class="lineno">   16</span>    <span class="comment">// Holder</span></div>
-<div class="line"><span class="lineno">   17</span>    <span class="keyword">auto</span>* holder {<a class="code hl_function" href="classActGeant_1_1DataHolder.html#adb5b711bfec65a6ffc9c99e1e7184aef">DataHolder::Instance</a>()};</div>
-<div class="line"><span class="lineno">   18</span> </div>
-<div class="line"><span class="lineno">   19</span>    <span class="comment">// Add columns</span></div>
-<div class="line"><span class="lineno">   20</span>    ana-&gt;CreateNtuple(<span class="stringliteral">&quot;ActGeant&quot;</span>, <span class="stringliteral">&quot;A simple NTuple created with Geant4&quot;</span>);</div>
-<div class="line"><span class="lineno">   21</span>    <span class="comment">// Vertex info</span></div>
-<div class="line"><span class="lineno">   22</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;RP&quot;</span>, holder-&gt;fVertexInfo.fRP); <span class="comment">// idx 0</span></div>
-<div class="line"><span class="lineno">   23</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;EBeam&quot;</span>);                       <span class="comment">// idx 1</span></div>
-<div class="line"><span class="lineno">   24</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;T3&quot;</span>);</div>
-<div class="line"><span class="lineno">   25</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;theta3&quot;</span>);</div>
-<div class="line"><span class="lineno">   26</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;phi3&quot;</span>);</div>
-<div class="line"><span class="lineno">   27</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;T4&quot;</span>);</div>
-<div class="line"><span class="lineno">   28</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;theta4&quot;</span>);</div>
-<div class="line"><span class="lineno">   29</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;phi4&quot;</span>);</div>
-<div class="line"><span class="lineno">   30</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;thetaCM&quot;</span>); <span class="comment">// idx 8</span></div>
-<div class="line"><span class="lineno">   31</span>    <span class="comment">// // Track info (only light id = 1)</span></div>
-<div class="line"><span class="lineno">   32</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;TPCIni&quot;</span>, holder-&gt;fLight.fTPCIni); <span class="comment">// 9</span></div>
-<div class="line"><span class="lineno">   33</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;TPCEnd&quot;</span>, holder-&gt;fLight.fTPCEnd);</div>
-<div class="line"><span class="lineno">   34</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;TPCDeltaE&quot;</span>);</div>
-<div class="line"><span class="lineno">   35</span>    ana-&gt;FinishNtuple();</div>
-<div class="line"><span class="lineno">   36</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">   20</span>{</div>
+<div class="line"><span class="lineno">   21</span>    G4RunManager::GetRunManager()-&gt;SetPrintProgress(<span class="keyword">true</span>);</div>
+<div class="line"><span class="lineno">   22</span>    <span class="keyword">auto</span>* ana = G4AnalysisManager::Instance();</div>
+<div class="line"><span class="lineno">   23</span>    ana-&gt;SetVerboseLevel(1);</div>
+<div class="line"><span class="lineno">   24</span>    ana-&gt;SetNtupleMerging(<span class="keyword">true</span>);</div>
+<div class="line"><span class="lineno">   25</span> </div>
+<div class="line"><span class="lineno">   26</span>    <span class="comment">// Holder</span></div>
+<div class="line"><span class="lineno">   27</span>    <span class="keyword">auto</span>* holder {<a class="code hl_function" href="classActGeant_1_1DataHolder.html#adb5b711bfec65a6ffc9c99e1e7184aef">DataHolder::Instance</a>()};</div>
+<div class="line"><span class="lineno">   28</span> </div>
+<div class="line"><span class="lineno">   29</span>    <span class="comment">// Add columns</span></div>
+<div class="line"><span class="lineno">   30</span>    ana-&gt;CreateNtuple(<span class="stringliteral">&quot;ActGeant&quot;</span>, <span class="stringliteral">&quot;A simple NTuple created with Geant4&quot;</span>);</div>
+<div class="line"><span class="lineno">   31</span>    <span class="comment">// Vertex info</span></div>
+<div class="line"><span class="lineno">   32</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;RP&quot;</span>, holder-&gt;fVertexInfo.fRP); <span class="comment">// idx 0</span></div>
+<div class="line"><span class="lineno">   33</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;EBeam&quot;</span>);                       <span class="comment">// idx 1</span></div>
+<div class="line"><span class="lineno">   34</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;T3&quot;</span>);</div>
+<div class="line"><span class="lineno">   35</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;theta3&quot;</span>);</div>
+<div class="line"><span class="lineno">   36</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;phi3&quot;</span>);</div>
+<div class="line"><span class="lineno">   37</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;T4&quot;</span>);</div>
+<div class="line"><span class="lineno">   38</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;theta4&quot;</span>);</div>
+<div class="line"><span class="lineno">   39</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;phi4&quot;</span>);</div>
+<div class="line"><span class="lineno">   40</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;thetaCM&quot;</span>); <span class="comment">// idx 8</span></div>
+<div class="line"><span class="lineno">   41</span>    <span class="comment">// // Track info (only light id = 1)</span></div>
+<div class="line"><span class="lineno">   42</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;TPCIni&quot;</span>, holder-&gt;fLight.fTPCIni); <span class="comment">// 9</span></div>
+<div class="line"><span class="lineno">   43</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;TPCEnd&quot;</span>, holder-&gt;fLight.fTPCEnd);</div>
+<div class="line"><span class="lineno">   44</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;TPCDeltaE&quot;</span>); <span class="comment">// 11</span></div>
+<div class="line"><span class="lineno">   45</span> </div>
+<div class="line"><span class="lineno">   46</span>    <span class="comment">// Silicon</span></div>
+<div class="line"><span class="lineno">   47</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;SilIni&quot;</span>, holder-&gt;fLight.fSilIni); <span class="comment">// 12</span></div>
+<div class="line"><span class="lineno">   48</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;SilEnd&quot;</span>, holder-&gt;fLight.fSilEnd); <span class="comment">// 13</span></div>
+<div class="line"><span class="lineno">   49</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;SilDeltaE&quot;</span>);                      <span class="comment">// 14</span></div>
+<div class="line"><span class="lineno">   50</span>    ana-&gt;CreateNtupleSColumn(<span class="stringliteral">&quot;SilLayer&quot;</span>);                       <span class="comment">// 15</span></div>
+<div class="line"><span class="lineno">   51</span>    ana-&gt;CreateNtupleIColumn(<span class="stringliteral">&quot;SilIdx&quot;</span>);                         <span class="comment">// 16</span></div>
+<div class="line"><span class="lineno">   52</span> </div>
+<div class="line"><span class="lineno">   53</span>    <span class="comment">// Particle name</span></div>
+<div class="line"><span class="lineno">   54</span>    ana-&gt;CreateNtupleSColumn(<span class="stringliteral">&quot;PartName&quot;</span>); <span class="comment">// 17</span></div>
+<div class="line"><span class="lineno">   55</span> </div>
+<div class="line"><span class="lineno">   56</span>    ana-&gt;FinishNtuple();</div>
+<div class="line"><span class="lineno">   57</span>}</div>
 <div class="ttc" id="aclassActGeant_1_1DataHolder_html_adb5b711bfec65a6ffc9c99e1e7184aef"><div class="ttname"><a href="classActGeant_1_1DataHolder.html#adb5b711bfec65a6ffc9c99e1e7184aef">ActGeant::DataHolder::Instance</a></div><div class="ttdeci">static DataHolder * Instance()</div><div class="ttdef"><b>Definition</b> ActGeantDataHolder.cc:8</div></div>
 </div><!-- fragment -->
 </div>
@@ -209,11 +220,14 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   39</span>{</div>
-<div class="line"><span class="lineno">   40</span>    <span class="keyword">auto</span>* ana = G4AnalysisManager::Instance();</div>
-<div class="line"><span class="lineno">   41</span>    G4String file {<span class="stringliteral">&quot;actgeant_test.root&quot;</span>};</div>
-<div class="line"><span class="lineno">   42</span>    ana-&gt;OpenFile(file);</div>
-<div class="line"><span class="lineno">   43</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">   60</span>{</div>
+<div class="line"><span class="lineno">   61</span>    <span class="keyword">auto</span>* ana = G4AnalysisManager::Instance();</div>
+<div class="line"><span class="lineno">   62</span>    G4String file {<span class="stringliteral">&quot;./Outputs/simu.root&quot;</span>};</div>
+<div class="line"><span class="lineno">   63</span>    <span class="comment">// auto* holder {DataHolder::Instance()};</span></div>
+<div class="line"><span class="lineno">   64</span>    <span class="comment">// file += &quot;simu_&quot; + holder-&gt;fReacInfo.fBeam + &quot;_ &quot; + holder-&gt;fReacInfo.fTarget + &quot;_&quot; + holder-&gt;fReacInfo.fLight +</span></div>
+<div class="line"><span class="lineno">   65</span>    <span class="comment">//         &quot;_ex_&quot; + TString::Format(&quot;%.2f&quot;, holder-&gt;fReacInfo.fEx).Data() + &quot;.root&quot;;</span></div>
+<div class="line"><span class="lineno">   66</span>    ana-&gt;OpenFile(file);</div>
+<div class="line"><span class="lineno">   67</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -240,12 +254,12 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   46</span>{</div>
-<div class="line"><span class="lineno">   47</span>    <span class="comment">// Write analys to file</span></div>
-<div class="line"><span class="lineno">   48</span>    <span class="keyword">auto</span>* ana = G4AnalysisManager::Instance();</div>
-<div class="line"><span class="lineno">   49</span>    ana-&gt;Write();</div>
-<div class="line"><span class="lineno">   50</span>    ana-&gt;CloseFile();</div>
-<div class="line"><span class="lineno">   51</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">   70</span>{</div>
+<div class="line"><span class="lineno">   71</span>    <span class="comment">// Write analys to file</span></div>
+<div class="line"><span class="lineno">   72</span>    <span class="keyword">auto</span>* ana = G4AnalysisManager::Instance();</div>
+<div class="line"><span class="lineno">   73</span>    ana-&gt;Write();</div>
+<div class="line"><span class="lineno">   74</span>    ana-&gt;CloseFile();</div>
+<div class="line"><span class="lineno">   75</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>

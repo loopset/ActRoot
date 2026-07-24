@@ -417,7 +417,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="lineno">  107</span> </div>
 <div class="line"><span class="lineno">  108</span>    <span class="keyword">auto</span>* padPlaneS {<span class="keyword">new</span> G4Box(<span class="stringliteral">&quot;PadPlane&quot;</span>, padPlaneX, padPlaneY, padPlaneZ)};</div>
 <div class="line"><span class="lineno">  109</span>    <span class="keyword">auto</span>* padPlaneLV =</div>
-<div class="line"><span class="lineno">  110</span>        <span class="keyword">new</span> G4LogicalVolume(padPlaneS, G4Material::GetMaterial(<span class="stringliteral">&quot;G4_Al&quot;</span>), <span class="stringliteral">&quot;PadPlane&quot;</span>); <span class="comment">// not the right material but ...</span></div>
+<div class="line"><span class="lineno">  110</span>        <span class="keyword">new</span> G4LogicalVolume(padPlaneS, G4Material::GetMaterial(<span class="stringliteral">&quot;Galactic&quot;</span>), <span class="stringliteral">&quot;PadPlane&quot;</span>); <span class="comment">// not the right material but ...</span></div>
 <div class="line"><span class="lineno">  111</span>    <span class="comment">//--place it above chamber</span></div>
 <div class="line"><span class="lineno">  112</span>    <span class="keyword">auto</span> padPlanePosX {0. * cm};</div>
 <div class="line"><span class="lineno">  113</span>    <span class="keyword">auto</span> padPlanePosY {0. * cm};</div>

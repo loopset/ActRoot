@@ -168,9 +168,9 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   70</span>{</div>
-<div class="line"><span class="lineno">   71</span>    <span class="keywordflow">return</span>;</div>
-<div class="line"><span class="lineno">   72</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">   71</span>{</div>
+<div class="line"><span class="lineno">   72</span>    <span class="keywordflow">return</span>;</div>
+<div class="line"><span class="lineno">   73</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -271,20 +271,21 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="lineno">   56</span>            <span class="keyword">auto</span>* phys {step-&gt;GetPreStepPoint()-&gt;GetTouchableHandle()-&gt;GetVolume()};</div>
 <div class="line"><span class="lineno">   57</span>            data.fSilLayer = phys-&gt;GetName();</div>
 <div class="line"><span class="lineno">   58</span>            data.fSilIdx = phys-&gt;GetCopyNo();</div>
-<div class="line"><span class="lineno">   59</span>            data.fIsIniSil = <span class="keyword">false</span>;</div>
-<div class="line"><span class="lineno">   60</span>        }</div>
-<div class="line"><span class="lineno">   61</span>        data.fSilDeltaE += step-&gt;GetTotalEnergyDeposit();</div>
-<div class="line"><span class="lineno">   62</span>        data.fSilEnd = <a class="code hl_function" href="classActGeant_1_1DataHolder.html#a72a962f5d8fd8af15040b8a0db71d18d">DataHolder::PointToVector</a>(step-&gt;GetPreStepPoint()-&gt;GetPosition());</div>
-<div class="line"><span class="lineno">   63</span>    }</div>
-<div class="line"><span class="lineno">   64</span> </div>
+<div class="line"><span class="lineno">   59</span>            data.fName = partDef-&gt;GetParticleName();</div>
+<div class="line"><span class="lineno">   60</span>            data.fIsIniSil = <span class="keyword">false</span>;</div>
+<div class="line"><span class="lineno">   61</span>        }</div>
+<div class="line"><span class="lineno">   62</span>        data.fSilDeltaE += step-&gt;GetTotalEnergyDeposit();</div>
+<div class="line"><span class="lineno">   63</span>        data.fSilEnd = <a class="code hl_function" href="classActGeant_1_1DataHolder.html#a72a962f5d8fd8af15040b8a0db71d18d">DataHolder::PointToVector</a>(step-&gt;GetPreStepPoint()-&gt;GetPosition());</div>
+<div class="line"><span class="lineno">   64</span>    }</div>
 <div class="line"><span class="lineno">   65</span> </div>
-<div class="line"><span class="lineno">   66</span>    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><span class="lineno">   67</span>}</div>
+<div class="line"><span class="lineno">   66</span> </div>
+<div class="line"><span class="lineno">   67</span>    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><span class="lineno">   68</span>}</div>
 <div class="ttc" id="aclassActGeant_1_1DataHolder_html_a72a962f5d8fd8af15040b8a0db71d18d"><div class="ttname"><a href="classActGeant_1_1DataHolder.html#a72a962f5d8fd8af15040b8a0db71d18d">ActGeant::DataHolder::PointToVector</a></div><div class="ttdeci">static Vector3DPoint PointToVector(const G4ThreeVector &amp;vec)</div><div class="ttdef"><b>Definition</b> ActGeantDataHolder.cc:22</div></div>
-<div class="ttc" id="aclassActGeant_1_1DataHolder_html_a90df1dd0191462bf271d3e5d8a04dd4e"><div class="ttname"><a href="classActGeant_1_1DataHolder.html#a90df1dd0191462bf271d3e5d8a04dd4e">ActGeant::DataHolder::fHeavy</a></div><div class="ttdeci">TrackInfo fHeavy</div><div class="ttdef"><b>Definition</b> ActGeantDataHolder.hh:17</div></div>
-<div class="ttc" id="aclassActGeant_1_1DataHolder_html_a92279961d8e99a38a68f5ac4386cdc73"><div class="ttname"><a href="classActGeant_1_1DataHolder.html#a92279961d8e99a38a68f5ac4386cdc73">ActGeant::DataHolder::fLight</a></div><div class="ttdeci">TrackInfo fLight</div><div class="ttdef"><b>Definition</b> ActGeantDataHolder.hh:16</div></div>
+<div class="ttc" id="aclassActGeant_1_1DataHolder_html_a90df1dd0191462bf271d3e5d8a04dd4e"><div class="ttname"><a href="classActGeant_1_1DataHolder.html#a90df1dd0191462bf271d3e5d8a04dd4e">ActGeant::DataHolder::fHeavy</a></div><div class="ttdeci">TrackInfo fHeavy</div><div class="ttdef"><b>Definition</b> ActGeantDataHolder.hh:19</div></div>
+<div class="ttc" id="aclassActGeant_1_1DataHolder_html_a92279961d8e99a38a68f5ac4386cdc73"><div class="ttname"><a href="classActGeant_1_1DataHolder.html#a92279961d8e99a38a68f5ac4386cdc73">ActGeant::DataHolder::fLight</a></div><div class="ttdeci">TrackInfo fLight</div><div class="ttdef"><b>Definition</b> ActGeantDataHolder.hh:18</div></div>
 <div class="ttc" id="aclassActGeant_1_1DataHolder_html_adb5b711bfec65a6ffc9c99e1e7184aef"><div class="ttname"><a href="classActGeant_1_1DataHolder.html#adb5b711bfec65a6ffc9c99e1e7184aef">ActGeant::DataHolder::Instance</a></div><div class="ttdeci">static DataHolder * Instance()</div><div class="ttdef"><b>Definition</b> ActGeantDataHolder.cc:8</div></div>
-<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_aa1c0691985cd295e7eebe5a9a6e970f5"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#aa1c0691985cd295e7eebe5a9a6e970f5">ActGeant::TrackInfo::fTrackID</a></div><div class="ttdeci">G4int fTrackID</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:42</div></div>
+<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_aa1c0691985cd295e7eebe5a9a6e970f5"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#aa1c0691985cd295e7eebe5a9a6e970f5">ActGeant::TrackInfo::fTrackID</a></div><div class="ttdeci">G4int fTrackID</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:56</div></div>
 </div><!-- fragment -->
 </div>
 </div>

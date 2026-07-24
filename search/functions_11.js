@@ -123,7 +123,7 @@ var searchData=
   ['split_120',['Split',['../classActAlgorithm_1_1Actions_1_1Split.html#ac3be8a12651a470dc77783d749b770bc',1,'ActAlgorithm::Actions::Split']]],
   ['splitregion_121',['SplitRegion',['../classActAlgorithm_1_1Actions_1_1SplitRegion.html#a6e6c226800721eb43983f8821adf4d53',1,'ActAlgorithm::Actions::SplitRegion']]],
   ['spreadcharge_122',['SpreadCharge',['../classActSim_1_1TrackGenerator.html#ab9b49094ddfb8c5725d999369e92e230',1,'ActSim::TrackGenerator']]],
-  ['srim_123',['srim',['../classActPhysics_1_1SRIM.html#a1b1cf1f7dc625361521825167abdfe15',1,'ActPhysics::SRIM::SRIM()=default'],['../classActPhysics_1_1SRIM.html#a400b092abae684e2826e869530fb7047',1,'ActPhysics::SRIM::SRIM(const std::string &amp;material, const std::string &amp;file)']]],
+  ['srim_123',['srim',['../classActPhysics_1_1SRIM.html#a1b1cf1f7dc625361521825167abdfe15',1,'ActPhysics::SRIM::SRIM()=default'],['../classActPhysics_1_1SRIM.html#a0057959e3d31019c53b9777c3158c542',1,'ActPhysics::SRIM::SRIM(const std::string &amp;material, const std::string &amp;file, bool isSRIM=true)']]],
   ['start_124',['start',['../classBS_1_1thread__pool_1_1blocks.html#a07a5edaab8af66bd1b2bc4a8b4cb134f',1,'BS::thread_pool::blocks::start()'],['../classBS_1_1timer.html#ad442341cacfb7970960a8e2090d66c10',1,'BS::timer::start()']]],
   ['steppingaction_125',['SteppingAction',['../classActGeant_1_1SteppingAction.html#a20cc96605a179be4817bc881d1910a4b',1,'ActGeant::SteppingAction']]],
   ['stop_126',['stop',['../classBS_1_1timer.html#aef4f43b7877eceaaaa1a34a5b58db903',1,'BS::timer']]],

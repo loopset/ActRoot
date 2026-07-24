@@ -114,13 +114,11 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4f6c281592d9f0195c4f1d1b67d4205b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad59eaf777114b17656b6c3ba7384ab5d" id="r_ad59eaf777114b17656b6c3ba7384ab5d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActGeant_1_1EventAction.html#ad59eaf777114b17656b6c3ba7384ab5d">EndOfEventAction</a> (const G4Event *event) override</td></tr>
 <tr class="separator:ad59eaf777114b17656b6c3ba7384ab5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a84c0355743eab37df7c3b59fdf0c881f" id="r_a84c0355743eab37df7c3b59fdf0c881f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActGeant_1_1EventAction.html#a84c0355743eab37df7c3b59fdf0c881f">AddEgas</a> (G4double de)</td></tr>
-<tr class="separator:a84c0355743eab37df7c3b59fdf0c881f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a806a94c16b214a417fb1ae9439e7eea2" id="r_a806a94c16b214a417fb1ae9439e7eea2"><td class="memItemLeft" align="right" valign="top">G4double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActGeant_1_1EventAction.html#a806a94c16b214a417fb1ae9439e7eea2">fGasEnergy</a> {}</td></tr>
-<tr class="separator:a806a94c16b214a417fb1ae9439e7eea2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6865270eab55920d8f3359c1b127ea7c" id="r_a6865270eab55920d8f3359c1b127ea7c"><td class="memItemLeft" align="right" valign="top">G4double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActGeant_1_1EventAction.html#a6865270eab55920d8f3359c1b127ea7c">fSiRes</a> {0.25}</td></tr>
+<tr class="separator:a6865270eab55920d8f3359c1b127ea7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a4e790d2993e860b37543b50d1f336731" name="a4e790d2993e860b37543b50d1f336731"></a>
@@ -137,7 +135,7 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   12</span>: G4UserEventAction() {}</div>
+<div class="fragment"><div class="line"><span class="lineno">   17</span>: G4UserEventAction() {}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -167,34 +165,6 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a84c0355743eab37df7c3b59fdf0c881f" name="a84c0355743eab37df7c3b59fdf0c881f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a84c0355743eab37df7c3b59fdf0c881f">&#9670;&#160;</a></span>AddEgas()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ActGeant::EventAction::AddEgas </td>
-          <td>(</td>
-          <td class="paramtype">G4double&#160;</td>
-          <td class="paramname"><em>de</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   21</span>{ <a class="code hl_variable" href="classActGeant_1_1EventAction.html#a806a94c16b214a417fb1ae9439e7eea2">fGasEnergy</a> += de; }</div>
-<div class="ttc" id="aclassActGeant_1_1EventAction_html_a806a94c16b214a417fb1ae9439e7eea2"><div class="ttname"><a href="classActGeant_1_1EventAction.html#a806a94c16b214a417fb1ae9439e7eea2">ActGeant::EventAction::fGasEnergy</a></div><div class="ttdeci">G4double fGasEnergy</div><div class="ttdef"><b>Definition</b> ActGeantEventAction.hh:12</div></div>
-</div><!-- fragment -->
-</div>
-</div>
 <a id="a4f6c281592d9f0195c4f1d1b67d4205b" name="a4f6c281592d9f0195c4f1d1b67d4205b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4f6c281592d9f0195c4f1d1b67d4205b">&#9670;&#160;</a></span>BeginOfEventAction()</h2>
 
@@ -218,7 +188,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   14</span>{}</div>
+<div class="fragment"><div class="line"><span class="lineno">   19</span>{}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -245,38 +215,50 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   17</span>{</div>
-<div class="line"><span class="lineno">   18</span>    <span class="comment">// Analysis manager</span></div>
-<div class="line"><span class="lineno">   19</span>    <span class="keyword">auto</span>* ana = G4AnalysisManager::Instance();</div>
-<div class="line"><span class="lineno">   20</span>    <span class="comment">//</span></div>
-<div class="line"><span class="lineno">   21</span>    <span class="comment">// // Data holder</span></div>
-<div class="line"><span class="lineno">   22</span>    <span class="keyword">auto</span>* holder {<a class="code hl_function" href="classActGeant_1_1DataHolder.html#adb5b711bfec65a6ffc9c99e1e7184aef">DataHolder::Instance</a>()};</div>
-<div class="line"><span class="lineno">   23</span>    <span class="comment">// Vertex</span></div>
-<div class="line"><span class="lineno">   24</span>    ana-&gt;FillNtupleDColumn(1, holder-&gt;fVertexInfo.fEBeam);</div>
-<div class="line"><span class="lineno">   25</span>    ana-&gt;FillNtupleDColumn(2, holder-&gt;fVertexInfo.fT3);</div>
-<div class="line"><span class="lineno">   26</span>    ana-&gt;FillNtupleDColumn(3, holder-&gt;fVertexInfo.ftheta3);</div>
-<div class="line"><span class="lineno">   27</span>    ana-&gt;FillNtupleDColumn(4, holder-&gt;fVertexInfo.fphi3);</div>
-<div class="line"><span class="lineno">   28</span>    ana-&gt;FillNtupleDColumn(5, holder-&gt;fVertexInfo.fT4);</div>
-<div class="line"><span class="lineno">   29</span>    ana-&gt;FillNtupleDColumn(6, holder-&gt;fVertexInfo.ftheta4);</div>
-<div class="line"><span class="lineno">   30</span>    ana-&gt;FillNtupleDColumn(7, holder-&gt;fVertexInfo.fphi4);</div>
-<div class="line"><span class="lineno">   31</span>    ana-&gt;FillNtupleDColumn(8, holder-&gt;fVertexInfo.fthetaCM);</div>
-<div class="line"><span class="lineno">   32</span>    <span class="comment">// Light</span></div>
-<div class="line"><span class="lineno">   33</span>    ana-&gt;FillNtupleDColumn(11, holder-&gt;fLight.fTPCDeltaE);</div>
-<div class="line"><span class="lineno">   34</span> </div>
-<div class="line"><span class="lineno">   35</span>    <span class="comment">// Write row (equivalent of TTree::Fill)</span></div>
-<div class="line"><span class="lineno">   36</span>    ana-&gt;AddNtupleRow();</div>
-<div class="line"><span class="lineno">   37</span> </div>
-<div class="line"><span class="lineno">   38</span>    <span class="comment">// Prepare for next iteration</span></div>
-<div class="line"><span class="lineno">   39</span>    holder-&gt;<a class="code hl_function" href="classActGeant_1_1DataHolder.html#ac082fed6a4d730f5bedb4e179ec1fa90">Clear</a>();</div>
-<div class="line"><span class="lineno">   40</span>}</div>
-<div class="ttc" id="aclassActGeant_1_1DataHolder_html_ac082fed6a4d730f5bedb4e179ec1fa90"><div class="ttname"><a href="classActGeant_1_1DataHolder.html#ac082fed6a4d730f5bedb4e179ec1fa90">ActGeant::DataHolder::Clear</a></div><div class="ttdeci">void Clear()</div><div class="ttdef"><b>Definition</b> ActGeantDataHolder.cc:15</div></div>
+<div class="fragment"><div class="line"><span class="lineno">   22</span>{</div>
+<div class="line"><span class="lineno">   23</span>    <span class="comment">// // Data holder</span></div>
+<div class="line"><span class="lineno">   24</span>    <span class="keyword">auto</span>* holder {<a class="code hl_function" href="classActGeant_1_1DataHolder.html#adb5b711bfec65a6ffc9c99e1e7184aef">DataHolder::Instance</a>()};</div>
+<div class="line"><span class="lineno">   25</span> </div>
+<div class="line"><span class="lineno">   26</span>    <span class="comment">// // Apply Si resolution</span></div>
+<div class="line"><span class="lineno">   27</span>    <span class="keyword">auto</span> silE {holder-&gt;<a class="code hl_variable" href="classActGeant_1_1DataHolder.html#a92279961d8e99a38a68f5ac4386cdc73">fLight</a>.<a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#ac24e5392c885ac1e1b31ec3e5b1bafa4">fSilDeltaE</a>};</div>
+<div class="line"><span class="lineno">   28</span>    holder-&gt;fLight.fSilDeltaE = G4RandGauss::shoot(silE, <a class="code hl_variable" href="classActGeant_1_1EventAction.html#a6865270eab55920d8f3359c1b127ea7c">fSiRes</a> * std::sqrt(silE / 5.5));</div>
+<div class="line"><span class="lineno">   29</span> </div>
+<div class="line"><span class="lineno">   30</span>    <span class="comment">// Analysis manager</span></div>
+<div class="line"><span class="lineno">   31</span>    <span class="keyword">auto</span>* ana = G4AnalysisManager::Instance();</div>
+<div class="line"><span class="lineno">   32</span>    <span class="comment">// Vertex</span></div>
+<div class="line"><span class="lineno">   33</span>    ana-&gt;FillNtupleDColumn(1, holder-&gt;fVertexInfo.fEBeam / MeV);</div>
+<div class="line"><span class="lineno">   34</span>    ana-&gt;FillNtupleDColumn(2, holder-&gt;fVertexInfo.fT3 / MeV);</div>
+<div class="line"><span class="lineno">   35</span>    ana-&gt;FillNtupleDColumn(3, holder-&gt;fVertexInfo.ftheta3 / deg);</div>
+<div class="line"><span class="lineno">   36</span>    ana-&gt;FillNtupleDColumn(4, holder-&gt;fVertexInfo.fphi3 / deg);</div>
+<div class="line"><span class="lineno">   37</span>    ana-&gt;FillNtupleDColumn(5, holder-&gt;fVertexInfo.fT4 / MeV);</div>
+<div class="line"><span class="lineno">   38</span>    ana-&gt;FillNtupleDColumn(6, holder-&gt;fVertexInfo.ftheta4 / deg);</div>
+<div class="line"><span class="lineno">   39</span>    ana-&gt;FillNtupleDColumn(7, holder-&gt;fVertexInfo.fphi4 / deg);</div>
+<div class="line"><span class="lineno">   40</span>    ana-&gt;FillNtupleDColumn(8, holder-&gt;fVertexInfo.fthetaCM / deg);</div>
+<div class="line"><span class="lineno">   41</span>    <span class="comment">// Light</span></div>
+<div class="line"><span class="lineno">   42</span>    ana-&gt;FillNtupleDColumn(11, holder-&gt;fLight.fTPCDeltaE / MeV);</div>
+<div class="line"><span class="lineno">   43</span>    ana-&gt;FillNtupleDColumn(14, holder-&gt;fLight.fSilDeltaE / MeV);</div>
+<div class="line"><span class="lineno">   44</span>    ana-&gt;FillNtupleSColumn(15, holder-&gt;fLight.fSilLayer);</div>
+<div class="line"><span class="lineno">   45</span>    ana-&gt;FillNtupleIColumn(16, holder-&gt;fLight.fSilIdx);</div>
+<div class="line"><span class="lineno">   46</span> </div>
+<div class="line"><span class="lineno">   47</span>    <span class="comment">// Name</span></div>
+<div class="line"><span class="lineno">   48</span>    ana-&gt;FillNtupleSColumn(17, holder-&gt;fLight.fName);</div>
+<div class="line"><span class="lineno">   49</span> </div>
+<div class="line"><span class="lineno">   50</span>    <span class="comment">// Write row (equivalent of TTree::Fill)</span></div>
+<div class="line"><span class="lineno">   51</span>    ana-&gt;AddNtupleRow();</div>
+<div class="line"><span class="lineno">   52</span> </div>
+<div class="line"><span class="lineno">   53</span>    <span class="comment">// Prepare for next iteration</span></div>
+<div class="line"><span class="lineno">   54</span>    holder-&gt;Clear();</div>
+<div class="line"><span class="lineno">   55</span>}</div>
+<div class="ttc" id="aclassActGeant_1_1DataHolder_html_a92279961d8e99a38a68f5ac4386cdc73"><div class="ttname"><a href="classActGeant_1_1DataHolder.html#a92279961d8e99a38a68f5ac4386cdc73">ActGeant::DataHolder::fLight</a></div><div class="ttdeci">TrackInfo fLight</div><div class="ttdef"><b>Definition</b> ActGeantDataHolder.hh:18</div></div>
 <div class="ttc" id="aclassActGeant_1_1DataHolder_html_adb5b711bfec65a6ffc9c99e1e7184aef"><div class="ttname"><a href="classActGeant_1_1DataHolder.html#adb5b711bfec65a6ffc9c99e1e7184aef">ActGeant::DataHolder::Instance</a></div><div class="ttdeci">static DataHolder * Instance()</div><div class="ttdef"><b>Definition</b> ActGeantDataHolder.cc:8</div></div>
+<div class="ttc" id="aclassActGeant_1_1EventAction_html_a6865270eab55920d8f3359c1b127ea7c"><div class="ttname"><a href="classActGeant_1_1EventAction.html#a6865270eab55920d8f3359c1b127ea7c">ActGeant::EventAction::fSiRes</a></div><div class="ttdeci">G4double fSiRes</div><div class="ttdef"><b>Definition</b> ActGeantEventAction.hh:13</div></div>
+<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_ac24e5392c885ac1e1b31ec3e5b1bafa4"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#ac24e5392c885ac1e1b31ec3e5b1bafa4">ActGeant::TrackInfo::fSilDeltaE</a></div><div class="ttdeci">G4double fSilDeltaE</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:50</div></div>
 </div><!-- fragment -->
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a806a94c16b214a417fb1ae9439e7eea2" name="a806a94c16b214a417fb1ae9439e7eea2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a806a94c16b214a417fb1ae9439e7eea2">&#9670;&#160;</a></span>fGasEnergy</h2>
+<a id="a6865270eab55920d8f3359c1b127ea7c" name="a6865270eab55920d8f3359c1b127ea7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6865270eab55920d8f3359c1b127ea7c">&#9670;&#160;</a></span>fSiRes</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -285,7 +267,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">G4double ActGeant::EventAction::fGasEnergy {}</td>
+          <td class="memname">G4double ActGeant::EventAction::fSiRes {0.25}</td>
         </tr>
       </table>
   </td>
@@ -294,7 +276,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   12</span>{};</div>
+<div class="fragment"><div class="line"><span class="lineno">   13</span>{0.25}; <span class="comment">// Silicon resolution, so far hardcoded. Measured at 5.5 MeV</span></div>
 </div><!-- fragment -->
 </div>
 </div>

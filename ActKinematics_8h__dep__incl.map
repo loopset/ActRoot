@@ -1,17 +1,15 @@
 <map id="Physics/inc/ActKinematics.h" name="Physics/inc/ActKinematics.h">
-<area shape="rect" id="Node000001" title=" " alt="" coords="250,5,454,31"/>
-<area shape="rect" id="Node000002" href="$ActKinematics_8cxx.html" title=" " alt="" coords="5,86,224,111"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="305,37,150,89,148,83,304,32"/>
-<area shape="rect" id="Node000003" href="$ActKinematicGenerator_8h.html" title=" " alt="" coords="249,79,455,119"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="355,44,355,79,349,79,349,44"/>
-<area shape="rect" id="Node000007" href="$ActKinematicGenerator_8cxx.html" title=" " alt="" coords="390,167,597,207"/>
-<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="407,33,441,51,470,77,483,99,491,123,496,166,491,167,485,124,478,101,466,80,438,55,405,38"/>
-<area shape="rect" id="Node000004" href="$ActGeantPrimaryGenerator_8hh.html" title=" " alt="" coords="107,167,314,207"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="311,128,243,169,240,164,308,123"/>
-<area shape="rect" id="Node000006" href="$ActGeantPrimaryGenerator_8cc.html" title=" " alt="" coords="249,255,455,295"/>
-<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="355,132,355,254,349,254,349,132"/>
-<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="396,123,464,164,461,169,393,128"/>
-<area shape="rect" id="Node000005" href="$ActGeantActionInitialization_8cc.html" title=" " alt="" coords="27,255,224,295"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="184,218,146,256,142,253,180,215"/>
-<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="255,211,322,252,320,257,252,216"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="274,5,478,31"/>
+<area shape="rect" id="Node000002" href="$ActGeantPrimaryGenerator_8cc.html" title=" " alt="" coords="156,167,362,207"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="261,25,188,31,116,42,57,58,35,68,20,80,9,98,10,114,20,127,39,139,92,159,156,171,155,177,91,164,36,144,17,131,5,116,4,97,16,77,32,64,55,53,115,37,188,26,260,20"/>
+<area shape="rect" id="Node000003" href="$ActGeantUtility_8cc.html" title=" " alt="" coords="30,86,242,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="329,37,172,89,170,83,328,32"/>
+<area shape="rect" id="Node000004" href="$ActKinematics_8cxx.html" title=" " alt="" coords="267,86,486,111"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="379,44,379,86,374,86,374,44"/>
+<area shape="rect" id="Node000005" href="$ActKinematicGenerator_8h.html" title=" " alt="" coords="510,79,717,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="425,32,557,76,556,81,423,37"/>
+<area shape="rect" id="Node000006" href="$ActKinematicGenerator_8cxx.html" title=" " alt="" coords="581,167,788,207"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="493,20,564,27,634,37,694,53,716,64,732,77,738,88,741,100,735,125,722,148,705,168,701,165,717,145,730,123,735,100,733,90,728,80,713,69,692,58,633,42,563,32,492,26"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="523,124,337,169,336,164,522,119"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="640,128,671,165,667,168,636,131"/>
 </map>

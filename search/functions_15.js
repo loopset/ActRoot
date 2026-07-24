@@ -5,6 +5,8 @@ var searchData=
   ['wait_5funtil_2',['wait_until',['../classBS_1_1multi__future.html#ad7e095316d61714456281cb3d30325a1',1,'BS::multi_future::wait_until()'],['../classBS_1_1thread__pool.html#a467e8c017965228950dacdbc73f0ae9c',1,'BS::thread_pool::wait_until(const std::chrono::time_point&lt; C, D &gt; &amp;timeout_time)']]],
   ['worker_3',['worker',['../classBS_1_1thread__pool.html#a0449c4a34e857dc9f6fce504278bf9af',1,'BS::thread_pool']]],
   ['write_4',['write',['../classActPhysics_1_1GenCorrection.html#a7f166f7d70f47f5bae7d3a3cb21787fb',1,'ActPhysics::GenCorrection::Write()'],['../classActPhysics_1_1PIDCorrection.html#a96d3a956a29ebb5f7903a495ea80fec3',1,'ActPhysics::PIDCorrection::Write()'],['../classActPhysics_1_1SilMatrix.html#abb120a3e2d58fb243434c2738e9184a5',1,'ActPhysics::SilMatrix::Write(const std::string &amp;file)'],['../classActPhysics_1_1SilMatrix.html#a83a429412ecceacf21fdd51a4a103933',1,'ActPhysics::SilMatrix::Write()']]],
-  ['writegeometry_5',['WriteGeometry',['../classActSim_1_1Geometry.html#a3d3aca94f12412b0f97439b19357cd47',1,'ActSim::Geometry']]],
-  ['writemetadata_6',['WriteMetadata',['../classActRoot_1_1OutputData.html#ade1e383735a4583483d74783264702d7',1,'ActRoot::OutputData']]]
+  ['writededxtable_5',['WriteDEDXTable',['../namespaceActGeant.html#a9174f63404cee9effb1b05b87ddefd23',1,'ActGeant']]],
+  ['writededxtables_6',['WriteDEDXTables',['../namespaceActGeant.html#a4542600e01a233315bbdf3c8e3c8affc',1,'ActGeant']]],
+  ['writegeometry_7',['WriteGeometry',['../classActSim_1_1Geometry.html#a3d3aca94f12412b0f97439b19357cd47',1,'ActSim::Geometry']]],
+  ['writemetadata_8',['WriteMetadata',['../classActRoot_1_1OutputData.html#ade1e383735a4583483d74783264702d7',1,'ActRoot::OutputData']]]
 ];

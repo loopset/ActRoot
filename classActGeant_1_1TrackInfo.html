@@ -107,6 +107,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:af22d9104f14c4346fcb47b95efc73fc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8cc9e37734005e6fba70b28e02eef4e4" id="r_a8cc9e37734005e6fba70b28e02eef4e4"><td class="memItemLeft" align="right" valign="top">G4int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActGeant_1_1TrackInfo.html#a8cc9e37734005e6fba70b28e02eef4e4">fSilIdx</a> {-1}</td></tr>
 <tr class="separator:a8cc9e37734005e6fba70b28e02eef4e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9a6f7e2cfbd41b3e1d1a3603a80df03" id="r_aa9a6f7e2cfbd41b3e1d1a3603a80df03"><td class="memItemLeft" align="right" valign="top">G4String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActGeant_1_1TrackInfo.html#aa9a6f7e2cfbd41b3e1d1a3603a80df03">fName</a> {}</td></tr>
+<tr class="separator:aa9a6f7e2cfbd41b3e1d1a3603a80df03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5cd577f1e15a69b277697dbf6064970" id="r_af5cd577f1e15a69b277697dbf6064970"><td class="memItemLeft" align="right" valign="top">G4int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActGeant_1_1TrackInfo.html#af5cd577f1e15a69b277697dbf6064970">fZ</a> {-1}</td></tr>
 <tr class="separator:af5cd577f1e15a69b277697dbf6064970"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85aa8ba160c58ac5ddcae45bffad3d59" id="r_a85aa8ba160c58ac5ddcae45bffad3d59"><td class="memItemLeft" align="right" valign="top">G4int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActGeant_1_1TrackInfo.html#a85aa8ba160c58ac5ddcae45bffad3d59">fA</a> {-1}</td></tr>
@@ -133,32 +135,34 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   23</span>{</div>
-<div class="line"><span class="lineno">   24</span>    G4cout &lt;&lt; <a class="code hl_define" href="ActColors_8h.html#a4a6c893a1703c33ede7d702fe5f97c91">BOLDGREEN</a> &lt;&lt; <span class="stringliteral">&quot;···· TrackInfo ····&quot;</span> &lt;&lt; G4endl;</div>
-<div class="line"><span class="lineno">   25</span>    G4cout &lt;&lt; <span class="stringliteral">&quot;  (Z,A) : (&quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#af5cd577f1e15a69b277697dbf6064970">fZ</a> &lt;&lt; <span class="stringliteral">&quot;, &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#a85aa8ba160c58ac5ddcae45bffad3d59">fA</a> &lt;&lt; <span class="stringliteral">&quot;)&quot;</span> &lt;&lt; G4endl;</div>
-<div class="line"><span class="lineno">   26</span>    G4cout &lt;&lt; <span class="stringliteral">&quot;  TPC&quot;</span> &lt;&lt; G4endl;</div>
-<div class="line"><span class="lineno">   27</span>    G4cout &lt;&lt; <span class="stringliteral">&quot;    dE  : &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#a01b5275f2148c58af1ea2729afb38d00">fTPCDeltaE</a> &lt;&lt; G4endl;</div>
-<div class="line"><span class="lineno">   28</span>    G4cout &lt;&lt; <span class="stringliteral">&quot;    Ini : (&quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#ae96787c4c954c94159a92671c3483a7d">fTPCIni</a>[0] &lt;&lt; <span class="stringliteral">&quot;, &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#ae96787c4c954c94159a92671c3483a7d">fTPCIni</a>[1] &lt;&lt; <span class="stringliteral">&quot;, &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#ae96787c4c954c94159a92671c3483a7d">fTPCIni</a>[2] &lt;&lt; <span class="stringliteral">&quot;)&quot;</span> &lt;&lt; G4endl;</div>
-<div class="line"><span class="lineno">   29</span>    G4cout &lt;&lt; <span class="stringliteral">&quot;    End : (&quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#a51c44555bbc505415d15c60748ddb0cd">fTPCEnd</a>[0] &lt;&lt; <span class="stringliteral">&quot;, &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#a51c44555bbc505415d15c60748ddb0cd">fTPCEnd</a>[1] &lt;&lt; <span class="stringliteral">&quot;, &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#a51c44555bbc505415d15c60748ddb0cd">fTPCEnd</a>[2] &lt;&lt; <span class="stringliteral">&quot;)&quot;</span> &lt;&lt; G4endl;</div>
-<div class="line"><span class="lineno">   30</span>    G4cout &lt;&lt; <span class="stringliteral">&quot;  Silicon&quot;</span> &lt;&lt; G4endl;</div>
-<div class="line"><span class="lineno">   31</span>    G4cout &lt;&lt; <span class="stringliteral">&quot;    Layer : &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#af22d9104f14c4346fcb47b95efc73fc8">fSilLayer</a> &lt;&lt; G4endl;</div>
-<div class="line"><span class="lineno">   32</span>    G4cout &lt;&lt; <span class="stringliteral">&quot;    Index : &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#a8cc9e37734005e6fba70b28e02eef4e4">fSilIdx</a> &lt;&lt; G4endl;</div>
-<div class="line"><span class="lineno">   33</span>    G4cout &lt;&lt; <span class="stringliteral">&quot;    dE    : &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#ac24e5392c885ac1e1b31ec3e5b1bafa4">fSilDeltaE</a> &lt;&lt; G4endl;</div>
-<div class="line"><span class="lineno">   34</span>    G4cout &lt;&lt; <span class="stringliteral">&quot;    Ini   : (&quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#a4fdac4adc99adc846e7c711b0868eeca">fSilIni</a>[0] &lt;&lt; <span class="stringliteral">&quot;, &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#a4fdac4adc99adc846e7c711b0868eeca">fSilIni</a>[1] &lt;&lt; <span class="stringliteral">&quot;, &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#a4fdac4adc99adc846e7c711b0868eeca">fSilIni</a>[2] &lt;&lt; <span class="stringliteral">&quot;)&quot;</span> &lt;&lt; G4endl;</div>
-<div class="line"><span class="lineno">   35</span>    G4cout &lt;&lt; <span class="stringliteral">&quot;    End   : (&quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#ae475efbed70b41df8ffb589107bcf8fc">fSilEnd</a>[0] &lt;&lt; <span class="stringliteral">&quot;, &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#ae475efbed70b41df8ffb589107bcf8fc">fSilEnd</a>[1] &lt;&lt; <span class="stringliteral">&quot;, &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#ae475efbed70b41df8ffb589107bcf8fc">fSilEnd</a>[2] &lt;&lt; <span class="stringliteral">&quot;)&quot;</span> &lt;&lt; <a class="code hl_define" href="ActColors_8h.html#ab702106cf3b3e96750b6845ded4e0299">RESET</a> &lt;&lt; G4endl;</div>
-<div class="line"><span class="lineno">   36</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">   34</span>{</div>
+<div class="line"><span class="lineno">   35</span>    G4cout &lt;&lt; <a class="code hl_define" href="ActColors_8h.html#a4a6c893a1703c33ede7d702fe5f97c91">BOLDGREEN</a> &lt;&lt; <span class="stringliteral">&quot;···· TrackInfo ····&quot;</span> &lt;&lt; G4endl;</div>
+<div class="line"><span class="lineno">   36</span>    G4cout &lt;&lt; <span class="stringliteral">&quot;  Name  : &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#aa9a6f7e2cfbd41b3e1d1a3603a80df03">fName</a> &lt;&lt; G4endl;</div>
+<div class="line"><span class="lineno">   37</span>    G4cout &lt;&lt; <span class="stringliteral">&quot;  (Z,A) : (&quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#af5cd577f1e15a69b277697dbf6064970">fZ</a> &lt;&lt; <span class="stringliteral">&quot;, &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#a85aa8ba160c58ac5ddcae45bffad3d59">fA</a> &lt;&lt; <span class="stringliteral">&quot;)&quot;</span> &lt;&lt; G4endl;</div>
+<div class="line"><span class="lineno">   38</span>    G4cout &lt;&lt; <span class="stringliteral">&quot;  TPC&quot;</span> &lt;&lt; G4endl;</div>
+<div class="line"><span class="lineno">   39</span>    G4cout &lt;&lt; <span class="stringliteral">&quot;    dE  : &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#a01b5275f2148c58af1ea2729afb38d00">fTPCDeltaE</a> &lt;&lt; G4endl;</div>
+<div class="line"><span class="lineno">   40</span>    G4cout &lt;&lt; <span class="stringliteral">&quot;    Ini : (&quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#ae96787c4c954c94159a92671c3483a7d">fTPCIni</a>[0] &lt;&lt; <span class="stringliteral">&quot;, &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#ae96787c4c954c94159a92671c3483a7d">fTPCIni</a>[1] &lt;&lt; <span class="stringliteral">&quot;, &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#ae96787c4c954c94159a92671c3483a7d">fTPCIni</a>[2] &lt;&lt; <span class="stringliteral">&quot;)&quot;</span> &lt;&lt; G4endl;</div>
+<div class="line"><span class="lineno">   41</span>    G4cout &lt;&lt; <span class="stringliteral">&quot;    End : (&quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#a51c44555bbc505415d15c60748ddb0cd">fTPCEnd</a>[0] &lt;&lt; <span class="stringliteral">&quot;, &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#a51c44555bbc505415d15c60748ddb0cd">fTPCEnd</a>[1] &lt;&lt; <span class="stringliteral">&quot;, &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#a51c44555bbc505415d15c60748ddb0cd">fTPCEnd</a>[2] &lt;&lt; <span class="stringliteral">&quot;)&quot;</span> &lt;&lt; G4endl;</div>
+<div class="line"><span class="lineno">   42</span>    G4cout &lt;&lt; <span class="stringliteral">&quot;  Silicon&quot;</span> &lt;&lt; G4endl;</div>
+<div class="line"><span class="lineno">   43</span>    G4cout &lt;&lt; <span class="stringliteral">&quot;    Layer : &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#af22d9104f14c4346fcb47b95efc73fc8">fSilLayer</a> &lt;&lt; G4endl;</div>
+<div class="line"><span class="lineno">   44</span>    G4cout &lt;&lt; <span class="stringliteral">&quot;    Index : &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#a8cc9e37734005e6fba70b28e02eef4e4">fSilIdx</a> &lt;&lt; G4endl;</div>
+<div class="line"><span class="lineno">   45</span>    G4cout &lt;&lt; <span class="stringliteral">&quot;    dE    : &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#ac24e5392c885ac1e1b31ec3e5b1bafa4">fSilDeltaE</a> &lt;&lt; G4endl;</div>
+<div class="line"><span class="lineno">   46</span>    G4cout &lt;&lt; <span class="stringliteral">&quot;    Ini   : (&quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#a4fdac4adc99adc846e7c711b0868eeca">fSilIni</a>[0] &lt;&lt; <span class="stringliteral">&quot;, &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#a4fdac4adc99adc846e7c711b0868eeca">fSilIni</a>[1] &lt;&lt; <span class="stringliteral">&quot;, &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#a4fdac4adc99adc846e7c711b0868eeca">fSilIni</a>[2] &lt;&lt; <span class="stringliteral">&quot;)&quot;</span> &lt;&lt; G4endl;</div>
+<div class="line"><span class="lineno">   47</span>    G4cout &lt;&lt; <span class="stringliteral">&quot;    End   : (&quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#ae475efbed70b41df8ffb589107bcf8fc">fSilEnd</a>[0] &lt;&lt; <span class="stringliteral">&quot;, &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#ae475efbed70b41df8ffb589107bcf8fc">fSilEnd</a>[1] &lt;&lt; <span class="stringliteral">&quot;, &quot;</span> &lt;&lt; <a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#ae475efbed70b41df8ffb589107bcf8fc">fSilEnd</a>[2] &lt;&lt; <span class="stringliteral">&quot;)&quot;</span> &lt;&lt; <a class="code hl_define" href="ActColors_8h.html#ab702106cf3b3e96750b6845ded4e0299">RESET</a> &lt;&lt; G4endl;</div>
+<div class="line"><span class="lineno">   48</span>}</div>
 <div class="ttc" id="aActColors_8h_html_a4a6c893a1703c33ede7d702fe5f97c91"><div class="ttname"><a href="ActColors_8h.html#a4a6c893a1703c33ede7d702fe5f97c91">BOLDGREEN</a></div><div class="ttdeci">#define BOLDGREEN</div><div class="ttdef"><b>Definition</b> ActColors.h:17</div></div>
 <div class="ttc" id="aActColors_8h_html_ab702106cf3b3e96750b6845ded4e0299"><div class="ttname"><a href="ActColors_8h.html#ab702106cf3b3e96750b6845ded4e0299">RESET</a></div><div class="ttdeci">#define RESET</div><div class="ttdef"><b>Definition</b> ActColors.h:6</div></div>
-<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_a01b5275f2148c58af1ea2729afb38d00"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#a01b5275f2148c58af1ea2729afb38d00">ActGeant::TrackInfo::fTPCDeltaE</a></div><div class="ttdeci">G4double fTPCDeltaE</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:36</div></div>
-<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_a4fdac4adc99adc846e7c711b0868eeca"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#a4fdac4adc99adc846e7c711b0868eeca">ActGeant::TrackInfo::fSilIni</a></div><div class="ttdeci">Vector3DPoint fSilIni</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:34</div></div>
-<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_a51c44555bbc505415d15c60748ddb0cd"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#a51c44555bbc505415d15c60748ddb0cd">ActGeant::TrackInfo::fTPCEnd</a></div><div class="ttdeci">Vector3DPoint fTPCEnd</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:33</div></div>
-<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_a85aa8ba160c58ac5ddcae45bffad3d59"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#a85aa8ba160c58ac5ddcae45bffad3d59">ActGeant::TrackInfo::fA</a></div><div class="ttdeci">G4int fA</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:41</div></div>
-<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_a8cc9e37734005e6fba70b28e02eef4e4"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#a8cc9e37734005e6fba70b28e02eef4e4">ActGeant::TrackInfo::fSilIdx</a></div><div class="ttdeci">G4int fSilIdx</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:39</div></div>
-<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_ac24e5392c885ac1e1b31ec3e5b1bafa4"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#ac24e5392c885ac1e1b31ec3e5b1bafa4">ActGeant::TrackInfo::fSilDeltaE</a></div><div class="ttdeci">G4double fSilDeltaE</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:37</div></div>
-<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_ae475efbed70b41df8ffb589107bcf8fc"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#ae475efbed70b41df8ffb589107bcf8fc">ActGeant::TrackInfo::fSilEnd</a></div><div class="ttdeci">Vector3DPoint fSilEnd</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:35</div></div>
-<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_ae96787c4c954c94159a92671c3483a7d"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#ae96787c4c954c94159a92671c3483a7d">ActGeant::TrackInfo::fTPCIni</a></div><div class="ttdeci">Vector3DPoint fTPCIni</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:32</div></div>
-<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_af22d9104f14c4346fcb47b95efc73fc8"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#af22d9104f14c4346fcb47b95efc73fc8">ActGeant::TrackInfo::fSilLayer</a></div><div class="ttdeci">G4String fSilLayer</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:38</div></div>
-<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_af5cd577f1e15a69b277697dbf6064970"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#af5cd577f1e15a69b277697dbf6064970">ActGeant::TrackInfo::fZ</a></div><div class="ttdeci">G4int fZ</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:40</div></div>
+<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_a01b5275f2148c58af1ea2729afb38d00"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#a01b5275f2148c58af1ea2729afb38d00">ActGeant::TrackInfo::fTPCDeltaE</a></div><div class="ttdeci">G4double fTPCDeltaE</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:49</div></div>
+<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_a4fdac4adc99adc846e7c711b0868eeca"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#a4fdac4adc99adc846e7c711b0868eeca">ActGeant::TrackInfo::fSilIni</a></div><div class="ttdeci">Vector3DPoint fSilIni</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:47</div></div>
+<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_a51c44555bbc505415d15c60748ddb0cd"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#a51c44555bbc505415d15c60748ddb0cd">ActGeant::TrackInfo::fTPCEnd</a></div><div class="ttdeci">Vector3DPoint fTPCEnd</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:46</div></div>
+<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_a85aa8ba160c58ac5ddcae45bffad3d59"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#a85aa8ba160c58ac5ddcae45bffad3d59">ActGeant::TrackInfo::fA</a></div><div class="ttdeci">G4int fA</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:55</div></div>
+<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_a8cc9e37734005e6fba70b28e02eef4e4"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#a8cc9e37734005e6fba70b28e02eef4e4">ActGeant::TrackInfo::fSilIdx</a></div><div class="ttdeci">G4int fSilIdx</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:52</div></div>
+<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_aa9a6f7e2cfbd41b3e1d1a3603a80df03"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#aa9a6f7e2cfbd41b3e1d1a3603a80df03">ActGeant::TrackInfo::fName</a></div><div class="ttdeci">G4String fName</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:53</div></div>
+<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_ac24e5392c885ac1e1b31ec3e5b1bafa4"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#ac24e5392c885ac1e1b31ec3e5b1bafa4">ActGeant::TrackInfo::fSilDeltaE</a></div><div class="ttdeci">G4double fSilDeltaE</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:50</div></div>
+<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_ae475efbed70b41df8ffb589107bcf8fc"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#ae475efbed70b41df8ffb589107bcf8fc">ActGeant::TrackInfo::fSilEnd</a></div><div class="ttdeci">Vector3DPoint fSilEnd</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:48</div></div>
+<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_ae96787c4c954c94159a92671c3483a7d"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#ae96787c4c954c94159a92671c3483a7d">ActGeant::TrackInfo::fTPCIni</a></div><div class="ttdeci">Vector3DPoint fTPCIni</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:45</div></div>
+<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_af22d9104f14c4346fcb47b95efc73fc8"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#af22d9104f14c4346fcb47b95efc73fc8">ActGeant::TrackInfo::fSilLayer</a></div><div class="ttdeci">G4String fSilLayer</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:51</div></div>
+<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_af5cd577f1e15a69b277697dbf6064970"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#af5cd577f1e15a69b277697dbf6064970">ActGeant::TrackInfo::fZ</a></div><div class="ttdeci">G4int fZ</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:54</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -174,7 +178,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   41</span>{-1};</div>
+<div class="fragment"><div class="line"><span class="lineno">   55</span>{-1};</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -189,7 +193,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   44</span>{<span class="keyword">true</span>};</div>
+<div class="fragment"><div class="line"><span class="lineno">   58</span>{<span class="keyword">true</span>};</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -204,7 +208,22 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   43</span>{<span class="keyword">true</span>};</div>
+<div class="fragment"><div class="line"><span class="lineno">   57</span>{<span class="keyword">true</span>};</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="aa9a6f7e2cfbd41b3e1d1a3603a80df03" name="aa9a6f7e2cfbd41b3e1d1a3603a80df03"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9a6f7e2cfbd41b3e1d1a3603a80df03">&#9670;&#160;</a></span>fName</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">G4String ActGeant::TrackInfo::fName {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="fragment"><div class="line"><span class="lineno">   53</span>{};</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -219,7 +238,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   37</span>{0};</div>
+<div class="fragment"><div class="line"><span class="lineno">   50</span>{0};</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -234,7 +253,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   35</span>{};</div>
+<div class="fragment"><div class="line"><span class="lineno">   48</span>{};</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -249,7 +268,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   39</span>{-1};</div>
+<div class="fragment"><div class="line"><span class="lineno">   52</span>{-1};</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -264,7 +283,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   34</span>{};</div>
+<div class="fragment"><div class="line"><span class="lineno">   47</span>{};</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -279,7 +298,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   38</span>{};</div>
+<div class="fragment"><div class="line"><span class="lineno">   51</span>{};</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -294,7 +313,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   36</span>{0};</div>
+<div class="fragment"><div class="line"><span class="lineno">   49</span>{0};</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -309,7 +328,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   33</span>{};</div>
+<div class="fragment"><div class="line"><span class="lineno">   46</span>{};</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -324,7 +343,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   32</span>{};</div>
+<div class="fragment"><div class="line"><span class="lineno">   45</span>{};</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -339,7 +358,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   42</span>{-1};</div>
+<div class="fragment"><div class="line"><span class="lineno">   56</span>{-1};</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -354,7 +373,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   40</span>{-1};</div>
+<div class="fragment"><div class="line"><span class="lineno">   54</span>{-1};</div>
 </div><!-- fragment -->
 </div>
 </div>

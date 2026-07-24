@@ -7,7 +7,9 @@ var searchData=
   ['white_4',['WHITE',['../ActColors_8h.html#a87b537f5fa5c109d3c05c13d6b18f382',1,'ActColors.h']]],
   ['worker_5',['worker',['../classBS_1_1thread__pool.html#a0449c4a34e857dc9f6fce504278bf9af',1,'BS::thread_pool']]],
   ['workers_5frunning_6',['workers_running',['../classBS_1_1thread__pool.html#a031db7480dd2ff3d13a4ba3d0aec3bc9',1,'BS::thread_pool']]],
-  ['write_7',['write',['../classActPhysics_1_1GenCorrection.html#a7f166f7d70f47f5bae7d3a3cb21787fb',1,'ActPhysics::GenCorrection::Write()'],['../classActPhysics_1_1PIDCorrection.html#a96d3a956a29ebb5f7903a495ea80fec3',1,'ActPhysics::PIDCorrection::Write()'],['../classActPhysics_1_1SilMatrix.html#abb120a3e2d58fb243434c2738e9184a5',1,'ActPhysics::SilMatrix::Write(const std::string &amp;file)'],['../classActPhysics_1_1SilMatrix.html#a83a429412ecceacf21fdd51a4a103933',1,'ActPhysics::SilMatrix::Write()']]],
-  ['writegeometry_8',['WriteGeometry',['../classActSim_1_1Geometry.html#a3d3aca94f12412b0f97439b19357cd47',1,'ActSim::Geometry']]],
-  ['writemetadata_9',['WriteMetadata',['../classActRoot_1_1OutputData.html#ade1e383735a4583483d74783264702d7',1,'ActRoot::OutputData']]]
+  ['write_7',['write',['../classActPhysics_1_1PIDCorrection.html#a96d3a956a29ebb5f7903a495ea80fec3',1,'ActPhysics::PIDCorrection::Write()'],['../classActPhysics_1_1SilMatrix.html#abb120a3e2d58fb243434c2738e9184a5',1,'ActPhysics::SilMatrix::Write(const std::string &amp;file)'],['../classActPhysics_1_1SilMatrix.html#a83a429412ecceacf21fdd51a4a103933',1,'ActPhysics::SilMatrix::Write()'],['../classActPhysics_1_1GenCorrection.html#a7f166f7d70f47f5bae7d3a3cb21787fb',1,'ActPhysics::GenCorrection::Write()']]],
+  ['writededxtable_8',['WriteDEDXTable',['../namespaceActGeant.html#a9174f63404cee9effb1b05b87ddefd23',1,'ActGeant']]],
+  ['writededxtables_9',['WriteDEDXTables',['../namespaceActGeant.html#a4542600e01a233315bbdf3c8e3c8affc',1,'ActGeant']]],
+  ['writegeometry_10',['WriteGeometry',['../classActSim_1_1Geometry.html#a3d3aca94f12412b0f97439b19357cd47',1,'ActSim::Geometry']]],
+  ['writemetadata_11',['WriteMetadata',['../classActRoot_1_1OutputData.html#ade1e383735a4583483d74783264702d7',1,'ActRoot::OutputData']]]
 ];
