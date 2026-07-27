@@ -4,6 +4,8 @@
 #include "ActKinematics.h"
 #include "ActOptions.h"
 
+#include "TString.h"
+
 #include "G4Material.hh"
 #include "G4ParticleDefinition.hh"
 
@@ -75,4 +77,20 @@ void ActGeant::WriteDEDXTables(const G4String& dir)
             WriteDEDXTable(part, mat, file);
         }
     }
+}
+
+G4String ActGeant::GetOutputFilename()
+{
+    auto config {ActRoot::Options::GetInstance()->GetConfigDir() + "geant.conf"};
+    ActRoot::InputParser parser {config};
+    auto block {parser.GetBlock("Kinematics")};
+    auto reac {block->GetStringVector("Reaction")};
+    auto aux {reac[0] + "," + reac[1]};
+    // Init kinematics
+    ActPhysics::Kinematics kin {aux};
+
+    return TString::Format("simu_%s_%s_%s_ebeam_%.2f_ex_%.2f.root", kin.GetParticle(1).GetName().c_str(),
+                           kin.GetParticle(2).GetName().c_str(), kin.GetParticle(3).GetName().c_str(), kin.GetT1Lab(),
+                           kin.GetEx())
+        .Data();
 }

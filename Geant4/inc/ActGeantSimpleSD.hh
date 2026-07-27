@@ -16,6 +16,8 @@ class SimpleSD : public G4VSensitiveDetector
 {
 private:
     G4bool fIsSil {};
+    G4String fCurrentLayer {};
+    G4bool fIsFirstLayer {true};
 
 public:
     SimpleSD(const G4String& name);

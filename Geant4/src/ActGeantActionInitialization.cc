@@ -5,17 +5,21 @@
 #include "ActGeantRunAction.hh"
 #include "ActGeantSteppingAction.hh"
 
-ActGeant::ActionInitialization::ActionInitialization(DetectorConstruction* det) : fDetConstruction(det) {}
+#include <G4String.hh>
+
+ActGeant::ActionInitialization::ActionInitialization(const G4String& file) : fOutFile(file) {}
 
 void ActGeant::ActionInitialization::BuildForMaster() const
 {
-    SetUserAction(new RunAction);
+    auto* runAction {new RunAction {fOutFile}};
+    SetUserAction(runAction);
 }
 
 void ActGeant::ActionInitialization::Build() const
 {
     SetUserAction(new PrimaryGenerator);
     SetUserAction(new EventAction);
-    SetUserAction(new SteppingAction());
-    SetUserAction(new RunAction);
+    SetUserAction(new SteppingAction);
+    auto* runAction {new RunAction {fOutFile}};
+    SetUserAction(runAction);
 }

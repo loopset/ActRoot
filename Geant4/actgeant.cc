@@ -98,7 +98,9 @@ int main(int argc, char** argv)
     auto physicsList = new ActGeant::PhysicsList();
     runManager->SetUserInitialization(physicsList);
 
-    auto actionInitialization = new ActGeant::ActionInitialization(detConstruction);
+    // User actions, getting proper file name for output
+    auto outFile {ActGeant::GetOutputFilename()};
+    auto actionInitialization = new ActGeant::ActionInitialization {outFile};
     runManager->SetUserInitialization(actionInitialization);
 
     // Initialize visualization

@@ -26,6 +26,7 @@ public:
 class VertexInfo
 {
 public:
+    Vector3DPoint fWP {};
     Vector3DPoint fRP {};
     G4double fEBeam {};
     G4double fT3 {};
@@ -42,20 +43,33 @@ public:
 class TrackInfo
 {
 public:
-    Vector3DPoint fTPCIni {};
-    Vector3DPoint fTPCEnd {};
-    Vector3DPoint fSilIni {};
-    Vector3DPoint fSilEnd {};
-    G4double fTPCDeltaE {0};
-    G4double fSilDeltaE {0};
-    G4String fSilLayer {};
-    G4int fSilIdx {-1};
+    // Common particle info
     G4String fName {};
     G4int fZ {-1};
     G4int fA {-1};
     G4int fTrackID {-1};
+    // TPC info
+    G4double fTPCDeltaE {0};
+    Vector3DPoint fTPCIni {};
+    Vector3DPoint fTPCEnd {};
     G4bool fIsIniTPC {true};
-    G4bool fIsIniSil {true};
+    // Si layer 0
+    G4double fSilDeltaE0 {0};
+    G4double fSilEAfter0 {-1};
+    Vector3DPoint fSilIni0 {};
+    Vector3DPoint fSilEnd0 {};
+    G4String fSilLayer0 {};
+    G4int fSilIdx0 {-1};
+    G4bool fIsIniSil0 {true};
+    // Si layer 1
+    G4double fSilDeltaE1 {0};
+    G4double fSilEAfter1 {-1};
+    Vector3DPoint fSilIni1 {};
+    Vector3DPoint fSilEnd1 {};
+    G4String fSilLayer1 {};
+    G4int fSilIdx1 {-1};
+    G4bool fIsIniSil1 {true};
+
     void Print() const;
 };
 } // namespace ActGeant

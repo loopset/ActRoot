@@ -9,6 +9,7 @@
 #include "TAttLine.h"
 #include "TCanvas.h"
 #include "TF1.h"
+#include "TGraph.h"
 #include "TGraphErrors.h"
 #include "TMathBase.h"
 #include "TString.h"
@@ -752,4 +753,35 @@ std::shared_ptr<ActPhysics::Kinematics> ActPhysics::Kinematics::GetOtherKinemati
     if(!fOtherKin)
         InitOtherKinematics();
     return fOtherKin;
+}
+
+TGraph* ActPhysics::Kinematics::EvalQMatching(double emin, double emax, double step) const
+{
+    // Inspired by TWOFNR calculation
+    auto eval {[this](Kinematics& k)
+               {
+                   auto tcm {k.GetECM() - (fm1 + fm2)};
+                   // Incoming
+                   auto muIn {fm1 * fm2 / (fm1 + fm2)};
+                   // 197.33 = hbar * c required for units conversion
+                   auto kIn {TMath::Sqrt(2 * muIn * tcm) / 197.33};
+                   // Outgoing
+                   auto muOut {fm3 * fm4 / (fm3 + fm4)};
+                   auto ecmOut {tcm + fQvalue};
+                   auto kOut {TMath::Sqrt(2 * muOut * ecmOut) / 197.33};
+                   // Radius
+                   auto r {1.2 * TMath::Power(fp1.GetA(), 1. / 3)};
+                   return TMath::Abs(kIn - kOut) * r;
+               }};
+
+    auto* ret {new TGraph};
+    ret->SetTitle("Q-matching;T_{beam} [MeV];l #hbar");
+    for(double e = emin; e <= emax; e += step)
+    {
+        auto k {*this};
+        k.SetBeamEnergy(e);
+        auto lhbar {eval(k)};
+        ret->AddPoint(e, lhbar);
+    }
+    return ret;
 }

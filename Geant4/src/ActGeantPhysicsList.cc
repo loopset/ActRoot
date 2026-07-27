@@ -22,6 +22,11 @@ ActGeant::PhysicsList::PhysicsList() : G4VModularPhysicsList()
 
     // Ignore decays
     // RegisterPhysics(new G4DecayPhysics);
+
+    // Enable transportation with MSc
+    // auto* emPars {G4EmParameters::Instance()};
+    // emPars->SetTransportationWithMsc(G4TransportationWithMscType::fEnabled);
+    // emPars->Dump();
 }
 
 void ActGeant::PhysicsList::ConstructParticle()

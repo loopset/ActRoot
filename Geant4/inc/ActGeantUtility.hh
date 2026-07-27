@@ -8,6 +8,9 @@ class G4Material;
 
 namespace ActGeant
 {
+
+G4String GetOutputFilename();
+
 void WriteDEDXTable(G4ParticleDefinition* p, G4Material* m, const G4String& file);
 
 void WriteDEDXTables(const G4String& dir);

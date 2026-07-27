@@ -11,6 +11,9 @@
 #include "Randomize.hh"
 
 #include "TLorentzVector.h"
+#include "TROOT.h"
+
+#include "Math/GenVector/AxisAngle.h"
 
 #include "G4Box.hh"
 #include "G4EmCalculator.hh"
@@ -73,12 +76,15 @@ ActGeant::PrimaryGenerator::PrimaryGenerator()
     }
 
     // Cross section
-    auto file {kin->GetString("CrossSection")};
-    if(file.size())
+    std::string xsfile {};
+    if(kin->CheckTokenExists("CrossSection", true))
+        xsfile = kin->GetString("CrossSection");
+    if(xsfile.size())
     {
-        G4cout << "Reading cross section from file: " << file << G4endl;
+        G4cout << "Reading cross section from file: " << xsfile << G4endl;
+        ROOT::EnableThreadSafety();
         fCrossSection = new ActSim::CrossSection;
-        fCrossSection->ReadUsingTGraph(file);
+        fCrossSection->ReadUsingTGraph(xsfile);
     }
 
     // Beam parameters
@@ -121,8 +127,8 @@ void ActGeant::PrimaryGenerator::GeneratePrimaries(G4Event* event)
     auto xHalfLength {driftBox->GetXHalfLength()};
 
     // 1-> Entrance point
-    G4ThreeVector entrance {0, G4RandGauss::shoot(0, fBeamSigmaXY), // assuming beam perfectly centred in Y
-                            G4RandGauss::shoot(fBeamCentreZ, fBeamSigmaZ)};
+    G4ThreeVector window {0, G4RandGauss::shoot(0, fBeamSigmaXY), // assuming beam perfectly centred in Y
+                          G4RandGauss::shoot(fBeamCentreZ, fBeamSigmaZ)};
 
     // 2-> Vertex
     // Sampling again gaussian.... not realistic bc real beam has a given emittance
@@ -130,7 +136,7 @@ void ActGeant::PrimaryGenerator::GeneratePrimaries(G4Event* event)
                           G4RandGauss::shoot(0, fBeamSigmaXY), // assuming beam perfectly centred in Y
                           G4RandGauss::shoot(fBeamCentreZ, fBeamSigmaZ)};
     // 3-> Beam direction
-    auto beamDir {vertex - entrance};
+    auto beamDir {vertex - window};
 
     // Shoot beam
     // WARNING: disabled as tracking the beam and then two recoild requires a more complex implementation
@@ -143,7 +149,7 @@ void ActGeant::PrimaryGenerator::GeneratePrimaries(G4Event* event)
     // fParticleGun->GeneratePrimaryVertex(event);
 
     // Slow down beam
-    auto d {(vertex - entrance).r()};
+    auto d {(vertex - window).r()};
     auto EBeamAtVertex {SlowDownBeam(fPartDefs[0], fEBeam, d, driftLog->GetMaterial())};
 
     // Generate kinematics
@@ -194,25 +200,31 @@ void ActGeant::PrimaryGenerator::GeneratePrimaries(G4Event* event)
         phiCM = phi3;
     }
 
-    G4ThreeVector dir3 {std::cos(theta3), std::sin(theta3) * std::sin(phi3), std::sin(theta3) * std::cos(phi3)};
+    // This is beam frame, but we must convert to geometry frame
+    G4ThreeVector lightDirBeamFrame {std::cos(theta3), std::sin(theta3) * std::sin(phi3),
+                                     std::sin(theta3) * std::cos(phi3)};
+    G4ThreeVector lightDir {RotateToWorld(lightDirBeamFrame, beamDir)};
     // Shoot
     fParticleGun->SetParticleDefinition(fPartDefs[2]);
     fParticleGun->SetParticlePosition(vertex);
-    fParticleGun->SetParticleMomentumDirection(dir3);
+    fParticleGun->SetParticleMomentumDirection(lightDir);
     fParticleGun->SetParticleEnergy(T3);
     fParticleGun->GeneratePrimaryVertex(event);
 
     // Heavy
-    G4ThreeVector dir4 {std::cos(theta4), std::sin(theta4) * std::sin(phi4), std::sin(theta4) * std::cos(phi4)};
-    fParticleGun->SetParticleDefinition(fPartDefs[3]);
-    fParticleGun->SetParticlePosition(vertex);
-    fParticleGun->SetParticleMomentumDirection(dir4);
-    fParticleGun->SetParticleEnergy(T4);
-    fParticleGun->GeneratePrimaryVertex(event);
+    G4ThreeVector heavyDirBeamFrame {std::cos(theta4), std::sin(theta4) * std::sin(phi4),
+                                     std::sin(theta4) * std::cos(phi4)};
+    G4ThreeVector heavyDir {RotateToWorld(heavyDirBeamFrame, beamDir)};
+    // fParticleGun->SetParticleDefinition(fPartDefs[3]);
+    // fParticleGun->SetParticlePosition(vertex);
+    // fParticleGun->SetParticleMomentumDirection(heavyDir);
+    // fParticleGun->SetParticleEnergy(T4);
+    // fParticleGun->GeneratePrimaryVertex(event);
 
     // Send to data holder
     auto* holder {DataHolder::Instance()};
     auto& info {holder->fVertexInfo};
+    info.fWP = DataHolder::PointToVector(window);
     info.fRP = DataHolder::PointToVector(vertex);
     info.fEBeam = EBeamAtVertex;
     info.fT3 = T3;
@@ -268,4 +280,23 @@ void ActGeant::PrimaryGenerator::InitialiseParticles()
         }
         fPartDefs.push_back(def);
     }
+}
+
+G4ThreeVector ActGeant::PrimaryGenerator::RotateToWorld(const G4ThreeVector& vec, const G4ThreeVector& beamDir)
+{
+
+    // Usually a sampled reaction returns the angles in the beam frame
+    //  But to compute geometrical things (propagate that track to a silicon)
+    //  We need to work in the "geometry = world" frame,
+    //  where in ACTAR the "beam" goes in {1, 0, 0}
+    //  Using XYZPoint and XYZVector is easy to compute it,
+    //  as quoted here: https://root-forum.cern.ch/t/get-3x3-rotation-matrix-between-two-tvector3/60070
+    //  Using only GenVector classes
+    auto originalFrame {beamDir.unit()};
+    G4ThreeVector worldFrame {1, 0, 0};
+    auto cross {worldFrame.cross(originalFrame)}; // this defines the rotation axis
+    auto angle {std::acos(originalFrame.dot(worldFrame))};
+    ROOT::Math::AxisAngle axis {cross, angle};
+    ROOT::Math::Rotation3D rotation {axis};
+    return rotation(vec);
 }

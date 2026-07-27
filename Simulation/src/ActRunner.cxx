@@ -221,6 +221,7 @@ ActSim::Runner::RotateToWorldFrame(const XYZVector& vBeamFrame, const XYZVector&
     XYZVector worldFrame {1, 0, 0};
     auto cross {worldFrame.Cross(originalFrame)}; // this defines the rotation axis
     auto angle {TMath::ACos(originalFrame.Dot(worldFrame))};
+    // Using legacy code I have from ROOT
     ROOT::Math::AxisAngle axis {cross, angle};
     ROOT::Math::Rotation3D rotation {axis};
     return rotation(vBeamFrame);

@@ -5,6 +5,7 @@
 #include "G4VUserPrimaryGeneratorAction.hh"
 
 #include <G4Material.hh>
+#include <G4ThreeVector.hh>
 
 #include <vector>
 
@@ -49,6 +50,7 @@ public:
 private:
     double SlowDownBeam(G4ParticleDefinition* part, double E, double d, G4Material* mat);
     void InitialiseParticles();
+    G4ThreeVector RotateToWorld(const G4ThreeVector& vec, const G4ThreeVector& beamDir);
 };
 } // namespace ActGeant
 #endif

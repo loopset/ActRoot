@@ -2,8 +2,6 @@
 
 #include "ActGeantDataHolder.hh"
 
-#include "TString.h"
-
 #include "G4AnalysisManager.hh"
 #include "G4Run.hh"
 #include "G4RunManager.hh"
@@ -14,9 +12,7 @@
 #include <G4Threading.hh>
 #include <G4ios.hh>
 
-#include <vector>
-
-ActGeant::RunAction::RunAction()
+ActGeant::RunAction::RunAction(const G4String& outFile) : fOutFile(outFile)
 {
     G4RunManager::GetRunManager()->SetPrintProgress(true);
     auto* ana = G4AnalysisManager::Instance();
@@ -43,15 +39,25 @@ ActGeant::RunAction::RunAction()
     ana->CreateNtupleDColumn("TPCEnd", holder->fLight.fTPCEnd);
     ana->CreateNtupleDColumn("TPCDeltaE"); // 11
 
-    // Silicon
-    ana->CreateNtupleDColumn("SilIni", holder->fLight.fSilIni); // 12
-    ana->CreateNtupleDColumn("SilEnd", holder->fLight.fSilEnd); // 13
-    ana->CreateNtupleDColumn("SilDeltaE");                      // 14
-    ana->CreateNtupleSColumn("SilLayer");                       // 15
-    ana->CreateNtupleIColumn("SilIdx");                         // 16
+    // Si layer 0
+    ana->CreateNtupleDColumn("SilIni0", holder->fLight.fSilIni0); // 12
+    ana->CreateNtupleDColumn("SilEnd0", holder->fLight.fSilEnd0); // 13
+    ana->CreateNtupleDColumn("SilDeltaE0");                       // 14
+    ana->CreateNtupleDColumn("SilEAfter0");                       // 15
+    ana->CreateNtupleSColumn("SilLayer0");                        // 16
+    ana->CreateNtupleIColumn("SilIdx0");                          // 17
+    // Si layer 1
+    ana->CreateNtupleDColumn("SilIni1", holder->fLight.fSilIni1); // 18
+    ana->CreateNtupleDColumn("SilEnd1", holder->fLight.fSilEnd1); // 19
+    ana->CreateNtupleDColumn("SilDeltaE1");                       // 20
+    ana->CreateNtupleDColumn("SilEAfter1");                       // 21
+    ana->CreateNtupleSColumn("SilLayer1");                        // 22
+    ana->CreateNtupleIColumn("SilIdx1");                          // 23
 
     // Particle name
-    ana->CreateNtupleSColumn("PartName"); // 17
+    ana->CreateNtupleSColumn("PartName"); // 24
+    // others that i forgot to include before
+    ana->CreateNtupleDColumn("WP", holder->fVertexInfo.fWP);
 
     ana->FinishNtuple();
 }
@@ -59,10 +65,7 @@ ActGeant::RunAction::RunAction()
 void ActGeant::RunAction::BeginOfRunAction(const G4Run* run)
 {
     auto* ana = G4AnalysisManager::Instance();
-    G4String file {"./Outputs/simu.root"};
-    // auto* holder {DataHolder::Instance()};
-    // file += "simu_" + holder->fReacInfo.fBeam + "_ " + holder->fReacInfo.fTarget + "_" + holder->fReacInfo.fLight +
-    //         "_ex_" + TString::Format("%.2f", holder->fReacInfo.fEx).Data() + ".root";
+    G4String file {"./Outputs/" + fOutFile};
     ana->OpenFile(file);
 }
 

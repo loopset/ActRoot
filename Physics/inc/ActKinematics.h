@@ -127,6 +127,7 @@ public:
                                                 //!< kinematics: inverse->direct
     std::pair<double, double>
     ComputeOtherInLab(double thetaCM); //!< Kin of 3rd particle in other kinematics for fixed thetaCM
+    TGraph* EvalQMatching(double emin, double emax, double step = 10) const;
 
     // Setters
     void SetBeamEnergy(double T1);
@@ -155,6 +156,7 @@ public:
     double GetMass(unsigned int index) const;
     std::tuple<double, double, double, double> GetMasses() const;
     FourVector GetPInitialLab() const { return fPInitialLab; }
+    FourVector GetPInitialCM() const { return fPInitialCM; }
     double GetQValue() const { return fQvalue; }
     double GetT1Thresh() const;
     const Particle& GetParticle(unsigned int i) const;
