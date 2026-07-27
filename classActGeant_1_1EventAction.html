@@ -216,43 +216,55 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="lineno">   22</span>{</div>
-<div class="line"><span class="lineno">   23</span>    <span class="comment">// // Data holder</span></div>
+<div class="line"><span class="lineno">   23</span>    <span class="comment">// Data holder</span></div>
 <div class="line"><span class="lineno">   24</span>    <span class="keyword">auto</span>* holder {<a class="code hl_function" href="classActGeant_1_1DataHolder.html#adb5b711bfec65a6ffc9c99e1e7184aef">DataHolder::Instance</a>()};</div>
 <div class="line"><span class="lineno">   25</span> </div>
-<div class="line"><span class="lineno">   26</span>    <span class="comment">// // Apply Si resolution</span></div>
-<div class="line"><span class="lineno">   27</span>    <span class="keyword">auto</span> silE {holder-&gt;<a class="code hl_variable" href="classActGeant_1_1DataHolder.html#a92279961d8e99a38a68f5ac4386cdc73">fLight</a>.<a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#ac24e5392c885ac1e1b31ec3e5b1bafa4">fSilDeltaE</a>};</div>
-<div class="line"><span class="lineno">   28</span>    holder-&gt;fLight.fSilDeltaE = G4RandGauss::shoot(silE, <a class="code hl_variable" href="classActGeant_1_1EventAction.html#a6865270eab55920d8f3359c1b127ea7c">fSiRes</a> * std::sqrt(silE / 5.5));</div>
-<div class="line"><span class="lineno">   29</span> </div>
-<div class="line"><span class="lineno">   30</span>    <span class="comment">// Analysis manager</span></div>
-<div class="line"><span class="lineno">   31</span>    <span class="keyword">auto</span>* ana = G4AnalysisManager::Instance();</div>
-<div class="line"><span class="lineno">   32</span>    <span class="comment">// Vertex</span></div>
-<div class="line"><span class="lineno">   33</span>    ana-&gt;FillNtupleDColumn(1, holder-&gt;fVertexInfo.fEBeam / MeV);</div>
-<div class="line"><span class="lineno">   34</span>    ana-&gt;FillNtupleDColumn(2, holder-&gt;fVertexInfo.fT3 / MeV);</div>
-<div class="line"><span class="lineno">   35</span>    ana-&gt;FillNtupleDColumn(3, holder-&gt;fVertexInfo.ftheta3 / deg);</div>
-<div class="line"><span class="lineno">   36</span>    ana-&gt;FillNtupleDColumn(4, holder-&gt;fVertexInfo.fphi3 / deg);</div>
-<div class="line"><span class="lineno">   37</span>    ana-&gt;FillNtupleDColumn(5, holder-&gt;fVertexInfo.fT4 / MeV);</div>
-<div class="line"><span class="lineno">   38</span>    ana-&gt;FillNtupleDColumn(6, holder-&gt;fVertexInfo.ftheta4 / deg);</div>
-<div class="line"><span class="lineno">   39</span>    ana-&gt;FillNtupleDColumn(7, holder-&gt;fVertexInfo.fphi4 / deg);</div>
-<div class="line"><span class="lineno">   40</span>    ana-&gt;FillNtupleDColumn(8, holder-&gt;fVertexInfo.fthetaCM / deg);</div>
-<div class="line"><span class="lineno">   41</span>    <span class="comment">// Light</span></div>
-<div class="line"><span class="lineno">   42</span>    ana-&gt;FillNtupleDColumn(11, holder-&gt;fLight.fTPCDeltaE / MeV);</div>
-<div class="line"><span class="lineno">   43</span>    ana-&gt;FillNtupleDColumn(14, holder-&gt;fLight.fSilDeltaE / MeV);</div>
-<div class="line"><span class="lineno">   44</span>    ana-&gt;FillNtupleSColumn(15, holder-&gt;fLight.fSilLayer);</div>
-<div class="line"><span class="lineno">   45</span>    ana-&gt;FillNtupleIColumn(16, holder-&gt;fLight.fSilIdx);</div>
-<div class="line"><span class="lineno">   46</span> </div>
-<div class="line"><span class="lineno">   47</span>    <span class="comment">// Name</span></div>
-<div class="line"><span class="lineno">   48</span>    ana-&gt;FillNtupleSColumn(17, holder-&gt;fLight.fName);</div>
+<div class="line"><span class="lineno">   26</span>    <span class="comment">// Apply Si resolution</span></div>
+<div class="line"><span class="lineno">   27</span>    <span class="keyword">auto</span> deltaE0 {holder-&gt;<a class="code hl_variable" href="classActGeant_1_1DataHolder.html#a92279961d8e99a38a68f5ac4386cdc73">fLight</a>.<a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#aaa282ef392aa3efc1fa4c1eb8c99b0dd">fSilDeltaE0</a>};</div>
+<div class="line"><span class="lineno">   28</span>    <span class="keywordflow">if</span>(deltaE0 &gt; 0)</div>
+<div class="line"><span class="lineno">   29</span>        holder-&gt;fLight.fSilDeltaE0 = G4RandGauss::shoot(deltaE0, <a class="code hl_variable" href="classActGeant_1_1EventAction.html#a6865270eab55920d8f3359c1b127ea7c">fSiRes</a> * std::sqrt(deltaE0 / 5.5));</div>
+<div class="line"><span class="lineno">   30</span>    <span class="keyword">auto</span> deltaE1 {holder-&gt;fLight.fSilDeltaE1};</div>
+<div class="line"><span class="lineno">   31</span>    <span class="keywordflow">if</span>(deltaE1 &gt; 0)</div>
+<div class="line"><span class="lineno">   32</span>        holder-&gt;fLight.fSilDeltaE1 = G4RandGauss::shoot(deltaE1, <a class="code hl_variable" href="classActGeant_1_1EventAction.html#a6865270eab55920d8f3359c1b127ea7c">fSiRes</a> * std::sqrt(deltaE1 / 5.5));</div>
+<div class="line"><span class="lineno">   33</span> </div>
+<div class="line"><span class="lineno">   34</span>    <span class="comment">// Analysis manager</span></div>
+<div class="line"><span class="lineno">   35</span>    <span class="keyword">auto</span>* ana = G4AnalysisManager::Instance();</div>
+<div class="line"><span class="lineno">   37</span>    ana-&gt;FillNtupleDColumn(1, holder-&gt;fVertexInfo.fEBeam / MeV);</div>
+<div class="line"><span class="lineno">   38</span>    ana-&gt;FillNtupleDColumn(2, holder-&gt;fVertexInfo.fT3 / MeV);</div>
+<div class="line"><span class="lineno">   39</span>    ana-&gt;FillNtupleDColumn(3, holder-&gt;fVertexInfo.ftheta3 / deg);</div>
+<div class="line"><span class="lineno">   40</span>    ana-&gt;FillNtupleDColumn(4, holder-&gt;fVertexInfo.fphi3 / deg);</div>
+<div class="line"><span class="lineno">   41</span>    ana-&gt;FillNtupleDColumn(5, holder-&gt;fVertexInfo.fT4 / MeV);</div>
+<div class="line"><span class="lineno">   42</span>    ana-&gt;FillNtupleDColumn(6, holder-&gt;fVertexInfo.ftheta4 / deg);</div>
+<div class="line"><span class="lineno">   43</span>    ana-&gt;FillNtupleDColumn(7, holder-&gt;fVertexInfo.fphi4 / deg);</div>
+<div class="line"><span class="lineno">   44</span>    ana-&gt;FillNtupleDColumn(8, holder-&gt;fVertexInfo.fthetaCM / deg);</div>
+<div class="line"><span class="lineno">   45</span> </div>
+<div class="line"><span class="lineno">   47</span>    <span class="comment">// TPC</span></div>
+<div class="line"><span class="lineno">   48</span>    ana-&gt;FillNtupleDColumn(11, holder-&gt;fLight.fTPCDeltaE / MeV);</div>
 <div class="line"><span class="lineno">   49</span> </div>
-<div class="line"><span class="lineno">   50</span>    <span class="comment">// Write row (equivalent of TTree::Fill)</span></div>
-<div class="line"><span class="lineno">   51</span>    ana-&gt;AddNtupleRow();</div>
-<div class="line"><span class="lineno">   52</span> </div>
-<div class="line"><span class="lineno">   53</span>    <span class="comment">// Prepare for next iteration</span></div>
-<div class="line"><span class="lineno">   54</span>    holder-&gt;Clear();</div>
-<div class="line"><span class="lineno">   55</span>}</div>
+<div class="line"><span class="lineno">   50</span>    <span class="comment">// Si layer 0</span></div>
+<div class="line"><span class="lineno">   51</span>    ana-&gt;FillNtupleDColumn(14, holder-&gt;fLight.fSilDeltaE0 / MeV);</div>
+<div class="line"><span class="lineno">   52</span>    ana-&gt;FillNtupleDColumn(15, holder-&gt;fLight.fSilEAfter0 / MeV);</div>
+<div class="line"><span class="lineno">   53</span>    ana-&gt;FillNtupleSColumn(16, holder-&gt;fLight.fSilLayer0);</div>
+<div class="line"><span class="lineno">   54</span>    ana-&gt;FillNtupleIColumn(17, holder-&gt;fLight.fSilIdx0);</div>
+<div class="line"><span class="lineno">   55</span>    <span class="comment">// Si layer 1</span></div>
+<div class="line"><span class="lineno">   56</span>    ana-&gt;FillNtupleDColumn(20, holder-&gt;fLight.fSilDeltaE1);</div>
+<div class="line"><span class="lineno">   57</span>    ana-&gt;FillNtupleDColumn(21, holder-&gt;fLight.fSilEAfter1);</div>
+<div class="line"><span class="lineno">   58</span>    ana-&gt;FillNtupleSColumn(22, holder-&gt;fLight.fSilLayer1);</div>
+<div class="line"><span class="lineno">   59</span>    ana-&gt;FillNtupleIColumn(23, holder-&gt;fLight.fSilIdx1);</div>
+<div class="line"><span class="lineno">   60</span> </div>
+<div class="line"><span class="lineno">   61</span>    <span class="comment">// Particle name</span></div>
+<div class="line"><span class="lineno">   62</span>    ana-&gt;FillNtupleSColumn(24, holder-&gt;fLight.fName);</div>
+<div class="line"><span class="lineno">   63</span> </div>
+<div class="line"><span class="lineno">   64</span>    <span class="comment">// Write row (equivalent of TTree::Fill)</span></div>
+<div class="line"><span class="lineno">   65</span>    ana-&gt;AddNtupleRow();</div>
+<div class="line"><span class="lineno">   66</span> </div>
+<div class="line"><span class="lineno">   67</span>    <span class="comment">// Prepare for next iteration</span></div>
+<div class="line"><span class="lineno">   68</span>    holder-&gt;Clear();</div>
+<div class="line"><span class="lineno">   69</span>}</div>
 <div class="ttc" id="aclassActGeant_1_1DataHolder_html_a92279961d8e99a38a68f5ac4386cdc73"><div class="ttname"><a href="classActGeant_1_1DataHolder.html#a92279961d8e99a38a68f5ac4386cdc73">ActGeant::DataHolder::fLight</a></div><div class="ttdeci">TrackInfo fLight</div><div class="ttdef"><b>Definition</b> ActGeantDataHolder.hh:18</div></div>
 <div class="ttc" id="aclassActGeant_1_1DataHolder_html_adb5b711bfec65a6ffc9c99e1e7184aef"><div class="ttname"><a href="classActGeant_1_1DataHolder.html#adb5b711bfec65a6ffc9c99e1e7184aef">ActGeant::DataHolder::Instance</a></div><div class="ttdeci">static DataHolder * Instance()</div><div class="ttdef"><b>Definition</b> ActGeantDataHolder.cc:8</div></div>
 <div class="ttc" id="aclassActGeant_1_1EventAction_html_a6865270eab55920d8f3359c1b127ea7c"><div class="ttname"><a href="classActGeant_1_1EventAction.html#a6865270eab55920d8f3359c1b127ea7c">ActGeant::EventAction::fSiRes</a></div><div class="ttdeci">G4double fSiRes</div><div class="ttdef"><b>Definition</b> ActGeantEventAction.hh:13</div></div>
-<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_ac24e5392c885ac1e1b31ec3e5b1bafa4"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#ac24e5392c885ac1e1b31ec3e5b1bafa4">ActGeant::TrackInfo::fSilDeltaE</a></div><div class="ttdeci">G4double fSilDeltaE</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:50</div></div>
+<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_aaa282ef392aa3efc1fa4c1eb8c99b0dd"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#aaa282ef392aa3efc1fa4c1eb8c99b0dd">ActGeant::TrackInfo::fSilDeltaE0</a></div><div class="ttdeci">G4double fSilDeltaE0</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:57</div></div>
 </div><!-- fragment -->
 </div>
 </div>

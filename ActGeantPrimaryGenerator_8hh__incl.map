@@ -1,11 +1,13 @@
 <map id="Geant4/inc/ActGeantPrimaryGenerator.hh" name="Geant4/inc/ActGeantPrimaryGenerator.hh">
-<area shape="rect" id="Node000001" title=" " alt="" coords="329,5,535,45"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="434,5,641,45"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="5,93,176,119"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="351,48,154,93,153,88,350,43"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="434,47,169,94,168,88,433,42"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="200,93,456,119"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="408,48,356,87,353,83,405,43"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="488,48,373,91,371,86,486,43"/>
 <area shape="rect" id="Node000004" title=" " alt="" coords="480,93,595,119"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="459,43,512,83,509,87,456,48"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="619,93,682,119"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="485,43,607,86,605,91,483,48"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="540,46,540,79,535,79,535,46"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="619,93,757,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="575,43,655,84,652,89,572,48"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="781,93,843,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="604,43,768,90,767,95,602,48"/>
 </map>

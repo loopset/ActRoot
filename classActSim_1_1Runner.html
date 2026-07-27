@@ -735,14 +735,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">  239</span>{</div>
-<div class="line"><span class="lineno">  240</span>    <a class="code hl_class" href="classActRoot_1_1InputParser.html">ActRoot::InputParser</a> parser {file};</div>
-<div class="line"><span class="lineno">  241</span>    <span class="keyword">auto</span> block {parser.<a class="code hl_function" href="classActRoot_1_1InputParser.html#a171a94bd3f09160982d9402e72176850">GetBlock</a>(<span class="stringliteral">&quot;Simulation&quot;</span>)};</div>
-<div class="line"><span class="lineno">  242</span>    <a class="code hl_function" href="classActSim_1_1Runner.html#afe976669cd52211381323892d2ae64bb">ReadConfiguration</a>(block);</div>
-<div class="line"><span class="lineno">  243</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">  240</span>{</div>
+<div class="line"><span class="lineno">  241</span>    <a class="code hl_class" href="classActRoot_1_1InputParser.html">ActRoot::InputParser</a> parser {file};</div>
+<div class="line"><span class="lineno">  242</span>    <span class="keyword">auto</span> block {parser.<a class="code hl_function" href="classActRoot_1_1InputParser.html#a171a94bd3f09160982d9402e72176850">GetBlock</a>(<span class="stringliteral">&quot;Simulation&quot;</span>)};</div>
+<div class="line"><span class="lineno">  243</span>    <a class="code hl_function" href="classActSim_1_1Runner.html#afe976669cd52211381323892d2ae64bb">ReadConfiguration</a>(block);</div>
+<div class="line"><span class="lineno">  244</span>}</div>
 <div class="ttc" id="aclassActRoot_1_1InputParser_html"><div class="ttname"><a href="classActRoot_1_1InputParser.html">ActRoot::InputParser</a></div><div class="ttdef"><b>Definition</b> ActInputParser.h:111</div></div>
 <div class="ttc" id="aclassActRoot_1_1InputParser_html_a171a94bd3f09160982d9402e72176850"><div class="ttname"><a href="classActRoot_1_1InputParser.html#a171a94bd3f09160982d9402e72176850">ActRoot::InputParser::GetBlock</a></div><div class="ttdeci">BlockPtr GetBlock(const std::string &amp;header) const</div><div class="ttdef"><b>Definition</b> ActInputParser.cxx:311</div></div>
-<div class="ttc" id="aclassActSim_1_1Runner_html_afe976669cd52211381323892d2ae64bb"><div class="ttname"><a href="classActSim_1_1Runner.html#afe976669cd52211381323892d2ae64bb">ActSim::Runner::ReadConfiguration</a></div><div class="ttdeci">void ReadConfiguration(std::shared_ptr&lt; ActRoot::InputBlock &gt; block)</div><div class="ttdef"><b>Definition</b> ActRunner.cxx:229</div></div>
+<div class="ttc" id="aclassActSim_1_1Runner_html_afe976669cd52211381323892d2ae64bb"><div class="ttname"><a href="classActSim_1_1Runner.html#afe976669cd52211381323892d2ae64bb">ActSim::Runner::ReadConfiguration</a></div><div class="ttdeci">void ReadConfiguration(std::shared_ptr&lt; ActRoot::InputBlock &gt; block)</div><div class="ttdef"><b>Definition</b> ActRunner.cxx:230</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -761,13 +761,13 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">  230</span>{</div>
-<div class="line"><span class="lineno">  231</span>    <span class="comment">// 1-&gt; Vertex sampling perpendicular to beam direction</span></div>
-<div class="line"><span class="lineno">  232</span>    <span class="keyword">auto</span> entrance {block-&gt;GetDoubleVector(<span class="stringliteral">&quot;Entrance&quot;</span>)};</div>
-<div class="line"><span class="lineno">  233</span>    <a class="code hl_variable" href="classActSim_1_1Runner.html#a20289b93d2cdcb779010f4c23978f3a5">fBeamEntrance</a> = {entrance[0], entrance[1], entrance[2]};</div>
-<div class="line"><span class="lineno">  234</span>    <a class="code hl_variable" href="classActSim_1_1Runner.html#aa61eb27f340aca373759e4ed456eb38a">fVertexSigmaY</a> = block-&gt;GetDouble(<span class="stringliteral">&quot;VertexSigmaY&quot;</span>);</div>
-<div class="line"><span class="lineno">  235</span>    <a class="code hl_variable" href="classActSim_1_1Runner.html#aebb443e08661b30ea75bb27bb552ee00">fVertexSigmaZ</a> = block-&gt;GetDouble(<span class="stringliteral">&quot;VertexSigmaZ&quot;</span>);</div>
-<div class="line"><span class="lineno">  236</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">  231</span>{</div>
+<div class="line"><span class="lineno">  232</span>    <span class="comment">// 1-&gt; Vertex sampling perpendicular to beam direction</span></div>
+<div class="line"><span class="lineno">  233</span>    <span class="keyword">auto</span> entrance {block-&gt;GetDoubleVector(<span class="stringliteral">&quot;Entrance&quot;</span>)};</div>
+<div class="line"><span class="lineno">  234</span>    <a class="code hl_variable" href="classActSim_1_1Runner.html#a20289b93d2cdcb779010f4c23978f3a5">fBeamEntrance</a> = {entrance[0], entrance[1], entrance[2]};</div>
+<div class="line"><span class="lineno">  235</span>    <a class="code hl_variable" href="classActSim_1_1Runner.html#aa61eb27f340aca373759e4ed456eb38a">fVertexSigmaY</a> = block-&gt;GetDouble(<span class="stringliteral">&quot;VertexSigmaY&quot;</span>);</div>
+<div class="line"><span class="lineno">  236</span>    <a class="code hl_variable" href="classActSim_1_1Runner.html#aebb443e08661b30ea75bb27bb552ee00">fVertexSigmaZ</a> = block-&gt;GetDouble(<span class="stringliteral">&quot;VertexSigmaZ&quot;</span>);</div>
+<div class="line"><span class="lineno">  237</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -808,10 +808,11 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="lineno">  221</span>    <a class="code hl_typedef" href="classActSim_1_1Runner.html#af8efce50e49d98fd544c1af995e6e431">XYZVector</a> worldFrame {1, 0, 0};</div>
 <div class="line"><span class="lineno">  222</span>    <span class="keyword">auto</span> cross {worldFrame.Cross(originalFrame)}; <span class="comment">// this defines the rotation axis</span></div>
 <div class="line"><span class="lineno">  223</span>    <span class="keyword">auto</span> angle {TMath::ACos(originalFrame.Dot(worldFrame))};</div>
-<div class="line"><span class="lineno">  224</span>    ROOT::Math::AxisAngle axis {cross, angle};</div>
-<div class="line"><span class="lineno">  225</span>    ROOT::Math::Rotation3D rotation {axis};</div>
-<div class="line"><span class="lineno">  226</span>    <span class="keywordflow">return</span> rotation(vBeamFrame);</div>
-<div class="line"><span class="lineno">  227</span>}</div>
+<div class="line"><span class="lineno">  224</span>    <span class="comment">// Using legacy code I have from ROOT</span></div>
+<div class="line"><span class="lineno">  225</span>    ROOT::Math::AxisAngle axis {cross, angle};</div>
+<div class="line"><span class="lineno">  226</span>    ROOT::Math::Rotation3D rotation {axis};</div>
+<div class="line"><span class="lineno">  227</span>    <span class="keywordflow">return</span> rotation(vBeamFrame);</div>
+<div class="line"><span class="lineno">  228</span>}</div>
 <div class="ttc" id="aclassActSim_1_1Runner_html_af8efce50e49d98fd544c1af995e6e431"><div class="ttname"><a href="classActSim_1_1Runner.html#af8efce50e49d98fd544c1af995e6e431">ActSim::Runner::XYZVector</a></div><div class="ttdeci">ROOT::Math::XYZVector XYZVector</div><div class="ttdef"><b>Definition</b> ActRunner.h:37</div></div>
 </div><!-- fragment -->
 </div>

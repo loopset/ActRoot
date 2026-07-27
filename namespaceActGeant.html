@@ -112,6 +112,8 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a9ce4f445140d1897bdc63eaadaab5315" id="r_a9ce4f445140d1897bdc63eaadaab5315"><td class="memItemLeft" align="right" valign="top">G4String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceActGeant.html#a9ce4f445140d1897bdc63eaadaab5315">GetOutputFilename</a> ()</td></tr>
+<tr class="separator:a9ce4f445140d1897bdc63eaadaab5315"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9174f63404cee9effb1b05b87ddefd23" id="r_a9174f63404cee9effb1b05b87ddefd23"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceActGeant.html#a9174f63404cee9effb1b05b87ddefd23">WriteDEDXTable</a> (G4ParticleDefinition *p, G4Material *m, const G4String &amp;file)</td></tr>
 <tr class="separator:a9174f63404cee9effb1b05b87ddefd23"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4542600e01a233315bbdf3c8e3c8affc" id="r_a4542600e01a233315bbdf3c8e3c8affc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceActGeant.html#a4542600e01a233315bbdf3c8e3c8affc">WriteDEDXTables</a> (const G4String &amp;dir)</td></tr>
@@ -133,6 +135,41 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="a9ce4f445140d1897bdc63eaadaab5315" name="a9ce4f445140d1897bdc63eaadaab5315"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ce4f445140d1897bdc63eaadaab5315">&#9670;&#160;</a></span>GetOutputFilename()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">G4String ActGeant::GetOutputFilename </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="fragment"><div class="line"><span class="lineno">   83</span>{</div>
+<div class="line"><span class="lineno">   84</span>    <span class="keyword">auto</span> config {<a class="code hl_function" href="classActRoot_1_1Options.html#a7bd54eeb620ca48afccde8edcadb6bb6">ActRoot::Options::GetInstance</a>()-&gt;GetConfigDir() + <span class="stringliteral">&quot;geant.conf&quot;</span>};</div>
+<div class="line"><span class="lineno">   85</span>    <a class="code hl_class" href="classActRoot_1_1InputParser.html">ActRoot::InputParser</a> parser {config};</div>
+<div class="line"><span class="lineno">   86</span>    <span class="keyword">auto</span> block {parser.<a class="code hl_function" href="classActRoot_1_1InputParser.html#a171a94bd3f09160982d9402e72176850">GetBlock</a>(<span class="stringliteral">&quot;Kinematics&quot;</span>)};</div>
+<div class="line"><span class="lineno">   87</span>    <span class="keyword">auto</span> reac {block-&gt;GetStringVector(<span class="stringliteral">&quot;Reaction&quot;</span>)};</div>
+<div class="line"><span class="lineno">   88</span>    <span class="keyword">auto</span> aux {reac[0] + <span class="stringliteral">&quot;,&quot;</span> + reac[1]};</div>
+<div class="line"><span class="lineno">   89</span>    <span class="comment">// Init kinematics</span></div>
+<div class="line"><span class="lineno">   90</span>    <a class="code hl_class" href="classActPhysics_1_1Kinematics.html">ActPhysics::Kinematics</a> kin {aux};</div>
+<div class="line"><span class="lineno">   91</span> </div>
+<div class="line"><span class="lineno">   92</span>    <span class="keywordflow">return</span> TString::Format(<span class="stringliteral">&quot;simu_%s_%s_%s_ebeam_%.2f_ex_%.2f.root&quot;</span>, kin.GetParticle(1).GetName().c_str(),</div>
+<div class="line"><span class="lineno">   93</span>                           kin.GetParticle(2).GetName().c_str(), kin.GetParticle(3).GetName().c_str(), kin.GetT1Lab(),</div>
+<div class="line"><span class="lineno">   94</span>                           kin.GetEx())</div>
+<div class="line"><span class="lineno">   95</span>        .Data();</div>
+<div class="line"><span class="lineno">   96</span>}</div>
+<div class="ttc" id="aclassActPhysics_1_1Kinematics_html"><div class="ttname"><a href="classActPhysics_1_1Kinematics.html">ActPhysics::Kinematics</a></div><div class="ttdef"><b>Definition</b> ActKinematics.h:26</div></div>
+<div class="ttc" id="aclassActRoot_1_1InputParser_html"><div class="ttname"><a href="classActRoot_1_1InputParser.html">ActRoot::InputParser</a></div><div class="ttdef"><b>Definition</b> ActInputParser.h:111</div></div>
+<div class="ttc" id="aclassActRoot_1_1InputParser_html_a171a94bd3f09160982d9402e72176850"><div class="ttname"><a href="classActRoot_1_1InputParser.html#a171a94bd3f09160982d9402e72176850">ActRoot::InputParser::GetBlock</a></div><div class="ttdeci">BlockPtr GetBlock(const std::string &amp;header) const</div><div class="ttdef"><b>Definition</b> ActInputParser.cxx:311</div></div>
+<div class="ttc" id="aclassActRoot_1_1Options_html_a7bd54eeb620ca48afccde8edcadb6bb6"><div class="ttname"><a href="classActRoot_1_1Options.html#a7bd54eeb620ca48afccde8edcadb6bb6">ActRoot::Options::GetInstance</a></div><div class="ttdeci">static std::shared_ptr&lt; Options &gt; GetInstance(int argc=0, char **=nullptr)</div><div class="ttdef"><b>Definition</b> ActOptions.cxx:30</div></div>
+</div><!-- fragment -->
+</div>
+</div>
 <a id="a9174f63404cee9effb1b05b87ddefd23" name="a9174f63404cee9effb1b05b87ddefd23"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9174f63404cee9effb1b05b87ddefd23">&#9670;&#160;</a></span>WriteDEDXTable()</h2>
 
@@ -164,26 +201,26 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   25</span>{</div>
-<div class="line"><span class="lineno">   26</span>    std::ofstream streamer {file};</div>
-<div class="line"><span class="lineno">   27</span>    <span class="keywordflow">if</span>(!streamer)</div>
-<div class="line"><span class="lineno">   28</span>        G4Exception(<span class="stringliteral">&quot;WriteDEDXTable&quot;</span>, <span class="stringliteral">&quot;WriteDEDX001&quot;</span>, FatalException, <span class="stringliteral">&quot;Cannot open DEDX file&quot;</span>);</div>
-<div class="line"><span class="lineno">   29</span> </div>
-<div class="line"><span class="lineno">   30</span>    G4cout &lt;&lt; <span class="stringliteral">&quot;Write DEDX for &quot;</span> &lt;&lt; p-&gt;GetParticleName() &lt;&lt; <span class="stringliteral">&quot; in &quot;</span> &lt;&lt; m-&gt;GetName() &lt;&lt; <span class="stringliteral">&quot; to file &quot;</span> &lt;&lt; file &lt;&lt; G4endl;</div>
+<div class="fragment"><div class="line"><span class="lineno">   27</span>{</div>
+<div class="line"><span class="lineno">   28</span>    std::ofstream streamer {file};</div>
+<div class="line"><span class="lineno">   29</span>    <span class="keywordflow">if</span>(!streamer)</div>
+<div class="line"><span class="lineno">   30</span>        G4Exception(<span class="stringliteral">&quot;WriteDEDXTable&quot;</span>, <span class="stringliteral">&quot;WriteDEDX001&quot;</span>, FatalException, <span class="stringliteral">&quot;Cannot open DEDX file&quot;</span>);</div>
 <div class="line"><span class="lineno">   31</span> </div>
-<div class="line"><span class="lineno">   32</span>    G4EmCalculator calc {};</div>
-<div class="line"><span class="lineno">   33</span>    G4double Emin {1 * keV};</div>
-<div class="line"><span class="lineno">   34</span>    G4double Emax {1000 * MeV};</div>
-<div class="line"><span class="lineno">   35</span>    G4double step {10 * keV};</div>
-<div class="line"><span class="lineno">   36</span>    G4double factor {1.01}; <span class="comment">// from IA... this sets the number of points per decade</span></div>
-<div class="line"><span class="lineno">   37</span>    <span class="keywordflow">for</span>(<span class="keyword">auto</span> E = Emin; E &lt;= Emax; E *= factor)</div>
-<div class="line"><span class="lineno">   38</span>    {</div>
-<div class="line"><span class="lineno">   39</span>        <span class="keyword">auto</span> dedx {calc.ComputeTotalDEDX(E, p, m)};</div>
-<div class="line"><span class="lineno">   40</span>        <span class="keyword">auto</span> r {calc.GetRange(E, p, m)};</div>
-<div class="line"><span class="lineno">   41</span>        streamer &lt;&lt; E / MeV &lt;&lt; <span class="stringliteral">&quot;  &quot;</span> &lt;&lt; dedx / (MeV / micrometer) &lt;&lt; <span class="stringliteral">&quot; &quot;</span> &lt;&lt; r / mm &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
-<div class="line"><span class="lineno">   42</span>    }</div>
-<div class="line"><span class="lineno">   43</span>    streamer.close();</div>
-<div class="line"><span class="lineno">   44</span>}</div>
+<div class="line"><span class="lineno">   32</span>    G4cout &lt;&lt; <span class="stringliteral">&quot;Write DEDX for &quot;</span> &lt;&lt; p-&gt;GetParticleName() &lt;&lt; <span class="stringliteral">&quot; in &quot;</span> &lt;&lt; m-&gt;GetName() &lt;&lt; <span class="stringliteral">&quot; to file &quot;</span> &lt;&lt; file &lt;&lt; G4endl;</div>
+<div class="line"><span class="lineno">   33</span> </div>
+<div class="line"><span class="lineno">   34</span>    G4EmCalculator calc {};</div>
+<div class="line"><span class="lineno">   35</span>    G4double Emin {1 * keV};</div>
+<div class="line"><span class="lineno">   36</span>    G4double Emax {1000 * MeV};</div>
+<div class="line"><span class="lineno">   37</span>    G4double step {10 * keV};</div>
+<div class="line"><span class="lineno">   38</span>    G4double factor {1.01}; <span class="comment">// from IA... this sets the number of points per decade</span></div>
+<div class="line"><span class="lineno">   39</span>    <span class="keywordflow">for</span>(<span class="keyword">auto</span> E = Emin; E &lt;= Emax; E *= factor)</div>
+<div class="line"><span class="lineno">   40</span>    {</div>
+<div class="line"><span class="lineno">   41</span>        <span class="keyword">auto</span> dedx {calc.ComputeTotalDEDX(E, p, m)};</div>
+<div class="line"><span class="lineno">   42</span>        <span class="keyword">auto</span> r {calc.GetRange(E, p, m)};</div>
+<div class="line"><span class="lineno">   43</span>        streamer &lt;&lt; E / MeV &lt;&lt; <span class="stringliteral">&quot;  &quot;</span> &lt;&lt; dedx / (MeV / micrometer) &lt;&lt; <span class="stringliteral">&quot; &quot;</span> &lt;&lt; r / mm &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><span class="lineno">   44</span>    }</div>
+<div class="line"><span class="lineno">   45</span>    streamer.close();</div>
+<div class="line"><span class="lineno">   46</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -202,45 +239,41 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   47</span>{</div>
-<div class="line"><span class="lineno">   48</span>    <span class="keyword">auto</span> config {<a class="code hl_function" href="classActRoot_1_1Options.html#a7bd54eeb620ca48afccde8edcadb6bb6">ActRoot::Options::GetInstance</a>()-&gt;GetConfigDir() + <span class="stringliteral">&quot;geant.conf&quot;</span>};</div>
-<div class="line"><span class="lineno">   49</span>    <a class="code hl_class" href="classActRoot_1_1InputParser.html">ActRoot::InputParser</a> parser {config};</div>
-<div class="line"><span class="lineno">   50</span>    <span class="keyword">auto</span> block {parser.<a class="code hl_function" href="classActRoot_1_1InputParser.html#a171a94bd3f09160982d9402e72176850">GetBlock</a>(<span class="stringliteral">&quot;Kinematics&quot;</span>)};</div>
-<div class="line"><span class="lineno">   51</span>    <span class="keyword">auto</span> reac {block-&gt;GetStringVector(<span class="stringliteral">&quot;Reaction&quot;</span>)};</div>
-<div class="line"><span class="lineno">   52</span>    <span class="keyword">auto</span> aux {reac[0] + <span class="stringliteral">&quot;,&quot;</span> + reac[1]};</div>
-<div class="line"><span class="lineno">   53</span>    <span class="comment">// Init kinematics</span></div>
-<div class="line"><span class="lineno">   54</span>    <a class="code hl_class" href="classActPhysics_1_1Kinematics.html">ActPhysics::Kinematics</a> kin {aux};</div>
-<div class="line"><span class="lineno">   55</span>    std::vector&lt;G4ParticleDefinition*&gt; parts;</div>
-<div class="line"><span class="lineno">   56</span>    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 1; i &lt;= 4; i++)</div>
-<div class="line"><span class="lineno">   57</span>    {</div>
-<div class="line"><span class="lineno">   58</span>        <span class="keyword">auto</span> Z {kin.<a class="code hl_function" href="classActPhysics_1_1Kinematics.html#a9699c585a0373bcdbee7c9e837f466c1">GetParticle</a>(i).<a class="code hl_function" href="classActPhysics_1_1Particle.html#a4bfa2c25e8f441d09b52b9a39e2bd63a">GetZ</a>()};</div>
-<div class="line"><span class="lineno">   59</span>        <span class="keyword">auto</span> A {kin.GetParticle(i).GetA()};</div>
-<div class="line"><span class="lineno">   60</span>        <span class="keyword">auto</span>* part {G4IonTable::GetIonTable()-&gt;FindIon(Z, A)};</div>
-<div class="line"><span class="lineno">   61</span>        parts.push_back(part);</div>
-<div class="line"><span class="lineno">   62</span>    }</div>
-<div class="line"><span class="lineno">   63</span> </div>
-<div class="line"><span class="lineno">   64</span>    <span class="comment">// Materials are hardcoded so far</span></div>
-<div class="line"><span class="lineno">   65</span>    std::vector&lt;G4Material*&gt; mats {G4Material::GetMaterial(<span class="stringliteral">&quot;GasMixture&quot;</span>), G4Material::GetMaterial(<span class="stringliteral">&quot;G4_Si&quot;</span>)};</div>
-<div class="line"><span class="lineno">   66</span> </div>
-<div class="line"><span class="lineno">   67</span>    <span class="comment">// Do</span></div>
-<div class="line"><span class="lineno">   68</span>    <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; part : parts)</div>
-<div class="line"><span class="lineno">   69</span>    {</div>
-<div class="line"><span class="lineno">   70</span>        <span class="keyword">auto</span> pname {part-&gt;GetParticleName()};</div>
-<div class="line"><span class="lineno">   71</span>        <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; mat : mats)</div>
-<div class="line"><span class="lineno">   72</span>        {</div>
-<div class="line"><span class="lineno">   73</span>            <span class="keyword">auto</span> mname {mat-&gt;GetName()};</div>
-<div class="line"><span class="lineno">   74</span>            <span class="keyword">auto</span> file {dir + <span class="stringliteral">&quot;/table_&quot;</span> + pname + <span class="stringliteral">&quot;_&quot;</span> + mname + <span class="stringliteral">&quot;.txt&quot;</span>};</div>
-<div class="line"><span class="lineno">   75</span>            <a class="code hl_function" href="namespaceActGeant.html#a9174f63404cee9effb1b05b87ddefd23">WriteDEDXTable</a>(part, mat, file);</div>
-<div class="line"><span class="lineno">   76</span>        }</div>
-<div class="line"><span class="lineno">   77</span>    }</div>
-<div class="line"><span class="lineno">   78</span>}</div>
-<div class="ttc" id="aclassActPhysics_1_1Kinematics_html"><div class="ttname"><a href="classActPhysics_1_1Kinematics.html">ActPhysics::Kinematics</a></div><div class="ttdef"><b>Definition</b> ActKinematics.h:26</div></div>
-<div class="ttc" id="aclassActPhysics_1_1Kinematics_html_a9699c585a0373bcdbee7c9e837f466c1"><div class="ttname"><a href="classActPhysics_1_1Kinematics.html#a9699c585a0373bcdbee7c9e837f466c1">ActPhysics::Kinematics::GetParticle</a></div><div class="ttdeci">const Particle &amp; GetParticle(unsigned int i) const</div><div class="ttdef"><b>Definition</b> ActKinematics.cxx:603</div></div>
+<div class="fragment"><div class="line"><span class="lineno">   49</span>{</div>
+<div class="line"><span class="lineno">   50</span>    <span class="keyword">auto</span> config {<a class="code hl_function" href="classActRoot_1_1Options.html#a7bd54eeb620ca48afccde8edcadb6bb6">ActRoot::Options::GetInstance</a>()-&gt;GetConfigDir() + <span class="stringliteral">&quot;geant.conf&quot;</span>};</div>
+<div class="line"><span class="lineno">   51</span>    <a class="code hl_class" href="classActRoot_1_1InputParser.html">ActRoot::InputParser</a> parser {config};</div>
+<div class="line"><span class="lineno">   52</span>    <span class="keyword">auto</span> block {parser.<a class="code hl_function" href="classActRoot_1_1InputParser.html#a171a94bd3f09160982d9402e72176850">GetBlock</a>(<span class="stringliteral">&quot;Kinematics&quot;</span>)};</div>
+<div class="line"><span class="lineno">   53</span>    <span class="keyword">auto</span> reac {block-&gt;GetStringVector(<span class="stringliteral">&quot;Reaction&quot;</span>)};</div>
+<div class="line"><span class="lineno">   54</span>    <span class="keyword">auto</span> aux {reac[0] + <span class="stringliteral">&quot;,&quot;</span> + reac[1]};</div>
+<div class="line"><span class="lineno">   55</span>    <span class="comment">// Init kinematics</span></div>
+<div class="line"><span class="lineno">   56</span>    <a class="code hl_class" href="classActPhysics_1_1Kinematics.html">ActPhysics::Kinematics</a> kin {aux};</div>
+<div class="line"><span class="lineno">   57</span>    std::vector&lt;G4ParticleDefinition*&gt; parts;</div>
+<div class="line"><span class="lineno">   58</span>    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 1; i &lt;= 4; i++)</div>
+<div class="line"><span class="lineno">   59</span>    {</div>
+<div class="line"><span class="lineno">   60</span>        <span class="keyword">auto</span> Z {kin.<a class="code hl_function" href="classActPhysics_1_1Kinematics.html#a9699c585a0373bcdbee7c9e837f466c1">GetParticle</a>(i).<a class="code hl_function" href="classActPhysics_1_1Particle.html#a4bfa2c25e8f441d09b52b9a39e2bd63a">GetZ</a>()};</div>
+<div class="line"><span class="lineno">   61</span>        <span class="keyword">auto</span> A {kin.GetParticle(i).GetA()};</div>
+<div class="line"><span class="lineno">   62</span>        <span class="keyword">auto</span>* part {G4IonTable::GetIonTable()-&gt;FindIon(Z, A)};</div>
+<div class="line"><span class="lineno">   63</span>        parts.push_back(part);</div>
+<div class="line"><span class="lineno">   64</span>    }</div>
+<div class="line"><span class="lineno">   65</span> </div>
+<div class="line"><span class="lineno">   66</span>    <span class="comment">// Materials are hardcoded so far</span></div>
+<div class="line"><span class="lineno">   67</span>    std::vector&lt;G4Material*&gt; mats {G4Material::GetMaterial(<span class="stringliteral">&quot;GasMixture&quot;</span>), G4Material::GetMaterial(<span class="stringliteral">&quot;G4_Si&quot;</span>)};</div>
+<div class="line"><span class="lineno">   68</span> </div>
+<div class="line"><span class="lineno">   69</span>    <span class="comment">// Do</span></div>
+<div class="line"><span class="lineno">   70</span>    <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; part : parts)</div>
+<div class="line"><span class="lineno">   71</span>    {</div>
+<div class="line"><span class="lineno">   72</span>        <span class="keyword">auto</span> pname {part-&gt;GetParticleName()};</div>
+<div class="line"><span class="lineno">   73</span>        <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; mat : mats)</div>
+<div class="line"><span class="lineno">   74</span>        {</div>
+<div class="line"><span class="lineno">   75</span>            <span class="keyword">auto</span> mname {mat-&gt;GetName()};</div>
+<div class="line"><span class="lineno">   76</span>            <span class="keyword">auto</span> file {dir + <span class="stringliteral">&quot;/table_&quot;</span> + pname + <span class="stringliteral">&quot;_&quot;</span> + mname + <span class="stringliteral">&quot;.txt&quot;</span>};</div>
+<div class="line"><span class="lineno">   77</span>            <a class="code hl_function" href="namespaceActGeant.html#a9174f63404cee9effb1b05b87ddefd23">WriteDEDXTable</a>(part, mat, file);</div>
+<div class="line"><span class="lineno">   78</span>        }</div>
+<div class="line"><span class="lineno">   79</span>    }</div>
+<div class="line"><span class="lineno">   80</span>}</div>
+<div class="ttc" id="aclassActPhysics_1_1Kinematics_html_a9699c585a0373bcdbee7c9e837f466c1"><div class="ttname"><a href="classActPhysics_1_1Kinematics.html#a9699c585a0373bcdbee7c9e837f466c1">ActPhysics::Kinematics::GetParticle</a></div><div class="ttdeci">const Particle &amp; GetParticle(unsigned int i) const</div><div class="ttdef"><b>Definition</b> ActKinematics.cxx:604</div></div>
 <div class="ttc" id="aclassActPhysics_1_1Particle_html_a4bfa2c25e8f441d09b52b9a39e2bd63a"><div class="ttname"><a href="classActPhysics_1_1Particle.html#a4bfa2c25e8f441d09b52b9a39e2bd63a">ActPhysics::Particle::GetZ</a></div><div class="ttdeci">int GetZ() const</div><div class="ttdef"><b>Definition</b> ActParticle.h:39</div></div>
-<div class="ttc" id="aclassActRoot_1_1InputParser_html"><div class="ttname"><a href="classActRoot_1_1InputParser.html">ActRoot::InputParser</a></div><div class="ttdef"><b>Definition</b> ActInputParser.h:111</div></div>
-<div class="ttc" id="aclassActRoot_1_1InputParser_html_a171a94bd3f09160982d9402e72176850"><div class="ttname"><a href="classActRoot_1_1InputParser.html#a171a94bd3f09160982d9402e72176850">ActRoot::InputParser::GetBlock</a></div><div class="ttdeci">BlockPtr GetBlock(const std::string &amp;header) const</div><div class="ttdef"><b>Definition</b> ActInputParser.cxx:311</div></div>
-<div class="ttc" id="aclassActRoot_1_1Options_html_a7bd54eeb620ca48afccde8edcadb6bb6"><div class="ttname"><a href="classActRoot_1_1Options.html#a7bd54eeb620ca48afccde8edcadb6bb6">ActRoot::Options::GetInstance</a></div><div class="ttdeci">static std::shared_ptr&lt; Options &gt; GetInstance(int argc=0, char **=nullptr)</div><div class="ttdef"><b>Definition</b> ActOptions.cxx:30</div></div>
-<div class="ttc" id="anamespaceActGeant_html_a9174f63404cee9effb1b05b87ddefd23"><div class="ttname"><a href="namespaceActGeant.html#a9174f63404cee9effb1b05b87ddefd23">ActGeant::WriteDEDXTable</a></div><div class="ttdeci">void WriteDEDXTable(G4ParticleDefinition *p, G4Material *m, const G4String &amp;file)</div><div class="ttdef"><b>Definition</b> ActGeantUtility.cc:24</div></div>
+<div class="ttc" id="anamespaceActGeant_html_a9174f63404cee9effb1b05b87ddefd23"><div class="ttname"><a href="namespaceActGeant.html#a9174f63404cee9effb1b05b87ddefd23">ActGeant::WriteDEDXTable</a></div><div class="ttdeci">void WriteDEDXTable(G4ParticleDefinition *p, G4Material *m, const G4String &amp;file)</div><div class="ttdef"><b>Definition</b> ActGeantUtility.cc:26</div></div>
 </div><!-- fragment -->
 </div>
 </div>

@@ -76,6 +76,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classActGeant_1_1RunAction-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">ActGeant::RunAction Class Reference</div></div>
 </div><!--header-->
@@ -105,18 +106,23 @@ Collaboration diagram for ActGeant::RunAction:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa5a474171843b4c82a089c2d4a41901e" id="r_aa5a474171843b4c82a089c2d4a41901e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActGeant_1_1RunAction.html#aa5a474171843b4c82a089c2d4a41901e">RunAction</a> ()</td></tr>
-<tr class="separator:aa5a474171843b4c82a089c2d4a41901e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e650340c2f81a109cf99a0aaa75f6e2" id="r_a7e650340c2f81a109cf99a0aaa75f6e2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActGeant_1_1RunAction.html#a7e650340c2f81a109cf99a0aaa75f6e2">RunAction</a> (const G4String &amp;outFile=&quot;&quot;)</td></tr>
+<tr class="separator:a7e650340c2f81a109cf99a0aaa75f6e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b73146c6423561b8122363bde018700" id="r_a0b73146c6423561b8122363bde018700"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActGeant_1_1RunAction.html#a0b73146c6423561b8122363bde018700">~RunAction</a> () override=default</td></tr>
 <tr class="separator:a0b73146c6423561b8122363bde018700"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65a5f29558e1cd42fd9e31794dff6a2b" id="r_a65a5f29558e1cd42fd9e31794dff6a2b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActGeant_1_1RunAction.html#a65a5f29558e1cd42fd9e31794dff6a2b">BeginOfRunAction</a> (const G4Run *run) override</td></tr>
 <tr class="separator:a65a5f29558e1cd42fd9e31794dff6a2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5aaa048cfa69dfc0b69bccf9217cae7c" id="r_a5aaa048cfa69dfc0b69bccf9217cae7c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActGeant_1_1RunAction.html#a5aaa048cfa69dfc0b69bccf9217cae7c">EndOfRunAction</a> (const G4Run *run) override</td></tr>
 <tr class="separator:a5aaa048cfa69dfc0b69bccf9217cae7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a0a2e6212a18a6a8f839e28c1403ffc43" id="r_a0a2e6212a18a6a8f839e28c1403ffc43"><td class="memItemLeft" align="right" valign="top">G4String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActGeant_1_1RunAction.html#a0a2e6212a18a6a8f839e28c1403ffc43">fOutFile</a> {}</td></tr>
+<tr class="separator:a0a2e6212a18a6a8f839e28c1403ffc43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="aa5a474171843b4c82a089c2d4a41901e" name="aa5a474171843b4c82a089c2d4a41901e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa5a474171843b4c82a089c2d4a41901e">&#9670;&#160;</a></span>RunAction()</h2>
+<a id="a7e650340c2f81a109cf99a0aaa75f6e2" name="a7e650340c2f81a109cf99a0aaa75f6e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e650340c2f81a109cf99a0aaa75f6e2">&#9670;&#160;</a></span>RunAction()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -124,50 +130,63 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">ActGeant::RunAction::RunAction </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">const G4String &amp;&#160;</td>
+          <td class="paramname"><em>outFile</em> = <code>&quot;&quot;</code></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   20</span>{</div>
-<div class="line"><span class="lineno">   21</span>    G4RunManager::GetRunManager()-&gt;SetPrintProgress(<span class="keyword">true</span>);</div>
-<div class="line"><span class="lineno">   22</span>    <span class="keyword">auto</span>* ana = G4AnalysisManager::Instance();</div>
-<div class="line"><span class="lineno">   23</span>    ana-&gt;SetVerboseLevel(1);</div>
-<div class="line"><span class="lineno">   24</span>    ana-&gt;SetNtupleMerging(<span class="keyword">true</span>);</div>
-<div class="line"><span class="lineno">   25</span> </div>
-<div class="line"><span class="lineno">   26</span>    <span class="comment">// Holder</span></div>
-<div class="line"><span class="lineno">   27</span>    <span class="keyword">auto</span>* holder {<a class="code hl_function" href="classActGeant_1_1DataHolder.html#adb5b711bfec65a6ffc9c99e1e7184aef">DataHolder::Instance</a>()};</div>
-<div class="line"><span class="lineno">   28</span> </div>
-<div class="line"><span class="lineno">   29</span>    <span class="comment">// Add columns</span></div>
-<div class="line"><span class="lineno">   30</span>    ana-&gt;CreateNtuple(<span class="stringliteral">&quot;ActGeant&quot;</span>, <span class="stringliteral">&quot;A simple NTuple created with Geant4&quot;</span>);</div>
-<div class="line"><span class="lineno">   31</span>    <span class="comment">// Vertex info</span></div>
-<div class="line"><span class="lineno">   32</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;RP&quot;</span>, holder-&gt;fVertexInfo.fRP); <span class="comment">// idx 0</span></div>
-<div class="line"><span class="lineno">   33</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;EBeam&quot;</span>);                       <span class="comment">// idx 1</span></div>
-<div class="line"><span class="lineno">   34</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;T3&quot;</span>);</div>
-<div class="line"><span class="lineno">   35</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;theta3&quot;</span>);</div>
-<div class="line"><span class="lineno">   36</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;phi3&quot;</span>);</div>
-<div class="line"><span class="lineno">   37</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;T4&quot;</span>);</div>
-<div class="line"><span class="lineno">   38</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;theta4&quot;</span>);</div>
-<div class="line"><span class="lineno">   39</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;phi4&quot;</span>);</div>
-<div class="line"><span class="lineno">   40</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;thetaCM&quot;</span>); <span class="comment">// idx 8</span></div>
-<div class="line"><span class="lineno">   41</span>    <span class="comment">// // Track info (only light id = 1)</span></div>
-<div class="line"><span class="lineno">   42</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;TPCIni&quot;</span>, holder-&gt;fLight.fTPCIni); <span class="comment">// 9</span></div>
-<div class="line"><span class="lineno">   43</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;TPCEnd&quot;</span>, holder-&gt;fLight.fTPCEnd);</div>
-<div class="line"><span class="lineno">   44</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;TPCDeltaE&quot;</span>); <span class="comment">// 11</span></div>
-<div class="line"><span class="lineno">   45</span> </div>
-<div class="line"><span class="lineno">   46</span>    <span class="comment">// Silicon</span></div>
-<div class="line"><span class="lineno">   47</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;SilIni&quot;</span>, holder-&gt;fLight.fSilIni); <span class="comment">// 12</span></div>
-<div class="line"><span class="lineno">   48</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;SilEnd&quot;</span>, holder-&gt;fLight.fSilEnd); <span class="comment">// 13</span></div>
-<div class="line"><span class="lineno">   49</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;SilDeltaE&quot;</span>);                      <span class="comment">// 14</span></div>
-<div class="line"><span class="lineno">   50</span>    ana-&gt;CreateNtupleSColumn(<span class="stringliteral">&quot;SilLayer&quot;</span>);                       <span class="comment">// 15</span></div>
-<div class="line"><span class="lineno">   51</span>    ana-&gt;CreateNtupleIColumn(<span class="stringliteral">&quot;SilIdx&quot;</span>);                         <span class="comment">// 16</span></div>
-<div class="line"><span class="lineno">   52</span> </div>
-<div class="line"><span class="lineno">   53</span>    <span class="comment">// Particle name</span></div>
-<div class="line"><span class="lineno">   54</span>    ana-&gt;CreateNtupleSColumn(<span class="stringliteral">&quot;PartName&quot;</span>); <span class="comment">// 17</span></div>
-<div class="line"><span class="lineno">   55</span> </div>
-<div class="line"><span class="lineno">   56</span>    ana-&gt;FinishNtuple();</div>
-<div class="line"><span class="lineno">   57</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">   15</span>                                                    : <a class="code hl_variable" href="classActGeant_1_1RunAction.html#a0a2e6212a18a6a8f839e28c1403ffc43">fOutFile</a>(outFile)</div>
+<div class="line"><span class="lineno">   16</span>{</div>
+<div class="line"><span class="lineno">   17</span>    G4RunManager::GetRunManager()-&gt;SetPrintProgress(<span class="keyword">true</span>);</div>
+<div class="line"><span class="lineno">   18</span>    <span class="keyword">auto</span>* ana = G4AnalysisManager::Instance();</div>
+<div class="line"><span class="lineno">   19</span>    ana-&gt;SetVerboseLevel(1);</div>
+<div class="line"><span class="lineno">   20</span>    ana-&gt;SetNtupleMerging(<span class="keyword">true</span>);</div>
+<div class="line"><span class="lineno">   21</span> </div>
+<div class="line"><span class="lineno">   22</span>    <span class="comment">// Holder</span></div>
+<div class="line"><span class="lineno">   23</span>    <span class="keyword">auto</span>* holder {<a class="code hl_function" href="classActGeant_1_1DataHolder.html#adb5b711bfec65a6ffc9c99e1e7184aef">DataHolder::Instance</a>()};</div>
+<div class="line"><span class="lineno">   24</span> </div>
+<div class="line"><span class="lineno">   25</span>    <span class="comment">// Add columns</span></div>
+<div class="line"><span class="lineno">   26</span>    ana-&gt;CreateNtuple(<span class="stringliteral">&quot;ActGeant&quot;</span>, <span class="stringliteral">&quot;A simple NTuple created with Geant4&quot;</span>);</div>
+<div class="line"><span class="lineno">   27</span>    <span class="comment">// Vertex info</span></div>
+<div class="line"><span class="lineno">   28</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;RP&quot;</span>, holder-&gt;fVertexInfo.fRP); <span class="comment">// idx 0</span></div>
+<div class="line"><span class="lineno">   29</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;EBeam&quot;</span>);                       <span class="comment">// idx 1</span></div>
+<div class="line"><span class="lineno">   30</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;T3&quot;</span>);</div>
+<div class="line"><span class="lineno">   31</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;theta3&quot;</span>);</div>
+<div class="line"><span class="lineno">   32</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;phi3&quot;</span>);</div>
+<div class="line"><span class="lineno">   33</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;T4&quot;</span>);</div>
+<div class="line"><span class="lineno">   34</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;theta4&quot;</span>);</div>
+<div class="line"><span class="lineno">   35</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;phi4&quot;</span>);</div>
+<div class="line"><span class="lineno">   36</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;thetaCM&quot;</span>); <span class="comment">// idx 8</span></div>
+<div class="line"><span class="lineno">   37</span>    <span class="comment">// // Track info (only light id = 1)</span></div>
+<div class="line"><span class="lineno">   38</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;TPCIni&quot;</span>, holder-&gt;fLight.fTPCIni); <span class="comment">// 9</span></div>
+<div class="line"><span class="lineno">   39</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;TPCEnd&quot;</span>, holder-&gt;fLight.fTPCEnd);</div>
+<div class="line"><span class="lineno">   40</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;TPCDeltaE&quot;</span>); <span class="comment">// 11</span></div>
+<div class="line"><span class="lineno">   41</span> </div>
+<div class="line"><span class="lineno">   42</span>    <span class="comment">// Si layer 0</span></div>
+<div class="line"><span class="lineno">   43</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;SilIni0&quot;</span>, holder-&gt;fLight.fSilIni0); <span class="comment">// 12</span></div>
+<div class="line"><span class="lineno">   44</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;SilEnd0&quot;</span>, holder-&gt;fLight.fSilEnd0); <span class="comment">// 13</span></div>
+<div class="line"><span class="lineno">   45</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;SilDeltaE0&quot;</span>);                       <span class="comment">// 14</span></div>
+<div class="line"><span class="lineno">   46</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;SilEAfter0&quot;</span>);                       <span class="comment">// 15</span></div>
+<div class="line"><span class="lineno">   47</span>    ana-&gt;CreateNtupleSColumn(<span class="stringliteral">&quot;SilLayer0&quot;</span>);                        <span class="comment">// 16</span></div>
+<div class="line"><span class="lineno">   48</span>    ana-&gt;CreateNtupleIColumn(<span class="stringliteral">&quot;SilIdx0&quot;</span>);                          <span class="comment">// 17</span></div>
+<div class="line"><span class="lineno">   49</span>    <span class="comment">// Si layer 1</span></div>
+<div class="line"><span class="lineno">   50</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;SilIni1&quot;</span>, holder-&gt;fLight.fSilIni1); <span class="comment">// 18</span></div>
+<div class="line"><span class="lineno">   51</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;SilEnd1&quot;</span>, holder-&gt;fLight.fSilEnd1); <span class="comment">// 19</span></div>
+<div class="line"><span class="lineno">   52</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;SilDeltaE1&quot;</span>);                       <span class="comment">// 20</span></div>
+<div class="line"><span class="lineno">   53</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;SilEAfter1&quot;</span>);                       <span class="comment">// 21</span></div>
+<div class="line"><span class="lineno">   54</span>    ana-&gt;CreateNtupleSColumn(<span class="stringliteral">&quot;SilLayer1&quot;</span>);                        <span class="comment">// 22</span></div>
+<div class="line"><span class="lineno">   55</span>    ana-&gt;CreateNtupleIColumn(<span class="stringliteral">&quot;SilIdx1&quot;</span>);                          <span class="comment">// 23</span></div>
+<div class="line"><span class="lineno">   56</span> </div>
+<div class="line"><span class="lineno">   57</span>    <span class="comment">// Particle name</span></div>
+<div class="line"><span class="lineno">   58</span>    ana-&gt;CreateNtupleSColumn(<span class="stringliteral">&quot;PartName&quot;</span>); <span class="comment">// 24</span></div>
+<div class="line"><span class="lineno">   59</span>    <span class="comment">// others that i forgot to include before</span></div>
+<div class="line"><span class="lineno">   60</span>    ana-&gt;CreateNtupleDColumn(<span class="stringliteral">&quot;WP&quot;</span>, holder-&gt;fVertexInfo.fWP);</div>
+<div class="line"><span class="lineno">   61</span> </div>
+<div class="line"><span class="lineno">   62</span>    ana-&gt;FinishNtuple();</div>
+<div class="line"><span class="lineno">   63</span>}</div>
 <div class="ttc" id="aclassActGeant_1_1DataHolder_html_adb5b711bfec65a6ffc9c99e1e7184aef"><div class="ttname"><a href="classActGeant_1_1DataHolder.html#adb5b711bfec65a6ffc9c99e1e7184aef">ActGeant::DataHolder::Instance</a></div><div class="ttdeci">static DataHolder * Instance()</div><div class="ttdef"><b>Definition</b> ActGeantDataHolder.cc:8</div></div>
+<div class="ttc" id="aclassActGeant_1_1RunAction_html_a0a2e6212a18a6a8f839e28c1403ffc43"><div class="ttname"><a href="classActGeant_1_1RunAction.html#a0a2e6212a18a6a8f839e28c1403ffc43">ActGeant::RunAction::fOutFile</a></div><div class="ttdeci">G4String fOutFile</div><div class="ttdef"><b>Definition</b> ActGeantRunAction.hh:15</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -220,14 +239,11 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   60</span>{</div>
-<div class="line"><span class="lineno">   61</span>    <span class="keyword">auto</span>* ana = G4AnalysisManager::Instance();</div>
-<div class="line"><span class="lineno">   62</span>    G4String file {<span class="stringliteral">&quot;./Outputs/simu.root&quot;</span>};</div>
-<div class="line"><span class="lineno">   63</span>    <span class="comment">// auto* holder {DataHolder::Instance()};</span></div>
-<div class="line"><span class="lineno">   64</span>    <span class="comment">// file += &quot;simu_&quot; + holder-&gt;fReacInfo.fBeam + &quot;_ &quot; + holder-&gt;fReacInfo.fTarget + &quot;_&quot; + holder-&gt;fReacInfo.fLight +</span></div>
-<div class="line"><span class="lineno">   65</span>    <span class="comment">//         &quot;_ex_&quot; + TString::Format(&quot;%.2f&quot;, holder-&gt;fReacInfo.fEx).Data() + &quot;.root&quot;;</span></div>
-<div class="line"><span class="lineno">   66</span>    ana-&gt;OpenFile(file);</div>
-<div class="line"><span class="lineno">   67</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">   66</span>{</div>
+<div class="line"><span class="lineno">   67</span>    <span class="keyword">auto</span>* ana = G4AnalysisManager::Instance();</div>
+<div class="line"><span class="lineno">   68</span>    G4String file {<span class="stringliteral">&quot;./Outputs/&quot;</span> + <a class="code hl_variable" href="classActGeant_1_1RunAction.html#a0a2e6212a18a6a8f839e28c1403ffc43">fOutFile</a>};</div>
+<div class="line"><span class="lineno">   69</span>    ana-&gt;OpenFile(file);</div>
+<div class="line"><span class="lineno">   70</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -254,12 +270,36 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   70</span>{</div>
-<div class="line"><span class="lineno">   71</span>    <span class="comment">// Write analys to file</span></div>
-<div class="line"><span class="lineno">   72</span>    <span class="keyword">auto</span>* ana = G4AnalysisManager::Instance();</div>
-<div class="line"><span class="lineno">   73</span>    ana-&gt;Write();</div>
-<div class="line"><span class="lineno">   74</span>    ana-&gt;CloseFile();</div>
-<div class="line"><span class="lineno">   75</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">   73</span>{</div>
+<div class="line"><span class="lineno">   74</span>    <span class="comment">// Write analys to file</span></div>
+<div class="line"><span class="lineno">   75</span>    <span class="keyword">auto</span>* ana = G4AnalysisManager::Instance();</div>
+<div class="line"><span class="lineno">   76</span>    ana-&gt;Write();</div>
+<div class="line"><span class="lineno">   77</span>    ana-&gt;CloseFile();</div>
+<div class="line"><span class="lineno">   78</span>}</div>
+</div><!-- fragment -->
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a0a2e6212a18a6a8f839e28c1403ffc43" name="a0a2e6212a18a6a8f839e28c1403ffc43"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a2e6212a18a6a8f839e28c1403ffc43">&#9670;&#160;</a></span>fOutFile</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">G4String ActGeant::RunAction::fOutFile {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="fragment"><div class="line"><span class="lineno">   15</span>{};</div>
 </div><!-- fragment -->
 </div>
 </div>

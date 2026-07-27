@@ -119,6 +119,10 @@ Public Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:ad8332383e7532a6e659858456e0fd1ab" id="r_ad8332383e7532a6e659858456e0fd1ab"><td class="memItemLeft" align="right" valign="top">G4bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActGeant_1_1SimpleSD.html#ad8332383e7532a6e659858456e0fd1ab">fIsSil</a> {}</td></tr>
 <tr class="separator:ad8332383e7532a6e659858456e0fd1ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a688cb4f43c926a799c3b0b79c0e12cee" id="r_a688cb4f43c926a799c3b0b79c0e12cee"><td class="memItemLeft" align="right" valign="top">G4String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActGeant_1_1SimpleSD.html#a688cb4f43c926a799c3b0b79c0e12cee">fCurrentLayer</a> {}</td></tr>
+<tr class="separator:a688cb4f43c926a799c3b0b79c0e12cee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0ecff0bcfa93454b7e7521f04b00e77" id="r_ad0ecff0bcfa93454b7e7521f04b00e77"><td class="memItemLeft" align="right" valign="top">G4bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classActGeant_1_1SimpleSD.html#ad0ecff0bcfa93454b7e7521f04b00e77">fIsFirstLayer</a> {true}</td></tr>
+<tr class="separator:ad0ecff0bcfa93454b7e7521f04b00e77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a6b70976df7820e524d5942046f5df494" name="a6b70976df7820e524d5942046f5df494"></a>
@@ -136,10 +140,10 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   14</span>                                               : G4VSensitiveDetector(name)</div>
-<div class="line"><span class="lineno">   15</span>{</div>
-<div class="line"><span class="lineno">   16</span>    <a class="code hl_variable" href="classActGeant_1_1SimpleSD.html#ad8332383e7532a6e659858456e0fd1ab">fIsSil</a> = G4StrUtil::contains(name, <span class="stringliteral">&quot;sil&quot;</span>);</div>
-<div class="line"><span class="lineno">   17</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">   15</span>                                               : G4VSensitiveDetector(name)</div>
+<div class="line"><span class="lineno">   16</span>{</div>
+<div class="line"><span class="lineno">   17</span>    <a class="code hl_variable" href="classActGeant_1_1SimpleSD.html#ad8332383e7532a6e659858456e0fd1ab">fIsSil</a> = G4StrUtil::contains(name, <span class="stringliteral">&quot;sil&quot;</span>);</div>
+<div class="line"><span class="lineno">   18</span>}</div>
 <div class="ttc" id="aclassActGeant_1_1SimpleSD_html_ad8332383e7532a6e659858456e0fd1ab"><div class="ttname"><a href="classActGeant_1_1SimpleSD.html#ad8332383e7532a6e659858456e0fd1ab">ActGeant::SimpleSD::fIsSil</a></div><div class="ttdeci">G4bool fIsSil</div><div class="ttdef"><b>Definition</b> ActGeantSimpleSD.hh:18</div></div>
 </div><!-- fragment -->
 </div>
@@ -168,9 +172,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   71</span>{</div>
-<div class="line"><span class="lineno">   72</span>    <span class="keywordflow">return</span>;</div>
-<div class="line"><span class="lineno">   73</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">   99</span>{}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -197,7 +199,13 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   19</span>{}</div>
+<div class="fragment"><div class="line"><span class="lineno">   21</span>{</div>
+<div class="line"><span class="lineno">   22</span>    <span class="comment">// Reset variables that track Si layers</span></div>
+<div class="line"><span class="lineno">   23</span>    <a class="code hl_variable" href="classActGeant_1_1SimpleSD.html#a688cb4f43c926a799c3b0b79c0e12cee">fCurrentLayer</a> = <span class="stringliteral">&quot;&quot;</span>;</div>
+<div class="line"><span class="lineno">   24</span>    <a class="code hl_variable" href="classActGeant_1_1SimpleSD.html#ad0ecff0bcfa93454b7e7521f04b00e77">fIsFirstLayer</a> = <span class="keyword">true</span>;</div>
+<div class="line"><span class="lineno">   25</span>}</div>
+<div class="ttc" id="aclassActGeant_1_1SimpleSD_html_a688cb4f43c926a799c3b0b79c0e12cee"><div class="ttname"><a href="classActGeant_1_1SimpleSD.html#a688cb4f43c926a799c3b0b79c0e12cee">ActGeant::SimpleSD::fCurrentLayer</a></div><div class="ttdeci">G4String fCurrentLayer</div><div class="ttdef"><b>Definition</b> ActGeantSimpleSD.hh:19</div></div>
+<div class="ttc" id="aclassActGeant_1_1SimpleSD_html_ad0ecff0bcfa93454b7e7521f04b00e77"><div class="ttname"><a href="classActGeant_1_1SimpleSD.html#ad0ecff0bcfa93454b7e7521f04b00e77">ActGeant::SimpleSD::fIsFirstLayer</a></div><div class="ttdeci">G4bool fIsFirstLayer</div><div class="ttdef"><b>Definition</b> ActGeantSimpleSD.hh:20</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -234,62 +242,131 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">   22</span>{</div>
-<div class="line"><span class="lineno">   23</span>    <span class="comment">// Get track</span></div>
-<div class="line"><span class="lineno">   24</span>    <span class="keyword">auto</span>* track {step-&gt;GetTrack()};</div>
-<div class="line"><span class="lineno">   25</span>    <span class="keyword">auto</span> <span class="keywordtype">id</span> {track-&gt;GetTrackID()};</div>
-<div class="line"><span class="lineno">   26</span>    <span class="keyword">auto</span>* partDef {track-&gt;GetParticleDefinition()};</div>
-<div class="line"><span class="lineno">   27</span> </div>
-<div class="line"><span class="lineno">   28</span>    <span class="comment">// Apply cuts: ignore neutral and secondary e-</span></div>
-<div class="line"><span class="lineno">   29</span>    <span class="keywordflow">if</span>(partDef-&gt;GetPDGCharge() == 0)</div>
-<div class="line"><span class="lineno">   30</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><span class="lineno">   31</span>    <span class="keywordflow">if</span>(partDef == G4Electron::Definition())</div>
-<div class="line"><span class="lineno">   32</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="fragment"><div class="line"><span class="lineno">   28</span>{</div>
+<div class="line"><span class="lineno">   29</span>    <span class="comment">// Get track</span></div>
+<div class="line"><span class="lineno">   30</span>    <span class="keyword">auto</span>* track {step-&gt;GetTrack()};</div>
+<div class="line"><span class="lineno">   31</span>    <span class="keyword">auto</span> <span class="keywordtype">id</span> {track-&gt;GetTrackID()};</div>
+<div class="line"><span class="lineno">   32</span>    <span class="keyword">auto</span>* partDef {track-&gt;GetParticleDefinition()};</div>
 <div class="line"><span class="lineno">   33</span> </div>
-<div class="line"><span class="lineno">   34</span>    <span class="comment">// Write info</span></div>
-<div class="line"><span class="lineno">   35</span>    <span class="keyword">auto</span>&amp; data {(<span class="keywordtype">id</span> == 1) ? <a class="code hl_function" href="classActGeant_1_1DataHolder.html#adb5b711bfec65a6ffc9c99e1e7184aef">DataHolder::Instance</a>()-&gt;<a class="code hl_variable" href="classActGeant_1_1DataHolder.html#a92279961d8e99a38a68f5ac4386cdc73">fLight</a> : <a class="code hl_function" href="classActGeant_1_1DataHolder.html#adb5b711bfec65a6ffc9c99e1e7184aef">DataHolder::Instance</a>()-&gt;<a class="code hl_variable" href="classActGeant_1_1DataHolder.html#a90df1dd0191462bf271d3e5d8a04dd4e">fHeavy</a>};</div>
-<div class="line"><span class="lineno">   36</span>    <span class="comment">// TPC</span></div>
-<div class="line"><span class="lineno">   37</span>    <span class="keywordflow">if</span>(!<a class="code hl_variable" href="classActGeant_1_1SimpleSD.html#ad8332383e7532a6e659858456e0fd1ab">fIsSil</a>)</div>
-<div class="line"><span class="lineno">   38</span>    {</div>
-<div class="line"><span class="lineno">   39</span>        <span class="keywordflow">if</span>(data.fIsIniTPC) <span class="comment">// get initial position</span></div>
-<div class="line"><span class="lineno">   40</span>        {</div>
-<div class="line"><span class="lineno">   41</span>            data.<a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#aa1c0691985cd295e7eebe5a9a6e970f5">fTrackID</a> = id;</div>
-<div class="line"><span class="lineno">   42</span>            data.fZ = partDef-&gt;GetAtomicNumber();</div>
-<div class="line"><span class="lineno">   43</span>            data.fA = partDef-&gt;GetAtomicMass();</div>
-<div class="line"><span class="lineno">   44</span>            data.fTPCIni = <a class="code hl_function" href="classActGeant_1_1DataHolder.html#a72a962f5d8fd8af15040b8a0db71d18d">DataHolder::PointToVector</a>(step-&gt;GetPreStepPoint()-&gt;GetPosition());</div>
-<div class="line"><span class="lineno">   45</span>            data.fIsIniTPC = <span class="keyword">false</span>;</div>
-<div class="line"><span class="lineno">   46</span>        }</div>
-<div class="line"><span class="lineno">   47</span>        data.fTPCDeltaE += step-&gt;GetTotalEnergyDeposit();</div>
-<div class="line"><span class="lineno">   48</span>        data.fTPCEnd = <a class="code hl_function" href="classActGeant_1_1DataHolder.html#a72a962f5d8fd8af15040b8a0db71d18d">DataHolder::PointToVector</a>(step-&gt;GetPreStepPoint()-&gt;GetPosition());</div>
-<div class="line"><span class="lineno">   49</span>    }</div>
-<div class="line"><span class="lineno">   50</span>    <span class="keywordflow">else</span> <span class="comment">// is Sil</span></div>
-<div class="line"><span class="lineno">   51</span>    {</div>
-<div class="line"><span class="lineno">   52</span>        <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActGeant_1_1SimpleSD.html#ad8332383e7532a6e659858456e0fd1ab">fIsSil</a>)</div>
-<div class="line"><span class="lineno">   53</span>        {</div>
-<div class="line"><span class="lineno">   54</span>            data.fSilIni = <a class="code hl_function" href="classActGeant_1_1DataHolder.html#a72a962f5d8fd8af15040b8a0db71d18d">DataHolder::PointToVector</a>(step-&gt;GetPreStepPoint()-&gt;GetPosition());</div>
-<div class="line"><span class="lineno">   55</span>            <span class="comment">// Get Si layer and idx</span></div>
-<div class="line"><span class="lineno">   56</span>            <span class="keyword">auto</span>* phys {step-&gt;GetPreStepPoint()-&gt;GetTouchableHandle()-&gt;GetVolume()};</div>
-<div class="line"><span class="lineno">   57</span>            data.fSilLayer = phys-&gt;GetName();</div>
-<div class="line"><span class="lineno">   58</span>            data.fSilIdx = phys-&gt;GetCopyNo();</div>
-<div class="line"><span class="lineno">   59</span>            data.fName = partDef-&gt;GetParticleName();</div>
-<div class="line"><span class="lineno">   60</span>            data.fIsIniSil = <span class="keyword">false</span>;</div>
-<div class="line"><span class="lineno">   61</span>        }</div>
-<div class="line"><span class="lineno">   62</span>        data.fSilDeltaE += step-&gt;GetTotalEnergyDeposit();</div>
-<div class="line"><span class="lineno">   63</span>        data.fSilEnd = <a class="code hl_function" href="classActGeant_1_1DataHolder.html#a72a962f5d8fd8af15040b8a0db71d18d">DataHolder::PointToVector</a>(step-&gt;GetPreStepPoint()-&gt;GetPosition());</div>
-<div class="line"><span class="lineno">   64</span>    }</div>
+<div class="line"><span class="lineno">   34</span>    <span class="comment">// Apply cuts: ignore neutral and secondary e-</span></div>
+<div class="line"><span class="lineno">   35</span>    <span class="keywordflow">if</span>(partDef-&gt;GetPDGCharge() == 0)</div>
+<div class="line"><span class="lineno">   36</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><span class="lineno">   37</span>    <span class="keywordflow">if</span>(partDef == G4Electron::Definition())</div>
+<div class="line"><span class="lineno">   38</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><span class="lineno">   39</span> </div>
+<div class="line"><span class="lineno">   40</span>    <span class="comment">// Write info</span></div>
+<div class="line"><span class="lineno">   41</span>    <span class="keyword">auto</span>&amp; data {(<span class="keywordtype">id</span> == 1) ? <a class="code hl_function" href="classActGeant_1_1DataHolder.html#adb5b711bfec65a6ffc9c99e1e7184aef">DataHolder::Instance</a>()-&gt;<a class="code hl_variable" href="classActGeant_1_1DataHolder.html#a92279961d8e99a38a68f5ac4386cdc73">fLight</a> : <a class="code hl_function" href="classActGeant_1_1DataHolder.html#adb5b711bfec65a6ffc9c99e1e7184aef">DataHolder::Instance</a>()-&gt;<a class="code hl_variable" href="classActGeant_1_1DataHolder.html#a90df1dd0191462bf271d3e5d8a04dd4e">fHeavy</a>};</div>
+<div class="line"><span class="lineno">   42</span>    <span class="comment">// TPC</span></div>
+<div class="line"><span class="lineno">   43</span>    <span class="keywordflow">if</span>(!<a class="code hl_variable" href="classActGeant_1_1SimpleSD.html#ad8332383e7532a6e659858456e0fd1ab">fIsSil</a>)</div>
+<div class="line"><span class="lineno">   44</span>    {</div>
+<div class="line"><span class="lineno">   45</span>        <span class="keywordflow">if</span>(data.fIsIniTPC) <span class="comment">// get initial position</span></div>
+<div class="line"><span class="lineno">   46</span>        {</div>
+<div class="line"><span class="lineno">   47</span>            data.<a class="code hl_variable" href="classActGeant_1_1TrackInfo.html#aa1c0691985cd295e7eebe5a9a6e970f5">fTrackID</a> = id;</div>
+<div class="line"><span class="lineno">   48</span>            data.fZ = partDef-&gt;GetAtomicNumber();</div>
+<div class="line"><span class="lineno">   49</span>            data.fA = partDef-&gt;GetAtomicMass();</div>
+<div class="line"><span class="lineno">   50</span>            data.fName = partDef-&gt;GetParticleName();</div>
+<div class="line"><span class="lineno">   51</span>            data.fTPCIni = <a class="code hl_function" href="classActGeant_1_1DataHolder.html#a72a962f5d8fd8af15040b8a0db71d18d">DataHolder::PointToVector</a>(step-&gt;GetPreStepPoint()-&gt;GetPosition());</div>
+<div class="line"><span class="lineno">   52</span>            data.fIsIniTPC = <span class="keyword">false</span>;</div>
+<div class="line"><span class="lineno">   53</span>        }</div>
+<div class="line"><span class="lineno">   54</span>        data.fTPCDeltaE += step-&gt;GetTotalEnergyDeposit();</div>
+<div class="line"><span class="lineno">   55</span>        data.fTPCEnd = <a class="code hl_function" href="classActGeant_1_1DataHolder.html#a72a962f5d8fd8af15040b8a0db71d18d">DataHolder::PointToVector</a>(step-&gt;GetPostStepPoint()-&gt;GetPosition());</div>
+<div class="line"><span class="lineno">   56</span>    }</div>
+<div class="line"><span class="lineno">   57</span>    <span class="comment">// Silicons</span></div>
+<div class="line"><span class="lineno">   58</span>    <span class="keywordflow">else</span></div>
+<div class="line"><span class="lineno">   59</span>    {</div>
+<div class="line"><span class="lineno">   60</span>        <span class="keyword">auto</span>* phys {step-&gt;GetPreStepPoint()-&gt;GetTouchableHandle()-&gt;GetVolume()};</div>
+<div class="line"><span class="lineno">   61</span>        <span class="keyword">auto</span> layer {phys-&gt;GetName()};</div>
+<div class="line"><span class="lineno">   62</span>        <span class="comment">// Determine whether is first layer or not</span></div>
+<div class="line"><span class="lineno">   63</span>        <span class="keywordflow">if</span>(!<a class="code hl_variable" href="classActGeant_1_1SimpleSD.html#a688cb4f43c926a799c3b0b79c0e12cee">fCurrentLayer</a>.empty() &amp;&amp; (layer != <a class="code hl_variable" href="classActGeant_1_1SimpleSD.html#a688cb4f43c926a799c3b0b79c0e12cee">fCurrentLayer</a>))</div>
+<div class="line"><span class="lineno">   64</span>            <a class="code hl_variable" href="classActGeant_1_1SimpleSD.html#ad0ecff0bcfa93454b7e7521f04b00e77">fIsFirstLayer</a> = <span class="keyword">false</span>;</div>
 <div class="line"><span class="lineno">   65</span> </div>
-<div class="line"><span class="lineno">   66</span> </div>
-<div class="line"><span class="lineno">   67</span>    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><span class="lineno">   68</span>}</div>
+<div class="line"><span class="lineno">   66</span>        <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActGeant_1_1SimpleSD.html#ad0ecff0bcfa93454b7e7521f04b00e77">fIsFirstLayer</a>)</div>
+<div class="line"><span class="lineno">   67</span>        {</div>
+<div class="line"><span class="lineno">   68</span>            <span class="keywordflow">if</span>(data.fIsIniSil0)</div>
+<div class="line"><span class="lineno">   69</span>            {</div>
+<div class="line"><span class="lineno">   70</span>                data.fSilIni0 = <a class="code hl_function" href="classActGeant_1_1DataHolder.html#a72a962f5d8fd8af15040b8a0db71d18d">DataHolder::PointToVector</a>(step-&gt;GetPreStepPoint()-&gt;GetPosition());</div>
+<div class="line"><span class="lineno">   71</span>                data.fSilLayer0 = phys-&gt;GetName();</div>
+<div class="line"><span class="lineno">   72</span>                data.fSilIdx0 = phys-&gt;GetCopyNo();</div>
+<div class="line"><span class="lineno">   73</span>                data.fIsIniSil0 = <span class="keyword">false</span>;</div>
+<div class="line"><span class="lineno">   74</span>            }</div>
+<div class="line"><span class="lineno">   75</span>            data.fSilDeltaE0 += step-&gt;GetTotalEnergyDeposit();</div>
+<div class="line"><span class="lineno">   76</span>            data.fSilEnd0 = <a class="code hl_function" href="classActGeant_1_1DataHolder.html#a72a962f5d8fd8af15040b8a0db71d18d">DataHolder::PointToVector</a>(step-&gt;GetPostStepPoint()-&gt;GetPosition());</div>
+<div class="line"><span class="lineno">   77</span>            data.fSilEAfter0 = step-&gt;GetPostStepPoint()-&gt;GetKineticEnergy();</div>
+<div class="line"><span class="lineno">   78</span>        }</div>
+<div class="line"><span class="lineno">   79</span>        <span class="keywordflow">else</span></div>
+<div class="line"><span class="lineno">   80</span>        {</div>
+<div class="line"><span class="lineno">   81</span>            <span class="keywordflow">if</span>(data.fIsIniSil1)</div>
+<div class="line"><span class="lineno">   82</span>            {</div>
+<div class="line"><span class="lineno">   83</span>                data.fSilIni1 = <a class="code hl_function" href="classActGeant_1_1DataHolder.html#a72a962f5d8fd8af15040b8a0db71d18d">DataHolder::PointToVector</a>(step-&gt;GetPreStepPoint()-&gt;GetPosition());</div>
+<div class="line"><span class="lineno">   84</span>                data.fSilLayer1 = phys-&gt;GetName();</div>
+<div class="line"><span class="lineno">   85</span>                data.fSilIdx1 = phys-&gt;GetCopyNo();</div>
+<div class="line"><span class="lineno">   86</span>                data.fIsIniSil1 = <span class="keyword">false</span>;</div>
+<div class="line"><span class="lineno">   87</span>            }</div>
+<div class="line"><span class="lineno">   88</span>            data.fSilDeltaE1 += step-&gt;GetTotalEnergyDeposit();</div>
+<div class="line"><span class="lineno">   89</span>            data.fSilEnd1 = <a class="code hl_function" href="classActGeant_1_1DataHolder.html#a72a962f5d8fd8af15040b8a0db71d18d">DataHolder::PointToVector</a>(step-&gt;GetPostStepPoint()-&gt;GetPosition());</div>
+<div class="line"><span class="lineno">   90</span>            data.fSilEAfter1 = step-&gt;GetPostStepPoint()-&gt;GetKineticEnergy();</div>
+<div class="line"><span class="lineno">   91</span>        }</div>
+<div class="line"><span class="lineno">   92</span> </div>
+<div class="line"><span class="lineno">   93</span>        <a class="code hl_variable" href="classActGeant_1_1SimpleSD.html#a688cb4f43c926a799c3b0b79c0e12cee">fCurrentLayer</a> = layer;</div>
+<div class="line"><span class="lineno">   94</span>    }</div>
+<div class="line"><span class="lineno">   95</span> </div>
+<div class="line"><span class="lineno">   96</span>    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><span class="lineno">   97</span>}</div>
 <div class="ttc" id="aclassActGeant_1_1DataHolder_html_a72a962f5d8fd8af15040b8a0db71d18d"><div class="ttname"><a href="classActGeant_1_1DataHolder.html#a72a962f5d8fd8af15040b8a0db71d18d">ActGeant::DataHolder::PointToVector</a></div><div class="ttdeci">static Vector3DPoint PointToVector(const G4ThreeVector &amp;vec)</div><div class="ttdef"><b>Definition</b> ActGeantDataHolder.cc:22</div></div>
 <div class="ttc" id="aclassActGeant_1_1DataHolder_html_a90df1dd0191462bf271d3e5d8a04dd4e"><div class="ttname"><a href="classActGeant_1_1DataHolder.html#a90df1dd0191462bf271d3e5d8a04dd4e">ActGeant::DataHolder::fHeavy</a></div><div class="ttdeci">TrackInfo fHeavy</div><div class="ttdef"><b>Definition</b> ActGeantDataHolder.hh:19</div></div>
 <div class="ttc" id="aclassActGeant_1_1DataHolder_html_a92279961d8e99a38a68f5ac4386cdc73"><div class="ttname"><a href="classActGeant_1_1DataHolder.html#a92279961d8e99a38a68f5ac4386cdc73">ActGeant::DataHolder::fLight</a></div><div class="ttdeci">TrackInfo fLight</div><div class="ttdef"><b>Definition</b> ActGeantDataHolder.hh:18</div></div>
 <div class="ttc" id="aclassActGeant_1_1DataHolder_html_adb5b711bfec65a6ffc9c99e1e7184aef"><div class="ttname"><a href="classActGeant_1_1DataHolder.html#adb5b711bfec65a6ffc9c99e1e7184aef">ActGeant::DataHolder::Instance</a></div><div class="ttdeci">static DataHolder * Instance()</div><div class="ttdef"><b>Definition</b> ActGeantDataHolder.cc:8</div></div>
-<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_aa1c0691985cd295e7eebe5a9a6e970f5"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#aa1c0691985cd295e7eebe5a9a6e970f5">ActGeant::TrackInfo::fTrackID</a></div><div class="ttdeci">G4int fTrackID</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:56</div></div>
+<div class="ttc" id="aclassActGeant_1_1TrackInfo_html_aa1c0691985cd295e7eebe5a9a6e970f5"><div class="ttname"><a href="classActGeant_1_1TrackInfo.html#aa1c0691985cd295e7eebe5a9a6e970f5">ActGeant::TrackInfo::fTrackID</a></div><div class="ttdeci">G4int fTrackID</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:50</div></div>
 </div><!-- fragment -->
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a688cb4f43c926a799c3b0b79c0e12cee" name="a688cb4f43c926a799c3b0b79c0e12cee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a688cb4f43c926a799c3b0b79c0e12cee">&#9670;&#160;</a></span>fCurrentLayer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">G4String ActGeant::SimpleSD::fCurrentLayer {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="fragment"><div class="line"><span class="lineno">   19</span>{};</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="ad0ecff0bcfa93454b7e7521f04b00e77" name="ad0ecff0bcfa93454b7e7521f04b00e77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0ecff0bcfa93454b7e7521f04b00e77">&#9670;&#160;</a></span>fIsFirstLayer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">G4bool ActGeant::SimpleSD::fIsFirstLayer {true}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="fragment"><div class="line"><span class="lineno">   20</span>{<span class="keyword">true</span>};</div>
+</div><!-- fragment -->
+</div>
+</div>
 <a id="ad8332383e7532a6e659858456e0fd1ab" name="ad8332383e7532a6e659858456e0fd1ab"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad8332383e7532a6e659858456e0fd1ab">&#9670;&#160;</a></span>fIsSil</h2>
 

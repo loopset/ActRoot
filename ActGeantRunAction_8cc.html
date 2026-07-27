@@ -79,7 +79,6 @@ $(function() {
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="ActGeantRunAction_8hh_source.html">ActGeantRunAction.hh</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="ActGeantDataHolder_8hh_source.html">ActGeantDataHolder.hh</a>&quot;</code><br />
-<code>#include &quot;TString.h&quot;</code><br />
 <code>#include &quot;G4AnalysisManager.hh&quot;</code><br />
 <code>#include &quot;G4Run.hh&quot;</code><br />
 <code>#include &quot;G4RunManager.hh&quot;</code><br />
@@ -88,50 +87,46 @@ $(function() {
 <code>#include &lt;G4String.hh&gt;</code><br />
 <code>#include &lt;G4Threading.hh&gt;</code><br />
 <code>#include &lt;G4ios.hh&gt;</code><br />
-<code>#include &lt;vector&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for ActGeantRunAction.cc:</div>
 <div class="dyncontent">
 <div class="center"><img src="ActGeantRunAction_8cc__incl.png" border="0" usemap="#aGeant4_2src_2ActGeantRunAction_8cc" alt=""/></div>
 <map name="aGeant4_2src_2ActGeantRunAction_8cc" id="aGeant4_2src_2ActGeantRunAction_8cc">
-<area shape="rect" title=" " alt="" coords="905,5,1145,31"/>
+<area shape="rect" title=" " alt="" coords="687,5,927,31"/>
 <area shape="rect" href="ActGeantRunAction_8hh.html" title=" " alt="" coords="45,79,213,104"/>
-<area shape="poly" title=" " alt="" coords="905,30,599,51,232,81,226,82,226,76,231,76,599,46,904,24"/>
-<area shape="rect" title=" " alt="" coords="234,225,333,251"/>
-<area shape="poly" title=" " alt="" coords="905,26,633,44,502,60,450,70,409,81,375,94,349,107,327,125,304,153,292,183,287,212,281,211,287,181,300,151,323,121,346,103,373,89,408,76,448,65,501,55,632,39,904,21"/>
-<area shape="rect" href="ActGeantDataHolder_8hh.html" title=" " alt="" coords="421,79,596,104"/>
-<area shape="poly" title=" " alt="" coords="942,33,605,79,605,74,941,28"/>
-<area shape="rect" title=" " alt="" coords="601,225,664,251"/>
-<area shape="poly" title=" " alt="" coords="931,33,825,53,779,66,749,81,729,103,721,125,714,151,699,179,660,219,656,215,695,176,709,149,716,124,725,100,746,77,777,61,823,48,930,28"/>
-<area shape="rect" title=" " alt="" coords="759,79,839,104"/>
-<area shape="poly" title=" " alt="" coords="989,33,850,77,848,72,988,28"/>
-<area shape="rect" title=" " alt="" coords="863,79,1034,104"/>
-<area shape="poly" title=" " alt="" coords="1014,33,973,71,969,67,1011,29"/>
-<area shape="rect" title=" " alt="" coords="1058,79,1143,104"/>
-<area shape="poly" title=" " alt="" coords="1039,29,1080,67,1076,71,1035,33"/>
-<area shape="rect" title=" " alt="" coords="1167,79,1309,104"/>
-<area shape="poly" title=" " alt="" coords="1060,28,1191,72,1190,77,1058,33"/>
-<area shape="rect" title=" " alt="" coords="1333,79,1447,104"/>
-<area shape="poly" title=" " alt="" coords="1084,28,1320,74,1319,79,1083,33"/>
-<area shape="rect" title=" " alt="" coords="1472,79,1620,104"/>
-<area shape="poly" title=" " alt="" coords="1109,28,1459,75,1458,81,1108,33"/>
-<area shape="rect" title=" " alt="" coords="1645,79,1770,104"/>
-<area shape="poly" title=" " alt="" coords="1145,27,1367,47,1632,76,1631,81,1366,52,1145,32"/>
-<area shape="rect" title=" " alt="" coords="1795,79,1873,104"/>
-<area shape="poly" title=" " alt="" coords="1145,21,1431,38,1605,54,1781,76,1781,81,1604,60,1431,44,1145,26"/>
+<area shape="poly" title=" " alt="" coords="695,33,232,81,226,82,226,77,231,76,694,28"/>
+<area shape="rect" title=" " alt="" coords="226,225,325,251"/>
+<area shape="poly" title=" " alt="" coords="687,28,445,47,344,62,310,71,292,81,281,94,274,110,267,146,267,181,272,211,266,212,262,181,261,145,269,109,277,92,288,77,308,66,343,57,444,42,687,23"/>
+<area shape="rect" href="ActGeantDataHolder_8hh.html" title=" " alt="" coords="303,79,477,104"/>
+<area shape="poly" title=" " alt="" coords="741,33,471,79,470,74,740,28"/>
+<area shape="rect" title=" " alt="" coords="502,79,673,104"/>
+<area shape="poly" title=" " alt="" coords="773,33,636,77,635,72,771,28"/>
+<area shape="rect" title=" " alt="" coords="697,79,782,104"/>
+<area shape="poly" title=" " alt="" coords="798,33,762,70,758,67,794,29"/>
+<area shape="rect" title=" " alt="" coords="806,79,947,104"/>
+<area shape="poly" title=" " alt="" coords="821,29,858,67,854,71,817,33"/>
+<area shape="rect" title=" " alt="" coords="971,79,1086,104"/>
+<area shape="poly" title=" " alt="" coords="844,28,981,72,979,77,842,33"/>
+<area shape="rect" title=" " alt="" coords="1111,79,1259,104"/>
+<area shape="poly" title=" " alt="" coords="868,28,1111,73,1110,79,867,33"/>
+<area shape="rect" title=" " alt="" coords="1283,79,1409,104"/>
+<area shape="poly" title=" " alt="" coords="902,28,1270,76,1269,81,901,33"/>
+<area shape="rect" title=" " alt="" coords="1433,79,1512,104"/>
+<area shape="poly" title=" " alt="" coords="928,24,1152,43,1285,58,1420,76,1419,81,1284,63,1152,48,928,29"/>
 <area shape="rect" title=" " alt="" coords="5,152,161,177"/>
 <area shape="poly" title=" " alt="" coords="123,106,100,142,96,139,119,103"/>
-<area shape="poly" title=" " alt="" coords="143,102,263,214,259,218,140,106"/>
-<area shape="poly" title=" " alt="" coords="431,107,377,124,351,137,328,154,306,182,292,213,288,211,301,179,324,150,348,133,375,119,430,101"/>
+<area shape="poly" title=" " alt="" coords="143,103,256,214,252,218,139,106"/>
+<area shape="poly" title=" " alt="" coords="377,106,353,127,328,154,307,184,289,214,285,212,302,182,324,150,349,124,373,102"/>
 <area shape="rect" href="ActGeantData_8hh.html" title=" " alt="" coords="338,152,471,177"/>
-<area shape="poly" title=" " alt="" coords="493,106,435,146,432,142,490,102"/>
-<area shape="rect" title=" " alt="" coords="373,225,471,251"/>
-<area shape="poly" title=" " alt="" coords="510,105,502,139,486,179,469,200,450,218,447,215,465,197,481,176,497,138,504,104"/>
+<area shape="poly" title=" " alt="" coords="395,104,402,138,397,139,390,105"/>
+<area shape="rect" title=" " alt="" coords="460,225,557,251"/>
+<area shape="poly" title=" " alt="" coords="420,102,454,121,485,150,501,181,508,211,503,212,496,183,481,154,451,126,417,106"/>
 <area shape="rect" title=" " alt="" coords="547,152,684,177"/>
-<area shape="poly" title=" " alt="" coords="527,102,588,142,585,147,524,106"/>
-<area shape="poly" title=" " alt="" coords="387,180,316,221,313,216,384,175"/>
-<area shape="poly" title=" " alt="" coords="410,177,419,212,413,213,405,178"/>
-<area shape="poly" title=" " alt="" coords="442,175,589,220,587,225,441,180"/>
+<area shape="poly" title=" " alt="" coords="427,101,567,145,565,150,425,107"/>
+<area shape="poly" title=" " alt="" coords="385,180,310,221,308,216,383,175"/>
+<area shape="poly" title=" " alt="" coords="423,175,482,215,479,219,420,180"/>
+<area shape="rect" title=" " alt="" coords="373,225,436,251"/>
+<area shape="poly" title=" " alt="" coords="407,178,407,212,402,212,402,178"/>
 </map>
 </div>
 </div></div><!-- contents -->
