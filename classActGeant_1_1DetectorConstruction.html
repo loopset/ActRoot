@@ -431,7 +431,7 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="lineno">  121</span>    padPlaneLV-&gt;SetVisAttributes(padPlaneVisAtt);</div>
 <div class="line"><span class="lineno">  122</span> </div>
 <div class="line"><span class="lineno">  123</span> </div>
-<div class="line"><span class="lineno">  125</span>    <span class="keyword">auto</span> configs {<a class="code hl_function" href="classActRoot_1_1Options.html#a7bd54eeb620ca48afccde8edcadb6bb6">ActRoot::Options::GetInstance</a>()-&gt;GetConfigDir() + <span class="stringliteral">&quot;./geant.conf&quot;</span>};</div>
+<div class="line"><span class="lineno">  125</span>    <span class="keyword">auto</span> configs {<a class="code hl_function" href="classActRoot_1_1Options.html#a7bd54eeb620ca48afccde8edcadb6bb6">ActRoot::Options::GetInstance</a>()-&gt;GetGeantFile()};</div>
 <div class="line"><span class="lineno">  126</span>    <a class="code hl_class" href="classActRoot_1_1InputParser.html">ActRoot::InputParser</a> parser {configs};</div>
 <div class="line"><span class="lineno">  127</span>    <span class="keyword">auto</span> sils {parser.<a class="code hl_function" href="classActRoot_1_1InputParser.html#a171a94bd3f09160982d9402e72176850">GetBlock</a>(<span class="stringliteral">&quot;Silicons&quot;</span>)};</div>
 <div class="line"><span class="lineno">  128</span>    <span class="keyword">auto</span> file {sils-&gt;GetString(<span class="stringliteral">&quot;Specs&quot;</span>)};</div>
@@ -661,7 +661,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="lineno">  274</span>{</div>
 <div class="line"><span class="lineno">  275</span>    <span class="comment">// Retrieve file path. So far name is hardcoded</span></div>
-<div class="line"><span class="lineno">  276</span>    <span class="keyword">auto</span> file {<a class="code hl_function" href="classActRoot_1_1Options.html#a7bd54eeb620ca48afccde8edcadb6bb6">ActRoot::Options::GetInstance</a>()-&gt;GetConfigDir() + <span class="stringliteral">&quot;/geant.conf&quot;</span>};</div>
+<div class="line"><span class="lineno">  276</span>    <span class="keyword">auto</span> file {<a class="code hl_function" href="classActRoot_1_1Options.html#a7bd54eeb620ca48afccde8edcadb6bb6">ActRoot::Options::GetInstance</a>()-&gt;GetGeantFile()};</div>
 <div class="line"><span class="lineno">  277</span>    <a class="code hl_class" href="classActRoot_1_1InputParser.html">ActRoot::InputParser</a> parser {file};</div>
 <div class="line"><span class="lineno">  278</span> </div>
 <div class="line"><span class="lineno">  279</span>    <span class="comment">// Get [Gas] block</span></div>
