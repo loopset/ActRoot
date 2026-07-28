@@ -26,6 +26,7 @@ private:
     std::string fDetFile {"detector.conf"};
     std::string fCalFile {"calibration.conf"};
     std::string fDataFile {"data.conf"};
+    std::string fGeantFile {"geant.conf"};
     ModeType fMode {ModeType::ENone};
     bool fIsVerbose {};
     bool fWithTrigger {false}; //!< Add GATCONF to TPCData as a flag
@@ -50,6 +51,7 @@ public:
     std::string GetDetFile() { return GetConfigDir() + fDetFile; }
     std::string GetCalFile() { return GetConfigDir() + fCalFile; }
     std::string GetDataFile() { return GetConfigDir() + fDataFile; }
+    std::string GetGeantFile();
     std::string GetProjectDir();
     std::string GetConfigDir() { return GetProjectDir() + "/configs/"; }
     bool GetIsMT() const { return fIsMT; }

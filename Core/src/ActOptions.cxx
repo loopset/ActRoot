@@ -108,6 +108,9 @@ void ActRoot::Options::Parse(int argc, char** argv)
         // Data configuration inside configs dir
         else if(arg == "-runs" && argc >= i + 1)
             fDataFile = argv[++i];
+        // Geant config file
+        else if(arg == "-g" && argc >= i + 1)
+            fGeantFile = argv[++i];
         // Verbose mode
         else if(arg == "-v")
             fIsVerbose = true;
@@ -131,6 +134,7 @@ void ActRoot::Options::Help() const
     std::cout << "-gui : Set visual mode (only valid for actplot)" << '\n';
     std::cout << "-det file.detector : Sets detector config file" << '\n';
     std::cout << "-cal file.calibrations : Sets calibrations for detectors" << '\n';
+    std::cout << "-g geant.conf : Sets config file for ActGeant" << '\n';
     std::cout << "-runs output.runs : Sets data flow configuration" << '\n';
     std::cout << "-mt or -st : Enables MT or ST mode" << '\n';
     std::cout << "-v : Enables verbose mode for algorithms" << '\n';
@@ -148,6 +152,7 @@ void ActRoot::Options::Print() const
     std::cout << "-> Detector     : " << fDetFile << '\n';
     std::cout << "-> Calibrations : " << fCalFile << '\n';
     std::cout << "-> Data         : " << fDataFile << '\n';
+    std::cout << "-> Geant        : " << fGeantFile << '\n';
     if(fWithTrigger)
         std::cout << "-> WithTrigger  : " << fWithTrigger << '\n';
     std::cout << "--------------------" << RESET << '\n';
@@ -167,8 +172,8 @@ std::string ActRoot::Options::FindConfigDir()
 {
     auto dir {std::filesystem::current_path()};
     auto pwd {dir.string()}; // copy to print error message
-    // Find up to two levels for a configs dir
-    for(int i = 0; i < 2; i++)
+    // Find up to three levels for a configs dir
+    for(int i = 0; i < 3; i++)
     {
         // Locate configs
         std::filesystem::path search {dir / "configs"};
@@ -182,4 +187,13 @@ std::string ActRoot::Options::FindConfigDir()
     }
     throw std::runtime_error("ActRoot::Options::FindConfigsDir() : from " + pwd +
                              " cannot find /configs up to two levels");
+}
+
+std::string ActRoot::Options::GetGeantFile()
+{
+    std::filesystem::path path {fGeantFile};
+    if(!path.parent_path().empty()) // if just file name, assume it resides in configs/ dir
+        return GetConfigDir() + fGeantFile;
+    else
+        return fGeantFile;
 }

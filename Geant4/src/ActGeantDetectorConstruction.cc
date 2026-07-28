@@ -122,7 +122,7 @@ G4VPhysicalVolume* ActGeant::DetectorConstruction::DefineVolumes()
 
 
     ////////////////////  Silicon detectors
-    auto configs {ActRoot::Options::GetInstance()->GetConfigDir() + "./geant.conf"};
+    auto configs {ActRoot::Options::GetInstance()->GetGeantFile()};
     ActRoot::InputParser parser {configs};
     auto sils {parser.GetBlock("Silicons")};
     auto file {sils->GetString("Specs")};
@@ -273,7 +273,7 @@ void ActGeant::DetectorConstruction::DefineMaterials()
 void ActGeant::DetectorConstruction::ParseGas()
 {
     // Retrieve file path. So far name is hardcoded
-    auto file {ActRoot::Options::GetInstance()->GetConfigDir() + "/geant.conf"};
+    auto file {ActRoot::Options::GetInstance()->GetGeantFile()};
     ActRoot::InputParser parser {file};
 
     // Get [Gas] block

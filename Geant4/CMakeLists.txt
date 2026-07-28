@@ -18,17 +18,17 @@ target_link_libraries(${EXEC_NAME} ${Geant4_LIBRARIES} ActCore ActPhysics ActSim
 # install it in bin
 install(TARGETS ${EXEC_NAME} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
-# copy macros
-set(MACROS
-  gui.mac
-  init_vis.mac
-  vis.mac
-  )
+# # copy macros
+# set(MACROS
+#   gui.mac
+#   init_vis.mac
+#   vis.mac
+#   )
 
-foreach(_macro ${MACROS})
-  configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/macros/${_macro}
-    ${CMAKE_INSTALL_PREFIX}/bin/${_macro}
-    COPYONLY
-    )
-endforeach()
+# foreach(_macro ${MACROS})
+#   configure_file(
+#     ${CMAKE_CURRENT_SOURCE_DIR}/macros/${_macro}
+#     ${CMAKE_INSTALL_PREFIX}/bin/${_macro}
+#     COPYONLY
+#     )
+# endforeach()

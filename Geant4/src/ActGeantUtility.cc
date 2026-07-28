@@ -47,13 +47,13 @@ void ActGeant::WriteDEDXTable(G4ParticleDefinition* p, G4Material* m, const G4St
 
 void ActGeant::WriteDEDXTables(const G4String& dir)
 {
-    auto config {ActRoot::Options::GetInstance()->GetConfigDir() + "geant.conf"};
+    auto config {ActRoot::Options::GetInstance()->GetGeantFile()};
     ActRoot::InputParser parser {config};
     auto block {parser.GetBlock("Kinematics")};
     auto reac {block->GetStringVector("Reaction")};
     auto aux {reac[0] + "," + reac[1]};
     // Init kinematics
-    ActPhysics::Kinematics kin {aux};
+    ActPhysics::Kinematics kin {"16N(d,3He)15C@640"};
     std::vector<G4ParticleDefinition*> parts;
     for(int i = 1; i <= 4; i++)
     {
@@ -63,12 +63,15 @@ void ActGeant::WriteDEDXTables(const G4String& dir)
         parts.push_back(part);
     }
 
+
     // Materials are hardcoded so far
     std::vector<G4Material*> mats {G4Material::GetMaterial("GasMixture"), G4Material::GetMaterial("G4_Si")};
 
     // Do
     for(auto& part : parts)
     {
+        if(!part)
+            continue;
         auto pname {part->GetParticleName()};
         for(const auto& mat : mats)
         {
@@ -81,7 +84,7 @@ void ActGeant::WriteDEDXTables(const G4String& dir)
 
 G4String ActGeant::GetOutputFilename()
 {
-    auto config {ActRoot::Options::GetInstance()->GetConfigDir() + "geant.conf"};
+    auto config {ActRoot::Options::GetInstance()->GetGeantFile()};
     ActRoot::InputParser parser {config};
     auto block {parser.GetBlock("Kinematics")};
     auto reac {block->GetStringVector("Reaction")};

@@ -2,6 +2,7 @@
 #include "ActGeantDetectorConstruction.hh"
 #include "ActGeantPhysicsList.hh"
 #include "ActGeantUtility.hh"
+#include "ActOptions.h"
 
 // #include "FTFP_BERT.hh"
 #include "G4RunManagerFactory.hh"
@@ -10,6 +11,11 @@
 #include "G4UIcommand.hh"
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
+
+#include <G4String.hh>
+#include <G4ios.hh>
+
+#include <vector>
 
 namespace
 {
@@ -24,7 +30,6 @@ void PrintUsage()
 int main(int argc, char** argv)
 {
     // Evaluate arguments
-    // echo 'kitty.desktop' > ~/.config/xdg-terminals.lisecho 'kitty.desktop' > ~/.config/xdg-terminals.listt
     if(argc > 7)
     {
         PrintUsage();
@@ -37,6 +42,8 @@ int main(int argc, char** argv)
 #ifdef G4MULTITHREADED
     G4int nThreads = 0;
 #endif
+
+    std::vector<G4String> customArgs {};
     for(G4int i = 1; i < argc; i = i + 2)
     {
         if(G4String(argv[i]) == "-m")
@@ -56,11 +63,27 @@ int main(int argc, char** argv)
         }
         else
         {
-            PrintUsage();
-            return 1;
+            // Additional arguments are passed to actroot
+            customArgs.push_back(argv[i]);
+            if(i + 1 < argc)
+                customArgs.push_back(argv[i + 1]);
         }
     }
 
+    if(customArgs.size())
+    {
+        std::vector<char*> customArgv {};
+        for(auto& s : customArgs)
+        {
+            G4cout << "Adding custom flag : " << s << G4endl;
+            customArgv.push_back(static_cast<char*>(s.data()));
+        }
+        // Insert program name before
+        customArgv.insert(customArgv.begin(), argv[0]);
+
+        ActRoot::Options::GetInstance(static_cast<int>(customArgv.size()), customArgv.data());
+        ActRoot::Options::GetInstance()->Print();
+    }
     // Detect interactive mode (if no macro provided) and define UI session
     //
     G4UIExecutive* ui = nullptr;

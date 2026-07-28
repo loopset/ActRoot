@@ -45,7 +45,7 @@ ActGeant::PrimaryGenerator::PrimaryGenerator()
     fParticleGun = new G4ParticleGun {1};
 
     // Parse configuration file
-    auto config {ActRoot::Options::GetInstance()->GetConfigDir() + "/geant.conf"};
+    auto config {ActRoot::Options::GetInstance()->GetGeantFile()};
     ActRoot::InputParser parser {config};
     // Kinematics
     auto kin {parser.GetBlock("Kinematics")};
