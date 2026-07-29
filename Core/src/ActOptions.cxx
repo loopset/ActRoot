@@ -172,8 +172,8 @@ std::string ActRoot::Options::FindConfigDir()
 {
     auto dir {std::filesystem::current_path()};
     auto pwd {dir.string()}; // copy to print error message
-    // Find up to three levels for a configs dir
-    for(int i = 0; i < 3; i++)
+    // Find up to 5 levels for a configs dir
+    for(int i = 0; i < 5; i++)
     {
         // Locate configs
         std::filesystem::path search {dir / "configs"};
@@ -191,8 +191,8 @@ std::string ActRoot::Options::FindConfigDir()
 
 std::string ActRoot::Options::GetGeantFile()
 {
-    std::filesystem::path path {fGeantFile};
-    if(!path.parent_path().empty()) // if just file name, assume it resides in configs/ dir
+    auto hasSlash {fGeantFile.find("/") != std::string::npos};
+    if(!hasSlash) // if just file name, assume it resides in configs/ dir
         return GetConfigDir() + fGeantFile;
     else
         return fGeantFile;

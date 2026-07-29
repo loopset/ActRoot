@@ -1,5 +1,6 @@
 #include "ActGeantPrimaryGenerator.hh"
 
+#include "ActColors.h"
 #include "ActCrossSection.h"
 #include "ActGeantDataHolder.hh"
 #include "ActInputParser.h"
@@ -278,6 +279,7 @@ void ActGeant::PrimaryGenerator::InitialiseParticles()
             G4String msg {"Cannot find part def for " + part.GetName()};
             G4Exception("ActPrimaryGenerator::InitialiseParticles", "ActPrimaryGenerator001", FatalException, msg);
         }
+        G4cout << BOLDGREEN << "Built particle : " << def->GetParticleName() << RESET << G4endl;
         fPartDefs.push_back(def);
     }
 }

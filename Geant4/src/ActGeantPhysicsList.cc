@@ -11,7 +11,7 @@
 
 ActGeant::PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
-    SetVerboseLevel(1);
+    SetVerboseLevel(0);
     // // Activate transport with multiple scattering: DOES NOT WORK BC IT IS HARDCODED IN EmStandard....
     // auto* emPars {G4EmParameters::Instance()};
     // emPars->SetTransportationWithMsc(G4TransportationWithMscType::fEnabled);
