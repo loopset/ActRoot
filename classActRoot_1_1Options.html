@@ -370,8 +370,8 @@ Static Private Attributes</h2></td></tr>
 <div class="fragment"><div class="line"><span class="lineno">  172</span>{</div>
 <div class="line"><span class="lineno">  173</span>    <span class="keyword">auto</span> dir {std::filesystem::current_path()};</div>
 <div class="line"><span class="lineno">  174</span>    <span class="keyword">auto</span> pwd {dir.string()}; <span class="comment">// copy to print error message</span></div>
-<div class="line"><span class="lineno">  175</span>    <span class="comment">// Find up to three levels for a configs dir</span></div>
-<div class="line"><span class="lineno">  176</span>    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; 3; i++)</div>
+<div class="line"><span class="lineno">  175</span>    <span class="comment">// Find up to 5 levels for a configs dir</span></div>
+<div class="line"><span class="lineno">  176</span>    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; 5; i++)</div>
 <div class="line"><span class="lineno">  177</span>    {</div>
 <div class="line"><span class="lineno">  178</span>        <span class="comment">// Locate configs</span></div>
 <div class="line"><span class="lineno">  179</span>        std::filesystem::path search {dir / <span class="stringliteral">&quot;configs&quot;</span>};</div>
@@ -508,8 +508,8 @@ Static Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <div class="fragment"><div class="line"><span class="lineno">  193</span>{</div>
-<div class="line"><span class="lineno">  194</span>    std::filesystem::path path {<a class="code hl_variable" href="classActRoot_1_1Options.html#ac0fcb095c17c8e3e8b5981184beffc0e">fGeantFile</a>};</div>
-<div class="line"><span class="lineno">  195</span>    <span class="keywordflow">if</span>(!path.parent_path().empty()) <span class="comment">// if just file name, assume it resides in configs/ dir</span></div>
+<div class="line"><span class="lineno">  194</span>    <span class="keyword">auto</span> hasSlash {<a class="code hl_variable" href="classActRoot_1_1Options.html#ac0fcb095c17c8e3e8b5981184beffc0e">fGeantFile</a>.find(<span class="stringliteral">&quot;/&quot;</span>) != std::string::npos};</div>
+<div class="line"><span class="lineno">  195</span>    <span class="keywordflow">if</span>(!hasSlash) <span class="comment">// if just file name, assume it resides in configs/ dir</span></div>
 <div class="line"><span class="lineno">  196</span>        <span class="keywordflow">return</span> <a class="code hl_function" href="classActRoot_1_1Options.html#afb1623c99496132cede31ce67262bc0b">GetConfigDir</a>() + <a class="code hl_variable" href="classActRoot_1_1Options.html#ac0fcb095c17c8e3e8b5981184beffc0e">fGeantFile</a>;</div>
 <div class="line"><span class="lineno">  197</span>    <span class="keywordflow">else</span></div>
 <div class="line"><span class="lineno">  198</span>        <span class="keywordflow">return</span> <a class="code hl_variable" href="classActRoot_1_1Options.html#ac0fcb095c17c8e3e8b5981184beffc0e">fGeantFile</a>;</div>
