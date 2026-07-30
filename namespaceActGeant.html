@@ -246,7 +246,7 @@ Functions</h2></td></tr>
 <div class="line"><span class="lineno">   53</span>    <span class="keyword">auto</span> reac {block-&gt;GetStringVector(<span class="stringliteral">&quot;Reaction&quot;</span>)};</div>
 <div class="line"><span class="lineno">   54</span>    <span class="keyword">auto</span> aux {reac[0] + <span class="stringliteral">&quot;,&quot;</span> + reac[1]};</div>
 <div class="line"><span class="lineno">   55</span>    <span class="comment">// Init kinematics</span></div>
-<div class="line"><span class="lineno">   56</span>    <a class="code hl_class" href="classActPhysics_1_1Kinematics.html">ActPhysics::Kinematics</a> kin {<span class="stringliteral">&quot;16N(d,3He)15C@640&quot;</span>};</div>
+<div class="line"><span class="lineno">   56</span>    <a class="code hl_class" href="classActPhysics_1_1Kinematics.html">ActPhysics::Kinematics</a> kin {aux};</div>
 <div class="line"><span class="lineno">   57</span>    std::vector&lt;G4ParticleDefinition*&gt; parts;</div>
 <div class="line"><span class="lineno">   58</span>    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 1; i &lt;= 4; i++)</div>
 <div class="line"><span class="lineno">   59</span>    {</div>
