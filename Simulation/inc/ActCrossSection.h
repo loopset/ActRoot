@@ -39,6 +39,7 @@ public:
     double GetTotalXSmbarn() { return fTotalXS; }
     double GetTotalXScm2() const { return fTotalXS * 1e-27; }
     double GetIntervalXS(double minAngle, double maxAngle);
+    TGraph* GetTheoXSGraph() const { return fTheoXSGraph; }
 
     // Others
     void Draw() const;

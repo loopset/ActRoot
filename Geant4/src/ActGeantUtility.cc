@@ -53,7 +53,7 @@ void ActGeant::WriteDEDXTables(const G4String& dir)
     auto reac {block->GetStringVector("Reaction")};
     auto aux {reac[0] + "," + reac[1]};
     // Init kinematics
-    ActPhysics::Kinematics kin {"16N(d,3He)15C@640"};
+    ActPhysics::Kinematics kin {aux};
     std::vector<G4ParticleDefinition*> parts;
     for(int i = 1; i <= 4; i++)
     {
