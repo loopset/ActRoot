@@ -10,7 +10,7 @@ namespace ActGeant
 class EventAction : public G4UserEventAction
 {
 private:
-    G4double fSiRes {0.25}; // Silicon resolution, so far hardcoded. Measured at 5.5 MeV
+    G4double fSiRes {0.025}; // Silicon resolution in SIGMA, so far hardcoded. Measured at 5.5 MeV
 public:
     EventAction();
     ~EventAction() override = default;
