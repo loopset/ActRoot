@@ -1,6 +1,8 @@
 #ifndef ACT4PRIMARYGENERATOR_HH
 #define ACT4PRIMARYGENERATOR_HH
 
+#include "TH3.h"
+
 #include "G4ParticleDefinition.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 
@@ -21,7 +23,7 @@ namespace ActSim
 {
 class KinematicGenerator;
 class CrossSection;
-}
+} // namespace ActSim
 
 namespace ActGeant
 {
@@ -34,10 +36,12 @@ private:
     ActSim::CrossSection* fCrossSection {};
     // Beam parameters parsed in constructor
     double fEBeam {};
+    double fSigmaEBeam {};
     double fEx {};
     double fBeamCentreZ {}; // Beam centre wrt to pad plane in mm
     double fBeamSigmaXY {}; // Preliminary emittances (just gaussians)
     double fBeamSigmaZ {};
+    TH3* fHistEmittance {}; // Emittance histogram in the same form as for E796
     std::vector<G4ParticleDefinition*> fPartDefs {};
 
 

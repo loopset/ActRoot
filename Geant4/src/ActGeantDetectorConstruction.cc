@@ -106,8 +106,8 @@ G4VPhysicalVolume* ActGeant::DetectorConstruction::DefineVolumes()
     auto padPlaneZ {4.54 / 2 * mm};
 
     auto* padPlaneS {new G4Box("PadPlane", padPlaneX, padPlaneY, padPlaneZ)};
-    auto* padPlaneLV =
-        new G4LogicalVolume(padPlaneS, G4Material::GetMaterial("Galactic"), "PadPlane"); // not the right material but ...
+    auto* padPlaneLV = new G4LogicalVolume(padPlaneS, G4Material::GetMaterial("Galactic"),
+                                           "PadPlane"); // not the right material but ...
     //--place it above chamber
     auto padPlanePosX {0. * cm};
     auto padPlanePosY {0. * cm};
@@ -316,6 +316,14 @@ void ActGeant::DetectorConstruction::ParseGas()
             mat = new G4Material {"iC4H10", density, 2, kStateGas, t, p};
             mat->AddElement(nist->FindOrBuildElement("C"), 4);
             mat->AddElement(nist->FindOrBuildElement("H"), 10);
+        }
+        if(comp == "CF4")
+        {
+            molarMass = (1. * 12.0107 + 4. * 18.998) * g / mole;
+            density = (p * molarMass) / (R * t);
+            mat = new G4Material {"CF4", density, 2, kStateGas, t, p};
+            mat->AddElement(nist->FindOrBuildElement("C"), 1);
+            mat->AddElement(nist->FindOrBuildElement("F"), 4);
         }
         std::cout << "Comp : " << comp << " molar mass: " << molarMass / (g / mole) << " rho: " << density / (g / cm3)
                   << '\n';

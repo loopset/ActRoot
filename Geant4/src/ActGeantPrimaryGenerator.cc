@@ -11,7 +11,9 @@
 
 #include "Randomize.hh"
 
+#include "TFile.h"
 #include "TLorentzVector.h"
+#include "TMath.h"
 #include "TROOT.h"
 
 #include "Math/GenVector/AxisAngle.h"
@@ -37,6 +39,7 @@
 #include <G4ios.hh>
 
 #include <cmath>
+#include <iostream>
 #include <string>
 
 
@@ -93,7 +96,14 @@ ActGeant::PrimaryGenerator::PrimaryGenerator()
     fBeamCentreZ = beam->GetDouble("CentreZ");
     fBeamSigmaXY = beam->GetDouble("SigmaXY");
     fBeamSigmaZ = beam->GetDouble("SigmaZ");
+    if(beam->CheckTokenExists("HistEmittance", true))
+    {
+        auto file {std::make_unique<TFile>(beam->GetString("HistEmittance").c_str())};
+        fHistEmittance = file->Get<TH3>("h3d"); // hardcoded name for now
+    }
     fEBeam = beam->GetDouble("Energy");
+    if(beam->CheckTokenExists("SigmaEnergy", true))
+        fSigmaEBeam = beam->GetDouble("SigmaEnergy");
 
     // Particles are lazily defined in InitialiseParticles, since
     // G4IonTable is not initialised by Geant4 at the moment of calling this constructor
@@ -127,17 +137,46 @@ void ActGeant::PrimaryGenerator::GeneratePrimaries(G4Event* event)
     // Get X half length
     auto xHalfLength {driftBox->GetXHalfLength()};
 
-    // 1-> Entrance point
-    G4ThreeVector window {0, G4RandGauss::shoot(0, fBeamSigmaXY), // assuming beam perfectly centred in Y
-                          G4RandGauss::shoot(fBeamCentreZ, fBeamSigmaZ)};
+    G4ThreeVector window {};
+    G4ThreeVector vertex {};
+    // If emittance available
+    if(fHistEmittance)
+    {
+        // Start point
+        // X
+        auto Xstart {-xHalfLength};
+        // Y depends completely on the method of calculation
+        double Ystart {};
+        double thetaXY {};
+        double thetaXZ {};
+        fHistEmittance->GetRandom3(Ystart, thetaXY, thetaXZ);
+        // Transform to Geant4 reference frame
+        Ystart -= driftBox->GetYHalfLength();
+        // Z of beam at entrance
+        double Zstart {G4RandGauss::shoot(fBeamCentreZ, fBeamSigmaZ)};
+        window = G4ThreeVector {Xstart, Ystart, Zstart};
 
-    // 2-> Vertex
-    // Sampling again gaussian.... not realistic bc real beam has a given emittance
-    G4ThreeVector vertex {G4RandFlat::shoot(-xHalfLength, +xHalfLength),
-                          G4RandGauss::shoot(0, fBeamSigmaXY), // assuming beam perfectly centred in Y
-                          G4RandGauss::shoot(fBeamCentreZ, fBeamSigmaZ)};
+        // Vertex values
+        auto Xrp {G4RandFlat::shoot(-xHalfLength, +xHalfLength)};
+        auto Yrp {Ystart - Xrp * TMath::Tan(thetaXY * TMath::DegToRad())};
+        auto Zrp {Zstart - Xrp * TMath::Tan(thetaXZ * TMath::DegToRad())};
+        vertex = G4ThreeVector {Xrp, Yrp, Zrp};
+        // std::cout << "Sampling from histogram" << '\n';
+        // std::cout << "Entrance : " << window << '\n';
+        // std::cout << "RP  : " << vertex << '\n';
+    }
+    else
+    {
+        window =
+            G4ThreeVector {-xHalfLength, G4RandGauss::shoot(0, fBeamSigmaXY), // assuming beam perfectly centred in Y
+                           G4RandGauss::shoot(fBeamCentreZ, fBeamSigmaZ)};
+        vertex = G4ThreeVector {G4RandFlat::shoot(-xHalfLength, +xHalfLength),
+                                G4RandGauss::shoot(0, fBeamSigmaXY), // assuming beam perfectly centred in Y
+                                G4RandGauss::shoot(fBeamCentreZ, fBeamSigmaZ)};
+    }
     // 3-> Beam direction
     auto beamDir {vertex - window};
+    beamDir = beamDir.unit();
 
     // Shoot beam
     // WARNING: disabled as tracking the beam and then two recoild requires a more complex implementation
@@ -149,9 +188,13 @@ void ActGeant::PrimaryGenerator::GeneratePrimaries(G4Event* event)
     // fParticleGun->SetParticleEnergy(fEBeam);
     // fParticleGun->GeneratePrimaryVertex(event);
 
+    // Random EBeam if requestes
+    double EBeamIt {G4RandGauss::shoot(fEBeam, fSigmaEBeam)};
+    // std::cout << "Beam energy : " << EBeamIt << " MeV" << std::endl;
+
     // Slow down beam
     auto d {(vertex - window).r()};
-    auto EBeamAtVertex {SlowDownBeam(fPartDefs[0], fEBeam, d, driftLog->GetMaterial())};
+    auto EBeamAtVertex {SlowDownBeam(fPartDefs[0], EBeamIt, d, driftLog->GetMaterial())};
 
     // Generate kinematics
     double weight {};
@@ -173,11 +216,18 @@ void ActGeant::PrimaryGenerator::GeneratePrimaries(G4Event* event)
             thetaCM = fCrossSection->SampleCDF() * deg;
         else
             thetaCM = std::acos(G4RandFlat::shoot(-1, 1));
+        // thetaCM = 5 * TMath::DegToRad();
+        // phiCM = 0;
         // Compute
         fKin->ComputeRecoilKinematics(thetaCM, phiCM);
         T3 = fKin->GetT3Lab();
         theta3 = fKin->GetTheta3Lab();
         phi3 = fKin->GetPhi3Lab();
+        // std::cout << "Entrance : " << window << '\n';
+        // std::cout << "RP  : " << vertex << '\n';
+        // std::cout << "Beam dir : " << beamDir << '\n';
+        // std::cout << "ThetaCM : " << thetaCM * TMath::RadToDeg() << " Lab : " << theta3 * TMath::RadToDeg()
+        //           << " phi3 : " << phi3 * TMath::RadToDeg() << std::endl;
         T4 = fKin->GetT4Lab();
         theta4 = fKin->GetTheta4Lab();
         phi4 = fKin->GetPhi4Lab();
