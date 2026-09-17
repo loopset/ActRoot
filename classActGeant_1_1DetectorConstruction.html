@@ -258,19 +258,19 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">  347</span>{</div>
-<div class="line"><span class="lineno">  348</span>    <span class="comment">// Here define the SDs</span></div>
-<div class="line"><span class="lineno">  349</span>    <span class="comment">// Both TPC and Si share the same SD altough in different pointers (different instances)</span></div>
-<div class="line"><span class="lineno">  350</span> </div>
-<div class="line"><span class="lineno">  351</span>    <span class="keyword">auto</span>* tpcSD {<span class="keyword">new</span> SimpleSD {<span class="stringliteral">&quot;tpcSD&quot;</span>}};</div>
-<div class="line"><span class="lineno">  352</span>    G4SDManager::GetSDMpointer()-&gt;AddNewDetector(tpcSD);</div>
-<div class="line"><span class="lineno">  353</span>    SetSensitiveDetector(<a class="code hl_variable" href="classActGeant_1_1DetectorConstruction.html#aba8abec765ef438f86e455c903780050">fDriftLV</a>, tpcSD);</div>
-<div class="line"><span class="lineno">  354</span> </div>
-<div class="line"><span class="lineno">  355</span>    <span class="keyword">auto</span>* silSD {<span class="keyword">new</span> SimpleSD {<span class="stringliteral">&quot;silSD&quot;</span>}};</div>
-<div class="line"><span class="lineno">  356</span>    G4SDManager::GetSDMpointer()-&gt;AddNewDetector(silSD);</div>
-<div class="line"><span class="lineno">  357</span>    <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; silLV : <a class="code hl_variable" href="classActGeant_1_1DetectorConstruction.html#a224e0b3a6eba22ec2d854d7f321c3ee7">fSilLVs</a>)</div>
-<div class="line"><span class="lineno">  358</span>        SetSensitiveDetector(silLV, silSD);</div>
-<div class="line"><span class="lineno">  359</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">  355</span>{</div>
+<div class="line"><span class="lineno">  356</span>    <span class="comment">// Here define the SDs</span></div>
+<div class="line"><span class="lineno">  357</span>    <span class="comment">// Both TPC and Si share the same SD altough in different pointers (different instances)</span></div>
+<div class="line"><span class="lineno">  358</span> </div>
+<div class="line"><span class="lineno">  359</span>    <span class="keyword">auto</span>* tpcSD {<span class="keyword">new</span> SimpleSD {<span class="stringliteral">&quot;tpcSD&quot;</span>}};</div>
+<div class="line"><span class="lineno">  360</span>    G4SDManager::GetSDMpointer()-&gt;AddNewDetector(tpcSD);</div>
+<div class="line"><span class="lineno">  361</span>    SetSensitiveDetector(<a class="code hl_variable" href="classActGeant_1_1DetectorConstruction.html#aba8abec765ef438f86e455c903780050">fDriftLV</a>, tpcSD);</div>
+<div class="line"><span class="lineno">  362</span> </div>
+<div class="line"><span class="lineno">  363</span>    <span class="keyword">auto</span>* silSD {<span class="keyword">new</span> SimpleSD {<span class="stringliteral">&quot;silSD&quot;</span>}};</div>
+<div class="line"><span class="lineno">  364</span>    G4SDManager::GetSDMpointer()-&gt;AddNewDetector(silSD);</div>
+<div class="line"><span class="lineno">  365</span>    <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; silLV : <a class="code hl_variable" href="classActGeant_1_1DetectorConstruction.html#a224e0b3a6eba22ec2d854d7f321c3ee7">fSilLVs</a>)</div>
+<div class="line"><span class="lineno">  366</span>        SetSensitiveDetector(silLV, silSD);</div>
+<div class="line"><span class="lineno">  367</span>}</div>
 <div class="ttc" id="aclassActGeant_1_1DetectorConstruction_html_a224e0b3a6eba22ec2d854d7f321c3ee7"><div class="ttname"><a href="classActGeant_1_1DetectorConstruction.html#a224e0b3a6eba22ec2d854d7f321c3ee7">ActGeant::DetectorConstruction::fSilLVs</a></div><div class="ttdeci">std::vector&lt; G4LogicalVolume * &gt; fSilLVs</div><div class="ttdef"><b>Definition</b> ActGeantDetectorConstruction.hh:27</div></div>
 <div class="ttc" id="aclassActGeant_1_1DetectorConstruction_html_aba8abec765ef438f86e455c903780050"><div class="ttname"><a href="classActGeant_1_1DetectorConstruction.html#aba8abec765ef438f86e455c903780050">ActGeant::DetectorConstruction::fDriftLV</a></div><div class="ttdeci">G4LogicalVolume * fDriftLV</div><div class="ttdef"><b>Definition</b> ActGeantDetectorConstruction.hh:19</div></div>
 </div><!-- fragment -->
@@ -416,8 +416,8 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="lineno">  106</span>    <span class="keyword">auto</span> padPlaneZ {4.54 / 2 * mm};</div>
 <div class="line"><span class="lineno">  107</span> </div>
 <div class="line"><span class="lineno">  108</span>    <span class="keyword">auto</span>* padPlaneS {<span class="keyword">new</span> G4Box(<span class="stringliteral">&quot;PadPlane&quot;</span>, padPlaneX, padPlaneY, padPlaneZ)};</div>
-<div class="line"><span class="lineno">  109</span>    <span class="keyword">auto</span>* padPlaneLV =</div>
-<div class="line"><span class="lineno">  110</span>        <span class="keyword">new</span> G4LogicalVolume(padPlaneS, G4Material::GetMaterial(<span class="stringliteral">&quot;Galactic&quot;</span>), <span class="stringliteral">&quot;PadPlane&quot;</span>); <span class="comment">// not the right material but ...</span></div>
+<div class="line"><span class="lineno">  109</span>    <span class="keyword">auto</span>* padPlaneLV = <span class="keyword">new</span> G4LogicalVolume(padPlaneS, G4Material::GetMaterial(<span class="stringliteral">&quot;Galactic&quot;</span>),</div>
+<div class="line"><span class="lineno">  110</span>                                           <span class="stringliteral">&quot;PadPlane&quot;</span>); <span class="comment">// not the right material but ...</span></div>
 <div class="line"><span class="lineno">  111</span>    <span class="comment">//--place it above chamber</span></div>
 <div class="line"><span class="lineno">  112</span>    <span class="keyword">auto</span> padPlanePosX {0. * cm};</div>
 <div class="line"><span class="lineno">  113</span>    <span class="keyword">auto</span> padPlanePosY {0. * cm};</div>
@@ -705,31 +705,39 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="lineno">  317</span>            mat-&gt;AddElement(nist-&gt;FindOrBuildElement(<span class="stringliteral">&quot;C&quot;</span>), 4);</div>
 <div class="line"><span class="lineno">  318</span>            mat-&gt;AddElement(nist-&gt;FindOrBuildElement(<span class="stringliteral">&quot;H&quot;</span>), 10);</div>
 <div class="line"><span class="lineno">  319</span>        }</div>
-<div class="line"><span class="lineno">  320</span>        std::cout &lt;&lt; <span class="stringliteral">&quot;Comp : &quot;</span> &lt;&lt; comp &lt;&lt; <span class="stringliteral">&quot; molar mass: &quot;</span> &lt;&lt; molarMass / (g / mole) &lt;&lt; <span class="stringliteral">&quot; rho: &quot;</span> &lt;&lt; density / (g / cm3)</div>
-<div class="line"><span class="lineno">  321</span>                  &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
-<div class="line"><span class="lineno">  322</span>        mats.push_back(mat);</div>
-<div class="line"><span class="lineno">  323</span>        molarMasses.push_back(molarMass);</div>
-<div class="line"><span class="lineno">  324</span>    }</div>
-<div class="line"><span class="lineno">  325</span>    <span class="comment">// Compute total mass of mixture</span></div>
-<div class="line"><span class="lineno">  326</span>    <span class="keywordtype">double</span> massMix {};</div>
-<div class="line"><span class="lineno">  327</span>    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; molarMasses.size(); i++)</div>
-<div class="line"><span class="lineno">  328</span>        massMix += <span class="keyword">static_cast&lt;</span><span class="keywordtype">double</span><span class="keyword">&gt;</span>(fracs[i]) / 100 * molarMasses[i];</div>
-<div class="line"><span class="lineno">  329</span>    <span class="comment">// And mass fractions</span></div>
-<div class="line"><span class="lineno">  330</span>    std::vector&lt;double&gt; massFracs {};</div>
-<div class="line"><span class="lineno">  331</span>    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; molarMasses.size(); i++)</div>
-<div class="line"><span class="lineno">  332</span>        massFracs.push_back((<span class="keyword">static_cast&lt;</span><span class="keywordtype">double</span><span class="keyword">&gt;</span>(fracs[i]) / 100 * molarMasses[i]) / massMix);</div>
-<div class="line"><span class="lineno">  333</span> </div>
-<div class="line"><span class="lineno">  334</span>    <span class="comment">// And density</span></div>
-<div class="line"><span class="lineno">  335</span>    <span class="keyword">auto</span> rhoMix {(p * massMix) / (R * t)};</div>
-<div class="line"><span class="lineno">  336</span> </div>
-<div class="line"><span class="lineno">  337</span>    std::cout &lt;&lt; <span class="stringliteral">&quot;Rho of mixture : &quot;</span> &lt;&lt; rhoMix / (g / cm3) &lt;&lt; <span class="stringliteral">&quot; g/cm3&quot;</span> &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
-<div class="line"><span class="lineno">  338</span>    <span class="keyword">auto</span>* mixture {<span class="keyword">new</span> G4Material {<span class="stringliteral">&quot;GasMixture&quot;</span>, rhoMix, <span class="keyword">static_cast&lt;</span>G4int<span class="keyword">&gt;</span>(mats.size()), kStateGas, t, p}};</div>
-<div class="line"><span class="lineno">  339</span>    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; mats.size(); i++)</div>
-<div class="line"><span class="lineno">  340</span>    {</div>
-<div class="line"><span class="lineno">  341</span>        <span class="keyword">const</span> <span class="keyword">auto</span>&amp; mat {mats[i]};</div>
-<div class="line"><span class="lineno">  342</span>        mixture-&gt;AddMaterial(mat, massFracs[i]);</div>
-<div class="line"><span class="lineno">  343</span>    }</div>
-<div class="line"><span class="lineno">  344</span>}</div>
+<div class="line"><span class="lineno">  320</span>        <span class="keywordflow">if</span>(comp == <span class="stringliteral">&quot;CF4&quot;</span>)</div>
+<div class="line"><span class="lineno">  321</span>        {</div>
+<div class="line"><span class="lineno">  322</span>            molarMass = (1. * 12.0107 + 4. * 18.998) * g / mole;</div>
+<div class="line"><span class="lineno">  323</span>            density = (p * molarMass) / (R * t);</div>
+<div class="line"><span class="lineno">  324</span>            mat = <span class="keyword">new</span> G4Material {<span class="stringliteral">&quot;CF4&quot;</span>, density, 2, kStateGas, t, p};</div>
+<div class="line"><span class="lineno">  325</span>            mat-&gt;AddElement(nist-&gt;FindOrBuildElement(<span class="stringliteral">&quot;C&quot;</span>), 1);</div>
+<div class="line"><span class="lineno">  326</span>            mat-&gt;AddElement(nist-&gt;FindOrBuildElement(<span class="stringliteral">&quot;F&quot;</span>), 4);</div>
+<div class="line"><span class="lineno">  327</span>        }</div>
+<div class="line"><span class="lineno">  328</span>        std::cout &lt;&lt; <span class="stringliteral">&quot;Comp : &quot;</span> &lt;&lt; comp &lt;&lt; <span class="stringliteral">&quot; molar mass: &quot;</span> &lt;&lt; molarMass / (g / mole) &lt;&lt; <span class="stringliteral">&quot; rho: &quot;</span> &lt;&lt; density / (g / cm3)</div>
+<div class="line"><span class="lineno">  329</span>                  &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><span class="lineno">  330</span>        mats.push_back(mat);</div>
+<div class="line"><span class="lineno">  331</span>        molarMasses.push_back(molarMass);</div>
+<div class="line"><span class="lineno">  332</span>    }</div>
+<div class="line"><span class="lineno">  333</span>    <span class="comment">// Compute total mass of mixture</span></div>
+<div class="line"><span class="lineno">  334</span>    <span class="keywordtype">double</span> massMix {};</div>
+<div class="line"><span class="lineno">  335</span>    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; molarMasses.size(); i++)</div>
+<div class="line"><span class="lineno">  336</span>        massMix += <span class="keyword">static_cast&lt;</span><span class="keywordtype">double</span><span class="keyword">&gt;</span>(fracs[i]) / 100 * molarMasses[i];</div>
+<div class="line"><span class="lineno">  337</span>    <span class="comment">// And mass fractions</span></div>
+<div class="line"><span class="lineno">  338</span>    std::vector&lt;double&gt; massFracs {};</div>
+<div class="line"><span class="lineno">  339</span>    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; molarMasses.size(); i++)</div>
+<div class="line"><span class="lineno">  340</span>        massFracs.push_back((<span class="keyword">static_cast&lt;</span><span class="keywordtype">double</span><span class="keyword">&gt;</span>(fracs[i]) / 100 * molarMasses[i]) / massMix);</div>
+<div class="line"><span class="lineno">  341</span> </div>
+<div class="line"><span class="lineno">  342</span>    <span class="comment">// And density</span></div>
+<div class="line"><span class="lineno">  343</span>    <span class="keyword">auto</span> rhoMix {(p * massMix) / (R * t)};</div>
+<div class="line"><span class="lineno">  344</span> </div>
+<div class="line"><span class="lineno">  345</span>    std::cout &lt;&lt; <span class="stringliteral">&quot;Rho of mixture : &quot;</span> &lt;&lt; rhoMix / (g / cm3) &lt;&lt; <span class="stringliteral">&quot; g/cm3&quot;</span> &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><span class="lineno">  346</span>    <span class="keyword">auto</span>* mixture {<span class="keyword">new</span> G4Material {<span class="stringliteral">&quot;GasMixture&quot;</span>, rhoMix, <span class="keyword">static_cast&lt;</span>G4int<span class="keyword">&gt;</span>(mats.size()), kStateGas, t, p}};</div>
+<div class="line"><span class="lineno">  347</span>    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; mats.size(); i++)</div>
+<div class="line"><span class="lineno">  348</span>    {</div>
+<div class="line"><span class="lineno">  349</span>        <span class="keyword">const</span> <span class="keyword">auto</span>&amp; mat {mats[i]};</div>
+<div class="line"><span class="lineno">  350</span>        mixture-&gt;AddMaterial(mat, massFracs[i]);</div>
+<div class="line"><span class="lineno">  351</span>    }</div>
+<div class="line"><span class="lineno">  352</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>
