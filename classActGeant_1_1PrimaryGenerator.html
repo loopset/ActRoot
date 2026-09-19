@@ -231,14 +231,16 @@ Private Attributes</h2></td></tr>
 <div class="line"><span class="lineno">  100</span>    {</div>
 <div class="line"><span class="lineno">  101</span>        <span class="keyword">auto</span> file {std::make_unique&lt;TFile&gt;(beam-&gt;GetString(<span class="stringliteral">&quot;HistEmittance&quot;</span>).c_str())};</div>
 <div class="line"><span class="lineno">  102</span>        <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a412a85f7a2e1b6f5fb1b62146c8a0dd2">fHistEmittance</a> = file-&gt;Get&lt;TH3&gt;(<span class="stringliteral">&quot;h3d&quot;</span>); <span class="comment">// hardcoded name for now</span></div>
-<div class="line"><span class="lineno">  103</span>    }</div>
-<div class="line"><span class="lineno">  104</span>    <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#adea07539ecd510ef4e44aa32bd5f6361">fEBeam</a> = beam-&gt;GetDouble(<span class="stringliteral">&quot;Energy&quot;</span>);</div>
-<div class="line"><span class="lineno">  105</span>    <span class="keywordflow">if</span>(beam-&gt;CheckTokenExists(<span class="stringliteral">&quot;SigmaEnergy&quot;</span>, <span class="keyword">true</span>))</div>
-<div class="line"><span class="lineno">  106</span>        <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a2f9a5b330a1a0580d23d5967288b361b">fSigmaEBeam</a> = beam-&gt;GetDouble(<span class="stringliteral">&quot;SigmaEnergy&quot;</span>);</div>
-<div class="line"><span class="lineno">  107</span> </div>
-<div class="line"><span class="lineno">  108</span>    <span class="comment">// Particles are lazily defined in InitialiseParticles, since</span></div>
-<div class="line"><span class="lineno">  109</span>    <span class="comment">// G4IonTable is not initialised by Geant4 at the moment of calling this constructor</span></div>
-<div class="line"><span class="lineno">  110</span>}</div>
+<div class="line"><span class="lineno">  103</span>        <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a412a85f7a2e1b6f5fb1b62146c8a0dd2">fHistEmittance</a>-&gt;SetDirectory(<span class="keyword">nullptr</span>);  <span class="comment">// detach from file</span></div>
+<div class="line"><span class="lineno">  104</span>        file-&gt;Close();</div>
+<div class="line"><span class="lineno">  105</span>    }</div>
+<div class="line"><span class="lineno">  106</span>    <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#adea07539ecd510ef4e44aa32bd5f6361">fEBeam</a> = beam-&gt;GetDouble(<span class="stringliteral">&quot;Energy&quot;</span>);</div>
+<div class="line"><span class="lineno">  107</span>    <span class="keywordflow">if</span>(beam-&gt;CheckTokenExists(<span class="stringliteral">&quot;SigmaEnergy&quot;</span>, <span class="keyword">true</span>))</div>
+<div class="line"><span class="lineno">  108</span>        <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a2f9a5b330a1a0580d23d5967288b361b">fSigmaEBeam</a> = beam-&gt;GetDouble(<span class="stringliteral">&quot;SigmaEnergy&quot;</span>);</div>
+<div class="line"><span class="lineno">  109</span> </div>
+<div class="line"><span class="lineno">  110</span>    <span class="comment">// Particles are lazily defined in InitialiseParticles, since</span></div>
+<div class="line"><span class="lineno">  111</span>    <span class="comment">// G4IonTable is not initialised by Geant4 at the moment of calling this constructor</span></div>
+<div class="line"><span class="lineno">  112</span>}</div>
 <div class="ttc" id="aclassActGeant_1_1DataHolder_html_ad108817a7123038297c2eba4414983e2"><div class="ttname"><a href="classActGeant_1_1DataHolder.html#ad108817a7123038297c2eba4414983e2">ActGeant::DataHolder::fReacInfo</a></div><div class="ttdeci">ReactionInfo fReacInfo</div><div class="ttdef"><b>Definition</b> ActGeantDataHolder.hh:16</div></div>
 <div class="ttc" id="aclassActGeant_1_1DataHolder_html_adb5b711bfec65a6ffc9c99e1e7184aef"><div class="ttname"><a href="classActGeant_1_1DataHolder.html#adb5b711bfec65a6ffc9c99e1e7184aef">ActGeant::DataHolder::Instance</a></div><div class="ttdeci">static DataHolder * Instance()</div><div class="ttdef"><b>Definition</b> ActGeantDataHolder.cc:8</div></div>
 <div class="ttc" id="aclassActGeant_1_1PrimaryGenerator_html_a1ff24c59e90b67e2a2a192cc85ec4896"><div class="ttname"><a href="classActGeant_1_1PrimaryGenerator.html#a1ff24c59e90b67e2a2a192cc85ec4896">ActGeant::PrimaryGenerator::fBeamSigmaZ</a></div><div class="ttdeci">double fBeamSigmaZ</div><div class="ttdef"><b>Definition</b> ActGeantPrimaryGenerator.hh:43</div></div>
@@ -290,14 +292,14 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">  113</span>{</div>
-<div class="line"><span class="lineno">  114</span>    <span class="keyword">delete</span> <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#abc851d58ef26ccb9eaf58cc556df3f3d">fKin</a>;</div>
-<div class="line"><span class="lineno">  115</span>    <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#af7a9779579c4010a927cdd3407d3b600">fKinGen</a>)</div>
-<div class="line"><span class="lineno">  116</span>        <span class="keyword">delete</span> <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#af7a9779579c4010a927cdd3407d3b600">fKinGen</a>;</div>
-<div class="line"><span class="lineno">  117</span>    <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#aa8dd11269ef72dda0d4510d24eae6d36">fCrossSection</a>)</div>
-<div class="line"><span class="lineno">  118</span>        <span class="keyword">delete</span> <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#aa8dd11269ef72dda0d4510d24eae6d36">fCrossSection</a>;</div>
-<div class="line"><span class="lineno">  119</span>    <span class="keyword">delete</span> <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a42074ca404ed4eb98cc61ac95f0d6d32">fParticleGun</a>;</div>
-<div class="line"><span class="lineno">  120</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">  115</span>{</div>
+<div class="line"><span class="lineno">  116</span>    <span class="keyword">delete</span> <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#abc851d58ef26ccb9eaf58cc556df3f3d">fKin</a>;</div>
+<div class="line"><span class="lineno">  117</span>    <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#af7a9779579c4010a927cdd3407d3b600">fKinGen</a>)</div>
+<div class="line"><span class="lineno">  118</span>        <span class="keyword">delete</span> <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#af7a9779579c4010a927cdd3407d3b600">fKinGen</a>;</div>
+<div class="line"><span class="lineno">  119</span>    <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#aa8dd11269ef72dda0d4510d24eae6d36">fCrossSection</a>)</div>
+<div class="line"><span class="lineno">  120</span>        <span class="keyword">delete</span> <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#aa8dd11269ef72dda0d4510d24eae6d36">fCrossSection</a>;</div>
+<div class="line"><span class="lineno">  121</span>    <span class="keyword">delete</span> <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a42074ca404ed4eb98cc61ac95f0d6d32">fParticleGun</a>;</div>
+<div class="line"><span class="lineno">  122</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -325,178 +327,178 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">  123</span>{</div>
-<div class="line"><span class="lineno">  124</span>    <span class="comment">// Initialise particles</span></div>
-<div class="line"><span class="lineno">  125</span>    <a class="code hl_function" href="classActGeant_1_1PrimaryGenerator.html#a8ff83886ad99c933d24a9c0cad1ea2de">InitialiseParticles</a>();</div>
-<div class="line"><span class="lineno">  126</span> </div>
-<div class="line"><span class="lineno">  127</span>    <span class="comment">// Sample points</span></div>
-<div class="line"><span class="lineno">  128</span>    <span class="keyword">auto</span>* driftLog {G4LogicalVolumeStore::GetInstance()-&gt;GetVolume(<span class="stringliteral">&quot;driftLog&quot;</span>)};</div>
-<div class="line"><span class="lineno">  129</span>    G4Box* driftBox {};</div>
-<div class="line"><span class="lineno">  130</span>    <span class="keywordflow">if</span>(driftLog)</div>
-<div class="line"><span class="lineno">  131</span>        driftBox = <span class="keyword">dynamic_cast&lt;</span>G4Box*<span class="keyword">&gt;</span>(driftLog-&gt;GetSolid());</div>
-<div class="line"><span class="lineno">  132</span>    <span class="keywordflow">else</span></div>
-<div class="line"><span class="lineno">  133</span>    {</div>
-<div class="line"><span class="lineno">  134</span>        G4Exception(<span class="stringliteral">&quot;PrimaryGeneratorAction::GeneratePrimaries()&quot;</span>, <span class="stringliteral">&quot;MyCode0002&quot;</span>, FatalException,</div>
-<div class="line"><span class="lineno">  135</span>                    <span class="stringliteral">&quot;Cannot retrieve driftLog solid volume&quot;</span>);</div>
-<div class="line"><span class="lineno">  136</span>    }</div>
-<div class="line"><span class="lineno">  137</span>    <span class="comment">// Get X half length</span></div>
-<div class="line"><span class="lineno">  138</span>    <span class="keyword">auto</span> xHalfLength {driftBox-&gt;GetXHalfLength()};</div>
-<div class="line"><span class="lineno">  139</span> </div>
-<div class="line"><span class="lineno">  140</span>    G4ThreeVector window {};</div>
-<div class="line"><span class="lineno">  141</span>    G4ThreeVector vertex {};</div>
-<div class="line"><span class="lineno">  142</span>    <span class="comment">// If emittance available</span></div>
-<div class="line"><span class="lineno">  143</span>    <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a412a85f7a2e1b6f5fb1b62146c8a0dd2">fHistEmittance</a>)</div>
-<div class="line"><span class="lineno">  144</span>    {</div>
-<div class="line"><span class="lineno">  145</span>        <span class="comment">// Start point</span></div>
-<div class="line"><span class="lineno">  146</span>        <span class="comment">// X</span></div>
-<div class="line"><span class="lineno">  147</span>        <span class="keyword">auto</span> Xstart {-xHalfLength};</div>
-<div class="line"><span class="lineno">  148</span>        <span class="comment">// Y depends completely on the method of calculation</span></div>
-<div class="line"><span class="lineno">  149</span>        <span class="keywordtype">double</span> Ystart {};</div>
-<div class="line"><span class="lineno">  150</span>        <span class="keywordtype">double</span> thetaXY {};</div>
-<div class="line"><span class="lineno">  151</span>        <span class="keywordtype">double</span> thetaXZ {};</div>
-<div class="line"><span class="lineno">  152</span>        <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a412a85f7a2e1b6f5fb1b62146c8a0dd2">fHistEmittance</a>-&gt;GetRandom3(Ystart, thetaXY, thetaXZ);</div>
-<div class="line"><span class="lineno">  153</span>        <span class="comment">// Transform to Geant4 reference frame</span></div>
-<div class="line"><span class="lineno">  154</span>        Ystart -= driftBox-&gt;GetYHalfLength();</div>
-<div class="line"><span class="lineno">  155</span>        <span class="comment">// Z of beam at entrance</span></div>
-<div class="line"><span class="lineno">  156</span>        <span class="keywordtype">double</span> Zstart {G4RandGauss::shoot(<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a2ad8faa3b4089f2e065830d0efe7b5ea">fBeamCentreZ</a>, <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a1ff24c59e90b67e2a2a192cc85ec4896">fBeamSigmaZ</a>)};</div>
-<div class="line"><span class="lineno">  157</span>        window = G4ThreeVector {Xstart, Ystart, Zstart};</div>
-<div class="line"><span class="lineno">  158</span> </div>
-<div class="line"><span class="lineno">  159</span>        <span class="comment">// Vertex values</span></div>
-<div class="line"><span class="lineno">  160</span>        <span class="keyword">auto</span> Xrp {G4RandFlat::shoot(-xHalfLength, +xHalfLength)};</div>
-<div class="line"><span class="lineno">  161</span>        <span class="keyword">auto</span> Yrp {Ystart - Xrp * TMath::Tan(thetaXY * TMath::DegToRad())};</div>
-<div class="line"><span class="lineno">  162</span>        <span class="keyword">auto</span> Zrp {Zstart - Xrp * TMath::Tan(thetaXZ * TMath::DegToRad())};</div>
-<div class="line"><span class="lineno">  163</span>        vertex = G4ThreeVector {Xrp, Yrp, Zrp};</div>
-<div class="line"><span class="lineno">  164</span>        <span class="comment">// std::cout &lt;&lt; &quot;Sampling from histogram&quot; &lt;&lt; &#39;\n&#39;;</span></div>
-<div class="line"><span class="lineno">  165</span>        <span class="comment">// std::cout &lt;&lt; &quot;Entrance : &quot; &lt;&lt; window &lt;&lt; &#39;\n&#39;;</span></div>
-<div class="line"><span class="lineno">  166</span>        <span class="comment">// std::cout &lt;&lt; &quot;RP  : &quot; &lt;&lt; vertex &lt;&lt; &#39;\n&#39;;</span></div>
-<div class="line"><span class="lineno">  167</span>    }</div>
-<div class="line"><span class="lineno">  168</span>    <span class="keywordflow">else</span></div>
-<div class="line"><span class="lineno">  169</span>    {</div>
-<div class="line"><span class="lineno">  170</span>        window =</div>
-<div class="line"><span class="lineno">  171</span>            G4ThreeVector {-xHalfLength, G4RandGauss::shoot(0, <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a7f18098f7109f780a562fe96a73245d1">fBeamSigmaXY</a>), <span class="comment">// assuming beam perfectly centred in Y</span></div>
-<div class="line"><span class="lineno">  172</span>                           G4RandGauss::shoot(<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a2ad8faa3b4089f2e065830d0efe7b5ea">fBeamCentreZ</a>, <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a1ff24c59e90b67e2a2a192cc85ec4896">fBeamSigmaZ</a>)};</div>
-<div class="line"><span class="lineno">  173</span>        vertex = G4ThreeVector {G4RandFlat::shoot(-xHalfLength, +xHalfLength),</div>
-<div class="line"><span class="lineno">  174</span>                                G4RandGauss::shoot(0, <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a7f18098f7109f780a562fe96a73245d1">fBeamSigmaXY</a>), <span class="comment">// assuming beam perfectly centred in Y</span></div>
-<div class="line"><span class="lineno">  175</span>                                G4RandGauss::shoot(<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a2ad8faa3b4089f2e065830d0efe7b5ea">fBeamCentreZ</a>, <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a1ff24c59e90b67e2a2a192cc85ec4896">fBeamSigmaZ</a>)};</div>
-<div class="line"><span class="lineno">  176</span>    }</div>
-<div class="line"><span class="lineno">  177</span>    <span class="comment">// 3-&gt; Beam direction</span></div>
-<div class="line"><span class="lineno">  178</span>    <span class="keyword">auto</span> beamDir {vertex - window};</div>
-<div class="line"><span class="lineno">  179</span>    beamDir = beamDir.unit();</div>
-<div class="line"><span class="lineno">  180</span> </div>
-<div class="line"><span class="lineno">  181</span>    <span class="comment">// Shoot beam</span></div>
-<div class="line"><span class="lineno">  182</span>    <span class="comment">// WARNING: disabled as tracking the beam and then two recoild requires a more complex implementation</span></div>
-<div class="line"><span class="lineno">  183</span>    <span class="comment">// As in NPTOOL, we simple slow down the beam energy from the entrance to the vertex</span></div>
-<div class="line"><span class="lineno">  184</span> </div>
-<div class="line"><span class="lineno">  185</span>    <span class="comment">// fParticleGun-&gt;SetParticleDefinition(fPartDefs[0]);</span></div>
-<div class="line"><span class="lineno">  186</span>    <span class="comment">// fParticleGun-&gt;SetParticlePosition(entrance);</span></div>
-<div class="line"><span class="lineno">  187</span>    <span class="comment">// fParticleGun-&gt;SetParticleMomentumDirection(beamDir);</span></div>
-<div class="line"><span class="lineno">  188</span>    <span class="comment">// fParticleGun-&gt;SetParticleEnergy(fEBeam);</span></div>
-<div class="line"><span class="lineno">  189</span>    <span class="comment">// fParticleGun-&gt;GeneratePrimaryVertex(event);</span></div>
-<div class="line"><span class="lineno">  190</span> </div>
-<div class="line"><span class="lineno">  191</span>    <span class="comment">// Random EBeam if requestes</span></div>
-<div class="line"><span class="lineno">  192</span>    <span class="keywordtype">double</span> EBeamIt {G4RandGauss::shoot(<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#adea07539ecd510ef4e44aa32bd5f6361">fEBeam</a>, <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a2f9a5b330a1a0580d23d5967288b361b">fSigmaEBeam</a>)};</div>
-<div class="line"><span class="lineno">  193</span>    <span class="comment">// std::cout &lt;&lt; &quot;Beam energy : &quot; &lt;&lt; EBeamIt &lt;&lt; &quot; MeV&quot; &lt;&lt; std::endl;</span></div>
-<div class="line"><span class="lineno">  194</span> </div>
-<div class="line"><span class="lineno">  195</span>    <span class="comment">// Slow down beam</span></div>
-<div class="line"><span class="lineno">  196</span>    <span class="keyword">auto</span> d {(vertex - window).r()};</div>
-<div class="line"><span class="lineno">  197</span>    <span class="keyword">auto</span> EBeamAtVertex {<a class="code hl_function" href="classActGeant_1_1PrimaryGenerator.html#a01b98c265eb4aaa140dbeaf23df940e4">SlowDownBeam</a>(<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a19905b69cc051a085317231856ec92c1">fPartDefs</a>[0], EBeamIt, d, driftLog-&gt;GetMaterial())};</div>
-<div class="line"><span class="lineno">  198</span> </div>
-<div class="line"><span class="lineno">  199</span>    <span class="comment">// Generate kinematics</span></div>
-<div class="line"><span class="lineno">  200</span>    <span class="keywordtype">double</span> weight {};</div>
-<div class="line"><span class="lineno">  201</span>    <span class="keywordtype">double</span> T3 {};</div>
-<div class="line"><span class="lineno">  202</span>    <span class="keywordtype">double</span> theta3 {};</div>
-<div class="line"><span class="lineno">  203</span>    <span class="keywordtype">double</span> phi3 {};</div>
-<div class="line"><span class="lineno">  204</span>    <span class="keywordtype">double</span> T4 {};</div>
-<div class="line"><span class="lineno">  205</span>    <span class="keywordtype">double</span> theta4 {};</div>
-<div class="line"><span class="lineno">  206</span>    <span class="keywordtype">double</span> phi4 {};</div>
-<div class="line"><span class="lineno">  207</span>    <span class="keywordtype">double</span> thetaCM {};</div>
-<div class="line"><span class="lineno">  208</span>    <span class="keywordtype">double</span> phiCM {};</div>
-<div class="line"><span class="lineno">  209</span>    <span class="comment">// NO PS</span></div>
-<div class="line"><span class="lineno">  210</span>    <span class="keywordflow">if</span>(!<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#af7a9779579c4010a927cdd3407d3b600">fKinGen</a>)</div>
-<div class="line"><span class="lineno">  211</span>    {</div>
-<div class="line"><span class="lineno">  212</span>        <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#abc851d58ef26ccb9eaf58cc556df3f3d">fKin</a>-&gt;<a class="code hl_function" href="classActPhysics_1_1Kinematics.html#ae0263978a8d1d3720334f838ab0e2681">SetBeamEnergy</a>(EBeamAtVertex);</div>
-<div class="line"><span class="lineno">  213</span>        <span class="comment">// Sample</span></div>
-<div class="line"><span class="lineno">  214</span>        phiCM = G4RandFlat::shoot(0., 2. * pi);</div>
-<div class="line"><span class="lineno">  215</span>        <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#aa8dd11269ef72dda0d4510d24eae6d36">fCrossSection</a>)</div>
-<div class="line"><span class="lineno">  216</span>            thetaCM = <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#aa8dd11269ef72dda0d4510d24eae6d36">fCrossSection</a>-&gt;<a class="code hl_function" href="classActSim_1_1CrossSection.html#a6ace708052724ffe70961e4cc0b9979e">SampleCDF</a>() * deg;</div>
-<div class="line"><span class="lineno">  217</span>        <span class="keywordflow">else</span></div>
-<div class="line"><span class="lineno">  218</span>            thetaCM = std::acos(G4RandFlat::shoot(-1, 1));</div>
-<div class="line"><span class="lineno">  219</span>        <span class="comment">// thetaCM = 5 * TMath::DegToRad();</span></div>
-<div class="line"><span class="lineno">  220</span>        <span class="comment">// phiCM = 0;</span></div>
-<div class="line"><span class="lineno">  221</span>        <span class="comment">// Compute</span></div>
-<div class="line"><span class="lineno">  222</span>        <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#abc851d58ef26ccb9eaf58cc556df3f3d">fKin</a>-&gt;<a class="code hl_function" href="classActPhysics_1_1Kinematics.html#af8b7c34fd0afcdcc5ba60dd79d63f112">ComputeRecoilKinematics</a>(thetaCM, phiCM);</div>
-<div class="line"><span class="lineno">  223</span>        T3 = <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#abc851d58ef26ccb9eaf58cc556df3f3d">fKin</a>-&gt;<a class="code hl_function" href="classActPhysics_1_1Kinematics.html#a7f506f0e0c3e90fc103919df82371439">GetT3Lab</a>();</div>
-<div class="line"><span class="lineno">  224</span>        theta3 = <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#abc851d58ef26ccb9eaf58cc556df3f3d">fKin</a>-&gt;<a class="code hl_function" href="classActPhysics_1_1Kinematics.html#ac75c3b9c01e5c18fa46494b5d1cf5664">GetTheta3Lab</a>();</div>
-<div class="line"><span class="lineno">  225</span>        phi3 = <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#abc851d58ef26ccb9eaf58cc556df3f3d">fKin</a>-&gt;<a class="code hl_function" href="classActPhysics_1_1Kinematics.html#ab09c08e60318a98910f1aa2a7e7fa387">GetPhi3Lab</a>();</div>
-<div class="line"><span class="lineno">  226</span>        <span class="comment">// std::cout &lt;&lt; &quot;Entrance : &quot; &lt;&lt; window &lt;&lt; &#39;\n&#39;;</span></div>
-<div class="line"><span class="lineno">  227</span>        <span class="comment">// std::cout &lt;&lt; &quot;RP  : &quot; &lt;&lt; vertex &lt;&lt; &#39;\n&#39;;</span></div>
-<div class="line"><span class="lineno">  228</span>        <span class="comment">// std::cout &lt;&lt; &quot;Beam dir : &quot; &lt;&lt; beamDir &lt;&lt; &#39;\n&#39;;</span></div>
-<div class="line"><span class="lineno">  229</span>        <span class="comment">// std::cout &lt;&lt; &quot;ThetaCM : &quot; &lt;&lt; thetaCM * TMath::RadToDeg() &lt;&lt; &quot; Lab : &quot; &lt;&lt; theta3 * TMath::RadToDeg()</span></div>
-<div class="line"><span class="lineno">  230</span>        <span class="comment">//           &lt;&lt; &quot; phi3 : &quot; &lt;&lt; phi3 * TMath::RadToDeg() &lt;&lt; std::endl;</span></div>
-<div class="line"><span class="lineno">  231</span>        T4 = <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#abc851d58ef26ccb9eaf58cc556df3f3d">fKin</a>-&gt;<a class="code hl_function" href="classActPhysics_1_1Kinematics.html#af9290f414c7368d548d6f8f3614c6370">GetT4Lab</a>();</div>
-<div class="line"><span class="lineno">  232</span>        theta4 = <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#abc851d58ef26ccb9eaf58cc556df3f3d">fKin</a>-&gt;<a class="code hl_function" href="classActPhysics_1_1Kinematics.html#a91b54a72884bf94bde3fa679b456b28b">GetTheta4Lab</a>();</div>
-<div class="line"><span class="lineno">  233</span>        phi4 = <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#abc851d58ef26ccb9eaf58cc556df3f3d">fKin</a>-&gt;<a class="code hl_function" href="classActPhysics_1_1Kinematics.html#a1fa58d6109146a366fc5c70fe9c402c5">GetPhi4Lab</a>();</div>
-<div class="line"><span class="lineno">  234</span>    }</div>
-<div class="line"><span class="lineno">  235</span>    <span class="keywordflow">else</span></div>
-<div class="line"><span class="lineno">  236</span>    {</div>
-<div class="line"><span class="lineno">  237</span>        <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#af7a9779579c4010a927cdd3407d3b600">fKinGen</a>-&gt;<a class="code hl_function" href="classActSim_1_1KinematicGenerator.html#a6c804787db0c2ffdaa0c1236e2500501">SetBeamEnergy</a>(EBeamAtVertex);</div>
-<div class="line"><span class="lineno">  238</span>        weight = <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#af7a9779579c4010a927cdd3407d3b600">fKinGen</a>-&gt;<a class="code hl_function" href="classActSim_1_1KinematicGenerator.html#a1e8eb5638057fbb92b508f799591b008">Generate</a>();</div>
-<div class="line"><span class="lineno">  239</span>        <span class="comment">// Light</span></div>
-<div class="line"><span class="lineno">  240</span>        <span class="keyword">auto</span> plight {<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#af7a9779579c4010a927cdd3407d3b600">fKinGen</a>-&gt;<a class="code hl_function" href="classActSim_1_1KinematicGenerator.html#afab451edf294f4bcdec1e801701c9994">GetLorentzVector</a>(0)};</div>
-<div class="line"><span class="lineno">  241</span>        T3 = plight-&gt;E() - <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#abc851d58ef26ccb9eaf58cc556df3f3d">fKin</a>-&gt;<a class="code hl_function" href="classActPhysics_1_1Kinematics.html#a9699c585a0373bcdbee7c9e837f466c1">GetParticle</a>(3).<a class="code hl_function" href="classActPhysics_1_1Particle.html#a50444b520c562653c8d529c8ccd56fe8">GetMass</a>();</div>
-<div class="line"><span class="lineno">  242</span>        theta3 = plight-&gt;Theta();</div>
-<div class="line"><span class="lineno">  243</span>        phi3 = plight-&gt;Phi();</div>
-<div class="line"><span class="lineno">  244</span>        <span class="comment">// Heavy</span></div>
-<div class="line"><span class="lineno">  245</span>        <span class="keyword">auto</span> pheavy {<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#af7a9779579c4010a927cdd3407d3b600">fKinGen</a>-&gt;<a class="code hl_function" href="classActSim_1_1KinematicGenerator.html#afab451edf294f4bcdec1e801701c9994">GetLorentzVector</a>(1)};</div>
-<div class="line"><span class="lineno">  246</span>        T4 = pheavy-&gt;E() - <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#abc851d58ef26ccb9eaf58cc556df3f3d">fKin</a>-&gt;<a class="code hl_function" href="classActPhysics_1_1Kinematics.html#a9699c585a0373bcdbee7c9e837f466c1">GetParticle</a>(4).<a class="code hl_function" href="classActPhysics_1_1Particle.html#a50444b520c562653c8d529c8ccd56fe8">GetMass</a>();</div>
-<div class="line"><span class="lineno">  247</span>        theta4 = pheavy-&gt;Theta();</div>
-<div class="line"><span class="lineno">  248</span>        phi4 = pheavy-&gt;Phi();</div>
-<div class="line"><span class="lineno">  249</span>        <span class="comment">// Reconstruct CM</span></div>
-<div class="line"><span class="lineno">  250</span>        thetaCM = <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#af7a9779579c4010a927cdd3407d3b600">fKinGen</a>-&gt;<a class="code hl_function" href="classActSim_1_1KinematicGenerator.html#adfacb1b04363fd14c4f136ecc224205c">GetBinaryKinematics</a>()-&gt;<a class="code hl_function" href="classActPhysics_1_1Kinematics.html#a85d044313af059a5727baf01c768f978">ReconstructTheta3CMFromLab</a>(T3, theta3);</div>
-<div class="line"><span class="lineno">  251</span>        phiCM = phi3;</div>
-<div class="line"><span class="lineno">  252</span>    }</div>
-<div class="line"><span class="lineno">  253</span> </div>
-<div class="line"><span class="lineno">  254</span>    <span class="comment">// This is beam frame, but we must convert to geometry frame</span></div>
-<div class="line"><span class="lineno">  255</span>    G4ThreeVector lightDirBeamFrame {std::cos(theta3), std::sin(theta3) * std::sin(phi3),</div>
-<div class="line"><span class="lineno">  256</span>                                     std::sin(theta3) * std::cos(phi3)};</div>
-<div class="line"><span class="lineno">  257</span>    G4ThreeVector lightDir {<a class="code hl_function" href="classActGeant_1_1PrimaryGenerator.html#a92e2e7d74651286b9cfd2feb7c109ea1">RotateToWorld</a>(lightDirBeamFrame, beamDir)};</div>
-<div class="line"><span class="lineno">  258</span>    <span class="comment">// Shoot</span></div>
-<div class="line"><span class="lineno">  259</span>    <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a42074ca404ed4eb98cc61ac95f0d6d32">fParticleGun</a>-&gt;SetParticleDefinition(<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a19905b69cc051a085317231856ec92c1">fPartDefs</a>[2]);</div>
-<div class="line"><span class="lineno">  260</span>    <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a42074ca404ed4eb98cc61ac95f0d6d32">fParticleGun</a>-&gt;SetParticlePosition(vertex);</div>
-<div class="line"><span class="lineno">  261</span>    <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a42074ca404ed4eb98cc61ac95f0d6d32">fParticleGun</a>-&gt;SetParticleMomentumDirection(lightDir);</div>
-<div class="line"><span class="lineno">  262</span>    <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a42074ca404ed4eb98cc61ac95f0d6d32">fParticleGun</a>-&gt;SetParticleEnergy(T3);</div>
-<div class="line"><span class="lineno">  263</span>    <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a42074ca404ed4eb98cc61ac95f0d6d32">fParticleGun</a>-&gt;GeneratePrimaryVertex(event);</div>
-<div class="line"><span class="lineno">  264</span> </div>
-<div class="line"><span class="lineno">  265</span>    <span class="comment">// Heavy</span></div>
-<div class="line"><span class="lineno">  266</span>    G4ThreeVector heavyDirBeamFrame {std::cos(theta4), std::sin(theta4) * std::sin(phi4),</div>
-<div class="line"><span class="lineno">  267</span>                                     std::sin(theta4) * std::cos(phi4)};</div>
-<div class="line"><span class="lineno">  268</span>    G4ThreeVector heavyDir {<a class="code hl_function" href="classActGeant_1_1PrimaryGenerator.html#a92e2e7d74651286b9cfd2feb7c109ea1">RotateToWorld</a>(heavyDirBeamFrame, beamDir)};</div>
-<div class="line"><span class="lineno">  269</span>    <span class="comment">// fParticleGun-&gt;SetParticleDefinition(fPartDefs[3]);</span></div>
-<div class="line"><span class="lineno">  270</span>    <span class="comment">// fParticleGun-&gt;SetParticlePosition(vertex);</span></div>
-<div class="line"><span class="lineno">  271</span>    <span class="comment">// fParticleGun-&gt;SetParticleMomentumDirection(heavyDir);</span></div>
-<div class="line"><span class="lineno">  272</span>    <span class="comment">// fParticleGun-&gt;SetParticleEnergy(T4);</span></div>
-<div class="line"><span class="lineno">  273</span>    <span class="comment">// fParticleGun-&gt;GeneratePrimaryVertex(event);</span></div>
-<div class="line"><span class="lineno">  274</span> </div>
-<div class="line"><span class="lineno">  275</span>    <span class="comment">// Send to data holder</span></div>
-<div class="line"><span class="lineno">  276</span>    <span class="keyword">auto</span>* holder {<a class="code hl_function" href="classActGeant_1_1DataHolder.html#adb5b711bfec65a6ffc9c99e1e7184aef">DataHolder::Instance</a>()};</div>
-<div class="line"><span class="lineno">  277</span>    <span class="keyword">auto</span>&amp; info {holder-&gt;<a class="code hl_variable" href="classActGeant_1_1DataHolder.html#ae0a8f56ca178d35e79cb8b70ce70a635">fVertexInfo</a>};</div>
-<div class="line"><span class="lineno">  278</span>    info.<a class="code hl_variable" href="classActGeant_1_1VertexInfo.html#a14604f5bb8aa76bdf7b75d88ae717580">fWP</a> = <a class="code hl_function" href="classActGeant_1_1DataHolder.html#a72a962f5d8fd8af15040b8a0db71d18d">DataHolder::PointToVector</a>(window);</div>
-<div class="line"><span class="lineno">  279</span>    info.fRP = <a class="code hl_function" href="classActGeant_1_1DataHolder.html#a72a962f5d8fd8af15040b8a0db71d18d">DataHolder::PointToVector</a>(vertex);</div>
-<div class="line"><span class="lineno">  280</span>    info.fEBeam = EBeamAtVertex;</div>
-<div class="line"><span class="lineno">  281</span>    info.fT3 = T3;</div>
-<div class="line"><span class="lineno">  282</span>    info.ftheta3 = theta3;</div>
-<div class="line"><span class="lineno">  283</span>    info.fphi3 = phi3;</div>
-<div class="line"><span class="lineno">  284</span>    info.fT4 = T4;</div>
-<div class="line"><span class="lineno">  285</span>    info.ftheta4 = theta4;</div>
-<div class="line"><span class="lineno">  286</span>    info.fphi4 = phi4;</div>
-<div class="line"><span class="lineno">  287</span>    info.fthetaCM = thetaCM;</div>
-<div class="line"><span class="lineno">  288</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">  125</span>{</div>
+<div class="line"><span class="lineno">  126</span>    <span class="comment">// Initialise particles</span></div>
+<div class="line"><span class="lineno">  127</span>    <a class="code hl_function" href="classActGeant_1_1PrimaryGenerator.html#a8ff83886ad99c933d24a9c0cad1ea2de">InitialiseParticles</a>();</div>
+<div class="line"><span class="lineno">  128</span> </div>
+<div class="line"><span class="lineno">  129</span>    <span class="comment">// Sample points</span></div>
+<div class="line"><span class="lineno">  130</span>    <span class="keyword">auto</span>* driftLog {G4LogicalVolumeStore::GetInstance()-&gt;GetVolume(<span class="stringliteral">&quot;driftLog&quot;</span>)};</div>
+<div class="line"><span class="lineno">  131</span>    G4Box* driftBox {};</div>
+<div class="line"><span class="lineno">  132</span>    <span class="keywordflow">if</span>(driftLog)</div>
+<div class="line"><span class="lineno">  133</span>        driftBox = <span class="keyword">dynamic_cast&lt;</span>G4Box*<span class="keyword">&gt;</span>(driftLog-&gt;GetSolid());</div>
+<div class="line"><span class="lineno">  134</span>    <span class="keywordflow">else</span></div>
+<div class="line"><span class="lineno">  135</span>    {</div>
+<div class="line"><span class="lineno">  136</span>        G4Exception(<span class="stringliteral">&quot;PrimaryGeneratorAction::GeneratePrimaries()&quot;</span>, <span class="stringliteral">&quot;MyCode0002&quot;</span>, FatalException,</div>
+<div class="line"><span class="lineno">  137</span>                    <span class="stringliteral">&quot;Cannot retrieve driftLog solid volume&quot;</span>);</div>
+<div class="line"><span class="lineno">  138</span>    }</div>
+<div class="line"><span class="lineno">  139</span>    <span class="comment">// Get X half length</span></div>
+<div class="line"><span class="lineno">  140</span>    <span class="keyword">auto</span> xHalfLength {driftBox-&gt;GetXHalfLength()};</div>
+<div class="line"><span class="lineno">  141</span> </div>
+<div class="line"><span class="lineno">  142</span>    G4ThreeVector window {};</div>
+<div class="line"><span class="lineno">  143</span>    G4ThreeVector vertex {};</div>
+<div class="line"><span class="lineno">  144</span>    <span class="comment">// If emittance available</span></div>
+<div class="line"><span class="lineno">  145</span>    <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a412a85f7a2e1b6f5fb1b62146c8a0dd2">fHistEmittance</a>)</div>
+<div class="line"><span class="lineno">  146</span>    {</div>
+<div class="line"><span class="lineno">  147</span>        <span class="comment">// Start point</span></div>
+<div class="line"><span class="lineno">  148</span>        <span class="comment">// X</span></div>
+<div class="line"><span class="lineno">  149</span>        <span class="keyword">auto</span> Xstart {-xHalfLength};</div>
+<div class="line"><span class="lineno">  150</span>        <span class="comment">// Y depends completely on the method of calculation</span></div>
+<div class="line"><span class="lineno">  151</span>        <span class="keywordtype">double</span> Ystart {};</div>
+<div class="line"><span class="lineno">  152</span>        <span class="keywordtype">double</span> thetaXY {};</div>
+<div class="line"><span class="lineno">  153</span>        <span class="keywordtype">double</span> thetaXZ {};</div>
+<div class="line"><span class="lineno">  154</span>        <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a412a85f7a2e1b6f5fb1b62146c8a0dd2">fHistEmittance</a>-&gt;GetRandom3(Ystart, thetaXY, thetaXZ);</div>
+<div class="line"><span class="lineno">  155</span>        <span class="comment">// Transform to Geant4 reference frame</span></div>
+<div class="line"><span class="lineno">  156</span>        Ystart -= driftBox-&gt;GetYHalfLength();</div>
+<div class="line"><span class="lineno">  157</span>        <span class="comment">// Z of beam at entrance</span></div>
+<div class="line"><span class="lineno">  158</span>        <span class="keywordtype">double</span> Zstart {G4RandGauss::shoot(<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a2ad8faa3b4089f2e065830d0efe7b5ea">fBeamCentreZ</a>, <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a1ff24c59e90b67e2a2a192cc85ec4896">fBeamSigmaZ</a>)};</div>
+<div class="line"><span class="lineno">  159</span>        window = G4ThreeVector {Xstart, Ystart, Zstart};</div>
+<div class="line"><span class="lineno">  160</span> </div>
+<div class="line"><span class="lineno">  161</span>        <span class="comment">// Vertex values</span></div>
+<div class="line"><span class="lineno">  162</span>        <span class="keyword">auto</span> Xrp {G4RandFlat::shoot(-xHalfLength, +xHalfLength)};</div>
+<div class="line"><span class="lineno">  163</span>        <span class="keyword">auto</span> Yrp {Ystart - Xrp * TMath::Tan(thetaXY * TMath::DegToRad())};</div>
+<div class="line"><span class="lineno">  164</span>        <span class="keyword">auto</span> Zrp {Zstart - Xrp * TMath::Tan(thetaXZ * TMath::DegToRad())};</div>
+<div class="line"><span class="lineno">  165</span>        vertex = G4ThreeVector {Xrp, Yrp, Zrp};</div>
+<div class="line"><span class="lineno">  166</span>        <span class="comment">// std::cout &lt;&lt; &quot;Sampling from histogram&quot; &lt;&lt; &#39;\n&#39;;</span></div>
+<div class="line"><span class="lineno">  167</span>        <span class="comment">// std::cout &lt;&lt; &quot;Entrance : &quot; &lt;&lt; window &lt;&lt; &#39;\n&#39;;</span></div>
+<div class="line"><span class="lineno">  168</span>        <span class="comment">// std::cout &lt;&lt; &quot;RP  : &quot; &lt;&lt; vertex &lt;&lt; &#39;\n&#39;;</span></div>
+<div class="line"><span class="lineno">  169</span>    }</div>
+<div class="line"><span class="lineno">  170</span>    <span class="keywordflow">else</span></div>
+<div class="line"><span class="lineno">  171</span>    {</div>
+<div class="line"><span class="lineno">  172</span>        window =</div>
+<div class="line"><span class="lineno">  173</span>            G4ThreeVector {-xHalfLength, G4RandGauss::shoot(0, <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a7f18098f7109f780a562fe96a73245d1">fBeamSigmaXY</a>), <span class="comment">// assuming beam perfectly centred in Y</span></div>
+<div class="line"><span class="lineno">  174</span>                           G4RandGauss::shoot(<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a2ad8faa3b4089f2e065830d0efe7b5ea">fBeamCentreZ</a>, <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a1ff24c59e90b67e2a2a192cc85ec4896">fBeamSigmaZ</a>)};</div>
+<div class="line"><span class="lineno">  175</span>        vertex = G4ThreeVector {G4RandFlat::shoot(-xHalfLength, +xHalfLength),</div>
+<div class="line"><span class="lineno">  176</span>                                G4RandGauss::shoot(0, <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a7f18098f7109f780a562fe96a73245d1">fBeamSigmaXY</a>), <span class="comment">// assuming beam perfectly centred in Y</span></div>
+<div class="line"><span class="lineno">  177</span>                                G4RandGauss::shoot(<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a2ad8faa3b4089f2e065830d0efe7b5ea">fBeamCentreZ</a>, <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a1ff24c59e90b67e2a2a192cc85ec4896">fBeamSigmaZ</a>)};</div>
+<div class="line"><span class="lineno">  178</span>    }</div>
+<div class="line"><span class="lineno">  179</span>    <span class="comment">// 3-&gt; Beam direction</span></div>
+<div class="line"><span class="lineno">  180</span>    <span class="keyword">auto</span> beamDir {vertex - window};</div>
+<div class="line"><span class="lineno">  181</span>    beamDir = beamDir.unit();</div>
+<div class="line"><span class="lineno">  182</span> </div>
+<div class="line"><span class="lineno">  183</span>    <span class="comment">// Shoot beam</span></div>
+<div class="line"><span class="lineno">  184</span>    <span class="comment">// WARNING: disabled as tracking the beam and then two recoild requires a more complex implementation</span></div>
+<div class="line"><span class="lineno">  185</span>    <span class="comment">// As in NPTOOL, we simple slow down the beam energy from the entrance to the vertex</span></div>
+<div class="line"><span class="lineno">  186</span> </div>
+<div class="line"><span class="lineno">  187</span>    <span class="comment">// fParticleGun-&gt;SetParticleDefinition(fPartDefs[0]);</span></div>
+<div class="line"><span class="lineno">  188</span>    <span class="comment">// fParticleGun-&gt;SetParticlePosition(entrance);</span></div>
+<div class="line"><span class="lineno">  189</span>    <span class="comment">// fParticleGun-&gt;SetParticleMomentumDirection(beamDir);</span></div>
+<div class="line"><span class="lineno">  190</span>    <span class="comment">// fParticleGun-&gt;SetParticleEnergy(fEBeam);</span></div>
+<div class="line"><span class="lineno">  191</span>    <span class="comment">// fParticleGun-&gt;GeneratePrimaryVertex(event);</span></div>
+<div class="line"><span class="lineno">  192</span> </div>
+<div class="line"><span class="lineno">  193</span>    <span class="comment">// Random EBeam if requestes</span></div>
+<div class="line"><span class="lineno">  194</span>    <span class="keywordtype">double</span> EBeamIt {G4RandGauss::shoot(<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#adea07539ecd510ef4e44aa32bd5f6361">fEBeam</a>, <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a2f9a5b330a1a0580d23d5967288b361b">fSigmaEBeam</a>)};</div>
+<div class="line"><span class="lineno">  195</span>    <span class="comment">// std::cout &lt;&lt; &quot;Beam energy : &quot; &lt;&lt; EBeamIt &lt;&lt; &quot; MeV&quot; &lt;&lt; std::endl;</span></div>
+<div class="line"><span class="lineno">  196</span> </div>
+<div class="line"><span class="lineno">  197</span>    <span class="comment">// Slow down beam</span></div>
+<div class="line"><span class="lineno">  198</span>    <span class="keyword">auto</span> d {(vertex - window).r()};</div>
+<div class="line"><span class="lineno">  199</span>    <span class="keyword">auto</span> EBeamAtVertex {<a class="code hl_function" href="classActGeant_1_1PrimaryGenerator.html#a01b98c265eb4aaa140dbeaf23df940e4">SlowDownBeam</a>(<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a19905b69cc051a085317231856ec92c1">fPartDefs</a>[0], EBeamIt, d, driftLog-&gt;GetMaterial())};</div>
+<div class="line"><span class="lineno">  200</span> </div>
+<div class="line"><span class="lineno">  201</span>    <span class="comment">// Generate kinematics</span></div>
+<div class="line"><span class="lineno">  202</span>    <span class="keywordtype">double</span> weight {};</div>
+<div class="line"><span class="lineno">  203</span>    <span class="keywordtype">double</span> T3 {};</div>
+<div class="line"><span class="lineno">  204</span>    <span class="keywordtype">double</span> theta3 {};</div>
+<div class="line"><span class="lineno">  205</span>    <span class="keywordtype">double</span> phi3 {};</div>
+<div class="line"><span class="lineno">  206</span>    <span class="keywordtype">double</span> T4 {};</div>
+<div class="line"><span class="lineno">  207</span>    <span class="keywordtype">double</span> theta4 {};</div>
+<div class="line"><span class="lineno">  208</span>    <span class="keywordtype">double</span> phi4 {};</div>
+<div class="line"><span class="lineno">  209</span>    <span class="keywordtype">double</span> thetaCM {};</div>
+<div class="line"><span class="lineno">  210</span>    <span class="keywordtype">double</span> phiCM {};</div>
+<div class="line"><span class="lineno">  211</span>    <span class="comment">// NO PS</span></div>
+<div class="line"><span class="lineno">  212</span>    <span class="keywordflow">if</span>(!<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#af7a9779579c4010a927cdd3407d3b600">fKinGen</a>)</div>
+<div class="line"><span class="lineno">  213</span>    {</div>
+<div class="line"><span class="lineno">  214</span>        <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#abc851d58ef26ccb9eaf58cc556df3f3d">fKin</a>-&gt;<a class="code hl_function" href="classActPhysics_1_1Kinematics.html#ae0263978a8d1d3720334f838ab0e2681">SetBeamEnergy</a>(EBeamAtVertex);</div>
+<div class="line"><span class="lineno">  215</span>        <span class="comment">// Sample</span></div>
+<div class="line"><span class="lineno">  216</span>        phiCM = G4RandFlat::shoot(0., 2. * pi);</div>
+<div class="line"><span class="lineno">  217</span>        <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#aa8dd11269ef72dda0d4510d24eae6d36">fCrossSection</a>)</div>
+<div class="line"><span class="lineno">  218</span>            thetaCM = <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#aa8dd11269ef72dda0d4510d24eae6d36">fCrossSection</a>-&gt;<a class="code hl_function" href="classActSim_1_1CrossSection.html#a6ace708052724ffe70961e4cc0b9979e">SampleCDF</a>() * deg;</div>
+<div class="line"><span class="lineno">  219</span>        <span class="keywordflow">else</span></div>
+<div class="line"><span class="lineno">  220</span>            thetaCM = std::acos(G4RandFlat::shoot(-1, 1));</div>
+<div class="line"><span class="lineno">  221</span>        <span class="comment">// thetaCM = 5 * TMath::DegToRad();</span></div>
+<div class="line"><span class="lineno">  222</span>        <span class="comment">// phiCM = 0;</span></div>
+<div class="line"><span class="lineno">  223</span>        <span class="comment">// Compute</span></div>
+<div class="line"><span class="lineno">  224</span>        <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#abc851d58ef26ccb9eaf58cc556df3f3d">fKin</a>-&gt;<a class="code hl_function" href="classActPhysics_1_1Kinematics.html#af8b7c34fd0afcdcc5ba60dd79d63f112">ComputeRecoilKinematics</a>(thetaCM, phiCM);</div>
+<div class="line"><span class="lineno">  225</span>        T3 = <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#abc851d58ef26ccb9eaf58cc556df3f3d">fKin</a>-&gt;<a class="code hl_function" href="classActPhysics_1_1Kinematics.html#a7f506f0e0c3e90fc103919df82371439">GetT3Lab</a>();</div>
+<div class="line"><span class="lineno">  226</span>        theta3 = <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#abc851d58ef26ccb9eaf58cc556df3f3d">fKin</a>-&gt;<a class="code hl_function" href="classActPhysics_1_1Kinematics.html#ac75c3b9c01e5c18fa46494b5d1cf5664">GetTheta3Lab</a>();</div>
+<div class="line"><span class="lineno">  227</span>        phi3 = <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#abc851d58ef26ccb9eaf58cc556df3f3d">fKin</a>-&gt;<a class="code hl_function" href="classActPhysics_1_1Kinematics.html#ab09c08e60318a98910f1aa2a7e7fa387">GetPhi3Lab</a>();</div>
+<div class="line"><span class="lineno">  228</span>        <span class="comment">// std::cout &lt;&lt; &quot;Entrance : &quot; &lt;&lt; window &lt;&lt; &#39;\n&#39;;</span></div>
+<div class="line"><span class="lineno">  229</span>        <span class="comment">// std::cout &lt;&lt; &quot;RP  : &quot; &lt;&lt; vertex &lt;&lt; &#39;\n&#39;;</span></div>
+<div class="line"><span class="lineno">  230</span>        <span class="comment">// std::cout &lt;&lt; &quot;Beam dir : &quot; &lt;&lt; beamDir &lt;&lt; &#39;\n&#39;;</span></div>
+<div class="line"><span class="lineno">  231</span>        <span class="comment">// std::cout &lt;&lt; &quot;ThetaCM : &quot; &lt;&lt; thetaCM * TMath::RadToDeg() &lt;&lt; &quot; Lab : &quot; &lt;&lt; theta3 * TMath::RadToDeg()</span></div>
+<div class="line"><span class="lineno">  232</span>        <span class="comment">//           &lt;&lt; &quot; phi3 : &quot; &lt;&lt; phi3 * TMath::RadToDeg() &lt;&lt; std::endl;</span></div>
+<div class="line"><span class="lineno">  233</span>        T4 = <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#abc851d58ef26ccb9eaf58cc556df3f3d">fKin</a>-&gt;<a class="code hl_function" href="classActPhysics_1_1Kinematics.html#af9290f414c7368d548d6f8f3614c6370">GetT4Lab</a>();</div>
+<div class="line"><span class="lineno">  234</span>        theta4 = <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#abc851d58ef26ccb9eaf58cc556df3f3d">fKin</a>-&gt;<a class="code hl_function" href="classActPhysics_1_1Kinematics.html#a91b54a72884bf94bde3fa679b456b28b">GetTheta4Lab</a>();</div>
+<div class="line"><span class="lineno">  235</span>        phi4 = <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#abc851d58ef26ccb9eaf58cc556df3f3d">fKin</a>-&gt;<a class="code hl_function" href="classActPhysics_1_1Kinematics.html#a1fa58d6109146a366fc5c70fe9c402c5">GetPhi4Lab</a>();</div>
+<div class="line"><span class="lineno">  236</span>    }</div>
+<div class="line"><span class="lineno">  237</span>    <span class="keywordflow">else</span></div>
+<div class="line"><span class="lineno">  238</span>    {</div>
+<div class="line"><span class="lineno">  239</span>        <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#af7a9779579c4010a927cdd3407d3b600">fKinGen</a>-&gt;<a class="code hl_function" href="classActSim_1_1KinematicGenerator.html#a6c804787db0c2ffdaa0c1236e2500501">SetBeamEnergy</a>(EBeamAtVertex);</div>
+<div class="line"><span class="lineno">  240</span>        weight = <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#af7a9779579c4010a927cdd3407d3b600">fKinGen</a>-&gt;<a class="code hl_function" href="classActSim_1_1KinematicGenerator.html#a1e8eb5638057fbb92b508f799591b008">Generate</a>();</div>
+<div class="line"><span class="lineno">  241</span>        <span class="comment">// Light</span></div>
+<div class="line"><span class="lineno">  242</span>        <span class="keyword">auto</span> plight {<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#af7a9779579c4010a927cdd3407d3b600">fKinGen</a>-&gt;<a class="code hl_function" href="classActSim_1_1KinematicGenerator.html#afab451edf294f4bcdec1e801701c9994">GetLorentzVector</a>(0)};</div>
+<div class="line"><span class="lineno">  243</span>        T3 = plight-&gt;E() - <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#abc851d58ef26ccb9eaf58cc556df3f3d">fKin</a>-&gt;<a class="code hl_function" href="classActPhysics_1_1Kinematics.html#a9699c585a0373bcdbee7c9e837f466c1">GetParticle</a>(3).<a class="code hl_function" href="classActPhysics_1_1Particle.html#a50444b520c562653c8d529c8ccd56fe8">GetMass</a>();</div>
+<div class="line"><span class="lineno">  244</span>        theta3 = plight-&gt;Theta();</div>
+<div class="line"><span class="lineno">  245</span>        phi3 = plight-&gt;Phi();</div>
+<div class="line"><span class="lineno">  246</span>        <span class="comment">// Heavy</span></div>
+<div class="line"><span class="lineno">  247</span>        <span class="keyword">auto</span> pheavy {<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#af7a9779579c4010a927cdd3407d3b600">fKinGen</a>-&gt;<a class="code hl_function" href="classActSim_1_1KinematicGenerator.html#afab451edf294f4bcdec1e801701c9994">GetLorentzVector</a>(1)};</div>
+<div class="line"><span class="lineno">  248</span>        T4 = pheavy-&gt;E() - <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#abc851d58ef26ccb9eaf58cc556df3f3d">fKin</a>-&gt;<a class="code hl_function" href="classActPhysics_1_1Kinematics.html#a9699c585a0373bcdbee7c9e837f466c1">GetParticle</a>(4).<a class="code hl_function" href="classActPhysics_1_1Particle.html#a50444b520c562653c8d529c8ccd56fe8">GetMass</a>();</div>
+<div class="line"><span class="lineno">  249</span>        theta4 = pheavy-&gt;Theta();</div>
+<div class="line"><span class="lineno">  250</span>        phi4 = pheavy-&gt;Phi();</div>
+<div class="line"><span class="lineno">  251</span>        <span class="comment">// Reconstruct CM</span></div>
+<div class="line"><span class="lineno">  252</span>        thetaCM = <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#af7a9779579c4010a927cdd3407d3b600">fKinGen</a>-&gt;<a class="code hl_function" href="classActSim_1_1KinematicGenerator.html#adfacb1b04363fd14c4f136ecc224205c">GetBinaryKinematics</a>()-&gt;<a class="code hl_function" href="classActPhysics_1_1Kinematics.html#a85d044313af059a5727baf01c768f978">ReconstructTheta3CMFromLab</a>(T3, theta3);</div>
+<div class="line"><span class="lineno">  253</span>        phiCM = phi3;</div>
+<div class="line"><span class="lineno">  254</span>    }</div>
+<div class="line"><span class="lineno">  255</span> </div>
+<div class="line"><span class="lineno">  256</span>    <span class="comment">// This is beam frame, but we must convert to geometry frame</span></div>
+<div class="line"><span class="lineno">  257</span>    G4ThreeVector lightDirBeamFrame {std::cos(theta3), std::sin(theta3) * std::sin(phi3),</div>
+<div class="line"><span class="lineno">  258</span>                                     std::sin(theta3) * std::cos(phi3)};</div>
+<div class="line"><span class="lineno">  259</span>    G4ThreeVector lightDir {<a class="code hl_function" href="classActGeant_1_1PrimaryGenerator.html#a92e2e7d74651286b9cfd2feb7c109ea1">RotateToWorld</a>(lightDirBeamFrame, beamDir)};</div>
+<div class="line"><span class="lineno">  260</span>    <span class="comment">// Shoot</span></div>
+<div class="line"><span class="lineno">  261</span>    <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a42074ca404ed4eb98cc61ac95f0d6d32">fParticleGun</a>-&gt;SetParticleDefinition(<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a19905b69cc051a085317231856ec92c1">fPartDefs</a>[2]);</div>
+<div class="line"><span class="lineno">  262</span>    <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a42074ca404ed4eb98cc61ac95f0d6d32">fParticleGun</a>-&gt;SetParticlePosition(vertex);</div>
+<div class="line"><span class="lineno">  263</span>    <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a42074ca404ed4eb98cc61ac95f0d6d32">fParticleGun</a>-&gt;SetParticleMomentumDirection(lightDir);</div>
+<div class="line"><span class="lineno">  264</span>    <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a42074ca404ed4eb98cc61ac95f0d6d32">fParticleGun</a>-&gt;SetParticleEnergy(T3);</div>
+<div class="line"><span class="lineno">  265</span>    <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a42074ca404ed4eb98cc61ac95f0d6d32">fParticleGun</a>-&gt;GeneratePrimaryVertex(event);</div>
+<div class="line"><span class="lineno">  266</span> </div>
+<div class="line"><span class="lineno">  267</span>    <span class="comment">// Heavy</span></div>
+<div class="line"><span class="lineno">  268</span>    G4ThreeVector heavyDirBeamFrame {std::cos(theta4), std::sin(theta4) * std::sin(phi4),</div>
+<div class="line"><span class="lineno">  269</span>                                     std::sin(theta4) * std::cos(phi4)};</div>
+<div class="line"><span class="lineno">  270</span>    G4ThreeVector heavyDir {<a class="code hl_function" href="classActGeant_1_1PrimaryGenerator.html#a92e2e7d74651286b9cfd2feb7c109ea1">RotateToWorld</a>(heavyDirBeamFrame, beamDir)};</div>
+<div class="line"><span class="lineno">  271</span>    <span class="comment">// fParticleGun-&gt;SetParticleDefinition(fPartDefs[3]);</span></div>
+<div class="line"><span class="lineno">  272</span>    <span class="comment">// fParticleGun-&gt;SetParticlePosition(vertex);</span></div>
+<div class="line"><span class="lineno">  273</span>    <span class="comment">// fParticleGun-&gt;SetParticleMomentumDirection(heavyDir);</span></div>
+<div class="line"><span class="lineno">  274</span>    <span class="comment">// fParticleGun-&gt;SetParticleEnergy(T4);</span></div>
+<div class="line"><span class="lineno">  275</span>    <span class="comment">// fParticleGun-&gt;GeneratePrimaryVertex(event);</span></div>
+<div class="line"><span class="lineno">  276</span> </div>
+<div class="line"><span class="lineno">  277</span>    <span class="comment">// Send to data holder</span></div>
+<div class="line"><span class="lineno">  278</span>    <span class="keyword">auto</span>* holder {<a class="code hl_function" href="classActGeant_1_1DataHolder.html#adb5b711bfec65a6ffc9c99e1e7184aef">DataHolder::Instance</a>()};</div>
+<div class="line"><span class="lineno">  279</span>    <span class="keyword">auto</span>&amp; info {holder-&gt;<a class="code hl_variable" href="classActGeant_1_1DataHolder.html#ae0a8f56ca178d35e79cb8b70ce70a635">fVertexInfo</a>};</div>
+<div class="line"><span class="lineno">  280</span>    info.<a class="code hl_variable" href="classActGeant_1_1VertexInfo.html#a14604f5bb8aa76bdf7b75d88ae717580">fWP</a> = <a class="code hl_function" href="classActGeant_1_1DataHolder.html#a72a962f5d8fd8af15040b8a0db71d18d">DataHolder::PointToVector</a>(window);</div>
+<div class="line"><span class="lineno">  281</span>    info.fRP = <a class="code hl_function" href="classActGeant_1_1DataHolder.html#a72a962f5d8fd8af15040b8a0db71d18d">DataHolder::PointToVector</a>(vertex);</div>
+<div class="line"><span class="lineno">  282</span>    info.fEBeam = EBeamAtVertex;</div>
+<div class="line"><span class="lineno">  283</span>    info.fT3 = T3;</div>
+<div class="line"><span class="lineno">  284</span>    info.ftheta3 = theta3;</div>
+<div class="line"><span class="lineno">  285</span>    info.fphi3 = phi3;</div>
+<div class="line"><span class="lineno">  286</span>    info.fT4 = T4;</div>
+<div class="line"><span class="lineno">  287</span>    info.ftheta4 = theta4;</div>
+<div class="line"><span class="lineno">  288</span>    info.fphi4 = phi4;</div>
+<div class="line"><span class="lineno">  289</span>    info.fthetaCM = thetaCM;</div>
+<div class="line"><span class="lineno">  290</span>}</div>
 <div class="ttc" id="aclassActGeant_1_1DataHolder_html_a72a962f5d8fd8af15040b8a0db71d18d"><div class="ttname"><a href="classActGeant_1_1DataHolder.html#a72a962f5d8fd8af15040b8a0db71d18d">ActGeant::DataHolder::PointToVector</a></div><div class="ttdeci">static Vector3DPoint PointToVector(const G4ThreeVector &amp;vec)</div><div class="ttdef"><b>Definition</b> ActGeantDataHolder.cc:22</div></div>
 <div class="ttc" id="aclassActGeant_1_1DataHolder_html_ae0a8f56ca178d35e79cb8b70ce70a635"><div class="ttname"><a href="classActGeant_1_1DataHolder.html#ae0a8f56ca178d35e79cb8b70ce70a635">ActGeant::DataHolder::fVertexInfo</a></div><div class="ttdeci">VertexInfo fVertexInfo</div><div class="ttdef"><b>Definition</b> ActGeantDataHolder.hh:17</div></div>
-<div class="ttc" id="aclassActGeant_1_1PrimaryGenerator_html_a01b98c265eb4aaa140dbeaf23df940e4"><div class="ttname"><a href="classActGeant_1_1PrimaryGenerator.html#a01b98c265eb4aaa140dbeaf23df940e4">ActGeant::PrimaryGenerator::SlowDownBeam</a></div><div class="ttdeci">double SlowDownBeam(G4ParticleDefinition *part, double E, double d, G4Material *mat)</div><div class="ttdef"><b>Definition</b> ActGeantPrimaryGenerator.cc:290</div></div>
+<div class="ttc" id="aclassActGeant_1_1PrimaryGenerator_html_a01b98c265eb4aaa140dbeaf23df940e4"><div class="ttname"><a href="classActGeant_1_1PrimaryGenerator.html#a01b98c265eb4aaa140dbeaf23df940e4">ActGeant::PrimaryGenerator::SlowDownBeam</a></div><div class="ttdeci">double SlowDownBeam(G4ParticleDefinition *part, double E, double d, G4Material *mat)</div><div class="ttdef"><b>Definition</b> ActGeantPrimaryGenerator.cc:292</div></div>
 <div class="ttc" id="aclassActGeant_1_1PrimaryGenerator_html_a19905b69cc051a085317231856ec92c1"><div class="ttname"><a href="classActGeant_1_1PrimaryGenerator.html#a19905b69cc051a085317231856ec92c1">ActGeant::PrimaryGenerator::fPartDefs</a></div><div class="ttdeci">std::vector&lt; G4ParticleDefinition * &gt; fPartDefs</div><div class="ttdef"><b>Definition</b> ActGeantPrimaryGenerator.hh:45</div></div>
-<div class="ttc" id="aclassActGeant_1_1PrimaryGenerator_html_a8ff83886ad99c933d24a9c0cad1ea2de"><div class="ttname"><a href="classActGeant_1_1PrimaryGenerator.html#a8ff83886ad99c933d24a9c0cad1ea2de">ActGeant::PrimaryGenerator::InitialiseParticles</a></div><div class="ttdeci">void InitialiseParticles()</div><div class="ttdef"><b>Definition</b> ActGeantPrimaryGenerator.cc:314</div></div>
-<div class="ttc" id="aclassActGeant_1_1PrimaryGenerator_html_a92e2e7d74651286b9cfd2feb7c109ea1"><div class="ttname"><a href="classActGeant_1_1PrimaryGenerator.html#a92e2e7d74651286b9cfd2feb7c109ea1">ActGeant::PrimaryGenerator::RotateToWorld</a></div><div class="ttdeci">G4ThreeVector RotateToWorld(const G4ThreeVector &amp;vec, const G4ThreeVector &amp;beamDir)</div><div class="ttdef"><b>Definition</b> ActGeantPrimaryGenerator.cc:337</div></div>
+<div class="ttc" id="aclassActGeant_1_1PrimaryGenerator_html_a8ff83886ad99c933d24a9c0cad1ea2de"><div class="ttname"><a href="classActGeant_1_1PrimaryGenerator.html#a8ff83886ad99c933d24a9c0cad1ea2de">ActGeant::PrimaryGenerator::InitialiseParticles</a></div><div class="ttdeci">void InitialiseParticles()</div><div class="ttdef"><b>Definition</b> ActGeantPrimaryGenerator.cc:316</div></div>
+<div class="ttc" id="aclassActGeant_1_1PrimaryGenerator_html_a92e2e7d74651286b9cfd2feb7c109ea1"><div class="ttname"><a href="classActGeant_1_1PrimaryGenerator.html#a92e2e7d74651286b9cfd2feb7c109ea1">ActGeant::PrimaryGenerator::RotateToWorld</a></div><div class="ttdeci">G4ThreeVector RotateToWorld(const G4ThreeVector &amp;vec, const G4ThreeVector &amp;beamDir)</div><div class="ttdef"><b>Definition</b> ActGeantPrimaryGenerator.cc:339</div></div>
 <div class="ttc" id="aclassActGeant_1_1VertexInfo_html_a14604f5bb8aa76bdf7b75d88ae717580"><div class="ttname"><a href="classActGeant_1_1VertexInfo.html#a14604f5bb8aa76bdf7b75d88ae717580">ActGeant::VertexInfo::fWP</a></div><div class="ttdeci">Vector3DPoint fWP</div><div class="ttdef"><b>Definition</b> ActGeantData.hh:29</div></div>
 <div class="ttc" id="aclassActPhysics_1_1Kinematics_html_a1fa58d6109146a366fc5c70fe9c402c5"><div class="ttname"><a href="classActPhysics_1_1Kinematics.html#a1fa58d6109146a366fc5c70fe9c402c5">ActPhysics::Kinematics::GetPhi4Lab</a></div><div class="ttdeci">double GetPhi4Lab() const</div><div class="ttdef"><b>Definition</b> ActKinematics.h:145</div></div>
 <div class="ttc" id="aclassActPhysics_1_1Kinematics_html_a7f506f0e0c3e90fc103919df82371439"><div class="ttname"><a href="classActPhysics_1_1Kinematics.html#a7f506f0e0c3e90fc103919df82371439">ActPhysics::Kinematics::GetT3Lab</a></div><div class="ttdeci">double GetT3Lab() const</div><div class="ttdef"><b>Definition</b> ActKinematics.h:140</div></div>
@@ -538,27 +540,27 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">  315</span>{</div>
-<div class="line"><span class="lineno">  316</span>    <span class="comment">// Already initialised</span></div>
-<div class="line"><span class="lineno">  317</span>    <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a19905b69cc051a085317231856ec92c1">fPartDefs</a>.size())</div>
-<div class="line"><span class="lineno">  318</span>        <span class="keywordflow">return</span>;</div>
-<div class="line"><span class="lineno">  319</span> </div>
-<div class="line"><span class="lineno">  320</span>    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 1; i &lt;= 4; i++)</div>
-<div class="line"><span class="lineno">  321</span>    {</div>
-<div class="line"><span class="lineno">  322</span>        <span class="keyword">auto</span>&amp; part {<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#abc851d58ef26ccb9eaf58cc556df3f3d">fKin</a>-&gt;<a class="code hl_function" href="classActPhysics_1_1Kinematics.html#a9699c585a0373bcdbee7c9e837f466c1">GetParticle</a>(i)};</div>
-<div class="line"><span class="lineno">  323</span>        <span class="keyword">auto</span> Z {part.<a class="code hl_function" href="classActPhysics_1_1Particle.html#a4bfa2c25e8f441d09b52b9a39e2bd63a">GetZ</a>()};</div>
-<div class="line"><span class="lineno">  324</span>        <span class="keyword">auto</span> A {part.GetA()};</div>
-<div class="line"><span class="lineno">  325</span>        <span class="keyword">auto</span> ex {(i == 4) ? <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a3eed4ac2115b47f5cb16f5144633307c">fEx</a> : 0}; <span class="comment">// explicitily add Ex for heavy fragment</span></div>
-<div class="line"><span class="lineno">  326</span>        <span class="keyword">auto</span>* def {G4IonTable::GetIonTable()-&gt;GetIon(Z, A, ex)};</div>
-<div class="line"><span class="lineno">  327</span>        <span class="keywordflow">if</span>(!def)</div>
-<div class="line"><span class="lineno">  328</span>        {</div>
-<div class="line"><span class="lineno">  329</span>            G4String msg {<span class="stringliteral">&quot;Cannot find part def for &quot;</span> + part.GetName()};</div>
-<div class="line"><span class="lineno">  330</span>            G4Exception(<span class="stringliteral">&quot;ActPrimaryGenerator::InitialiseParticles&quot;</span>, <span class="stringliteral">&quot;ActPrimaryGenerator001&quot;</span>, FatalException, msg);</div>
-<div class="line"><span class="lineno">  331</span>        }</div>
-<div class="line"><span class="lineno">  332</span>        G4cout &lt;&lt; <a class="code hl_define" href="ActColors_8h.html#a4a6c893a1703c33ede7d702fe5f97c91">BOLDGREEN</a> &lt;&lt; <span class="stringliteral">&quot;Built particle : &quot;</span> &lt;&lt; def-&gt;GetParticleName() &lt;&lt; <a class="code hl_define" href="ActColors_8h.html#ab702106cf3b3e96750b6845ded4e0299">RESET</a> &lt;&lt; G4endl;</div>
-<div class="line"><span class="lineno">  333</span>        <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a19905b69cc051a085317231856ec92c1">fPartDefs</a>.push_back(def);</div>
-<div class="line"><span class="lineno">  334</span>    }</div>
-<div class="line"><span class="lineno">  335</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">  317</span>{</div>
+<div class="line"><span class="lineno">  318</span>    <span class="comment">// Already initialised</span></div>
+<div class="line"><span class="lineno">  319</span>    <span class="keywordflow">if</span>(<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a19905b69cc051a085317231856ec92c1">fPartDefs</a>.size())</div>
+<div class="line"><span class="lineno">  320</span>        <span class="keywordflow">return</span>;</div>
+<div class="line"><span class="lineno">  321</span> </div>
+<div class="line"><span class="lineno">  322</span>    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 1; i &lt;= 4; i++)</div>
+<div class="line"><span class="lineno">  323</span>    {</div>
+<div class="line"><span class="lineno">  324</span>        <span class="keyword">auto</span>&amp; part {<a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#abc851d58ef26ccb9eaf58cc556df3f3d">fKin</a>-&gt;<a class="code hl_function" href="classActPhysics_1_1Kinematics.html#a9699c585a0373bcdbee7c9e837f466c1">GetParticle</a>(i)};</div>
+<div class="line"><span class="lineno">  325</span>        <span class="keyword">auto</span> Z {part.<a class="code hl_function" href="classActPhysics_1_1Particle.html#a4bfa2c25e8f441d09b52b9a39e2bd63a">GetZ</a>()};</div>
+<div class="line"><span class="lineno">  326</span>        <span class="keyword">auto</span> A {part.GetA()};</div>
+<div class="line"><span class="lineno">  327</span>        <span class="keyword">auto</span> ex {(i == 4) ? <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a3eed4ac2115b47f5cb16f5144633307c">fEx</a> : 0}; <span class="comment">// explicitily add Ex for heavy fragment</span></div>
+<div class="line"><span class="lineno">  328</span>        <span class="keyword">auto</span>* def {G4IonTable::GetIonTable()-&gt;GetIon(Z, A, ex)};</div>
+<div class="line"><span class="lineno">  329</span>        <span class="keywordflow">if</span>(!def)</div>
+<div class="line"><span class="lineno">  330</span>        {</div>
+<div class="line"><span class="lineno">  331</span>            G4String msg {<span class="stringliteral">&quot;Cannot find part def for &quot;</span> + part.GetName()};</div>
+<div class="line"><span class="lineno">  332</span>            G4Exception(<span class="stringliteral">&quot;ActPrimaryGenerator::InitialiseParticles&quot;</span>, <span class="stringliteral">&quot;ActPrimaryGenerator001&quot;</span>, FatalException, msg);</div>
+<div class="line"><span class="lineno">  333</span>        }</div>
+<div class="line"><span class="lineno">  334</span>        G4cout &lt;&lt; <a class="code hl_define" href="ActColors_8h.html#a4a6c893a1703c33ede7d702fe5f97c91">BOLDGREEN</a> &lt;&lt; <span class="stringliteral">&quot;Built particle : &quot;</span> &lt;&lt; def-&gt;GetParticleName() &lt;&lt; <a class="code hl_define" href="ActColors_8h.html#ab702106cf3b3e96750b6845ded4e0299">RESET</a> &lt;&lt; G4endl;</div>
+<div class="line"><span class="lineno">  335</span>        <a class="code hl_variable" href="classActGeant_1_1PrimaryGenerator.html#a19905b69cc051a085317231856ec92c1">fPartDefs</a>.push_back(def);</div>
+<div class="line"><span class="lineno">  336</span>    }</div>
+<div class="line"><span class="lineno">  337</span>}</div>
 <div class="ttc" id="aActColors_8h_html_a4a6c893a1703c33ede7d702fe5f97c91"><div class="ttname"><a href="ActColors_8h.html#a4a6c893a1703c33ede7d702fe5f97c91">BOLDGREEN</a></div><div class="ttdeci">#define BOLDGREEN</div><div class="ttdef"><b>Definition</b> ActColors.h:17</div></div>
 <div class="ttc" id="aActColors_8h_html_ab702106cf3b3e96750b6845ded4e0299"><div class="ttname"><a href="ActColors_8h.html#ab702106cf3b3e96750b6845ded4e0299">RESET</a></div><div class="ttdeci">#define RESET</div><div class="ttdef"><b>Definition</b> ActColors.h:6</div></div>
 <div class="ttc" id="aclassActPhysics_1_1Particle_html_a4bfa2c25e8f441d09b52b9a39e2bd63a"><div class="ttname"><a href="classActPhysics_1_1Particle.html#a4bfa2c25e8f441d09b52b9a39e2bd63a">ActPhysics::Particle::GetZ</a></div><div class="ttdeci">int GetZ() const</div><div class="ttdef"><b>Definition</b> ActParticle.h:39</div></div>
@@ -598,23 +600,23 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">  338</span>{</div>
-<div class="line"><span class="lineno">  339</span> </div>
-<div class="line"><span class="lineno">  340</span>    <span class="comment">// Usually a sampled reaction returns the angles in the beam frame</span></div>
-<div class="line"><span class="lineno">  341</span>    <span class="comment">//  But to compute geometrical things (propagate that track to a silicon)</span></div>
-<div class="line"><span class="lineno">  342</span>    <span class="comment">//  We need to work in the &quot;geometry = world&quot; frame,</span></div>
-<div class="line"><span class="lineno">  343</span>    <span class="comment">//  where in ACTAR the &quot;beam&quot; goes in {1, 0, 0}</span></div>
-<div class="line"><span class="lineno">  344</span>    <span class="comment">//  Using XYZPoint and XYZVector is easy to compute it,</span></div>
-<div class="line"><span class="lineno">  345</span>    <span class="comment">//  as quoted here: https://root-forum.cern.ch/t/get-3x3-rotation-matrix-between-two-tvector3/60070</span></div>
-<div class="line"><span class="lineno">  346</span>    <span class="comment">//  Using only GenVector classes</span></div>
-<div class="line"><span class="lineno">  347</span>    <span class="keyword">auto</span> originalFrame {beamDir.unit()};</div>
-<div class="line"><span class="lineno">  348</span>    G4ThreeVector worldFrame {1, 0, 0};</div>
-<div class="line"><span class="lineno">  349</span>    <span class="keyword">auto</span> cross {worldFrame.cross(originalFrame)}; <span class="comment">// this defines the rotation axis</span></div>
-<div class="line"><span class="lineno">  350</span>    <span class="keyword">auto</span> angle {std::acos(originalFrame.dot(worldFrame))};</div>
-<div class="line"><span class="lineno">  351</span>    ROOT::Math::AxisAngle axis {cross, angle};</div>
-<div class="line"><span class="lineno">  352</span>    ROOT::Math::Rotation3D rotation {axis};</div>
-<div class="line"><span class="lineno">  353</span>    <span class="keywordflow">return</span> rotation(vec);</div>
-<div class="line"><span class="lineno">  354</span>}</div>
+<div class="fragment"><div class="line"><span class="lineno">  340</span>{</div>
+<div class="line"><span class="lineno">  341</span> </div>
+<div class="line"><span class="lineno">  342</span>    <span class="comment">// Usually a sampled reaction returns the angles in the beam frame</span></div>
+<div class="line"><span class="lineno">  343</span>    <span class="comment">//  But to compute geometrical things (propagate that track to a silicon)</span></div>
+<div class="line"><span class="lineno">  344</span>    <span class="comment">//  We need to work in the &quot;geometry = world&quot; frame,</span></div>
+<div class="line"><span class="lineno">  345</span>    <span class="comment">//  where in ACTAR the &quot;beam&quot; goes in {1, 0, 0}</span></div>
+<div class="line"><span class="lineno">  346</span>    <span class="comment">//  Using XYZPoint and XYZVector is easy to compute it,</span></div>
+<div class="line"><span class="lineno">  347</span>    <span class="comment">//  as quoted here: https://root-forum.cern.ch/t/get-3x3-rotation-matrix-between-two-tvector3/60070</span></div>
+<div class="line"><span class="lineno">  348</span>    <span class="comment">//  Using only GenVector classes</span></div>
+<div class="line"><span class="lineno">  349</span>    <span class="keyword">auto</span> originalFrame {beamDir.unit()};</div>
+<div class="line"><span class="lineno">  350</span>    G4ThreeVector worldFrame {1, 0, 0};</div>
+<div class="line"><span class="lineno">  351</span>    <span class="keyword">auto</span> cross {worldFrame.cross(originalFrame)}; <span class="comment">// this defines the rotation axis</span></div>
+<div class="line"><span class="lineno">  352</span>    <span class="keyword">auto</span> angle {std::acos(originalFrame.dot(worldFrame))};</div>
+<div class="line"><span class="lineno">  353</span>    ROOT::Math::AxisAngle axis {cross, angle};</div>
+<div class="line"><span class="lineno">  354</span>    ROOT::Math::Rotation3D rotation {axis};</div>
+<div class="line"><span class="lineno">  355</span>    <span class="keywordflow">return</span> rotation(vec);</div>
+<div class="line"><span class="lineno">  356</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -663,28 +665,28 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="fragment"><div class="line"><span class="lineno">  291</span>{</div>
-<div class="line"><span class="lineno">  292</span>    <span class="keywordflow">if</span>(part-&gt;GetParticleName() == <span class="stringliteral">&quot;neutron&quot;</span>)</div>
-<div class="line"><span class="lineno">  293</span>        <span class="keywordflow">return</span> E;</div>
-<div class="line"><span class="lineno">  294</span>    <span class="keywordtype">double</span> dEdx {};</div>
-<div class="line"><span class="lineno">  295</span>    <span class="keywordtype">double</span> dE {};</div>
-<div class="line"><span class="lineno">  296</span>    <span class="keywordtype">int</span> nsteps {100};</div>
-<div class="line"><span class="lineno">  297</span> </div>
-<div class="line"><span class="lineno">  298</span>    G4EmCalculator calc {};</div>
+<div class="fragment"><div class="line"><span class="lineno">  293</span>{</div>
+<div class="line"><span class="lineno">  294</span>    <span class="keywordflow">if</span>(part-&gt;GetParticleName() == <span class="stringliteral">&quot;neutron&quot;</span>)</div>
+<div class="line"><span class="lineno">  295</span>        <span class="keywordflow">return</span> E;</div>
+<div class="line"><span class="lineno">  296</span>    <span class="keywordtype">double</span> dEdx {};</div>
+<div class="line"><span class="lineno">  297</span>    <span class="keywordtype">double</span> dE {};</div>
+<div class="line"><span class="lineno">  298</span>    <span class="keywordtype">int</span> nsteps {100};</div>
 <div class="line"><span class="lineno">  299</span> </div>
-<div class="line"><span class="lineno">  300</span>    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; nsteps; i++)</div>
-<div class="line"><span class="lineno">  301</span>    {</div>
-<div class="line"><span class="lineno">  302</span>        dEdx = calc.ComputeTotalDEDX(E, part, mat);</div>
-<div class="line"><span class="lineno">  303</span>        dE = dEdx * d / nsteps;</div>
-<div class="line"><span class="lineno">  304</span>        E -= dE;</div>
-<div class="line"><span class="lineno">  305</span>        <span class="keywordflow">if</span>(E &lt; 0)</div>
-<div class="line"><span class="lineno">  306</span>        {</div>
-<div class="line"><span class="lineno">  307</span>            E = 0;</div>
-<div class="line"><span class="lineno">  308</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><span class="lineno">  309</span>        }</div>
-<div class="line"><span class="lineno">  310</span>    }</div>
-<div class="line"><span class="lineno">  311</span>    <span class="keywordflow">return</span> E;</div>
-<div class="line"><span class="lineno">  312</span>}</div>
+<div class="line"><span class="lineno">  300</span>    G4EmCalculator calc {};</div>
+<div class="line"><span class="lineno">  301</span> </div>
+<div class="line"><span class="lineno">  302</span>    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; nsteps; i++)</div>
+<div class="line"><span class="lineno">  303</span>    {</div>
+<div class="line"><span class="lineno">  304</span>        dEdx = calc.ComputeTotalDEDX(E, part, mat);</div>
+<div class="line"><span class="lineno">  305</span>        dE = dEdx * d / nsteps;</div>
+<div class="line"><span class="lineno">  306</span>        E -= dE;</div>
+<div class="line"><span class="lineno">  307</span>        <span class="keywordflow">if</span>(E &lt; 0)</div>
+<div class="line"><span class="lineno">  308</span>        {</div>
+<div class="line"><span class="lineno">  309</span>            E = 0;</div>
+<div class="line"><span class="lineno">  310</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><span class="lineno">  311</span>        }</div>
+<div class="line"><span class="lineno">  312</span>    }</div>
+<div class="line"><span class="lineno">  313</span>    <span class="keywordflow">return</span> E;</div>
+<div class="line"><span class="lineno">  314</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>
