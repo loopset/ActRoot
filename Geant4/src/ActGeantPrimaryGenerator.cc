@@ -100,6 +100,8 @@ ActGeant::PrimaryGenerator::PrimaryGenerator()
     {
         auto file {std::make_unique<TFile>(beam->GetString("HistEmittance").c_str())};
         fHistEmittance = file->Get<TH3>("h3d"); // hardcoded name for now
+        fHistEmittance->SetDirectory(nullptr);  // detach from file
+        file->Close();
     }
     fEBeam = beam->GetDouble("Energy");
     if(beam->CheckTokenExists("SigmaEnergy", true))

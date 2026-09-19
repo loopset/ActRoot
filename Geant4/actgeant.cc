@@ -15,6 +15,8 @@
 #include <G4String.hh>
 #include <G4ios.hh>
 
+#include "TROOT.h"
+
 #include <vector>
 
 namespace
@@ -69,6 +71,9 @@ int main(int argc, char** argv)
                 customArgs.push_back(argv[i + 1]);
         }
     }
+
+    // Enable thread safety for ROOT
+    ROOT::EnableThreadSafety();
 
     if(customArgs.size())
     {
