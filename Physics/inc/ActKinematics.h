@@ -161,13 +161,14 @@ public:
     double GetT1Thresh() const;
     const Particle& GetParticle(unsigned int i) const;
     std::shared_ptr<Kinematics> GetOtherKinematics();
+    bool CheckReactionThreshold();
 
 private:
     void ConstructFromStr(const std::string& reaction);
     void SetRecoil3LabKinematics();
     void SetRecoil4LabKinematics();
     void ComputeQValue();
-    void CheckQValue();
+    bool CheckQValue();
     void Init(); //!< Main function initializing kinematics every time a change is produced
     double GetPhiFromVector(const FourVector& vect);
     double GetThetaFromVector(const FourVector& vect, bool reverse = false);

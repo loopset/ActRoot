@@ -38,6 +38,7 @@ private:
     double fEBeam {};
     double fSigmaEBeam {};
     double fEx {};
+    double fGamma {};       // intrinsic width of state in MeV
     double fBeamCentreZ {}; // Beam centre wrt to pad plane in mm
     double fBeamSigmaXY {}; // Preliminary emittances (just gaussians)
     double fBeamSigmaZ {};

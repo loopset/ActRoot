@@ -19,6 +19,7 @@ public:
     G4String fHeavy {};
     G4double fEBeam {};
     G4double fEx {};
+    G4double fGamma {};
 
     void Print() const;
 };

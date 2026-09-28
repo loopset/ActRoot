@@ -60,6 +60,9 @@ ActGeant::PrimaryGenerator::PrimaryGenerator()
     // And get information from it
     fEBeam = fKin->GetT1Lab();
     fEx = fKin->GetEx();
+    // If state has intrinsic with, consider it
+    if(kin->CheckTokenExists("Gamma", true))
+        fGamma = kin->GetDouble("Gamma");
     // Send information to holder
     auto* holder {DataHolder::Instance()};
     holder->fReacInfo.fBeam = fKin->GetParticle(1).GetName();
@@ -68,6 +71,7 @@ ActGeant::PrimaryGenerator::PrimaryGenerator()
     holder->fReacInfo.fHeavy = fKin->GetParticle(4).GetName();
     holder->fReacInfo.fEBeam = fEBeam;
     holder->fReacInfo.fEx = fEx;
+    holder->fReacInfo.fGamma = fGamma;
 
     // Phase spaces
     auto ps {kin->GetDoubleVector("PS")};
@@ -198,6 +202,32 @@ void ActGeant::PrimaryGenerator::GeneratePrimaries(G4Event* event)
     auto d {(vertex - window).r()};
     auto EBeamAtVertex {SlowDownBeam(fPartDefs[0], EBeamIt, d, driftLog->GetMaterial())};
 
+    // Random Ex if Gamma if present
+    double ExIt {fEx};
+    if(fGamma > 0)
+        ExIt = CLHEP::RandBreitWigner::shoot(fEx, fGamma);
+    // Ensure reaction reaches threshold
+    fKin->SetBeamEnergyAndEx(EBeamAtVertex, ExIt);
+    auto isOk {fKin->CheckReactionThreshold()};
+    if(!isOk && (fGamma > 0))
+    {
+        int count {};
+        while(!isOk)
+        {
+            // G4cout << "Reaction does not reach threshold energy, resampling Ex..." << G4endl;
+            ExIt = CLHEP::RandBreitWigner::shoot(fEx, fGamma);
+            fKin->SetBeamEnergyAndEx(EBeamAtVertex, ExIt);
+            isOk = fKin->CheckReactionThreshold();
+            count++;
+            if(count > 10) // add a limit to avoid infinite loops
+            {
+                ExIt = fEx;
+                fKin->SetBeamEnergyAndEx(EBeamAtVertex, ExIt);
+                break;
+            }
+        }
+    }
+
     // Generate kinematics
     double weight {};
     double T3 {};
@@ -211,7 +241,7 @@ void ActGeant::PrimaryGenerator::GeneratePrimaries(G4Event* event)
     // NO PS
     if(!fKinGen)
     {
-        fKin->SetBeamEnergy(EBeamAtVertex);
+        fKin->SetBeamEnergyAndEx(EBeamAtVertex, ExIt);
         // Sample
         phiCM = G4RandFlat::shoot(0., 2. * pi);
         if(fCrossSection)
@@ -236,7 +266,7 @@ void ActGeant::PrimaryGenerator::GeneratePrimaries(G4Event* event)
     }
     else
     {
-        fKinGen->SetBeamEnergy(EBeamAtVertex);
+        fKinGen->SetBeamAndExEnergies(EBeamAtVertex, ExIt);
         weight = fKinGen->Generate();
         // Light
         auto plight {fKinGen->GetLorentzVector(0)};

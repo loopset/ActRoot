@@ -199,10 +199,14 @@ void ActPhysics::Kinematics::Init()
     ComputeQValue();
     if(fT1Lab == -1)
     {
-        // std::cout << MAGENTA << "Using Kinematics with no beam energy set!" << RESET << '\n';
         return;
     }
-    CheckQValue();
+    auto isOk {CheckQValue()};
+    // if reaction does not reach threshold energy, return also
+    if(!isOk)
+    {
+        return;
+    }
     double E1Lab {fT1Lab + fm1};
     double p1Lab {TMath::Sqrt(E1Lab * E1Lab - fm1 * fm1)};
     fP1Lab = {p1Lab, 0.0, 0.0, E1Lab}; // beam along X axis! ACTAR TPC reference frame!
@@ -369,18 +373,21 @@ double ActPhysics::Kinematics::GetT1Thresh() const
     return -fQvalue * (fm1 + fm2 + fm3 + (fm4 + fEx)) / (2.0 * fm2);
 }
 
-void ActPhysics::Kinematics::CheckQValue()
+bool ActPhysics::Kinematics::CheckQValue()
 {
     if(fQvalue < 0.0)
     {
         auto T1threshold {GetT1Thresh()};
         if(fT1Lab < T1threshold)
-        {
-            throw std::runtime_error(("Kinematics::CheckQValue(): Reaction has a threshold energy of " +
-                                      std::to_string(T1threshold) + " MeV, but given beam has only " +
-                                      std::to_string(fT1Lab) + " MeV!"));
-        }
+            return false;
     }
+    return true;
+}
+
+bool ActPhysics::Kinematics::CheckReactionThreshold()
+{
+    ComputeQValue();
+    return CheckQValue();
 }
 
 double ActPhysics::Kinematics::ReconstructExcitationEnergy(double argT3, double argTheta3LabRads)
